@@ -1,0 +1,14 @@
+{
+ "actions": [],
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "istable": 1,
+ "module": "Laboratory Management",
+ "name": "LIMS Worksheet Template Item",
+ "fields": [
+  {"fieldname": "analysis_service", "fieldtype": "Link", "label": "Analysis Service", "options": "LIMS Analysis Service", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "instrument", "fieldtype": "Link", "label": "Default Instrument", "options": "LIMS Instrument"},
+  {"fieldname": "is_active", "fieldtype": "Check", "label": "Is Active", "default": "1", "in_list_view": 1}
+ ]
+}

@@ -1,0 +1,43 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:instrument_name",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "module": "Laboratory Management",
+ "name": "LIMS Instrument",
+ "field_order": [
+  "instrument_name",
+  "code",
+  "instrument_type",
+  "instrument_location",
+  "asset",
+  "serial_number",
+  "status",
+  "is_active",
+  "last_calibrated_on",
+  "calibration_cycle_days",
+  "calibration_due_on",
+  "is_calibration_overdue"
+ ],
+ "fields": [
+  {"fieldname":"instrument_name","fieldtype":"Data","label":"Instrument Name","reqd":1,"unique":1,"in_list_view":1},
+  {"fieldname":"code","fieldtype":"Data","label":"Code","reqd":1,"unique":1,"in_list_view":1},
+  {"fieldname":"instrument_type","fieldtype":"Link","label":"Instrument Type","options":"LIMS Instrument Type","in_list_view":1},
+  {"fieldname":"instrument_location","fieldtype":"Link","label":"Instrument Location","options":"LIMS Instrument Location","in_list_view":1},
+  {"fieldname":"asset","fieldtype":"Link","label":"Asset","options":"Asset","in_list_view":1},
+  {"fieldname":"serial_number","fieldtype":"Data","label":"Serial Number"},
+  {"fieldname":"status","fieldtype":"Select","label":"Status","options":"Active\nMaintenance\nRetired","default":"Active","in_list_view":1},
+  {"fieldname":"is_active","fieldtype":"Check","label":"Is Active","default":"1"},
+  {"fieldname":"last_calibrated_on","fieldtype":"Date","label":"Last Calibrated On"},
+  {"fieldname":"calibration_cycle_days","fieldtype":"Int","label":"Calibration Cycle (Days)","default":"0"},
+  {"fieldname":"calibration_due_on","fieldtype":"Date","label":"Calibration Due On"},
+  {"fieldname":"is_calibration_overdue","fieldtype":"Check","label":"Calibration Overdue","default":"0","read_only":1}
+ ],
+ "permissions": [
+  {"role":"System Manager","read":1,"write":1,"create":1,"delete":1,"report":1,"export":1,"print":1,"email":1,"share":1},
+  {"role":"LIMS Manager","read":1,"write":1,"create":1,"delete":1,"report":1,"export":1,"print":1,"email":1,"share":1},
+  {"role":"LIMS Analyst","read":1,"report":1},
+  {"role":"LIMS Verifier","read":1,"report":1}
+ ]
+}

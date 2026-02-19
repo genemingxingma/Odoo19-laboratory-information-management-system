@@ -1,0 +1,25 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:profile_name",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "module": "Laboratory Management",
+ "name": "LIMS Analysis Profile",
+ "field_order": ["profile_name", "code", "lims_department", "analysis_category", "description", "is_active", "items"],
+ "fields": [
+  {"fieldname": "profile_name", "fieldtype": "Data", "label": "Profile Name", "reqd": 1, "unique": 1, "in_list_view": 1},
+  {"fieldname": "code", "fieldtype": "Data", "label": "Code", "in_list_view": 1},
+  {"fieldname": "lims_department", "fieldtype": "Link", "label": "LIMS Department", "options": "LIMS Department", "in_list_view": 1},
+  {"fieldname": "analysis_category", "fieldtype": "Link", "label": "Analysis Category", "options": "LIMS Analysis Category", "in_list_view": 1},
+  {"fieldname": "description", "fieldtype": "Small Text", "label": "Description"},
+  {"fieldname": "is_active", "fieldtype": "Check", "label": "Is Active", "default": "1", "in_list_view": 1},
+  {"fieldname": "items", "fieldtype": "Table", "label": "Services", "options": "LIMS Analysis Profile Item", "reqd": 1}
+ ],
+ "permissions": [
+  {"role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1, "print": 1, "email": 1, "share": 1},
+  {"role": "LIMS Manager", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1, "print": 1, "email": 1, "share": 1},
+  {"role": "LIMS Analyst", "read": 1, "report": 1},
+  {"role": "LIMS Verifier", "read": 1, "report": 1}
+ ]
+}

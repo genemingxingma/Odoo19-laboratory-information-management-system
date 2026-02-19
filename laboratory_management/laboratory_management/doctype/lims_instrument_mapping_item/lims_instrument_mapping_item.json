@@ -1,0 +1,15 @@
+{
+ "actions": [],
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "istable": 1,
+ "module": "Laboratory Management",
+ "name": "LIMS Instrument Mapping Item",
+ "fields": [
+  {"fieldname": "external_code", "fieldtype": "Data", "label": "External Code", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "analysis_service", "fieldtype": "Link", "label": "Analysis Service", "options": "LIMS Analysis Service", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "notes", "fieldtype": "Small Text", "label": "Notes"}
+ ]
+}
+

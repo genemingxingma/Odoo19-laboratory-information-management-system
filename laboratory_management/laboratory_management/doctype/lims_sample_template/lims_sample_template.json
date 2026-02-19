@@ -1,0 +1,46 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:template_name",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "module": "Laboratory Management",
+ "name": "LIMS Sample Template",
+ "field_order": [
+  "template_name",
+  "sample_type",
+  "analysis_profile",
+  "sample_condition",
+  "sample_preservation",
+  "sample_matrix",
+  "sample_container",
+  "storage_location",
+  "point_of_capture",
+  "stability_hours",
+  "priority",
+  "is_active",
+  "items"
+ ],
+ "fields": [
+  {"fieldname": "template_name", "fieldtype": "Data", "label": "Template Name", "reqd": 1, "unique": 1, "in_list_view": 1},
+  {"fieldname": "sample_type", "fieldtype": "Link", "label": "Sample Type", "options": "LIMS Sample Type", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "analysis_profile", "fieldtype": "Link", "label": "Analysis Profile", "options": "LIMS Analysis Profile"},
+  {"fieldname": "sample_condition", "fieldtype": "Link", "label": "Sample Condition", "options": "LIMS Sample Condition"},
+  {"fieldname": "sample_preservation", "fieldtype": "Link", "label": "Sample Preservation", "options": "LIMS Sample Preservation"},
+  {"fieldname": "sample_matrix", "fieldtype": "Link", "label": "Sample Matrix", "options": "LIMS Sample Matrix"},
+  {"fieldname": "sample_container", "fieldtype": "Link", "label": "Sample Container", "options": "LIMS Sample Container"},
+  {"fieldname": "storage_location", "fieldtype": "Link", "label": "Storage Location", "options": "LIMS Storage Location"},
+  {"fieldname": "point_of_capture", "fieldtype": "Select", "label": "Point Of Capture", "options": "lab\nfield", "default": "lab"},
+  {"fieldname": "stability_hours", "fieldtype": "Int", "label": "Stability (Hours)", "default": "0"},
+  {"fieldname": "priority", "fieldtype": "Select", "label": "Priority", "options": "Normal\nUrgent", "default": "Normal"},
+  {"fieldname": "is_active", "fieldtype": "Check", "label": "Is Active", "default": "1", "in_list_view": 1},
+  {"fieldname": "items", "fieldtype": "Table", "label": "Template Items", "options": "LIMS Sample Template Item"}
+ ],
+ "permissions": [
+  {"role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1, "print": 1, "email": 1, "share": 1},
+  {"role": "LIMS Manager", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1, "print": 1, "email": 1, "share": 1},
+  {"role": "LIMS Sampler", "read": 1, "report": 1},
+  {"role": "LIMS Analyst", "read": 1, "report": 1},
+  {"role": "LIMS Verifier", "read": 1, "report": 1}
+ ]
+}

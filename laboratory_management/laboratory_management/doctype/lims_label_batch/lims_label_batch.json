@@ -1,0 +1,66 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "module": "Laboratory Management",
+ "name": "LIMS Label Batch",
+ "field_order": [
+  "naming_series",
+  "label_template",
+  "status",
+  "pdf_file",
+  "section_break_items",
+  "items"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "LIMS-LB-.YYYY.-",
+   "default": "LIMS-LB-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "fieldname": "label_template",
+   "fieldtype": "Link",
+   "label": "Label Template",
+   "options": "LIMS Label Template",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nGenerated\nPrinted\nCancelled",
+   "default": "Draft",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pdf_file",
+   "fieldtype": "Attach",
+   "label": "PDF File",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {"fieldname": "section_break_items", "fieldtype": "Section Break", "label": "Items"},
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "LIMS Label Batch Item",
+   "reqd": 1
+  }
+ ],
+ "permissions": [
+  {"role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1, "print": 1, "email": 1, "share": 1},
+  {"role": "LIMS Manager", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1, "print": 1, "email": 1, "share": 1},
+  {"role": "LIMS Sampler", "read": 1, "write": 1, "create": 1, "report": 1, "print": 1},
+  {"role": "LIMS Analyst", "read": 1, "write": 1, "create": 1, "report": 1, "print": 1},
+  {"role": "LIMS Verifier", "read": 1, "report": 1, "print": 1}
+ ]
+}
+

@@ -1,0 +1,586 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "module": "Laboratory Management",
+ "name": "LIMS Sample",
+ "title_field": "name",
+ "field_order": [
+  "section_sample_overview",
+  "naming_series",
+  "sample_status",
+  "column_break_sample_overview_2",
+  "lims_client",
+  "customer",
+  "patient",
+  "section_specimen_details",
+  "sample_point",
+  "sample_condition",
+  "sample_preservation",
+  "sample_matrix",
+  "column_break_specimen_details_2",
+  "sample_container",
+  "storage_location",
+  "batch",
+  "parent_sample",
+  "is_partition",
+  "partition_reason",
+  "is_on_hold",
+  "hold_reason",
+  "ar_template",
+  "sample_template",
+  "analysis_profile",
+  "sample_type",
+  "priority",
+  "point_of_capture",
+  "section_timing_tracking",
+  "sample_barcode",
+  "specimen_status",
+  "collected_on",
+  "in_transit_on",
+  "accessioned_on",
+  "column_break_timing_tracking_2",
+  "collection_datetime",
+  "received_datetime",
+  "column_break_timing_tracking_3",
+  "stability_hours",
+  "stability_expires_on",
+  "is_stability_expired",
+  "dispatched_on",
+  "due_date",
+  "is_tat_overdue",
+  "sampling_required",
+  "sampler",
+  "section_finance",
+  "sales_order",
+  "sales_invoice",
+  "payment_entry",
+  "credit_note",
+  "column_break_finance_2",
+  "billing_status",
+  "payment_status",
+  "invoice_grand_total",
+  "invoice_outstanding",
+  "invoice_paid_amount",
+  "section_reporting",
+  "coa_file",
+  "coa_signature_file",
+  "coa_signature_type",
+  "coa_signed_by",
+  "coa_signed_on",
+  "column_break_reporting_2",
+  "preliminary_conclusion",
+  "final_conclusion",
+  "is_report_authorized",
+  "report_authorized_by",
+  "report_authorized_on",
+  "published_on",
+  "progress_percent",
+  "section_analysis_items",
+  "analysis_items"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "LIMS-SMP-.YYYY.-",
+   "default": "LIMS-SMP-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sample_status",
+   "fieldtype": "Select",
+   "label": "Sample Status",
+   "options": "Draft\nSampled\nReceived\nTo Verify\nVerified\nPublished\nDispatched\nRejected\nCancelled",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "lims_client",
+   "fieldtype": "Link",
+   "label": "LIMS Client",
+   "options": "LIMS Client",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "patient",
+   "fieldtype": "Link",
+   "label": "Patient",
+   "options": "Patient"
+  },
+  {
+   "fieldname": "sample_point",
+   "fieldtype": "Link",
+   "label": "Sample Point",
+   "options": "LIMS Sample Point"
+  },
+  {
+   "fieldname": "sample_condition",
+   "fieldtype": "Link",
+   "label": "Sample Condition",
+   "options": "LIMS Sample Condition"
+  },
+  {
+   "fieldname": "sample_preservation",
+   "fieldtype": "Link",
+   "label": "Sample Preservation",
+   "options": "LIMS Sample Preservation"
+  },
+  {
+   "fieldname": "sample_matrix",
+   "fieldtype": "Link",
+   "label": "Sample Matrix",
+   "options": "LIMS Sample Matrix"
+  },
+  {
+   "fieldname": "sample_container",
+   "fieldtype": "Link",
+   "label": "Sample Container",
+   "options": "LIMS Sample Container"
+  },
+  {
+   "fieldname": "storage_location",
+   "fieldtype": "Link",
+   "label": "Storage Location",
+   "options": "LIMS Storage Location"
+  },
+  {
+   "fieldname": "batch",
+   "fieldtype": "Link",
+   "label": "Batch",
+   "options": "LIMS Batch"
+  },
+  {
+   "fieldname": "parent_sample",
+   "fieldtype": "Link",
+   "label": "Parent Sample",
+   "options": "LIMS Sample",
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_partition",
+   "fieldtype": "Check",
+   "label": "Is Partition",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "partition_reason",
+   "fieldtype": "Small Text",
+   "label": "Partition Reason",
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_on_hold",
+   "fieldtype": "Check",
+   "label": "On Hold",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "hold_reason",
+   "fieldtype": "Small Text",
+   "label": "Hold Reason",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ar_template",
+   "fieldtype": "Link",
+   "label": "AR Template",
+   "options": "LIMS AR Template"
+  },
+  {
+   "fieldname": "sample_template",
+   "fieldtype": "Link",
+   "label": "Sample Template",
+   "options": "LIMS Sample Template"
+  },
+  {
+   "fieldname": "analysis_profile",
+   "fieldtype": "Link",
+   "label": "Analysis Profile",
+   "options": "LIMS Analysis Profile"
+  },
+  {
+   "fieldname": "sample_type",
+   "fieldtype": "Link",
+   "label": "Sample Type",
+   "options": "LIMS Sample Type",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "label": "Priority",
+   "options": "Normal\nUrgent",
+   "default": "Normal",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "point_of_capture",
+   "fieldtype": "Select",
+   "label": "Point Of Capture",
+   "options": "lab\nfield",
+   "default": "lab"
+  },
+  {
+   "fieldname": "sample_barcode",
+   "fieldtype": "Data",
+   "label": "Sample Barcode",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "specimen_status",
+   "fieldtype": "Select",
+   "label": "Specimen Status",
+   "options": "Registered\nCollected\nIn Transit\nAccessioned\nRejected\nDisposed",
+   "default": "Registered",
+   "read_only": 1
+  },
+  {
+   "fieldname": "collected_on",
+   "fieldtype": "Datetime",
+   "label": "Collected On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "in_transit_on",
+   "fieldtype": "Datetime",
+   "label": "In Transit On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accessioned_on",
+   "fieldtype": "Datetime",
+   "label": "Accessioned On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "collection_datetime",
+   "fieldtype": "Datetime",
+   "label": "Collection Datetime"
+  },
+  {
+   "fieldname": "received_datetime",
+   "fieldtype": "Datetime",
+   "label": "Received Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stability_hours",
+   "fieldtype": "Int",
+   "label": "Stability (Hours)",
+   "default": "0"
+  },
+  {
+   "fieldname": "stability_expires_on",
+   "fieldtype": "Datetime",
+   "label": "Stability Expires On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_stability_expired",
+   "fieldtype": "Check",
+   "label": "Stability Expired",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "dispatched_on",
+   "fieldtype": "Datetime",
+   "label": "Dispatched On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "label": "Due Date"
+  },
+  {
+   "fieldname": "is_tat_overdue",
+   "fieldtype": "Check",
+   "label": "TAT Overdue",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sampling_required",
+   "fieldtype": "Check",
+   "label": "Sampling Required",
+   "default": "0"
+  },
+  {
+   "fieldname": "sampler",
+   "fieldtype": "Link",
+   "label": "Sampler",
+   "options": "User"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "Sales Order",
+   "options": "Sales Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_entry",
+   "fieldtype": "Link",
+   "label": "Payment Entry",
+   "options": "Payment Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "credit_note",
+   "fieldtype": "Link",
+   "label": "Credit Note",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "billing_status",
+   "fieldtype": "Select",
+   "label": "Billing Status",
+   "options": "Not Billed\nUnpaid\nPartially Paid\nPaid\nCredited\nCancelled",
+   "default": "Not Billed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Data",
+   "label": "Payment Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invoice_grand_total",
+   "fieldtype": "Currency",
+   "label": "Invoice Grand Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invoice_outstanding",
+   "fieldtype": "Currency",
+   "label": "Invoice Outstanding",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invoice_paid_amount",
+   "fieldtype": "Currency",
+   "label": "Invoice Paid Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "coa_file",
+   "fieldtype": "Attach",
+   "label": "COA File",
+   "read_only": 1
+  },
+  {
+   "fieldname": "coa_signature_file",
+   "fieldtype": "Attach",
+   "label": "COA Signature File",
+   "description": "Supports image or PDF"
+  },
+  {
+   "fieldname": "coa_signature_type",
+   "fieldtype": "Select",
+   "label": "COA Signature Type",
+   "options": "Image\nPDF",
+   "read_only": 1
+  },
+  {
+   "fieldname": "coa_signed_by",
+   "fieldtype": "Link",
+   "label": "COA Signed By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "coa_signed_on",
+   "fieldtype": "Datetime",
+   "label": "COA Signed On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "preliminary_conclusion",
+   "fieldtype": "Small Text",
+   "label": "Preliminary Conclusion",
+   "read_only": 1
+  },
+  {
+   "fieldname": "final_conclusion",
+   "fieldtype": "Text",
+   "label": "Final Conclusion",
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_report_authorized",
+   "fieldtype": "Check",
+   "label": "Report Authorized",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "report_authorized_by",
+   "fieldtype": "Link",
+   "label": "Report Authorized By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "report_authorized_on",
+   "fieldtype": "Datetime",
+   "label": "Report Authorized On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "published_on",
+   "fieldtype": "Datetime",
+   "label": "Published On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "progress_percent",
+   "fieldtype": "Percent",
+   "label": "Progress",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "analysis_items",
+   "fieldtype": "Table",
+   "label": "Analysis Items",
+   "options": "LIMS Sample Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_sample_overview",
+   "fieldtype": "Section Break",
+   "label": "Sample Overview"
+  },
+  {
+   "fieldname": "column_break_sample_overview_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_specimen_details",
+   "fieldtype": "Section Break",
+   "label": "Specimen Details"
+  },
+  {
+   "fieldname": "column_break_specimen_details_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_timing_tracking",
+   "fieldtype": "Section Break",
+   "label": "Timing & Tracking"
+  },
+  {
+   "fieldname": "column_break_timing_tracking_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_timing_tracking_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_finance",
+   "fieldtype": "Section Break",
+   "label": "Finance"
+  },
+  {
+   "fieldname": "column_break_finance_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_reporting",
+   "fieldtype": "Section Break",
+   "label": "Reporting"
+  },
+  {
+   "fieldname": "column_break_reporting_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_analysis_items",
+   "fieldtype": "Section Break",
+   "label": "Analysis Items"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "LIMS Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "LIMS Sampler",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "LIMS Analyst",
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "LIMS Verifier",
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ]
+}

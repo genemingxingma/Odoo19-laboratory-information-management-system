@@ -1,0 +1,251 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:spec_name",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "module": "Laboratory Management",
+ "name": "LIMS Analysis Specification",
+ "field_order": [
+  "section_spec_identity",
+  "spec_name",
+  "is_active",
+  "priority",
+  "column_break_spec_identity_2",
+  "analysis_service",
+  "section_scope_filters",
+  "sample_type",
+  "sample_matrix",
+  "sample_condition",
+  "sample_preservation",
+  "column_break_scope_filters_2",
+  "container_type",
+  "lims_client",
+  "customer",
+  "section_demographics",
+  "sex",
+  "age_min_years",
+  "age_max_years",
+  "section_effective_dates",
+  "effective_from",
+  "column_break_effective_dates_2",
+  "effective_to",
+  "section_acceptance_limits",
+  "spec_low",
+  "spec_high",
+  "column_break_acceptance_limits_2",
+  "allowed_values",
+  "action_on_fail",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "spec_name",
+   "fieldtype": "Data",
+   "label": "Specification Name",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "priority",
+   "fieldtype": "Int",
+   "label": "Priority",
+   "default": "10",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "analysis_service",
+   "fieldtype": "Link",
+   "label": "Analysis Service",
+   "options": "LIMS Analysis Service",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sample_type",
+   "fieldtype": "Link",
+   "label": "Sample Type",
+   "options": "LIMS Sample Type"
+  },
+  {
+   "fieldname": "sample_matrix",
+   "fieldtype": "Link",
+   "label": "Sample Matrix",
+   "options": "LIMS Sample Matrix"
+  },
+  {
+   "fieldname": "sample_condition",
+   "fieldtype": "Link",
+   "label": "Sample Condition",
+   "options": "LIMS Sample Condition"
+  },
+  {
+   "fieldname": "sample_preservation",
+   "fieldtype": "Link",
+   "label": "Sample Preservation",
+   "options": "LIMS Sample Preservation"
+  },
+  {
+   "fieldname": "container_type",
+   "fieldtype": "Link",
+   "label": "Container Type",
+   "options": "LIMS Container Type"
+  },
+  {
+   "fieldname": "lims_client",
+   "fieldtype": "Link",
+   "label": "LIMS Client",
+   "options": "LIMS Client"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "sex",
+   "fieldtype": "Select",
+   "label": "Sex",
+   "options": "Any\nMale\nFemale\nUnknown",
+   "default": "Any"
+  },
+  {
+   "fieldname": "age_min_years",
+   "fieldtype": "Float",
+   "label": "Age Min (Years)"
+  },
+  {
+   "fieldname": "age_max_years",
+   "fieldtype": "Float",
+   "label": "Age Max (Years)"
+  },
+  {
+   "fieldname": "effective_from",
+   "fieldtype": "Date",
+   "label": "Effective From"
+  },
+  {
+   "fieldname": "effective_to",
+   "fieldtype": "Date",
+   "label": "Effective To"
+  },
+  {
+   "fieldname": "spec_low",
+   "fieldtype": "Float",
+   "label": "Spec Low"
+  },
+  {
+   "fieldname": "spec_high",
+   "fieldtype": "Float",
+   "label": "Spec High"
+  },
+  {
+   "fieldname": "allowed_values",
+   "fieldtype": "Small Text",
+   "label": "Allowed Values",
+   "description": "Optional. One value per line for non-numeric/qualitative results."
+  },
+  {
+   "fieldname": "action_on_fail",
+   "fieldtype": "Select",
+   "label": "Action On Fail",
+   "options": "Warn\nBlock",
+   "default": "Warn",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "section_spec_identity",
+   "fieldtype": "Section Break",
+   "label": "Specification Identity"
+  },
+  {
+   "fieldname": "column_break_spec_identity_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_scope_filters",
+   "fieldtype": "Section Break",
+   "label": "Scope Filters"
+  },
+  {
+   "fieldname": "column_break_scope_filters_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_demographics",
+   "fieldtype": "Section Break",
+   "label": "Demographics"
+  },
+  {
+   "fieldname": "section_effective_dates",
+   "fieldtype": "Section Break",
+   "label": "Effective Dates"
+  },
+  {
+   "fieldname": "column_break_effective_dates_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_acceptance_limits",
+   "fieldtype": "Section Break",
+   "label": "Acceptance Limits"
+  },
+  {
+   "fieldname": "column_break_acceptance_limits_2",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "LIMS Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "LIMS Verifier",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1
+  },
+  {
+   "role": "LIMS Analyst",
+   "read": 1,
+   "report": 1
+  }
+ ]
+}

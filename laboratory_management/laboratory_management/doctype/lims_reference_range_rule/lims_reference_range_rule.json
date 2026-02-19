@@ -1,0 +1,29 @@
+{
+ "actions": [],
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "istable": 1,
+ "module": "Laboratory Management",
+ "name": "LIMS Reference Range Rule",
+ "field_order": [
+  "sex",
+  "age_min_years",
+  "age_max_years",
+  "reference_low",
+  "reference_high",
+  "critical_low",
+  "critical_high",
+  "notes"
+ ],
+ "fields": [
+  {"fieldname": "sex", "fieldtype": "Select", "label": "Sex", "options": "Any\nMale\nFemale\nUnknown", "default": "Any", "in_list_view": 1},
+  {"fieldname": "age_min_years", "fieldtype": "Float", "label": "Age Min (Years)", "in_list_view": 1},
+  {"fieldname": "age_max_years", "fieldtype": "Float", "label": "Age Max (Years)", "in_list_view": 1},
+  {"fieldname": "reference_low", "fieldtype": "Float", "label": "Reference Low", "in_list_view": 1},
+  {"fieldname": "reference_high", "fieldtype": "Float", "label": "Reference High", "in_list_view": 1},
+  {"fieldname": "critical_low", "fieldtype": "Float", "label": "Critical Low", "in_list_view": 1},
+  {"fieldname": "critical_high", "fieldtype": "Float", "label": "Critical High", "in_list_view": 1},
+  {"fieldname": "notes", "fieldtype": "Small Text", "label": "Notes"}
+ ]
+}

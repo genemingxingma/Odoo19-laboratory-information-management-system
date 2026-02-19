@@ -1,0 +1,15 @@
+{
+ "add_total_row": 1,
+ "disabled": 0,
+ "doctype": "Report",
+ "is_standard": "Yes",
+ "module": "Laboratory Management",
+ "name": "LIMS Financial Overview",
+ "ref_doctype": "LIMS Sample",
+ "report_name": "LIMS Financial Overview",
+ "report_type": "Script Report",
+ "roles": [
+  {"role": "System Manager"},
+  {"role": "LIMS Manager"}
+ ]
+}

@@ -1,0 +1,224 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "module": "Laboratory Management",
+ "name": "LIMS Results Report",
+ "field_order": [
+  "section_report_header",
+  "naming_series",
+  "sample",
+  "report_title",
+  "column_break_report_header_2",
+  "revision",
+  "previous_report",
+  "status",
+  "section_output_release",
+  "print_format",
+  "generated_file",
+  "generated_on",
+  "column_break_output_release_2",
+  "released_by",
+  "released_on",
+  "section_signature_supersede",
+  "signature_file",
+  "signature_type",
+  "signed_by",
+  "signed_on",
+  "column_break_signature_supersede_2",
+  "supersede_reason",
+  "section_snapshot",
+  "results_snapshot"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "LIMS-RPT-.YYYY.-",
+   "default": "LIMS-RPT-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sample",
+   "fieldtype": "Link",
+   "label": "Sample",
+   "options": "LIMS Sample",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "report_title",
+   "fieldtype": "Data",
+   "label": "Report Title",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "revision",
+   "fieldtype": "Int",
+   "label": "Revision",
+   "default": "1",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "previous_report",
+   "fieldtype": "Link",
+   "label": "Previous Report",
+   "options": "LIMS Results Report"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nReleased\nSuperseded\nCancelled",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "print_format",
+   "fieldtype": "Link",
+   "label": "Print Format",
+   "options": "Print Format"
+  },
+  {
+   "fieldname": "generated_file",
+   "fieldtype": "Attach",
+   "label": "Generated File",
+   "read_only": 1
+  },
+  {
+   "fieldname": "generated_on",
+   "fieldtype": "Datetime",
+   "label": "Generated On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "released_by",
+   "fieldtype": "Link",
+   "label": "Released By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "released_on",
+   "fieldtype": "Datetime",
+   "label": "Released On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "signature_file",
+   "fieldtype": "Attach",
+   "label": "Signature File",
+   "description": "Supports image or PDF"
+  },
+  {
+   "fieldname": "signature_type",
+   "fieldtype": "Select",
+   "label": "Signature Type",
+   "options": "Image\nPDF",
+   "read_only": 1
+  },
+  {
+   "fieldname": "signed_by",
+   "fieldtype": "Link",
+   "label": "Signed By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "signed_on",
+   "fieldtype": "Datetime",
+   "label": "Signed On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "supersede_reason",
+   "fieldtype": "Small Text",
+   "label": "Supersede Reason",
+   "read_only": 0
+  },
+  {
+   "fieldname": "results_snapshot",
+   "fieldtype": "Code",
+   "label": "Results Snapshot",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_report_header",
+   "fieldtype": "Section Break",
+   "label": "Report Header"
+  },
+  {
+   "fieldname": "column_break_report_header_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_output_release",
+   "fieldtype": "Section Break",
+   "label": "Output & Release"
+  },
+  {
+   "fieldname": "column_break_output_release_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_signature_supersede",
+   "fieldtype": "Section Break",
+   "label": "Signature & Supersede"
+  },
+  {
+   "fieldname": "column_break_signature_supersede_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_snapshot",
+   "fieldtype": "Section Break",
+   "label": "Snapshot"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "LIMS Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "LIMS Verifier",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "LIMS Analyst",
+   "read": 1,
+   "report": 1
+  }
+ ]
+}

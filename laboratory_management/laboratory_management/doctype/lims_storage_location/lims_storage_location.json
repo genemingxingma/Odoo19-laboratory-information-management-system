@@ -1,0 +1,23 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:location_name",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "module": "Laboratory Management",
+ "name": "LIMS Storage Location",
+ "field_order": ["location_name", "parent_location", "is_group", "description", "is_active"],
+ "fields": [
+  {"fieldname": "location_name", "fieldtype": "Data", "label": "Location", "reqd": 1, "unique": 1, "in_list_view": 1},
+  {"fieldname": "parent_location", "fieldtype": "Link", "label": "Parent Location", "options": "LIMS Storage Location"},
+  {"fieldname": "is_group", "fieldtype": "Check", "label": "Is Group", "default": "0", "in_list_view": 1},
+  {"fieldname": "description", "fieldtype": "Small Text", "label": "Description"},
+  {"fieldname": "is_active", "fieldtype": "Check", "label": "Is Active", "default": "1", "in_list_view": 1}
+ ],
+ "permissions": [
+  {"role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1, "print": 1, "email": 1, "share": 1},
+  {"role": "LIMS Manager", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1, "print": 1, "email": 1, "share": 1},
+  {"role": "LIMS Analyst", "read": 1, "report": 1},
+  {"role": "LIMS Verifier", "read": 1, "report": 1}
+ ]
+}

@@ -1,0 +1,51 @@
+LIMS AR Template,AR模板
+LIMS AR Template Item,AR模板明细
+LIMS Analysis Category,检验分类
+LIMS Analysis Profile,检验组合
+LIMS Analysis Profile Item,检验组合明细
+LIMS Analysis Service,检验项目
+LIMS Attachment Type,附件类型
+LIMS Audit Log,审计日志
+LIMS Batch,批次
+LIMS Client,客户
+LIMS Container Type,容器类型
+LIMS Critical Notification,危急值通知
+LIMS Department,科室
+LIMS EQA Plan,室间质评计划
+LIMS EQA Result,室间质评结果
+LIMS Financial Overview,财务概览
+LIMS IQC Run,室内质控
+LIMS Instrument,仪器
+LIMS Instrument Location,仪器位置
+LIMS Instrument Message,仪器消息
+LIMS Instrument Type,仪器类型
+LIMS Interpretation Template,解读模板
+LIMS Label,标签
+LIMS Label Batch,标签批次
+LIMS Label Batch Item,标签批次明细
+LIMS Label Template,标签模板
+LIMS Method,方法
+LIMS Reference Range Rule,参考范围规则
+LIMS Rejection Reason,拒收原因
+LIMS Sample,样本
+LIMS Sample Condition,样本状态
+LIMS Sample Container,样本容器
+LIMS Sample Item,样本项目
+LIMS Sample Matrix,样本基质
+LIMS Sample Point,采样点
+LIMS Sample Preservation,样本保存方式
+LIMS Sample Template,样本模板
+LIMS Sample Template Item,样本模板明细
+LIMS Sample Type,样本类型
+LIMS Settings,设置
+LIMS Specimen Event,标本事件
+LIMS Storage Location,存储位置
+LIMS Worksheet,工作表
+LIMS Worksheet Item,工作表明细
+LIMS Worksheet Template,工作表模板
+LIMS Worksheet Template Item,工作表模板明细
+LIMS CAPA,纠正预防措施
+LIMS Results Report,检验报告
+LIMS Analysis Specification,检验规格
+LIMS Instrument Mapping,仪器映射
+LIMS Instrument Mapping Item,仪器映射明细

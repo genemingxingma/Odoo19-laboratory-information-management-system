@@ -1,0 +1,193 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "module": "Laboratory Management",
+ "name": "LIMS EQA Result",
+ "field_order": [
+  "section_eqa_header",
+  "naming_series",
+  "eqa_plan",
+  "analysis_service",
+  "column_break_eqa_header_2",
+  "instrument",
+  "sample",
+  "capa",
+  "section_eqa_values",
+  "expected_value",
+  "reported_value",
+  "column_break_eqa_values_2",
+  "score_percent",
+  "z_score",
+  "section_eqa_evaluation",
+  "evaluation",
+  "evaluated_by",
+  "evaluated_on",
+  "column_break_eqa_evaluation_2",
+  "comments"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "EQAR-.YYYY.-",
+   "default": "EQAR-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "fieldname": "eqa_plan",
+   "fieldtype": "Link",
+   "label": "EQA Plan",
+   "options": "LIMS EQA Plan",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "analysis_service",
+   "fieldtype": "Link",
+   "label": "Analysis Service",
+   "options": "LIMS Analysis Service",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "instrument",
+   "fieldtype": "Link",
+   "label": "Instrument",
+   "options": "LIMS Instrument"
+  },
+  {
+   "fieldname": "sample",
+   "fieldtype": "Link",
+   "label": "Sample",
+   "options": "LIMS Sample"
+  },
+  {
+   "fieldname": "capa",
+   "fieldtype": "Link",
+   "label": "CAPA",
+   "options": "LIMS CAPA",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "expected_value",
+   "fieldtype": "Data",
+   "label": "Expected Value"
+  },
+  {
+   "fieldname": "reported_value",
+   "fieldtype": "Data",
+   "label": "Reported Value",
+   "reqd": 1
+  },
+  {
+   "fieldname": "score_percent",
+   "fieldtype": "Percent",
+   "label": "Score %",
+   "read_only": 1
+  },
+  {
+   "fieldname": "z_score",
+   "fieldtype": "Float",
+   "label": "Z Score",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evaluation",
+   "fieldtype": "Select",
+   "label": "Evaluation",
+   "options": "Pass\nWarning\nFail",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "evaluated_by",
+   "fieldtype": "Link",
+   "label": "Evaluated By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evaluated_on",
+   "fieldtype": "Datetime",
+   "label": "Evaluated On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "comments",
+   "fieldtype": "Small Text",
+   "label": "Comments"
+  },
+  {
+   "fieldname": "section_eqa_header",
+   "fieldtype": "Section Break",
+   "label": "EQA Header"
+  },
+  {
+   "fieldname": "column_break_eqa_header_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_eqa_values",
+   "fieldtype": "Section Break",
+   "label": "Expected vs Reported"
+  },
+  {
+   "fieldname": "column_break_eqa_values_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_eqa_evaluation",
+   "fieldtype": "Section Break",
+   "label": "Evaluation"
+  },
+  {
+   "fieldname": "column_break_eqa_evaluation_2",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "LIMS Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "LIMS Analyst",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1
+  },
+  {
+   "role": "LIMS Verifier",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1
+  }
+ ]
+}
