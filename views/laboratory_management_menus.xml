@@ -5,7 +5,6 @@
         name="Laboratory"
         sequence="10"
         groups="laboratory_management.group_lab_user"
-        action="action_lab_sample"
         web_icon="laboratory_management,static/description/icon.png"
     />
 

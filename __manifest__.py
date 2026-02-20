@@ -3,6 +3,7 @@
     "summary": "SENAITE-style laboratory workflow",
     "description": """
 Laboratory management workflow implemented on Odoo:
+
 - Analysis service catalog and profiles
 - Sample accessioning and lifecycle
 - Analysis execution and worksheet batching
@@ -52,6 +53,7 @@ Laboratory management workflow implemented on Odoo:
         "report/lab_report_actions.xml",
         "report/lab_custody_report_templates.xml",
         "report/lab_custody_report_actions.xml",
+        "views/laboratory_management_menus.xml",
         "views/lab_service_views.xml",
         "views/lab_notification_views.xml",
         "views/lab_review_views.xml",
@@ -100,7 +102,6 @@ Laboratory management workflow implemented on Odoo:
         "wizard/lab_custody_investigation_bulk_update_wizard_views.xml",
         "wizard/lab_result_import_wizard_views.xml",
         "wizard/lab_instrument_result_import_wizard_views.xml",
-        "views/laboratory_management_menus.xml",
         "views/portal_templates.xml",
     ],
     "installable": True,
