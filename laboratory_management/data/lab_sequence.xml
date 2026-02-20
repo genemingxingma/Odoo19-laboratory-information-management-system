@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_lab_sample" model="ir.sequence">
+        <field name="name">Lab Sample</field>
+        <field name="code">lab.sample</field>
+        <field name="prefix">ACC%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_lab_worksheet" model="ir.sequence">
+        <field name="name">Lab Worksheet</field>
+        <field name="code">lab.worksheet</field>
+        <field name="prefix">WS%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_lab_qc_run" model="ir.sequence">
+        <field name="name">Lab QC Run</field>
+        <field name="code">lab.qc.run</field>
+        <field name="prefix">QC%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_lab_import_job" model="ir.sequence">
+        <field name="name">Lab Import Job</field>
+        <field name="code">lab.import.job</field>
+        <field name="prefix">IMP%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_lab_nonconformance" model="ir.sequence">
+        <field name="name">Lab Nonconformance</field>
+        <field name="code">lab.nonconformance</field>
+        <field name="prefix">NCR%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

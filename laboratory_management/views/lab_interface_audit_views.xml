@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_interface_audit_log_list" model="ir.ui.view">
+        <field name="name">lab.interface.audit.log.list</field>
+        <field name="model">lab.interface.audit.log</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="action == 'error'" decoration-success="action == 'ack'">
+                <field name="event_at"/>
+                <field name="endpoint_id"/>
+                <field name="job_id"/>
+                <field name="direction"/>
+                <field name="action"/>
+                <field name="external_uid"/>
+                <field name="source_ip"/>
+                <field name="state"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_interface_audit_log_form" model="ir.ui.view">
+        <field name="name">lab.interface.audit.log.form</field>
+        <field name="model">lab.interface.audit.log</field>
+        <field name="arch" type="xml">
+            <form string="Interface Audit Log">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="event_at" readonly="1"/>
+                            <field name="endpoint_id" readonly="1"/>
+                            <field name="job_id" readonly="1"/>
+                            <field name="direction" readonly="1"/>
+                            <field name="action" readonly="1"/>
+                            <field name="state" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="external_uid" readonly="1"/>
+                            <field name="source_ip" readonly="1"/>
+                            <field name="user_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="payload" readonly="1"/>
+                        <field name="result" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_interface_audit_log" model="ir.actions.act_window">
+        <field name="name">Interface Audit Logs</field>
+        <field name="res_model">lab.interface.audit.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_lab_interface_audit_log"
+        name="Interface Audit Logs"
+        parent="menu_laboratory_operations"
+        action="action_lab_interface_audit_log"
+        sequence="13"
+    />
+</odoo>

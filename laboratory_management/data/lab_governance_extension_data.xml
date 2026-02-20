@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_exception_template_manual_review_chem" model="lab.department.exception.template">
+        <field name="sequence">10</field>
+        <field name="name">Chemistry Manual Review Exception</field>
+        <field name="code">EXC_CHEM_MANUAL_REVIEW</field>
+        <field name="department">chemistry</field>
+        <field name="sample_type">all</field>
+        <field name="trigger_event">manual_review_required</field>
+        <field name="severity">major</field>
+        <field name="route_action">task</field>
+        <field name="task_workstation">review</field>
+        <field name="task_priority">urgent</field>
+        <field name="owner_group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="sla_hours">8</field>
+        <field name="title_template">[{code}] Manual review {sample}</field>
+        <field name="note_template">{name} triggered for sample {sample}.</field>
+    </record>
+
+    <record id="lab_exception_template_interface_failed_chem" model="lab.department.exception.template">
+        <field name="sequence">20</field>
+        <field name="name">Chemistry Interface Failure Exception</field>
+        <field name="code">EXC_CHEM_IFACE_FAIL</field>
+        <field name="department">chemistry</field>
+        <field name="sample_type">all</field>
+        <field name="trigger_event">interface_failed</field>
+        <field name="severity">major</field>
+        <field name="route_action">task_ncr</field>
+        <field name="task_workstation">interface</field>
+        <field name="task_priority">stat</field>
+        <field name="owner_group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="sla_hours">2</field>
+        <field name="title_template">[{code}] Interface failure {sample}</field>
+        <field name="note_template">Interface failure handling for sample {sample} in department {department}.</field>
+    </record>
+</odoo>

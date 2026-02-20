@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_permission_matrix_reception" model="lab.permission.matrix">
+        <field name="sequence">10</field>
+        <field name="name">Reception Desk Matrix</field>
+        <field name="group_id" ref="laboratory_management.group_lab_reception"/>
+        <field name="workstation">accession</field>
+        <field name="can_view">1</field>
+        <field name="can_create">1</field>
+        <field name="can_edit">1</field>
+        <field name="can_approve">0</field>
+        <field name="can_release">0</field>
+        <field name="can_administer">0</field>
+    </record>
+
+    <record id="lab_permission_matrix_analytical" model="lab.permission.matrix">
+        <field name="sequence">20</field>
+        <field name="name">Analytical Bench Matrix</field>
+        <field name="group_id" ref="laboratory_management.group_lab_analyst"/>
+        <field name="workstation">analytical</field>
+        <field name="can_view">1</field>
+        <field name="can_create">1</field>
+        <field name="can_edit">1</field>
+        <field name="can_approve">0</field>
+        <field name="can_release">0</field>
+        <field name="can_administer">0</field>
+    </record>
+
+    <record id="lab_permission_matrix_review" model="lab.permission.matrix">
+        <field name="sequence">30</field>
+        <field name="name">Reviewer Matrix</field>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="workstation">review</field>
+        <field name="can_view">1</field>
+        <field name="can_create">0</field>
+        <field name="can_edit">1</field>
+        <field name="can_approve">1</field>
+        <field name="can_release">1</field>
+        <field name="can_administer">0</field>
+    </record>
+
+    <record id="lab_permission_matrix_quality" model="lab.permission.matrix">
+        <field name="sequence">40</field>
+        <field name="name">Quality Matrix</field>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="workstation">quality</field>
+        <field name="can_view">1</field>
+        <field name="can_create">1</field>
+        <field name="can_edit">1</field>
+        <field name="can_approve">1</field>
+        <field name="can_release">0</field>
+        <field name="can_administer">1</field>
+    </record>
+
+    <record id="lab_permission_matrix_integration" model="lab.permission.matrix">
+        <field name="sequence">50</field>
+        <field name="name">Interface Admin Matrix</field>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="workstation">integration</field>
+        <field name="can_view">1</field>
+        <field name="can_create">1</field>
+        <field name="can_edit">1</field>
+        <field name="can_approve">1</field>
+        <field name="can_release">0</field>
+        <field name="can_administer">1</field>
+    </record>
+</odoo>

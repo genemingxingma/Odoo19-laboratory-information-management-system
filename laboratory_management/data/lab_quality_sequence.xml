@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_lab_quality_program" model="ir.sequence">
+        <field name="name">Lab Quality Program</field>
+        <field name="code">lab.quality.program</field>
+        <field name="prefix">LQP/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="seq_lab_quality_audit" model="ir.sequence">
+        <field name="name">Lab Quality Audit</field>
+        <field name="code">lab.quality.audit</field>
+        <field name="prefix">LQA/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="seq_lab_quality_training" model="ir.sequence">
+        <field name="name">Lab Quality Training</field>
+        <field name="code">lab.quality.training</field>
+        <field name="prefix">LQT/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

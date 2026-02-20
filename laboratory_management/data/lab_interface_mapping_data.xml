@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_interface_map_out_order_rest" model="lab.interface.mapping.profile">
+        <field name="name">REST Outbound Order Mapping</field>
+        <field name="code">MAP-REST-OUT-ORDER</field>
+        <field name="protocol">rest</field>
+        <field name="direction">outbound</field>
+        <field name="message_type">order</field>
+    </record>
+
+    <record id="lab_interface_map_out_order_rest_1" model="lab.interface.mapping.line">
+        <field name="profile_id" ref="laboratory_management.lab_interface_map_out_order_rest"/>
+        <field name="sequence">10</field>
+        <field name="source_path">request_no</field>
+        <field name="target_path">order_id</field>
+    </record>
+    <record id="lab_interface_map_out_order_rest_2" model="lab.interface.mapping.line">
+        <field name="profile_id" ref="laboratory_management.lab_interface_map_out_order_rest"/>
+        <field name="sequence">20</field>
+        <field name="source_path">priority</field>
+        <field name="target_path">urgency</field>
+        <field name="transform">upper</field>
+    </record>
+    <record id="lab_interface_map_out_order_rest_3" model="lab.interface.mapping.line">
+        <field name="profile_id" ref="laboratory_management.lab_interface_map_out_order_rest"/>
+        <field name="sequence">30</field>
+        <field name="source_path">lines</field>
+        <field name="target_path">test_items</field>
+    </record>
+
+    <record id="lab_interface_map_in_order_rest" model="lab.interface.mapping.profile">
+        <field name="name">REST Inbound Order Mapping</field>
+        <field name="code">MAP-REST-IN-ORDER</field>
+        <field name="protocol">rest</field>
+        <field name="direction">inbound</field>
+        <field name="message_type">order</field>
+    </record>
+
+    <record id="lab_interface_map_in_order_rest_1" model="lab.interface.mapping.line">
+        <field name="profile_id" ref="laboratory_management.lab_interface_map_in_order_rest"/>
+        <field name="sequence">10</field>
+        <field name="source_path">ext_patient</field>
+        <field name="target_path">patient_name</field>
+    </record>
+    <record id="lab_interface_map_in_order_rest_2" model="lab.interface.mapping.line">
+        <field name="profile_id" ref="laboratory_management.lab_interface_map_in_order_rest"/>
+        <field name="sequence">20</field>
+        <field name="source_path">ext_priority</field>
+        <field name="target_path">priority</field>
+        <field name="transform">lower</field>
+    </record>
+    <record id="lab_interface_map_in_order_rest_3" model="lab.interface.mapping.line">
+        <field name="profile_id" ref="laboratory_management.lab_interface_map_in_order_rest"/>
+        <field name="sequence">30</field>
+        <field name="source_path">ext_sample</field>
+        <field name="target_path">sample_type</field>
+        <field name="transform">lower</field>
+    </record>
+    <record id="lab_interface_map_in_order_rest_4" model="lab.interface.mapping.line">
+        <field name="profile_id" ref="laboratory_management.lab_interface_map_in_order_rest"/>
+        <field name="sequence">40</field>
+        <field name="source_path">ext_lines</field>
+        <field name="target_path">lines</field>
+    </record>
+</odoo>

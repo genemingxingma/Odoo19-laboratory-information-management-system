@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_retest_policy_chemistry_default" model="lab.retest.policy">
+        <field name="name">Chemistry Default Retest Policy</field>
+        <field name="code">RET-CHEM-DEFAULT</field>
+        <field name="scope">department</field>
+        <field name="department">chemistry</field>
+        <field name="max_retest_count">2</field>
+        <field name="require_reason">1</field>
+        <field name="cooldown_minutes">10</field>
+        <field name="escalate_after_failures">2</field>
+        <field name="escalation_group_id" ref="laboratory_management.group_lab_manager"/>
+    </record>
+
+    <record id="lab_sop_chemistry_default" model="lab.department.sop">
+        <field name="name">Chemistry End-to-End SOP</field>
+        <field name="code">SOP-CHEM-001</field>
+        <field name="department">chemistry</field>
+        <field name="sample_type">blood</field>
+        <field name="priority">all</field>
+        <field name="retest_policy_id" ref="laboratory_management.lab_retest_policy_chemistry_default"/>
+        <field name="state">active</field>
+    </record>
+
+    <record id="lab_sop_chem_step_register" model="lab.department.sop.step">
+        <field name="sop_id" ref="laboratory_management.lab_sop_chemistry_default"/>
+        <field name="sequence">10</field>
+        <field name="step_code">register</field>
+        <field name="name">Sample Registration</field>
+        <field name="workstation_role">reception</field>
+        <field name="required">1</field>
+    </record>
+
+    <record id="lab_sop_chem_step_accession" model="lab.department.sop.step">
+        <field name="sop_id" ref="laboratory_management.lab_sop_chemistry_default"/>
+        <field name="sequence">20</field>
+        <field name="step_code">accession</field>
+        <field name="name">Accessioning and Label Check</field>
+        <field name="workstation_role">reception</field>
+        <field name="required">1</field>
+    </record>
+
+    <record id="lab_sop_chem_step_analysis" model="lab.department.sop.step">
+        <field name="sop_id" ref="laboratory_management.lab_sop_chemistry_default"/>
+        <field name="sequence">30</field>
+        <field name="step_code">analysis</field>
+        <field name="name">Analytical Processing</field>
+        <field name="workstation_role">analyst</field>
+        <field name="required">1</field>
+    </record>
+
+    <record id="lab_sop_chem_step_verify" model="lab.department.sop.step">
+        <field name="sop_id" ref="laboratory_management.lab_sop_chemistry_default"/>
+        <field name="sequence">40</field>
+        <field name="step_code">verify</field>
+        <field name="name">Technical and Medical Verification</field>
+        <field name="workstation_role">reviewer</field>
+        <field name="required">1</field>
+    </record>
+
+    <record id="lab_sop_chem_step_release" model="lab.department.sop.step">
+        <field name="sop_id" ref="laboratory_management.lab_sop_chemistry_default"/>
+        <field name="sequence">50</field>
+        <field name="step_code">release</field>
+        <field name="name">Report Release and Dispatch</field>
+        <field name="workstation_role">reviewer</field>
+        <field name="required">1</field>
+    </record>
+
+    <record id="lab_sop_chem_exception_critical" model="lab.sop.exception.route">
+        <field name="sop_id" ref="laboratory_management.lab_sop_chemistry_default"/>
+        <field name="sequence">10</field>
+        <field name="trigger_event">critical</field>
+        <field name="severity">critical</field>
+        <field name="route_action">manual_review</field>
+        <field name="owner_group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="sla_hours">1</field>
+    </record>
+
+    <record id="lab_sop_chem_exception_delta" model="lab.sop.exception.route">
+        <field name="sop_id" ref="laboratory_management.lab_sop_chemistry_default"/>
+        <field name="sequence">20</field>
+        <field name="trigger_event">delta_fail</field>
+        <field name="severity">major</field>
+        <field name="route_action">retest</field>
+        <field name="owner_group_id" ref="laboratory_management.group_lab_analyst"/>
+        <field name="sla_hours">4</field>
+    </record>
+
+    <record id="lab_sop_chem_exception_qc" model="lab.sop.exception.route">
+        <field name="sop_id" ref="laboratory_management.lab_sop_chemistry_default"/>
+        <field name="sequence">30</field>
+        <field name="trigger_event">qc_reject</field>
+        <field name="severity">major</field>
+        <field name="route_action">ncr</field>
+        <field name="owner_group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="sla_hours">8</field>
+    </record>
+</odoo>

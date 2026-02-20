@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_storage_bulk_operation_wizard_form" model="ir.ui.view">
+        <field name="name">lab.storage.bulk.operation.wizard.form</field>
+        <field name="model">lab.storage.bulk.operation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Storage Operation">
+                <sheet>
+                    <group>
+                        <field name="operation"/>
+                        <field name="apply_only_reported"/>
+                        <field name="note"/>
+                    </group>
+
+                    <group string="Storage Parameters" invisible="operation not in ('store','move')">
+                        <field name="storage_location_id"/>
+                        <field name="box"/>
+                        <field name="slot"/>
+                    </group>
+
+                    <group string="Disposal Parameters" invisible="operation != 'dispose'">
+                        <field name="disposal_method"/>
+                        <field name="disposal_reason"/>
+                        <field name="witness_name"/>
+                    </group>
+
+                    <group string="Samples">
+                        <field name="sample_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_apply" type="object" string="Apply" class="btn-primary"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_storage_bulk_operation_wizard" model="ir.actions.act_window">
+        <field name="name">Bulk Storage Operation</field>
+        <field name="res_model">lab.storage.bulk.operation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="server_action_lab_storage_bulk_operation" model="ir.actions.server">
+        <field name="name">Bulk Storage Operation</field>
+        <field name="model_id" ref="model_lab_sample"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_lab_sample"/>
+        <field name="binding_view_types">list</field>
+        <field name="code">
+action = env["lab.storage.bulk.operation.wizard"].with_context(active_ids=records.ids).action_open_wizard()
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_lab_storage_bulk_operation"
+        name="Bulk Storage Operation"
+        parent="menu_laboratory_operations"
+        action="action_lab_storage_bulk_operation_wizard"
+        sequence="25"
+    />
+
+</odoo>

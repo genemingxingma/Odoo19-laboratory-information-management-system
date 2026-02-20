@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_nonconformance_list" model="ir.ui.view">
+        <field name="name">lab.nonconformance.list</field>
+        <field name="model">lab.nonconformance</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="severity == 'critical'" decoration-warning="state in ('open', 'investigation', 'capa')">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="source_type"/>
+                <field name="sample_id"/>
+                <field name="qc_run_id"/>
+                <field name="severity"/>
+                <field name="owner_id"/>
+                <field name="due_date"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_nonconformance_form" model="ir.ui.view">
+        <field name="name">lab.nonconformance.form</field>
+        <field name="model">lab.nonconformance</field>
+        <field name="arch" type="xml">
+            <form string="Nonconformance / CAPA">
+                <header>
+                    <button name="action_open" type="object" string="Open" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_start_investigation" type="object" string="Start Investigation" invisible="state not in ('open', 'draft')"/>
+                    <button name="action_plan_capa" type="object" string="Plan CAPA" class="btn-primary" invisible="state != 'investigation'"/>
+                    <button name="action_close" type="object" string="Close" class="btn-primary" invisible="state != 'capa'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('closed', 'cancel')"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft" invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,investigation,capa,closed,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="title"/>
+                            <field name="source_type"/>
+                            <field name="severity"/>
+                            <field name="owner_id"/>
+                            <field name="due_date"/>
+                        </group>
+                        <group>
+                            <field name="detected_date"/>
+                            <field name="detected_by_id"/>
+                            <field name="sample_id"/>
+                            <field name="analysis_id"/>
+                            <field name="qc_run_id"/>
+                            <field name="service_id" readonly="1"/>
+                            <field name="closed_by_id" readonly="1"/>
+                            <field name="closed_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Issue">
+                            <group>
+                                <field name="description"/>
+                                <field name="immediate_action"/>
+                            </group>
+                        </page>
+                        <page string="Investigation">
+                            <group>
+                                <field name="root_cause"/>
+                                <field name="effectiveness_check"/>
+                            </group>
+                        </page>
+                        <page string="CAPA">
+                            <group>
+                                <field name="corrective_action"/>
+                                <field name="preventive_action"/>
+                                <field name="close_note"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_nonconformance_search" model="ir.ui.view">
+        <field name="name">lab.nonconformance.search</field>
+        <field name="model">lab.nonconformance</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="title"/>
+                <field name="source_type"/>
+                <field name="sample_id"/>
+                <field name="qc_run_id"/>
+                <field name="severity"/>
+                <field name="state"/>
+                <filter name="f_ncr_open" string="Open" domain="[('state','in',('open','investigation','capa'))]"/>
+                <filter name="f_ncr_critical" string="Critical" domain="[('severity','=','critical')]"/>
+                <filter name="f_ncr_closed" string="Closed" domain="[('state','=','closed')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_nonconformance" model="ir.actions.act_window">
+        <field name="name">Nonconformance / CAPA</field>
+        <field name="res_model">lab.nonconformance</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_nonconformance_search"/>
+    </record>
+
+    <menuitem id="menu_lab_nonconformance" name="Nonconformance / CAPA" parent="menu_laboratory_quality" action="action_lab_nonconformance" sequence="15"/>
+</odoo>

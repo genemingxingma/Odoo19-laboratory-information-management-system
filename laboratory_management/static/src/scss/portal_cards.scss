@@ -1,0 +1,31 @@
+#portal_laboratory_category {
+    margin-top: 0.75rem !important;
+}
+
+#portal_laboratory_category .o_portal_index_card {
+    margin-bottom: 0 !important;
+}
+
+#portal_laboratory_category .o_portal_index_card > a {
+    align-items: flex-start;
+    min-height: 118px;
+}
+
+#portal_laboratory_category .o_portal_index_card .o_portal_icon {
+    width: 44px;
+    min-width: 44px;
+}
+
+#portal_laboratory_category .o_portal_index_card .o_portal_icon img {
+    width: 44px;
+    height: 44px;
+    display: block;
+    object-fit: contain;
+}
+
+#portal_laboratory_category .o_portal_index_card .opacity-75 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

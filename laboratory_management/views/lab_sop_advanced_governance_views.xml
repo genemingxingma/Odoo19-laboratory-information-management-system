@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_department_sop_version_list" model="ir.ui.view">
+        <field name="name">lab.department.sop.version.list</field>
+        <field name="model">lab.department.sop.version</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="sop_id"/>
+                <field name="version_no"/>
+                <field name="state"/>
+                <field name="is_active_version"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_department_sop_version_form" model="ir.ui.view">
+        <field name="name">lab.department.sop.version.form</field>
+        <field name="model">lab.department.sop.version</field>
+        <field name="arch" type="xml">
+            <form string="SOP Version Snapshot">
+                <header>
+                    <button name="action_approve" type="object" string="Approve" invisible="state != 'draft'"/>
+                    <button name="action_apply_to_sop" type="object" string="Apply To SOP" class="btn-primary" invisible="state not in ('approved','active')"/>
+                    <button name="action_activate_version" type="object" string="Activate Version" invisible="state not in ('approved','draft')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,active,retired"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sop_id"/>
+                            <field name="version_no"/>
+                            <field name="is_active_version" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="source_note"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Step Snapshot">
+                            <field name="step_json" widget="text" readonly="1"/>
+                        </page>
+                        <page string="Exception Route Snapshot">
+                            <field name="exception_route_json" widget="text" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_department_sop_version" model="ir.actions.act_window">
+        <field name="name">SOP Versions</field>
+        <field name="res_model">lab.department.sop.version</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_department_sop_form_advanced_governance_inherit" model="ir.ui.view">
+        <field name="name">lab.department.sop.form.advanced.governance.inherit</field>
+        <field name="model">lab.department.sop</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_department_sop_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_version_snapshot" type="object" string="Create Version"/>
+                <button name="action_view_versions" type="object" string="Versions"/>
+            </xpath>
+            <xpath expr="//group[1]/group[2]" position="inside">
+                <field name="version_count" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_sop_exception_decision_form_advanced_governance_inherit" model="ir.ui.view">
+        <field name="name">lab.sop.exception.decision.form.advanced.governance.inherit</field>
+        <field name="model">lab.sop.exception.decision</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sop_exception_decision_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stop_execution']" position="after">
+                <field name="sla_hours"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_sop_execution_form_advanced_governance_inherit" model="ir.ui.view">
+        <field name="name">lab.sop.execution.form.advanced.governance.inherit</field>
+        <field name="model">lab.sop.execution</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sop_execution_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='exception_reason']" position="after">
+                <group>
+                    <field name="exception_trigger" readonly="1"/>
+                    <field name="exception_opened_at" readonly="1"/>
+                    <field name="exception_sla_hours" readonly="1"/>
+                    <field name="exception_deadline" readonly="1"/>
+                    <field name="exception_escalated" readonly="1"/>
+                    <field name="exception_escalated_at" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_retest_analytics_report_list" model="ir.ui.view">
+        <field name="name">lab.retest.analytics.report.list</field>
+        <field name="model">lab.retest.analytics.report</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="department"/>
+                <field name="total_retests"/>
+                <field name="sample_count"/>
+                <field name="escalated_sample_count"/>
+                <field name="avg_retests_per_sample"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_retest_analytics_report_form" model="ir.ui.view">
+        <field name="name">lab.retest.analytics.report.form</field>
+        <field name="model">lab.retest.analytics.report</field>
+        <field name="arch" type="xml">
+            <form string="Retest Analytics Report">
+                <header>
+                    <button name="action_generate" type="object" string="Generate" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="department"/>
+                        </group>
+                        <group>
+                            <field name="total_retests" readonly="1"/>
+                            <field name="sample_count" readonly="1"/>
+                            <field name="escalated_sample_count" readonly="1"/>
+                            <field name="recollect_event_count" readonly="1"/>
+                            <field name="avg_retests_per_sample" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" readonly="1">
+                        <list>
+                            <field name="service_id"/>
+                            <field name="retest_count"/>
+                            <field name="sample_count"/>
+                            <field name="critical_retest_count"/>
+                            <field name="avg_delta_abs"/>
+                            <field name="last_retest_at"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_retest_analytics_report" model="ir.actions.act_window">
+        <field name="name">Retest Analytics</field>
+        <field name="res_model">lab.retest.analytics.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lab_department_sop_version" name="SOP Versions" parent="menu_laboratory_config" action="action_lab_department_sop_version" sequence="32"/>
+    <menuitem id="menu_lab_retest_analytics_report" name="Retest Analytics" parent="menu_laboratory_quality" action="action_lab_retest_analytics_report" sequence="48"/>
+</odoo>

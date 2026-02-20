@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_worksheet_list" model="ir.ui.view">
+        <field name="name">lab.worksheet.list</field>
+        <field name="model">lab.worksheet</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="department"/>
+                <field name="analyst_id"/>
+                <field name="planned_date"/>
+                <field name="total_analysis"/>
+                <field name="done_analysis"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_worksheet_form" model="ir.ui.view">
+        <field name="name">lab.worksheet.form</field>
+        <field name="model">lab.worksheet</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_load_pending" type="object" string="Load Pending" invisible="state != 'draft'"/>
+                    <button name="action_start" type="object" string="Start" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_done" type="object" string="Mark Done" class="btn-primary" invisible="state == 'done'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="department"/>
+                            <field name="analyst_id"/>
+                        </group>
+                        <group>
+                            <field name="planned_date"/>
+                            <field name="total_analysis" readonly="1"/>
+                            <field name="done_analysis" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                    <field name="analysis_ids" readonly="1">
+                        <list>
+                            <field name="sample_id"/>
+                            <field name="service_id"/>
+                            <field name="analyst_id"/>
+                            <field name="result_value"/>
+                            <field name="result_flag"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_worksheet" model="ir.actions.act_window">
+        <field name="name">Worksheets</field>
+        <field name="res_model">lab.worksheet</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lab_worksheet" name="Worksheets" parent="menu_laboratory_operations" action="action_lab_worksheet" sequence="20"/>
+</odoo>

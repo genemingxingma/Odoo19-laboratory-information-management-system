@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_sop_retest_strategy_chem_default" model="lab.sop.retest.strategy">
+        <field name="sequence">10</field>
+        <field name="name">Chemistry Default Retest Strategy</field>
+        <field name="code">CHEM_RETEST_DEFAULT</field>
+        <field name="department">chemistry</field>
+        <field name="sample_type">other</field>
+        <field name="max_total_attempts">2</field>
+        <field name="cooldown_minutes">5</field>
+        <field name="recollect_after_attempt">2</field>
+        <field name="escalate_after_attempt">2</field>
+        <field name="owner_group_id" ref="laboratory_management.group_lab_manager"/>
+    </record>
+    <record id="lab_sop_retest_strategy_chem_rule_critical" model="lab.sop.retest.strategy.line">
+        <field name="strategy_id" ref="lab_sop_retest_strategy_chem_default"/>
+        <field name="sequence">10</field>
+        <field name="trigger">critical</field>
+        <field name="action">manual_review</field>
+        <field name="max_attempt">1</field>
+        <field name="require_reason" eval="True"/>
+        <field name="route_to_group_id" ref="laboratory_management.group_lab_reviewer"/>
+    </record>
+    <record id="lab_sop_retest_strategy_chem_rule_delta" model="lab.sop.retest.strategy.line">
+        <field name="strategy_id" ref="lab_sop_retest_strategy_chem_default"/>
+        <field name="sequence">20</field>
+        <field name="trigger">delta_fail</field>
+        <field name="action">retest</field>
+        <field name="max_attempt">1</field>
+        <field name="require_reason" eval="True"/>
+        <field name="route_to_group_id" ref="laboratory_management.group_lab_analyst"/>
+    </record>
+    <record id="lab_sop_retest_strategy_chem_rule_qc" model="lab.sop.retest.strategy.line">
+        <field name="strategy_id" ref="lab_sop_retest_strategy_chem_default"/>
+        <field name="sequence">30</field>
+        <field name="trigger">qc_reject</field>
+        <field name="action">escalate</field>
+        <field name="max_attempt">0</field>
+        <field name="require_reason" eval="False"/>
+        <field name="route_to_group_id" ref="laboratory_management.group_lab_quality_manager"/>
+    </record>
+
+    <record id="lab_sop_retest_strategy_hema_default" model="lab.sop.retest.strategy">
+        <field name="sequence">20</field>
+        <field name="name">Hematology Default Retest Strategy</field>
+        <field name="code">HEMA_RETEST_DEFAULT</field>
+        <field name="department">hematology</field>
+        <field name="sample_type">other</field>
+        <field name="max_total_attempts">3</field>
+        <field name="cooldown_minutes">0</field>
+        <field name="recollect_after_attempt">3</field>
+        <field name="escalate_after_attempt">2</field>
+        <field name="owner_group_id" ref="laboratory_management.group_lab_manager"/>
+    </record>
+    <record id="lab_sop_retest_strategy_hema_rule_instr" model="lab.sop.retest.strategy.line">
+        <field name="strategy_id" ref="lab_sop_retest_strategy_hema_default"/>
+        <field name="sequence">10</field>
+        <field name="trigger">instrument_error</field>
+        <field name="action">recollect</field>
+        <field name="max_attempt">0</field>
+        <field name="require_reason" eval="True"/>
+        <field name="route_to_group_id" ref="laboratory_management.group_lab_reception"/>
+    </record>
+    <record id="lab_sop_retest_strategy_hema_rule_manual_reject" model="lab.sop.retest.strategy.line">
+        <field name="strategy_id" ref="lab_sop_retest_strategy_hema_default"/>
+        <field name="sequence">20</field>
+        <field name="trigger">manual_review_reject</field>
+        <field name="action">retest</field>
+        <field name="max_attempt">2</field>
+        <field name="require_reason" eval="True"/>
+        <field name="route_to_group_id" ref="laboratory_management.group_lab_analyst"/>
+    </record>
+</odoo>

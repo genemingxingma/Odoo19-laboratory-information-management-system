@@ -1,0 +1,32 @@
+:root {
+    --lab-chatter-aside-width: 336px;
+}
+
+.o-mail-Form-chatter.o-aside,
+.o-mail-ChatterContainer.o-aside {
+    width: var(--lab-chatter-aside-width) !important;
+    min-width: 280px;
+    max-width: 720px;
+    position: relative;
+}
+
+.o-mail-Form-chatter.o-aside .lab-chatter-resizer,
+.o-mail-ChatterContainer.o-aside .lab-chatter-resizer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 8px;
+    cursor: col-resize;
+    z-index: 3;
+    background: linear-gradient(to right, rgba(13, 110, 253, 0.24), rgba(13, 110, 253, 0));
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.o-mail-Form-chatter.o-aside:hover .lab-chatter-resizer,
+.o-mail-ChatterContainer.o-aside:hover .lab-chatter-resizer,
+.o-mail-Form-chatter.o-aside .lab-chatter-resizer.is-dragging,
+.o-mail-ChatterContainer.o-aside .lab-chatter-resizer.is-dragging {
+    opacity: 1;
+}

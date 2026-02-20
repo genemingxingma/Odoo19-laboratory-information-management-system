@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_eqa_scheme_list" model="ir.ui.view">
+        <field name="name">lab.eqa.scheme.list</field>
+        <field name="model">lab.eqa.scheme</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="provider"/>
+                <field name="department"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_eqa_scheme_form" model="ir.ui.view">
+        <field name="name">lab.eqa.scheme.form</field>
+        <field name="model">lab.eqa.scheme</field>
+        <field name="arch" type="xml">
+            <form string="EQA Scheme">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="provider"/>
+                            <field name="department"/>
+                        </group>
+                        <group>
+                            <field name="service_ids" widget="many2many_tags"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_eqa_round_list" model="ir.ui.view">
+        <field name="name">lab.eqa.round.list</field>
+        <field name="model">lab.eqa.round</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="fail_count &gt; 0 and state in ('evaluated','closed')" decoration-success="state == 'closed'">
+                <field name="name"/>
+                <field name="scheme_id"/>
+                <field name="sample_date"/>
+                <field name="due_date"/>
+                <field name="submitted_date"/>
+                <field name="pass_rate" widget="percentage"/>
+                <field name="fail_count"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_eqa_round_form" model="ir.ui.view">
+        <field name="name">lab.eqa.round.form</field>
+        <field name="model">lab.eqa.round</field>
+        <field name="arch" type="xml">
+            <form string="EQA Round">
+                <header>
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_evaluate" type="object" string="Evaluate" class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_close" type="object" string="Close" invisible="state != 'evaluated'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,evaluated,closed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="scheme_id"/>
+                            <field name="sample_date"/>
+                            <field name="due_date"/>
+                            <field name="submitted_date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="pass_rate" widget="percentage" readonly="1"/>
+                            <field name="fail_count" readonly="1"/>
+                            <field name="zscore_mean" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="Results">
+                            <field name="result_ids">
+                                <list editable="bottom">
+                                    <field name="service_id"/>
+                                    <field name="expected_value"/>
+                                    <field name="reported_value"/>
+                                    <field name="tolerance"/>
+                                    <field name="z_score" readonly="1"/>
+                                    <field name="status" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_compliance_snapshot_list" model="ir.ui.view">
+        <field name="name">lab.compliance.snapshot.list</field>
+        <field name="model">lab.compliance.snapshot</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'published'">
+                <field name="name"/>
+                <field name="period_start"/>
+                <field name="period_end"/>
+                <field name="generated_at"/>
+                <field name="on_time_rate" widget="percentage"/>
+                <field name="qc_reject_rate" widget="percentage"/>
+                <field name="eqa_pass_rate" widget="percentage"/>
+                <field name="ncr_closure_rate" widget="percentage"/>
+                <field name="interface_success_rate" widget="percentage"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_compliance_snapshot_form" model="ir.ui.view">
+        <field name="name">lab.compliance.snapshot.form</field>
+        <field name="model">lab.compliance.snapshot</field>
+        <field name="arch" type="xml">
+            <form string="Compliance Snapshot">
+                <header>
+                    <button name="action_generate" type="object" string="Generate" class="btn-primary"/>
+                    <button name="action_publish" type="object" string="Publish" invisible="state == 'published'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,published"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                            <field name="generated_at" readonly="1"/>
+                            <field name="generated_by_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="total_samples" readonly="1"/>
+                            <field name="reported_samples" readonly="1"/>
+                            <field name="overdue_samples" readonly="1"/>
+                            <field name="on_time_rate" widget="percentage" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Quality Metrics">
+                        <group>
+                            <field name="qc_total" readonly="1"/>
+                            <field name="qc_reject" readonly="1"/>
+                            <field name="qc_reject_rate" widget="percentage" readonly="1"/>
+                            <field name="eqa_total" readonly="1"/>
+                            <field name="eqa_pass" readonly="1"/>
+                            <field name="eqa_pass_rate" widget="percentage" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="ncr_total" readonly="1"/>
+                            <field name="ncr_closed" readonly="1"/>
+                            <field name="ncr_closure_rate" widget="percentage" readonly="1"/>
+                            <field name="interface_total" readonly="1"/>
+                            <field name="interface_success" readonly="1"/>
+                            <field name="interface_success_rate" widget="percentage" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Compliance Lines">
+                            <field name="line_ids" readonly="1">
+                                <list decoration-success="passed" decoration-danger="not passed">
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="actual_value"/>
+                                    <field name="target_value"/>
+                                    <field name="unit"/>
+                                    <field name="gap"/>
+                                    <field name="passed"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group>
+                        <field name="conclusion"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_eqa_scheme" model="ir.actions.act_window">
+        <field name="name">EQA Schemes</field>
+        <field name="res_model">lab.eqa.scheme</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_eqa_round" model="ir.actions.act_window">
+        <field name="name">EQA Rounds</field>
+        <field name="res_model">lab.eqa.round</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_compliance_snapshot" model="ir.actions.act_window">
+        <field name="name">Compliance Snapshots</field>
+        <field name="res_model">lab.compliance.snapshot</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lab_eqa_scheme" name="EQA Schemes" parent="menu_laboratory_quality" action="action_lab_eqa_scheme" sequence="34"/>
+    <menuitem id="menu_lab_eqa_round" name="EQA Rounds" parent="menu_laboratory_quality" action="action_lab_eqa_round" sequence="35"/>
+    <menuitem id="menu_lab_compliance_snapshot" name="Compliance Reports" parent="menu_laboratory_quality" action="action_lab_compliance_snapshot" sequence="36"/>
+</odoo>

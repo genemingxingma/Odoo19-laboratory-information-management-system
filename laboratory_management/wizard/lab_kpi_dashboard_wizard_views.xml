@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_kpi_dashboard_wizard_form" model="ir.ui.view">
+        <field name="name">lab.kpi.dashboard.wizard.form</field>
+        <field name="model">lab.kpi.dashboard.wizard</field>
+        <field name="arch" type="xml">
+            <form string="KPI Dashboard">
+                <sheet>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <button name="action_refresh" type="object" string="Refresh KPI" class="btn-primary"/>
+                    </group>
+                    <group string="TAT KPI">
+                        <field name="total_reported_samples" readonly="1"/>
+                        <field name="tat_on_time_samples" readonly="1"/>
+                        <field name="tat_overdue_samples" readonly="1"/>
+                        <field name="tat_rate" readonly="1" widget="percentage"/>
+                        <button name="action_open_overdue_samples" type="object" string="Open Overdue Samples"/>
+                    </group>
+                    <group string="Retest KPI">
+                        <field name="total_analysis" readonly="1"/>
+                        <field name="retest_count" readonly="1"/>
+                        <field name="retest_rate" readonly="1" widget="percentage"/>
+                        <button name="action_open_retest_analysis" type="object" string="Open Retest Lines"/>
+                    </group>
+                    <group string="QC KPI">
+                        <field name="total_qc_runs" readonly="1"/>
+                        <field name="qc_reject_count" readonly="1"/>
+                        <field name="qc_reject_rate" readonly="1" widget="percentage"/>
+                        <button name="action_open_qc_reject" type="object" string="Open QC Rejects"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button special="cancel" string="Close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_kpi_dashboard_wizard" model="ir.actions.act_window">
+        <field name="name">KPI Dashboard</field>
+        <field name="res_model">lab.kpi.dashboard.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_lab_kpi_dashboard" name="KPI Dashboard" parent="menu_laboratory_quality" action="action_lab_kpi_dashboard_wizard" sequence="40"/>
+</odoo>

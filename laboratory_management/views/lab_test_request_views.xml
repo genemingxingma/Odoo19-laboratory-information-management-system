@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_test_request_list" model="ir.ui.view">
+        <field name="name">lab.test.request.list</field>
+        <field name="model">lab.test.request</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="state == 'quoted'" decoration-info="state == 'submitted'" decoration-success="state == 'completed'">
+                <field name="name"/>
+                <field name="request_type"/>
+                <field name="requester_partner_id"/>
+                <field name="patient_id"/>
+                <field name="patient_name"/>
+                <field name="priority"/>
+                <field name="requested_collection_date"/>
+                <field name="estimated_report_date"/>
+                <field name="quote_valid_until"/>
+                <field name="quote_days_left"/>
+                <field name="amount_total"/>
+                <field name="sample_count"/>
+                <field name="interface_job_count"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_test_request_search" model="ir.ui.view">
+        <field name="name">lab.test.request.search</field>
+        <field name="model">lab.test.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="requester_partner_id"/>
+                <field name="client_partner_id"/>
+                <field name="patient_id"/>
+                <field name="patient_name"/>
+                <field name="priority"/>
+                <field name="state"/>
+
+                <filter name="f_submitted" string="Submitted" domain="[('state','=','submitted')]"/>
+                <filter name="f_quoted" string="Quoted" domain="[('state','=','quoted')]"/>
+                <filter name="f_approved" string="Approved" domain="[('state','=','approved')]"/>
+                <filter name="f_in_progress" string="In Progress" domain="[('state','=','in_progress')]"/>
+                <filter name="f_completed" string="Completed" domain="[('state','=','completed')]"/>
+                <filter name="f_quote_expired" string="Quote Expired" domain="[('quote_expired','=',True)]"/>
+
+                <separator string="Group By"/>
+                <filter name="g_state" string="State" context="{'group_by': 'state'}"/>
+                <filter name="g_type" string="Type" context="{'group_by': 'request_type'}"/>
+                <filter name="g_priority" string="Priority" context="{'group_by': 'priority'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_test_request_form" model="ir.ui.view">
+        <field name="name">lab.test.request.form</field>
+        <field name="model">lab.test.request</field>
+        <field name="arch" type="xml">
+            <form string="Test Request">
+                <header>
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary" invisible="state not in ('draft','cancelled')"/>
+                    <button name="action_start_triage" type="object" string="Start Triage" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager" invisible="state not in ('submitted','draft')"/>
+                    <button name="action_prepare_quote" type="object" string="Prepare Quote" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager" invisible="state not in ('submitted','triage','draft')"/>
+                    <button name="action_send_quote" type="object" string="Send Quote" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager" invisible="state != 'quoted'"/>
+                    <button name="action_create_quote_revision" type="object" string="Revise Quote" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager" invisible="state != 'quoted'"/>
+                    <button name="action_approve_quote" type="object" string="Approve" class="btn-primary" invisible="state != 'quoted'"/>
+                    <button name="action_create_samples" type="object" string="Create Sample" class="btn-primary" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager" invisible="state not in ('approved','in_progress')"/>
+                    <button name="action_mark_completed" type="object" string="Mark Completed" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="state not in ('approved','in_progress')"/>
+                    <button name="action_reject" type="object" string="Reject" invisible="state in ('completed','cancelled','rejected')"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('completed','cancelled')"/>
+                    <button name="action_reset_draft" type="object" string="Reset Draft" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,triage,quoted,approved,in_progress,completed,rejected,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_view_samples" type="object" icon="fa-flask">
+                            <field name="sample_count" widget="statinfo" string="Samples"/>
+                        </button>
+                        <button class="oe_stat_button" name="action_view_quote_revisions" type="object" icon="fa-history">
+                            <field name="quote_revision_count" widget="statinfo" string="Quote Revisions"/>
+                        </button>
+                        <button class="oe_stat_button" name="action_view_interface_jobs" type="object" icon="fa-exchange">
+                            <field name="interface_job_count" widget="statinfo" string="Interface Jobs"/>
+                        </button>
+                        <button class="oe_stat_button" name="action_open_portal" type="object" icon="fa-external-link" string="Portal"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="request_type"/>
+                            <field name="requester_partner_id"/>
+                            <field name="client_partner_id" invisible="request_type != 'institution'"/>
+                            <field name="priority"/>
+                            <field name="requested_collection_date"/>
+                            <field name="sample_type"/>
+                            <field name="fasting_required"/>
+                        </group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="patient_name"/>
+                            <field name="patient_identifier"/>
+                            <field name="patient_birthdate"/>
+                            <field name="patient_gender"/>
+                            <field name="patient_phone"/>
+                            <field name="physician_name"/>
+                            <field name="preferred_template_id"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="quote_reference"/>
+                            <field name="quote_valid_until"/>
+                            <field name="quote_expired" readonly="1"/>
+                            <field name="quote_days_left" readonly="1"/>
+                            <field name="currency_id"/>
+                        </group>
+                        <group>
+                            <field name="amount_untaxed" readonly="1"/>
+                            <field name="amount_discount" readonly="1"/>
+                            <field name="amount_total" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="clinical_note"/>
+                        <field name="quote_note"/>
+                        <field name="quote_last_sent_at" readonly="1"/>
+                        <field name="quote_last_sent_by_id" readonly="1"/>
+                        <field name="quote_auto_reminder_count" readonly="1"/>
+                        <field name="rejection_reason" invisible="state != 'rejected'"/>
+                        <field name="cancel_reason" invisible="state != 'cancelled'"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Requested Tests">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="line_type"/>
+                                    <field name="service_id" invisible="line_type != 'service'"/>
+                                    <field name="profile_id" invisible="line_type != 'profile'"/>
+                                    <field name="quantity"/>
+                                    <field name="service_count" readonly="1"/>
+                                    <field name="effective_turnaround_hours" readonly="1"/>
+                                    <field name="unit_price"/>
+                                    <field name="discount_percent"/>
+                                    <field name="discount_amount" readonly="1"/>
+                                    <field name="subtotal" readonly="1"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Timeline">
+                            <field name="timeline_ids" readonly="1">
+                                <list>
+                                    <field name="event_time"/>
+                                    <field name="event_type"/>
+                                    <field name="user_id"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Quote Revisions">
+                            <field name="quote_revision_ids" readonly="1">
+                                <list>
+                                    <field name="revision_no"/>
+                                    <field name="created_at"/>
+                                    <field name="created_by_id"/>
+                                    <field name="amount_untaxed"/>
+                                    <field name="amount_discount"/>
+                                    <field name="amount_total"/>
+                                    <field name="quote_valid_until"/>
+                                    <field name="reason"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Samples">
+                            <field name="sample_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="patient_id"/>
+                                    <field name="priority"/>
+                                    <field name="collection_date"/>
+                                    <field name="state"/>
+                                    <field name="report_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Audit">
+                            <group>
+                                <group>
+                                    <field name="submitted_at" readonly="1"/>
+                                    <field name="submitted_by_id" readonly="1"/>
+                                    <field name="triaged_at" readonly="1"/>
+                                    <field name="triaged_by_id" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="approved_at" readonly="1"/>
+                                    <field name="approved_by_id" readonly="1"/>
+                                    <field name="rejected_at" readonly="1"/>
+                                    <field name="rejected_by_id" readonly="1"/>
+                                    <field name="completed_at" readonly="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="estimated_turnaround_hours" readonly="1"/>
+                                <field name="estimated_report_date" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_test_request_quote_revision_list" model="ir.ui.view">
+        <field name="name">lab.test.request.quote.revision.list</field>
+        <field name="model">lab.test.request.quote.revision</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="request_id"/>
+                <field name="revision_no"/>
+                <field name="created_at"/>
+                <field name="created_by_id"/>
+                <field name="amount_untaxed"/>
+                <field name="amount_discount"/>
+                <field name="amount_total"/>
+                <field name="quote_valid_until"/>
+                <field name="reason"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_test_request_quote_revision_form" model="ir.ui.view">
+        <field name="name">lab.test.request.quote.revision.form</field>
+        <field name="model">lab.test.request.quote.revision</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="request_id"/>
+                            <field name="revision_no"/>
+                            <field name="created_at"/>
+                            <field name="created_by_id"/>
+                        </group>
+                        <group>
+                            <field name="amount_untaxed"/>
+                            <field name="amount_discount"/>
+                            <field name="amount_total"/>
+                            <field name="quote_valid_until"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason"/>
+                        <field name="quote_note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_test_request" model="ir.actions.act_window">
+        <field name="name">Test Requests</field>
+        <field name="res_model">lab.test.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_test_request_search"/>
+    </record>
+
+    <record id="action_lab_test_request_quote_revision" model="ir.actions.act_window">
+        <field name="name">Quote Revisions</field>
+        <field name="res_model">lab.test.request.quote.revision</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_test_request_to_triage" model="ir.actions.act_window">
+        <field name="name">Requests to Triage</field>
+        <field name="res_model">lab.test.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ('submitted','triage'))]</field>
+    </record>
+
+    <record id="action_lab_test_request_to_quote" model="ir.actions.act_window">
+        <field name="name">Requests to Quote</field>
+        <field name="res_model">lab.test.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'quoted')]</field>
+    </record>
+
+    <menuitem id="menu_lab_test_request" name="Test Requests" parent="menu_laboratory_operations" action="action_lab_test_request" sequence="5"/>
+    <menuitem id="menu_lab_test_request_triage" name="Requests to Triage" parent="menu_laboratory_operations" action="action_lab_test_request_to_triage" sequence="6" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_test_request_quote" name="Requests to Quote" parent="menu_laboratory_operations" action="action_lab_test_request_to_quote" sequence="7" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_test_request_quote_revision" name="Quote Revisions" parent="menu_laboratory_operations" action="action_lab_test_request_quote_revision" sequence="8" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+</odoo>

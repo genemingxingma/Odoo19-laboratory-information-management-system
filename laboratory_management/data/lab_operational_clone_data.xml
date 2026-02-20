@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_queue_rule_chem_reception" model="lab.department.queue.rule">
+        <field name="name">Chemistry Reception Queue</field>
+        <field name="department">chemistry</field>
+        <field name="role_type">reception</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample</field>
+        <field name="source_state">draft,received</field>
+        <field name="include_overdue_only" eval="False"/>
+        <field name="action_name">Chemistry Incoming Samples</field>
+    </record>
+    <record id="lab_queue_rule_chem_analyst" model="lab.department.queue.rule">
+        <field name="name">Chemistry Analyst Queue</field>
+        <field name="department">chemistry</field>
+        <field name="role_type">analyst</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample.analysis</field>
+        <field name="source_state">assigned,done</field>
+        <field name="include_manual_review_only" eval="False"/>
+        <field name="action_name">Chemistry Pending Analyses</field>
+    </record>
+    <record id="lab_queue_rule_chem_reviewer" model="lab.department.queue.rule">
+        <field name="name">Chemistry Reviewer Queue</field>
+        <field name="department">chemistry</field>
+        <field name="role_type">reviewer</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample.analysis</field>
+        <field name="source_state">done</field>
+        <field name="include_manual_review_only" eval="True"/>
+        <field name="action_name">Chemistry Manual Review</field>
+    </record>
+    <record id="lab_queue_rule_hema_reception" model="lab.department.queue.rule">
+        <field name="name">Hematology Reception Queue</field>
+        <field name="department">hematology</field>
+        <field name="role_type">reception</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample</field>
+        <field name="source_state">draft,received</field>
+        <field name="include_overdue_only" eval="False"/>
+        <field name="action_name">Hematology Incoming Samples</field>
+    </record>
+    <record id="lab_queue_rule_hema_analyst" model="lab.department.queue.rule">
+        <field name="name">Hematology Analyst Queue</field>
+        <field name="department">hematology</field>
+        <field name="role_type">analyst</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample.analysis</field>
+        <field name="source_state">assigned,done</field>
+        <field name="include_critical_only" eval="False"/>
+        <field name="action_name">Hematology Pending Analyses</field>
+    </record>
+    <record id="lab_queue_rule_hema_reviewer" model="lab.department.queue.rule">
+        <field name="name">Hematology Reviewer Queue</field>
+        <field name="department">hematology</field>
+        <field name="role_type">reviewer</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample.analysis</field>
+        <field name="source_state">done</field>
+        <field name="include_manual_review_only" eval="True"/>
+        <field name="action_name">Hematology Manual Review</field>
+    </record>
+    <record id="lab_queue_rule_micro_reception" model="lab.department.queue.rule">
+        <field name="name">Microbiology Reception Queue</field>
+        <field name="department">microbiology</field>
+        <field name="role_type">reception</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample</field>
+        <field name="source_state">draft,received</field>
+        <field name="action_name">Microbiology Incoming Samples</field>
+    </record>
+    <record id="lab_queue_rule_micro_analyst" model="lab.department.queue.rule">
+        <field name="name">Microbiology Analyst Queue</field>
+        <field name="department">microbiology</field>
+        <field name="role_type">analyst</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample.analysis</field>
+        <field name="source_state">assigned,done</field>
+        <field name="action_name">Microbiology Pending Analyses</field>
+    </record>
+    <record id="lab_queue_rule_micro_reviewer" model="lab.department.queue.rule">
+        <field name="name">Microbiology Reviewer Queue</field>
+        <field name="department">microbiology</field>
+        <field name="role_type">reviewer</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample.analysis</field>
+        <field name="source_state">done</field>
+        <field name="include_manual_review_only" eval="True"/>
+        <field name="action_name">Microbiology Manual Review</field>
+    </record>
+    <record id="lab_queue_rule_immun_reception" model="lab.department.queue.rule">
+        <field name="name">Immunology Reception Queue</field>
+        <field name="department">immunology</field>
+        <field name="role_type">reception</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample</field>
+        <field name="source_state">draft,received</field>
+        <field name="action_name">Immunology Incoming Samples</field>
+    </record>
+    <record id="lab_queue_rule_immun_analyst" model="lab.department.queue.rule">
+        <field name="name">Immunology Analyst Queue</field>
+        <field name="department">immunology</field>
+        <field name="role_type">analyst</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample.analysis</field>
+        <field name="source_state">assigned,done</field>
+        <field name="action_name">Immunology Pending Analyses</field>
+    </record>
+    <record id="lab_queue_rule_immun_reviewer" model="lab.department.queue.rule">
+        <field name="name">Immunology Reviewer Queue</field>
+        <field name="department">immunology</field>
+        <field name="role_type">reviewer</field>
+        <field name="priority">all</field>
+        <field name="source_model">lab.sample.analysis</field>
+        <field name="source_state">done</field>
+        <field name="include_manual_review_only" eval="True"/>
+        <field name="action_name">Immunology Manual Review</field>
+    </record>
+
+    <record id="lab_hl7_template_order_default" model="lab.hl7.template">
+        <field name="name">Default ORM Order Template</field>
+        <field name="code">HL7_ORM_DEFAULT</field>
+        <field name="message_type">order</field>
+        <field name="version">2.5</field>
+    </record>
+    <record id="lab_hl7_template_order_seg_msh" model="lab.hl7.template.segment">
+        <field name="template_id" ref="lab_hl7_template_order_default"/>
+        <field name="sequence">10</field>
+        <field name="segment_name">MSH</field>
+        <field name="field_template">^~\&amp;|LIS|IMYTEST|HIS|HOSPITAL|{{message_time}}||ORM^O01|{{control_id}}|P|2.5</field>
+    </record>
+    <record id="lab_hl7_template_order_seg_pid" model="lab.hl7.template.segment">
+        <field name="template_id" ref="lab_hl7_template_order_default"/>
+        <field name="sequence">20</field>
+        <field name="segment_name">PID</field>
+        <field name="field_template">1||{{accession}}||{{patient_name}}</field>
+    </record>
+    <record id="lab_hl7_template_order_seg_orc" model="lab.hl7.template.segment">
+        <field name="template_id" ref="lab_hl7_template_order_default"/>
+        <field name="sequence">30</field>
+        <field name="segment_name">ORC</field>
+        <field name="field_template">NW|{{request_no}}</field>
+    </record>
+    <record id="lab_hl7_template_order_seg_obr" model="lab.hl7.template.segment">
+        <field name="template_id" ref="lab_hl7_template_order_default"/>
+        <field name="sequence">40</field>
+        <field name="segment_name">OBR</field>
+        <field name="field_template">1|{{request_no}}|{{accession}}|{{service_code}}</field>
+    </record>
+
+    <record id="lab_hl7_template_result_default" model="lab.hl7.template">
+        <field name="name">Default ORU Result Template</field>
+        <field name="code">HL7_ORU_DEFAULT</field>
+        <field name="message_type">result</field>
+        <field name="version">2.5</field>
+    </record>
+    <record id="lab_hl7_template_result_seg_msh" model="lab.hl7.template.segment">
+        <field name="template_id" ref="lab_hl7_template_result_default"/>
+        <field name="sequence">10</field>
+        <field name="segment_name">MSH</field>
+        <field name="field_template">^~\&amp;|LIS|IMYTEST|HIS|HOSPITAL|{{message_time}}||ORU^R01|{{control_id}}|P|2.5</field>
+    </record>
+    <record id="lab_hl7_template_result_seg_pid" model="lab.hl7.template.segment">
+        <field name="template_id" ref="lab_hl7_template_result_default"/>
+        <field name="sequence">20</field>
+        <field name="segment_name">PID</field>
+        <field name="field_template">1||{{accession}}||{{patient_name}}</field>
+    </record>
+    <record id="lab_hl7_template_result_seg_obr" model="lab.hl7.template.segment">
+        <field name="template_id" ref="lab_hl7_template_result_default"/>
+        <field name="sequence">30</field>
+        <field name="segment_name">OBR</field>
+        <field name="field_template">1|{{request_no}}|{{accession}}|{{service_code}}</field>
+    </record>
+    <record id="lab_hl7_template_result_seg_obx" model="lab.hl7.template.segment">
+        <field name="template_id" ref="lab_hl7_template_result_default"/>
+        <field name="sequence">40</field>
+        <field name="segment_name">OBX</field>
+        <field name="field_template">1|NM|{{service_code}}||{{result_value}}|||{{result_flag}}</field>
+        <field name="repeatable" eval="True"/>
+    </record>
+
+    <record id="lab_qc_trend_profile_default" model="lab.qc.trend.profile">
+        <field name="name">Default QC Trend Profile</field>
+        <field name="code">QC_TREND_DEFAULT</field>
+        <field name="window_size">20</field>
+        <field name="warning_sigma">2.0</field>
+        <field name="reject_sigma">3.0</field>
+    </record>
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_lab_report_dispatch" model="ir.sequence">
+        <field name="name">Lab Report Dispatch</field>
+        <field name="code">lab.report.dispatch</field>
+        <field name="prefix">RDISP/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

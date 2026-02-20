@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_request_invoice_list" model="ir.ui.view">
+        <field name="name">lab.request.invoice.list</field>
+        <field name="model">lab.request.invoice</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state in ('issued','partially_paid') and due_date &lt; context_today()" decoration-success="state == 'paid'">
+                <field name="name"/>
+                <field name="request_id"/>
+                <field name="partner_id"/>
+                <field name="invoice_date"/>
+                <field name="due_date"/>
+                <field name="amount_total"/>
+                <field name="amount_paid"/>
+                <field name="amount_residual"/>
+                <field name="payment_state"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_request_invoice_search" model="ir.ui.view">
+        <field name="name">lab.request.invoice.search</field>
+        <field name="model">lab.request.invoice</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="request_id"/>
+                <field name="partner_id"/>
+                <field name="state"/>
+                <field name="payment_state"/>
+                <filter name="f_issued" string="Issued" domain="[('state','=','issued')]"/>
+                <filter name="f_partial" string="Partially Paid" domain="[('state','=','partially_paid')]"/>
+                <filter name="f_paid" string="Paid" domain="[('state','=','paid')]"/>
+                <filter name="f_overdue" string="Overdue" domain="[('state','in',('issued','partially_paid')),('due_date','&lt;',context_today())]"/>
+                <separator string="Group By"/>
+                <filter name="g_state" string="State" context="{'group_by': 'state'}"/>
+                <filter name="g_payment" string="Payment State" context="{'group_by': 'payment_state'}"/>
+                <filter name="g_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_request_invoice_form" model="ir.ui.view">
+        <field name="name">lab.request.invoice.form</field>
+        <field name="model">lab.request.invoice</field>
+        <field name="arch" type="xml">
+            <form string="Request Invoice">
+                <header>
+                    <button name="action_issue" type="object" string="Issue" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_register_payment" type="object" string="Register Payment" class="btn-primary" invisible="state not in ('issued','partially_paid')"/>
+                    <button name="action_mark_paid" type="object" string="Mark Paid" invisible="state not in ('issued','partially_paid')"/>
+                    <button name="action_mark_void" type="object" string="Void" invisible="state in ('paid','void')"/>
+                    <button name="action_reset_draft" type="object" string="Reset Draft" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,issued,partially_paid,paid,void"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_view_payments" type="object" icon="fa-money">
+                            <field name="payment_count" widget="statinfo" string="Payments"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="request_id"/>
+                            <field name="partner_id"/>
+                            <field name="currency_id"/>
+                        </group>
+                        <group>
+                            <field name="invoice_date"/>
+                            <field name="due_date"/>
+                            <field name="payment_state" readonly="1"/>
+                            <field name="portal_last_viewed_at" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="Invoice Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="request_line_id"/>
+                                    <field name="description"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="discount_percent"/>
+                                    <field name="subtotal_gross" readonly="1"/>
+                                    <field name="discount_amount" readonly="1"/>
+                                    <field name="subtotal" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Payments">
+                            <field name="payment_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="payment_date"/>
+                                    <field name="payer_partner_id"/>
+                                    <field name="channel"/>
+                                    <field name="reference"/>
+                                    <field name="amount"/>
+                                    <field name="state"/>
+                                    <field name="reviewed_by_id"/>
+                                    <field name="reviewed_at"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group>
+                        <group>
+                            <field name="amount_untaxed" readonly="1"/>
+                            <field name="amount_discount" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="amount_total" readonly="1"/>
+                            <field name="amount_paid" readonly="1"/>
+                            <field name="amount_residual" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_request_payment_list" model="ir.ui.view">
+        <field name="name">lab.request.payment.list</field>
+        <field name="model">lab.request.payment</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="invoice_id"/>
+                <field name="request_id"/>
+                <field name="payer_partner_id"/>
+                <field name="payment_date"/>
+                <field name="channel"/>
+                <field name="reference"/>
+                <field name="amount"/>
+                <field name="state"/>
+                <field name="reviewed_by_id"/>
+                <field name="reviewed_at"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_request_payment_search" model="ir.ui.view">
+        <field name="name">lab.request.payment.search</field>
+        <field name="model">lab.request.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="invoice_id"/>
+                <field name="request_id"/>
+                <field name="payer_partner_id"/>
+                <field name="state"/>
+                <filter name="f_pending" string="Pending" domain="[('state','=','pending')]"/>
+                <filter name="f_confirmed" string="Confirmed" domain="[('state','=','confirmed')]"/>
+                <filter name="f_rejected" string="Rejected" domain="[('state','=','rejected')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_request_payment_form" model="ir.ui.view">
+        <field name="name">lab.request.payment.form</field>
+        <field name="model">lab.request.payment</field>
+        <field name="arch" type="xml">
+            <form string="Request Payment">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary" invisible="state != 'pending'"/>
+                    <button name="action_reject" type="object" string="Reject" invisible="state != 'pending'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('confirmed','cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,confirmed,rejected,cancelled"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="invoice_id"/>
+                            <field name="request_id" readonly="1"/>
+                            <field name="payer_partner_id"/>
+                            <field name="amount"/>
+                        </group>
+                        <group>
+                            <field name="payment_date"/>
+                            <field name="channel"/>
+                            <field name="reference"/>
+                            <field name="reviewed_by_id" readonly="1"/>
+                            <field name="reviewed_at" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                        <field name="rejection_reason" invisible="state != 'rejected'"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_test_request_form_inherit_billing" model="ir.ui.view">
+        <field name="name">lab.test.request.form.inherit.billing</field>
+        <field name="model">lab.test.request</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_test_request_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" name="action_view_invoices" type="object" icon="fa-file-text-o">
+                    <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                </button>
+                <button class="oe_stat_button" name="action_view_odoo_invoices" type="object" icon="fa-book">
+                    <field name="account_move_count" widget="statinfo" string="Odoo Invoices"/>
+                </button>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_generate_invoice" type="object" string="Generate Invoice" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager" invisible="state not in ('quoted','approved','in_progress','completed')"/>
+                <button name="action_generate_odoo_invoice" type="object" string="Generate Odoo Invoice" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager" invisible="state not in ('quoted','approved','in_progress','completed')"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Billing">
+                    <group>
+                        <group>
+                            <field name="billing_state" readonly="1"/>
+                            <field name="payment_policy" readonly="1"/>
+                            <field name="invoice_count" readonly="1"/>
+                            <field name="account_move_count" readonly="1"/>
+                            <field name="account_move_payment_state" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="invoice_amount_total" readonly="1"/>
+                            <field name="invoice_amount_paid" readonly="1"/>
+                            <field name="invoice_amount_residual" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="invoice_ids" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="invoice_date"/>
+                            <field name="due_date"/>
+                            <field name="amount_total"/>
+                            <field name="amount_paid"/>
+                            <field name="amount_residual"/>
+                            <field name="payment_state"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_res_config_settings_inherit_lab_billing" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.lab.billing</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Laboratory" name="laboratory_management">
+                    <block title="Billing Policy" name="lab_billing_policy_block">
+                        <setting string="Require Full Payment Before Sample Creation" id="lab_require_payment_before_sample_setting" help="If enabled, samples cannot be created until request invoice is fully paid.">
+                            <field name="lab_require_payment_before_sample"/>
+                        </setting>
+                        <setting string="Auto Generate Invoice On Quote Approval" id="lab_auto_invoice_on_approve_setting" help="If enabled, request invoice is auto-generated when quote is approved.">
+                            <field name="lab_auto_invoice_on_approve"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_lab_request_invoice" model="ir.actions.act_window">
+        <field name="name">Request Invoices</field>
+        <field name="res_model">lab.request.invoice</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_request_invoice_search"/>
+    </record>
+
+    <record id="action_lab_request_payment" model="ir.actions.act_window">
+        <field name="name">Request Payments</field>
+        <field name="res_model">lab.request.payment</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_request_payment_search"/>
+    </record>
+
+    <record id="action_lab_request_invoice_overdue" model="ir.actions.act_window">
+        <field name="name">Overdue Request Invoices</field>
+        <field name="res_model">lab.request.invoice</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','in',('issued','partially_paid')),('due_date','&lt;',context_today())]</field>
+    </record>
+
+    <menuitem id="menu_lab_request_invoice" name="Request Invoices" parent="menu_laboratory_operations" action="action_lab_request_invoice" sequence="12"/>
+    <menuitem id="menu_lab_request_invoice_overdue" name="Overdue Invoices" parent="menu_laboratory_operations" action="action_lab_request_invoice_overdue" sequence="13" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_request_payment" name="Request Payments" parent="menu_laboratory_operations" action="action_lab_request_payment" sequence="14" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+</odoo>

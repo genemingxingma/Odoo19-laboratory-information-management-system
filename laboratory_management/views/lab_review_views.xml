@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_review_reason_template_list" model="ir.ui.view">
+        <field name="name">lab.review.reason.template.list</field>
+        <field name="model">lab.review.reason.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="sla_hours"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_review_reason_template_form" model="ir.ui.view">
+        <field name="name">lab.review.reason.template.form</field>
+        <field name="model">lab.review.reason.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="sla_hours"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="message"/>
+                        <field name="recommendation"/>
+                        <field name="append_to_result_note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_review_reason_template" model="ir.actions.act_window">
+        <field name="name">Review Reason Templates</field>
+        <field name="res_model">lab.review.reason.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_lab_review_reason_template"
+        name="Review Reason Templates"
+        parent="menu_laboratory_config"
+        action="action_lab_review_reason_template"
+        sequence="35"
+    />
+</odoo>

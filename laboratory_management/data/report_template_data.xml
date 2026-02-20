@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="report_template_classic" model="lab.report.template">
+        <field name="name">Classic</field>
+        <field name="code">classic</field>
+        <field name="title">Laboratory Report</field>
+        <field name="show_reference">True</field>
+        <field name="show_flag">True</field>
+        <field name="show_notes">True</field>
+        <field name="show_ai_summary_in_pdf">True</field>
+        <field name="sequence">10</field>
+        <field name="ai_interpretation_enabled">True</field>
+        <field name="ai_auto_generate_on_release">True</field>
+        <field name="ai_temperature">0.2</field>
+        <field name="ai_system_prompt">You are a laboratory report interpretation assistant. Provide educational interpretation only, never diagnose.</field>
+        <field name="ai_user_prompt_template"><![CDATA[Sample: {sample_name}
+Accession: {accession}
+Patient: {patient_name}
+Client: {client_name}
+Physician: {physician_name}
+Template: {report_template}
+Priority: {priority}
+State: {state}
+Collection Date: {collection_date}
+Verified Date: {verified_date}
+Report Date: {report_date}
+Sample Note: {sample_note}
+Amendment Note: {amendment_note}
+
+Report Snapshot:
+{report_snapshot}
+
+Analysis Results:
+{analysis_lines}
+
+Abnormal Items:
+{abnormal_lines}
+
+Please provide a structured interpretation:
+1) Key findings
+2) Abnormal item significance
+3) Clinical cautions and limitations
+4) Suggested follow-up
+
+Keep concise and factual. Output language: {output_language}.]]></field>
+    </record>
+
+    <record id="report_template_clinical" model="lab.report.template">
+        <field name="name">Clinical Summary</field>
+        <field name="code">clinical</field>
+        <field name="title">Clinical Summary Report</field>
+        <field name="show_reference">True</field>
+        <field name="show_flag">False</field>
+        <field name="show_notes">True</field>
+        <field name="show_ai_summary_in_pdf">True</field>
+        <field name="sequence">20</field>
+        <field name="ai_interpretation_enabled">True</field>
+        <field name="ai_auto_generate_on_release">True</field>
+        <field name="ai_temperature">0.15</field>
+        <field name="ai_system_prompt">You are a clinical laboratory assistant. Be concise, neutral, and non-diagnostic. Never provide treatment decisions.</field>
+        <field name="ai_user_prompt_template"><![CDATA[Clinical Summary Interpretation
+Sample: {sample_name}
+Patient: {patient_name}
+Report Date: {report_date}
+Priority: {priority}
+
+Results:
+{analysis_lines}
+
+Abnormal:
+{abnormal_lines}
+
+Generate:
+1) Clinical-oriented summary of findings
+2) Risk/caution points
+3) Follow-up test suggestions
+4) Communication notes for physician
+
+Output language: {output_language}.]]></field>
+    </record>
+
+    <record id="report_template_compact" model="lab.report.template">
+        <field name="name">Compact</field>
+        <field name="code">compact</field>
+        <field name="title">Compact Laboratory Report</field>
+        <field name="show_reference">False</field>
+        <field name="show_flag">True</field>
+        <field name="show_notes">False</field>
+        <field name="show_ai_summary_in_pdf">True</field>
+        <field name="sequence">30</field>
+        <field name="ai_interpretation_enabled">True</field>
+        <field name="ai_auto_generate_on_release">True</field>
+        <field name="ai_temperature">0.1</field>
+        <field name="ai_system_prompt">You are a compact lab-report summarizer. Be very short and practical, without diagnosis.</field>
+        <field name="ai_user_prompt_template"><![CDATA[Compact interpretation for sample {sample_name}.
+Results:
+{analysis_lines}
+Abnormal:
+{abnormal_lines}
+
+Provide 3 short sections:
+- Summary
+- Abnormal focus
+- Next steps
+
+Language: {output_language}.]]></field>
+    </record>
+</odoo>

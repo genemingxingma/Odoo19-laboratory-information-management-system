@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_interface_mapping_profile_list" model="ir.ui.view">
+        <field name="name">lab.interface.mapping.profile.list</field>
+        <field name="model">lab.interface.mapping.profile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="protocol"/>
+                <field name="direction"/>
+                <field name="message_type"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_interface_mapping_profile_form" model="ir.ui.view">
+        <field name="name">lab.interface.mapping.profile.form</field>
+        <field name="model">lab.interface.mapping.profile</field>
+        <field name="arch" type="xml">
+            <form string="Interface Mapping Profile">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="protocol"/>
+                            <field name="direction"/>
+                            <field name="message_type"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rules">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="source_path"/>
+                                    <field name="target_path"/>
+                                    <field name="transform"/>
+                                    <field name="default_value"/>
+                                    <field name="required"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_interface_mapping_profile" model="ir.actions.act_window">
+        <field name="name">Interface Mapping Profiles</field>
+        <field name="res_model">lab.interface.mapping.profile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_lab_interface_mapping_profile"
+        name="Mapping Profiles"
+        parent="menu_laboratory_config"
+        action="action_lab_interface_mapping_profile"
+        sequence="31"
+    />
+</odoo>

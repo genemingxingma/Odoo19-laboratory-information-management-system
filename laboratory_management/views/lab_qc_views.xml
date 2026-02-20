@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_qc_material_list" model="ir.ui.view">
+        <field name="name">lab.qc.material.list</field>
+        <field name="model">lab.qc.material</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="service_id"/>
+                <field name="lot_number"/>
+                <field name="target_value"/>
+                <field name="std_dev"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_qc_material_form" model="ir.ui.view">
+        <field name="name">lab.qc.material.form</field>
+        <field name="model">lab.qc.material</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="service_id"/>
+                            <field name="lot_number"/>
+                        </group>
+                        <group>
+                            <field name="target_value"/>
+                            <field name="std_dev"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_qc_material" model="ir.actions.act_window">
+        <field name="name">QC Materials</field>
+        <field name="res_model">lab.qc.material</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_qc_run_list" model="ir.ui.view">
+        <field name="name">lab.qc.run.list</field>
+        <field name="model">lab.qc.run</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="status == 'reject'" decoration-warning="status == 'warning'">
+                <field name="name"/>
+                <field name="run_date"/>
+                <field name="qc_material_id"/>
+                <field name="service_id"/>
+                <field name="operator_id"/>
+                <field name="result_value"/>
+                <field name="z_score"/>
+                <field name="rule_triggered"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_qc_run_form" model="ir.ui.view">
+        <field name="name">lab.qc.run.form</field>
+        <field name="model">lab.qc.run</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="run_date"/>
+                            <field name="qc_material_id"/>
+                            <field name="service_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="operator_id"/>
+                            <field name="result_value"/>
+                            <field name="z_score" readonly="1"/>
+                            <field name="rule_triggered" readonly="1"/>
+                            <field name="status" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_qc_run_search" model="ir.ui.view">
+        <field name="name">lab.qc.run.search</field>
+        <field name="model">lab.qc.run</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="qc_material_id"/>
+                <field name="service_id"/>
+                <field name="status"/>
+                <filter name="f_qc_pass" string="Pass" domain="[('status','=','pass')]"/>
+                <filter name="f_qc_warning" string="Warning" domain="[('status','=','warning')]"/>
+                <filter name="f_qc_reject" string="Reject" domain="[('status','=','reject')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_qc_run" model="ir.actions.act_window">
+        <field name="name">QC Runs</field>
+        <field name="res_model">lab.qc.run</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_qc_run_search"/>
+    </record>
+
+    <menuitem id="menu_lab_qc_material" name="QC Materials" parent="menu_laboratory_quality" action="action_lab_qc_material" sequence="20"/>
+    <menuitem id="menu_lab_qc_run" name="QC Runs" parent="menu_laboratory_quality" action="action_lab_qc_run" sequence="30"/>
+</odoo>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_interface_endpoint_list" model="ir.ui.view">
+        <field name="name">lab.interface.endpoint.list</field>
+        <field name="model">lab.interface.endpoint</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="failed_count &gt; 0">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="system_type"/>
+                <field name="direction"/>
+                <field name="protocol"/>
+                <field name="endpoint_url"/>
+                <field name="inbound_url"/>
+                <field name="queued_count"/>
+                <field name="success_count"/>
+                <field name="failed_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_interface_endpoint_form" model="ir.ui.view">
+        <field name="name">lab.interface.endpoint.form</field>
+        <field name="model">lab.interface.endpoint</field>
+        <field name="arch" type="xml">
+            <form string="Interface Endpoint">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_jobs" icon="fa-exchange">
+                            <field name="queued_count" widget="statinfo" string="Queued"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="system_type"/>
+                            <field name="direction"/>
+                            <field name="protocol"/>
+                        </group>
+                        <group>
+                            <field name="auth_type"/>
+                            <field name="endpoint_url"/>
+                            <field name="inbound_url" readonly="1"/>
+                            <field name="timeout_seconds"/>
+                            <field name="retry_limit"/>
+                            <field name="dead_letter_enabled"/>
+                            <field name="outbound_mapping_profile_id"/>
+                            <field name="inbound_mapping_profile_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Credentials">
+                        <group>
+                            <field name="username" invisible="auth_type not in ('basic')"/>
+                            <field name="password" password="True" invisible="auth_type not in ('basic')"/>
+                            <field name="token" password="True" invisible="auth_type != 'bearer'"/>
+                            <field name="api_key" password="True" invisible="auth_type != 'api_key'"/>
+                            <field name="allowed_ip_list"/>
+                            <field name="auto_submit_inbound_order"/>
+                            <field name="auto_mark_done_inbound_result"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="mapping_schema" placeholder='{"field_map":{"accession":"OBR.3"}}'/>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="Audit Logs">
+                            <field name="audit_log_ids" readonly="1">
+                                <list>
+                                    <field name="event_at"/>
+                                    <field name="action"/>
+                                    <field name="direction"/>
+                                    <field name="external_uid"/>
+                                    <field name="state"/>
+                                    <field name="source_ip"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_interface_job_list" model="ir.ui.view">
+        <field name="name">lab.interface.job.list</field>
+        <field name="model">lab.interface.job</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state in ('failed','dead_letter')" decoration-warning="state == 'retry'" decoration-success="state == 'done'">
+                <field name="name"/>
+                <field name="endpoint_id"/>
+                <field name="direction"/>
+                <field name="message_type"/>
+                <field name="external_uid"/>
+                <field name="request_id"/>
+                <field name="sample_id"/>
+                <field name="state"/>
+                <field name="attempt_count"/>
+                <field name="queued_at"/>
+                <field name="processed_at"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_interface_job_form" model="ir.ui.view">
+        <field name="name">lab.interface.job.form</field>
+        <field name="model">lab.interface.job</field>
+        <field name="arch" type="xml">
+            <form string="Interface Job">
+                <header>
+                    <button name="action_process" type="object" string="Process" class="btn-primary" invisible="state not in ('queued','retry')"/>
+                    <button name="action_requeue" type="object" string="Requeue" invisible="state not in ('failed','dead_letter','cancel')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="queued,running,done,retry,failed,dead_letter,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="endpoint_id"/>
+                            <field name="direction"/>
+                            <field name="message_type"/>
+                            <field name="external_uid"/>
+                            <field name="source_ip" readonly="1"/>
+                            <field name="request_id"/>
+                            <field name="sample_id"/>
+                        </group>
+                        <group>
+                            <field name="attempt_count" readonly="1"/>
+                            <field name="queued_at" readonly="1"/>
+                            <field name="processed_at" readonly="1"/>
+                            <field name="next_retry_at" readonly="1"/>
+                            <field name="ack_code" readonly="1"/>
+                            <field name="response_code" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="payload_text"/>
+                        <field name="payload_json" readonly="1"/>
+                        <field name="response_body" readonly="1"/>
+                        <field name="error_message" readonly="1"/>
+                        <field name="dead_letter_reason" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Audit Logs">
+                            <field name="audit_log_ids" readonly="1">
+                                <list>
+                                    <field name="event_at"/>
+                                    <field name="action"/>
+                                    <field name="direction"/>
+                                    <field name="external_uid"/>
+                                    <field name="state"/>
+                                    <field name="source_ip"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_interface_endpoint" model="ir.actions.act_window">
+        <field name="name">Interface Endpoints</field>
+        <field name="res_model">lab.interface.endpoint</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_interface_job" model="ir.actions.act_window">
+        <field name="name">Interface Jobs</field>
+        <field name="res_model">lab.interface.job</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','in',('queued','retry','failed','dead_letter'))]</field>
+    </record>
+
+    <record id="action_lab_interface_process_pending" model="ir.actions.server">
+        <field name="name">Process Pending Interface Jobs</field>
+        <field name="model_id" ref="model_lab_interface_job"/>
+        <field name="state">code</field>
+        <field name="code">model.action_process_pending()</field>
+    </record>
+
+    <menuitem id="menu_lab_interface_endpoint" name="Interface Endpoints" parent="menu_laboratory_config" action="action_lab_interface_endpoint" sequence="30"/>
+    <menuitem id="menu_lab_interface_job" name="Interface Jobs" parent="menu_laboratory_operations" action="action_lab_interface_job" sequence="12"/>
+</odoo>

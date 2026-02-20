@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_sample_list" model="ir.ui.view">
+        <field name="name">lab.sample.list</field>
+        <field name="model">lab.sample</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="is_overdue">
+                <field name="name"/>
+                <field name="accession_barcode"/>
+                <field name="parent_sample_id"/>
+                <field name="patient_id"/>
+                <field name="client_id"/>
+                <field name="request_id"/>
+                <field name="priority"/>
+                <field name="collection_date"/>
+                <field name="received_date"/>
+                <field name="expected_report_date"/>
+                <field name="is_overdue"/>
+                <field name="state"/>
+                <field name="ai_review_state"/>
+                <field name="report_revision"/>
+                <field name="is_amended"/>
+                <field name="sop_id"/>
+                <field name="sop_step_code"/>
+                <field name="sop_exception_state"/>
+                <field name="interface_job_count"/>
+                <field name="total_analysis"/>
+                <field name="done_analysis"/>
+                <field name="verified_analysis"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_search" model="ir.ui.view">
+        <field name="name">lab.sample.search</field>
+        <field name="model">lab.sample</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="accession_barcode"/>
+                <field name="patient_id"/>
+                <field name="client_id"/>
+                <field name="request_id"/>
+                <field name="state"/>
+                <field name="ai_review_state"/>
+                <filter name="f_received" string="Received" domain="[('state','=','received')]"/>
+                <filter name="f_in_progress" string="In Progress" domain="[('state','=','in_progress')]"/>
+                <filter name="f_to_verify" string="To Verify" domain="[('state','=','to_verify')]"/>
+                <filter name="f_reported" string="Reported" domain="[('state','=','reported')]"/>
+                <filter name="f_ai_pending" string="AI Pending Review" domain="[('ai_review_state','=','pending')]"/>
+                <filter name="f_overdue" string="Overdue" domain="[('is_overdue','=',True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_form" model="ir.ui.view">
+        <field name="name">lab.sample.form</field>
+        <field name="model">lab.sample</field>
+        <field name="arch" type="xml">
+            <form string="Laboratory Sample">
+                <header>
+                    <button name="action_create_aliquot" type="object" string="Create Aliquot" groups="laboratory_management.group_lab_analyst,laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="state == 'cancel'"/>
+                    <button name="action_add_profile_services" type="object" string="Load Profile Tests" invisible="not profile_id or state != 'draft'"/>
+                    <button name="action_receive" type="object" string="Receive" class="btn-primary" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager" invisible="state != 'draft'"/>
+                    <button name="action_start" type="object" string="Start Analyses" groups="laboratory_management.group_lab_analyst,laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="state not in ('draft', 'received')"/>
+                    <button name="action_mark_to_verify" type="object" string="To Verify" groups="laboratory_management.group_lab_analyst,laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="state != 'in_progress'"/>
+                    <button name="action_verify" type="object" string="Verify" class="btn-primary" groups="laboratory_management.group_lab_reviewer" invisible="state != 'to_verify'"/>
+                    <button name="action_release_report" type="object" string="Release Report" class="btn-primary" groups="laboratory_management.group_lab_reviewer" invisible="state != 'verified'"/>
+                    <button name="action_amend_report" type="object" string="Amend Report" groups="laboratory_management.group_lab_reviewer" invisible="state != 'reported'"/>
+                    <button name="action_open_transfer_custody_wizard" type="object" string="Transfer Custody" groups="laboratory_management.group_lab_analyst,laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="state == 'cancel'"/>
+                    <button name="action_print_report" type="object" string="Print Report" invisible="state not in ('verified', 'reported')"/>
+                    <button name="action_generate_ai_interpretation" type="object" string="AI Interpretation" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="state not in ('verified','reported')"/>
+                    <button name="action_approve_ai_interpretation" type="object" string="Approve AI" class="btn-primary" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="ai_interpretation_state != 'done' or ai_review_state == 'approved'"/>
+                    <button name="action_reject_ai_interpretation" type="object" string="Reject AI" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="ai_interpretation_state not in ('done','error') or ai_review_state == 'rejected'"/>
+                    <button name="action_clear_ai_interpretation" type="object" string="Clear AI" groups="laboratory_management.group_lab_manager" invisible="ai_interpretation_state == 'none'"/>
+                    <button name="%(action_report_lab_sample_label)d" type="action" string="Print Barcode Label"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('cancel', 'reported')"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,received,in_progress,to_verify,verified,reported,cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_aliquots" icon="fa-flask">
+                            <field name="aliquot_count" widget="statinfo" string="Aliquots"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_nonconformances" icon="fa-exclamation-triangle">
+                            <field name="nonconformance_count" widget="statinfo" string="Nonconformances"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_ai_interpretation_history" icon="fa-history">
+                            <field name="ai_interpretation_history_count" widget="statinfo" string="AI History"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_interface_jobs" icon="fa-exchange">
+                            <field name="interface_job_count" widget="statinfo" string="Interface Jobs"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="accession_barcode"/>
+                            <field name="parent_sample_id" readonly="1"/>
+                            <field name="patient_id"/>
+                            <field name="client_id"/>
+                            <field name="request_id" readonly="1"/>
+                            <field name="physician_name"/>
+                        </group>
+                        <group>
+                            <field name="profile_id"/>
+                            <field name="report_template_id"/>
+                            <field name="sop_id" readonly="1"/>
+                            <field name="sop_step_code" readonly="1"/>
+                            <field name="sop_exception_state" readonly="1"/>
+                            <field name="priority"/>
+                            <field name="collection_date"/>
+                            <field name="received_date" readonly="1"/>
+                            <field name="expected_report_date" readonly="1"/>
+                            <field name="is_overdue" readonly="1"/>
+                            <field name="verified_by_id" readonly="1"/>
+                            <field name="verified_date" readonly="1"/>
+                            <field name="report_date" readonly="1"/>
+                            <field name="report_revision" readonly="1"/>
+                            <field name="is_amended" readonly="1"/>
+                            <field name="current_custodian_id" readonly="1"/>
+                            <field name="custody_location"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                        <field name="amendment_note" placeholder="Reason for amendment (used when clicking Amend Report)"/>
+                    </group>
+                    <notebook>
+                        <page string="Analyses">
+                            <field name="analysis_ids">
+                                <list editable="bottom">
+                                    <field name="service_id"/>
+                                    <field name="department" readonly="1"/>
+                                    <field name="sample_type" readonly="1"/>
+                                    <field name="is_retest" readonly="1"/>
+                                    <field name="retest_of_id" readonly="1"/>
+                                    <field name="reagent_lot_id"/>
+                                    <field name="analyst_id"/>
+                                    <field name="worksheet_id" readonly="1"/>
+                                    <field name="result_value"/>
+                                    <field name="unit" readonly="1"/>
+                                    <field name="ref_min" readonly="1"/>
+                                    <field name="ref_max" readonly="1"/>
+                                    <field name="result_flag" readonly="1"/>
+                                    <field name="auto_verified" readonly="1"/>
+                                    <field name="delta_check_status" readonly="1"/>
+                                    <field name="delta_check_value" readonly="1"/>
+                                    <field name="needs_manual_review" readonly="1"/>
+                                    <field name="manual_review_reason_code" readonly="1"/>
+                                    <field name="is_critical" readonly="1"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Amendment History">
+                            <field name="amendment_ids" readonly="1">
+                                <list>
+                                    <field name="revision"/>
+                                    <field name="amended_by_id"/>
+                                    <field name="amended_date"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Timeline">
+                            <field name="timeline_ids" readonly="1">
+                                <list>
+                                    <field name="event_time"/>
+                                    <field name="event_type"/>
+                                    <field name="user_id"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Sign-offs">
+                            <field name="signoff_ids" readonly="1">
+                                <list>
+                                    <field name="signed_at"/>
+                                    <field name="action_type"/>
+                                    <field name="signed_by_id"/>
+                                    <field name="signature_ref"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Custody Trail">
+                            <field name="custody_ids" readonly="1">
+                                <list>
+                                    <field name="event_time"/>
+                                    <field name="event_type"/>
+                                    <field name="from_user_id"/>
+                                    <field name="to_user_id"/>
+                                    <field name="location"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="AI Interpretation">
+                            <group>
+                                <group>
+                                    <field name="ai_interpretation_state" readonly="1"/>
+                                    <field name="ai_review_state" readonly="1"/>
+                                    <field name="ai_interpretation_model" readonly="1"/>
+                                    <field name="ai_interpretation_lang" readonly="1"/>
+                                    <field name="ai_interpretation_updated_at" readonly="1"/>
+                                    <field name="ai_portal_visible" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="ai_reviewed_by_id" readonly="1"/>
+                                    <field name="ai_reviewed_at" readonly="1"/>
+                                    <field name="ai_review_note"/>
+                                    <field name="ai_interpretation_error" readonly="1" invisible="not ai_interpretation_error"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="ai_interpretation_text" readonly="1" widget="text"/>
+                            </group>
+                        </page>
+                        <page string="AI History">
+                            <field name="ai_interpretation_history_ids" readonly="1">
+                                <list>
+                                    <field name="generated_at"/>
+                                    <field name="state"/>
+                                    <field name="trigger_source"/>
+                                    <field name="model_name"/>
+                                    <field name="output_language"/>
+                                    <field name="duration_ms"/>
+                                    <field name="total_tokens"/>
+                                    <field name="error_text"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="AI Review Timeline">
+                            <field name="ai_review_log_ids" readonly="1">
+                                <list>
+                                    <field name="reviewed_at"/>
+                                    <field name="action"/>
+                                    <field name="reviewer_id"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_sample" model="ir.actions.act_window">
+        <field name="name">Samples / Accessions</field>
+        <field name="res_model">lab.sample</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_sample_search"/>
+        <field name="group_ids" eval="[(6, 0, [ref('laboratory_management.group_lab_user')])]"/>
+    </record>
+
+    <record id="action_lab_sample_to_verify" model="ir.actions.act_window">
+        <field name="name">Results to Verify</field>
+        <field name="res_model">lab.sample</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[("state", "=", "to_verify")]</field>
+        <field name="group_ids" eval="[(6, 0, [ref('laboratory_management.group_lab_user')])]"/>
+    </record>
+
+    <record id="action_lab_sample_ai_pending_review" model="ir.actions.act_window">
+        <field name="name">AI Pending Review</field>
+        <field name="res_model">lab.sample</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[("ai_review_state", "=", "pending"), ("state", "in", ("verified", "reported"))]</field>
+        <field name="group_ids" eval="[(6, 0, [ref('laboratory_management.group_lab_reviewer'), ref('laboratory_management.group_lab_manager')])]"/>
+    </record>
+
+    <menuitem id="menu_lab_sample" name="Samples / Accessions" parent="menu_laboratory_operations" action="action_lab_sample" sequence="10"/>
+    <menuitem id="menu_lab_sample_to_verify" name="Results to Verify" parent="menu_laboratory_quality" action="action_lab_sample_to_verify" sequence="10"/>
+    <menuitem id="menu_lab_sample_ai_pending_review" name="AI Pending Review" parent="menu_laboratory_quality" action="action_lab_sample_ai_pending_review" sequence="15" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
+
+    <record id="menu_laboratory_root" model="ir.ui.menu">
+        <field name="action" ref="action_lab_sample"/>
+    </record>
+</odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_lab_custody_manifest" model="ir.actions.report">
+        <field name="name">Custody Manifest</field>
+        <field name="model">lab.sample.custody.batch</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">laboratory_management.report_lab_custody_manifest</field>
+        <field name="report_file">laboratory_management.report_lab_custody_manifest</field>
+        <field name="print_report_name">'Custody Manifest - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_lab_sample_custody_batch"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_lab_custody_investigation" model="ir.actions.report">
+        <field name="name">Custody Investigation Summary</field>
+        <field name="model">lab.custody.investigation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">laboratory_management.report_lab_custody_investigation</field>
+        <field name="report_file">laboratory_management.report_lab_custody_investigation</field>
+        <field name="print_report_name">'Custody Investigation - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_lab_custody_investigation"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

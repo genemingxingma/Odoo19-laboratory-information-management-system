@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_retest_policy_list" model="ir.ui.view">
+        <field name="name">lab.retest.policy.list</field>
+        <field name="model">lab.retest.policy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="scope"/>
+                <field name="department"/>
+                <field name="max_retest_count"/>
+                <field name="cooldown_minutes"/>
+                <field name="escalate_after_failures"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_retest_policy_form" model="ir.ui.view">
+        <field name="name">lab.retest.policy.form</field>
+        <field name="model">lab.retest.policy</field>
+        <field name="arch" type="xml">
+            <form string="Retest Policy">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="scope"/>
+                            <field name="department" invisible="scope != 'department'"/>
+                            <field name="service_ids" widget="many2many_tags" invisible="scope != 'service'"/>
+                        </group>
+                        <group>
+                            <field name="max_retest_count"/>
+                            <field name="require_reason"/>
+                            <field name="cooldown_minutes"/>
+                            <field name="escalate_after_failures"/>
+                            <field name="escalation_group_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_department_sop_list" model="ir.ui.view">
+        <field name="name">lab.department.sop.list</field>
+        <field name="model">lab.department.sop</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'active'" decoration-muted="state == 'retired'">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="department"/>
+                <field name="sample_type"/>
+                <field name="priority"/>
+                <field name="retest_policy_id"/>
+                <field name="state"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_department_sop_form" model="ir.ui.view">
+        <field name="name">lab.department.sop.form</field>
+        <field name="model">lab.department.sop</field>
+        <field name="arch" type="xml">
+            <form string="Department SOP">
+                <header>
+                    <button name="action_activate" type="object" string="Activate" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_retire" type="object" string="Retire" invisible="state != 'active'"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,retired"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="department"/>
+                            <field name="sample_type"/>
+                            <field name="priority"/>
+                        </group>
+                        <group>
+                            <field name="retest_policy_id"/>
+                            <field name="service_ids" widget="many2many_tags"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="SOP Steps">
+                            <field name="step_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="step_code"/>
+                                    <field name="name"/>
+                                    <field name="workstation_role"/>
+                                    <field name="required"/>
+                                    <field name="max_hours_from_prev"/>
+                                    <field name="on_fail_action"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Exception Routes">
+                            <field name="exception_route_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="trigger_event"/>
+                                    <field name="severity"/>
+                                    <field name="route_action"/>
+                                    <field name="owner_group_id"/>
+                                    <field name="sla_hours"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_permission_matrix_list" model="ir.ui.view">
+        <field name="name">lab.permission.matrix.list</field>
+        <field name="model">lab.permission.matrix</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="group_id"/>
+                <field name="workstation"/>
+                <field name="can_view"/>
+                <field name="can_create"/>
+                <field name="can_edit"/>
+                <field name="can_approve"/>
+                <field name="can_release"/>
+                <field name="can_administer"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_permission_matrix_form" model="ir.ui.view">
+        <field name="name">lab.permission.matrix.form</field>
+        <field name="model">lab.permission.matrix</field>
+        <field name="arch" type="xml">
+            <form string="Permission Matrix">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="group_id"/>
+                            <field name="workstation"/>
+                        </group>
+                        <group>
+                            <field name="can_view"/>
+                            <field name="can_create"/>
+                            <field name="can_edit"/>
+                            <field name="can_approve"/>
+                            <field name="can_release"/>
+                            <field name="can_administer"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_department_sop" model="ir.actions.act_window">
+        <field name="name">Department SOP</field>
+        <field name="res_model">lab.department.sop</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_retest_policy" model="ir.actions.act_window">
+        <field name="name">Retest Policies</field>
+        <field name="res_model">lab.retest.policy</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_permission_matrix" model="ir.actions.act_window">
+        <field name="name">Permission Matrix</field>
+        <field name="res_model">lab.permission.matrix</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lab_department_sop" name="Department SOP" parent="menu_laboratory_config" action="action_lab_department_sop" sequence="20"/>
+    <menuitem id="menu_lab_retest_policy" name="Retest Policies" parent="menu_laboratory_config" action="action_lab_retest_policy" sequence="21"/>
+    <menuitem id="menu_lab_permission_matrix" name="Permission Matrix" parent="menu_laboratory_config" action="action_lab_permission_matrix" sequence="22"/>
+</odoo>

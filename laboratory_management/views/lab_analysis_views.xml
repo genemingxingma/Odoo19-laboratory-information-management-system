@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_analysis_list" model="ir.ui.view">
+        <field name="name">lab.sample.analysis.list</field>
+        <field name="model">lab.sample.analysis</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="is_critical or review_overdue" decoration-warning="is_out_of_range and not is_critical">
+                <field name="sample_id"/>
+                <field name="service_id"/>
+                <field name="department"/>
+                <field name="is_retest"/>
+                <field name="retest_of_id"/>
+                <field name="reagent_lot_id"/>
+                <field name="analyst_id"/>
+                <field name="worksheet_id"/>
+                <field name="result_value"/>
+                <field name="unit"/>
+                <field name="result_flag"/>
+                <field name="auto_verified"/>
+                <field name="delta_check_status"/>
+                <field name="delta_check_value"/>
+                <field name="needs_manual_review"/>
+                <field name="review_due_date"/>
+                <field name="review_overdue"/>
+                <field name="review_assigned_user_id"/>
+                <field name="manual_review_reason_code"/>
+                <field name="is_critical"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_analysis_form" model="ir.ui.view">
+        <field name="name">lab.sample.analysis.form</field>
+        <field name="model">lab.sample.analysis</field>
+        <field name="arch" type="xml">
+            <form string="Sample Analysis">
+                <header>
+                    <button name="action_mark_done" string="Mark Done" type="object" class="btn-primary" groups="laboratory_management.group_lab_analyst,laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="state in ('done', 'verified')"/>
+                    <button name="action_claim_manual_review" string="Claim Review" type="object" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="not needs_manual_review or state not in ('assigned','done')"/>
+                    <button name="action_verify_result" string="Verify" type="object" class="btn-primary" groups="laboratory_management.group_lab_reviewer" invisible="state == 'verified'"/>
+                    <button name="action_reject_result" string="Reject" type="object" groups="laboratory_management.group_lab_reviewer"/>
+                    <button name="action_request_retest" string="Request Retest" type="object" groups="laboratory_management.group_lab_reviewer" invisible="state == 'pending'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,assigned,done,verified,rejected"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sample_id"/>
+                            <field name="service_id"/>
+                            <field name="is_retest" readonly="1"/>
+                            <field name="retest_of_id" readonly="1"/>
+                            <field name="department" readonly="1"/>
+                            <field name="sample_type" readonly="1"/>
+                            <field name="reagent_lot_id" domain="[('service_id', '=', service_id)]"/>
+                        </group>
+                        <group>
+                            <field name="worksheet_id"/>
+                            <field name="analyst_id"/>
+                            <field name="result_value"/>
+                            <field name="result_note"/>
+                            <field name="auto_verified" readonly="1"/>
+                            <field name="delta_previous_value" readonly="1"/>
+                            <field name="delta_check_value" readonly="1"/>
+                            <field name="delta_check_status" readonly="1"/>
+                            <field name="needs_manual_review" readonly="1"/>
+                            <field name="manual_review_reason_code" readonly="1"/>
+                            <field name="review_due_date" readonly="1"/>
+                            <field name="review_overdue" readonly="1"/>
+                            <field name="review_assigned_user_id" readonly="1"/>
+                            <field name="review_assigned_date" readonly="1"/>
+                            <field name="manual_reviewed_by_id" readonly="1"/>
+                            <field name="manual_reviewed_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="manual_review_reason_note" readonly="1"/>
+                        <field name="manual_review_recommendation" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="unit" readonly="1"/>
+                        <field name="ref_min" readonly="1"/>
+                        <field name="ref_max" readonly="1"/>
+                        <field name="critical_min" readonly="1"/>
+                        <field name="critical_max" readonly="1"/>
+                        <field name="result_flag" readonly="1"/>
+                        <field name="is_out_of_range" readonly="1"/>
+                        <field name="is_critical" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_analysis_search" model="ir.ui.view">
+        <field name="name">lab.sample.analysis.search</field>
+        <field name="model">lab.sample.analysis</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sample_id"/>
+                <field name="service_id"/>
+                <field name="analyst_id"/>
+                <field name="department"/>
+                <field name="state"/>
+                <filter name="f_pending" string="Pending" domain="[('state','=','pending')]"/>
+                <filter name="f_assigned" string="Assigned" domain="[('state','=','assigned')]"/>
+                <filter name="f_done" string="Done" domain="[('state','=','done')]"/>
+                <filter name="f_critical" string="Critical" domain="[('is_critical','=',True)]"/>
+                <filter name="f_manual_review" string="Manual Review" domain="[('needs_manual_review','=',True),('state','in',('assigned','done'))]"/>
+                <filter name="f_review_overdue" string="Review Overdue" domain="[('review_overdue','=',True)]"/>
+                <filter name="f_my_manual_review" string="My Reviews" domain="[('needs_manual_review','=',True),('review_assigned_user_id','=',uid),('state','in',('assigned','done'))]"/>
+                <filter name="f_unassigned_manual_review" string="Unassigned Reviews" domain="[('needs_manual_review','=',True),('review_assigned_user_id','=',False),('state','in',('assigned','done'))]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_analysis_queue" model="ir.actions.act_window">
+        <field name="name">Analysis Queue</field>
+        <field name="res_model">lab.sample.analysis</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_analysis_search"/>
+    </record>
+
+    <record id="action_lab_manual_review_queue" model="ir.actions.act_window">
+        <field name="name">Manual Review Queue</field>
+        <field name="res_model">lab.sample.analysis</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_analysis_search"/>
+        <field name="domain">[('needs_manual_review','=',True),('state','in',('assigned','done'))]</field>
+    </record>
+
+    <record id="action_lab_my_manual_review_queue" model="ir.actions.act_window">
+        <field name="name">My Manual Reviews</field>
+        <field name="res_model">lab.sample.analysis</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_analysis_search"/>
+        <field name="domain">[('needs_manual_review','=',True),('review_assigned_user_id','=',uid),('state','in',('assigned','done'))]</field>
+    </record>
+
+    <menuitem id="menu_lab_analysis_queue" name="Analysis Queue" parent="menu_laboratory_operations" action="action_lab_analysis_queue" sequence="15"/>
+    <menuitem id="menu_lab_manual_review_queue" name="Manual Review Queue" parent="menu_laboratory_quality" action="action_lab_manual_review_queue" sequence="12"/>
+    <menuitem id="menu_lab_my_manual_review_queue" name="My Manual Reviews" parent="menu_laboratory_quality" action="action_lab_my_manual_review_queue" sequence="13"/>
+</odoo>

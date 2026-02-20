@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_analysis_bulk_review_wizard_form" model="ir.ui.view">
+        <field name="name">lab.analysis.bulk.review.wizard.form</field>
+        <field name="model">lab.analysis.bulk.review.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Batch Manual Review">
+                <sheet>
+                    <group>
+                        <field name="decision"/>
+                        <field name="only_manual_review"/>
+                        <field name="reason_template_id"/>
+                        <field name="reviewer_note"/>
+                    </group>
+                    <group>
+                        <field name="analysis_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_apply" type="object" string="Apply" class="btn-primary"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_analysis_bulk_review_wizard" model="ir.actions.act_window">
+        <field name="name">Batch Manual Review</field>
+        <field name="res_model">lab.analysis.bulk.review.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="server_action_lab_analysis_bulk_review" model="ir.actions.server">
+        <field name="name">Batch Manual Review</field>
+        <field name="model_id" ref="model_lab_sample_analysis"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_lab_sample_analysis"/>
+        <field name="binding_view_types">list</field>
+        <field name="code">
+action = env["lab.analysis.bulk.review.wizard"].with_context(active_ids=records.ids).action_open_wizard()
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_lab_analysis_bulk_review_wizard"
+        name="Batch Manual Review"
+        parent="menu_laboratory_quality"
+        action="action_lab_analysis_bulk_review_wizard"
+        sequence="14"
+    />
+</odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_reagent_lot_list" model="ir.ui.view">
+        <field name="name">lab.reagent.lot.list</field>
+        <field name="model">lab.reagent.lot</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="is_expired">
+                <field name="name"/>
+                <field name="service_id"/>
+                <field name="lot_number"/>
+                <field name="vendor"/>
+                <field name="received_date"/>
+                <field name="opened_date"/>
+                <field name="expiry_date"/>
+                <field name="days_to_expiry"/>
+                <field name="is_expiring_soon"/>
+                <field name="is_expired"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_reagent_lot_search" model="ir.ui.view">
+        <field name="name">lab.reagent.lot.search</field>
+        <field name="model">lab.reagent.lot</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="service_id"/>
+                <field name="lot_number"/>
+                <filter name="f_expired" string="Expired" domain="[('is_expired', '=', True)]"/>
+                <filter name="f_expiring_soon" string="Expiring 7 Days" domain="[('is_expiring_soon', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_reagent_lot_form" model="ir.ui.view">
+        <field name="name">lab.reagent.lot.form</field>
+        <field name="model">lab.reagent.lot</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="service_id"/>
+                            <field name="lot_number"/>
+                            <field name="vendor"/>
+                        </group>
+                        <group>
+                            <field name="received_date"/>
+                            <field name="opened_date"/>
+                            <field name="expiry_date"/>
+                            <field name="is_expired" readonly="1"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_reagent_lot" model="ir.actions.act_window">
+        <field name="name">Reagent Lots</field>
+        <field name="res_model">lab.reagent.lot</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_reagent_lot_search"/>
+    </record>
+
+    <menuitem id="menu_lab_reagent_lot" name="Reagent Lots" parent="menu_laboratory_config" action="action_lab_reagent_lot" sequence="40"/>
+</odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_task_sla_policy_review_chem" model="lab.task.sla.policy">
+        <field name="sequence">10</field>
+        <field name="name">Chemistry Review SLA</field>
+        <field name="code">TASK_SLA_CHEM_REVIEW</field>
+        <field name="department">chemistry</field>
+        <field name="workstation">review</field>
+        <field name="priority">all</field>
+        <field name="sla_hours">12</field>
+        <field name="auto_assign_group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="escalation_group_id" ref="laboratory_management.group_lab_manager"/>
+    </record>
+
+    <record id="lab_task_sla_policy_interface_chem" model="lab.task.sla.policy">
+        <field name="sequence">20</field>
+        <field name="name">Chemistry Interface SLA</field>
+        <field name="code">TASK_SLA_CHEM_INTERFACE</field>
+        <field name="department">chemistry</field>
+        <field name="workstation">interface</field>
+        <field name="priority">all</field>
+        <field name="sla_hours">4</field>
+        <field name="auto_assign_group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="escalation_group_id" ref="laboratory_management.group_lab_manager"/>
+    </record>
+
+    <record id="lab_sop_branch_rule_manual_review_task" model="lab.sop.branch.rule">
+        <field name="sequence">10</field>
+        <field name="name">Manual Review Creates Review Task</field>
+        <field name="code">SOP_BRANCH_MANUAL_REVIEW_TASK</field>
+        <field name="department">chemistry</field>
+        <field name="sample_type">all</field>
+        <field name="trigger_event">manual_review_required</field>
+        <field name="action_type">create_task</field>
+        <field name="target_workstation">review</field>
+        <field name="task_priority">urgent</field>
+        <field name="owner_group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="note">Create review task for manual-review required analysis.</field>
+    </record>
+
+    <record id="lab_sop_branch_rule_interface_failed_replay" model="lab.sop.branch.rule">
+        <field name="sequence">20</field>
+        <field name="name">Failed Interface Creates Replay Batch</field>
+        <field name="code">SOP_BRANCH_IFACE_REPLAY</field>
+        <field name="department">chemistry</field>
+        <field name="sample_type">all</field>
+        <field name="trigger_event">interface_failed</field>
+        <field name="action_type">interface_replay</field>
+        <field name="target_workstation">interface</field>
+        <field name="task_priority">stat</field>
+        <field name="owner_group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="note">Generate replay batch for failed interface jobs.</field>
+    </record>
+
+    <record id="ir_cron_lab_task_overdue" model="ir.cron">
+        <field name="name">Lab Task: Mark Overdue</field>
+        <field name="model_id" ref="model_lab_workstation_task"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_mark_overdue()</field>
+        <field name="interval_number">15</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="ir_cron_lab_task_auto_assign" model="ir.cron">
+        <field name="name">Lab Task: Auto Assign</field>
+        <field name="model_id" ref="model_lab_workstation_task"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_auto_assign_open()</field>
+        <field name="interval_number">10</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

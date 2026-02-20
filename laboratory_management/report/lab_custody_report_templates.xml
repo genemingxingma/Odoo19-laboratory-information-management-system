@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_lab_custody_manifest_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2 style="margin-bottom: 8px;">Chain of Custody Manifest</h2>
+                <table class="table table-sm table-bordered">
+                    <tbody>
+                        <tr>
+                            <td><strong>Batch</strong></td>
+                            <td><span t-field="doc.name"/></td>
+                            <td><strong>Status</strong></td>
+                            <td><span t-esc="dict(doc._fields['state'].selection).get(doc.state)"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>From Custodian</strong></td>
+                            <td><span t-field="doc.from_user_id"/></td>
+                            <td><strong>To Custodian</strong></td>
+                            <td><span t-field="doc.to_user_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>From Location</strong></td>
+                            <td><span t-esc="doc.from_location or '-'"/></td>
+                            <td><strong>To Location</strong></td>
+                            <td><span t-esc="doc.to_location or '-'"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tracking #</strong></td>
+                            <td><span t-esc="doc.tracking_number or '-'"/></td>
+                            <td><strong>Seal Code</strong></td>
+                            <td><span t-esc="doc.seal_code or '-'"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dispatch Time</strong></td>
+                            <td><span t-field="doc.dispatch_time"/></td>
+                            <td><strong>Receive Time</strong></td>
+                            <td><span t-field="doc.received_time"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Package Condition</strong></td>
+                            <td><span t-esc="dict(doc._fields['package_condition'].selection).get(doc.package_condition)"/></td>
+                            <td><strong>Temperature</strong></td>
+                            <td>
+                                Dispatch: <span t-esc="doc.measured_temp_dispatch or '-'"/> C,
+                                Receive: <span t-esc="doc.measured_temp_receive or '-'"/> C
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin-top: 14px;">Sample Lines</h4>
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Sample</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Location</th>
+                            <th>State</th>
+                            <th>Exception</th>
+                            <th>NCR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc.line_ids" t-as="line" t-att-class="'table-danger' if line.state == 'exception' else ''">
+                            <td><span t-esc="line.id"/></td>
+                            <td><span t-field="line.sample_id"/></td>
+                            <td><span t-field="line.from_user_id"/></td>
+                            <td><span t-field="line.to_user_id"/></td>
+                            <td><span t-esc="(line.from_location or '-') + ' -> ' + (line.to_location or '-')"/></td>
+                            <td><span t-esc="dict(line._fields['state'].selection).get(line.state)"/></td>
+                            <td>
+                                <t t-if="line.exception_template_id">
+                                    <span t-field="line.exception_template_id"/>
+                                </t>
+                                <t t-elif="line.exception_detail">
+                                    <span t-esc="line.exception_detail"/>
+                                </t>
+                                <t t-else="">
+                                    -
+                                </t>
+                            </td>
+                            <td><span t-esc="line.nonconformance_id.name if line.nonconformance_id else '-'"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin-top: 14px;">Sign-offs</h4>
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Action</th>
+                            <th>User</th>
+                            <th>Signature Ref</th>
+                            <th>Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc.signoff_ids" t-as="s">
+                            <td><span t-field="s.signed_at"/></td>
+                            <td><span t-esc="dict(s._fields['action_type'].selection).get(s.action_type)"/></td>
+                            <td><span t-field="s.signed_by_id"/></td>
+                            <td><span t-esc="s.signature_ref"/></td>
+                            <td><span t-esc="s.note or '-'"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin-top: 14px;">Receive Sessions</h4>
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Session</th>
+                            <th>State</th>
+                            <th>Receiver</th>
+                            <th>Witness</th>
+                            <th>QA</th>
+                            <th>Result</th>
+                            <th>Discrepancy Lines</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc.receive_session_ids" t-as="r">
+                            <td><span t-field="r.name"/></td>
+                            <td><span t-esc="dict(r._fields['state'].selection).get(r.state)"/></td>
+                            <td><span t-field="r.receiver_id"/></td>
+                            <td><span t-field="r.witness_id"/></td>
+                            <td><span t-field="r.qa_reviewer_id"/></td>
+                            <td><span t-esc="dict(r._fields['checklist_result'].selection).get(r.checklist_result)"/></td>
+                            <td><span t-esc="r.discrepancy_line_count"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <t t-if="doc.closure_note">
+                    <p><strong>Closure Note:</strong> <span t-esc="doc.closure_note"/></p>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_lab_custody_manifest">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="laboratory_management.report_lab_custody_manifest_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_lab_custody_investigation_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2 style="margin-bottom: 8px;">Custody Investigation Summary</h2>
+                <table class="table table-sm table-bordered">
+                    <tbody>
+                        <tr>
+                            <td><strong>Investigation</strong></td>
+                            <td><span t-field="doc.name"/></td>
+                            <td><strong>Status</strong></td>
+                            <td><span t-esc="dict(doc._fields['state'].selection).get(doc.state)"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Batch</strong></td>
+                            <td><span t-field="doc.batch_id"/></td>
+                            <td><strong>Sample</strong></td>
+                            <td><span t-field="doc.sample_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>NCR</strong></td>
+                            <td><span t-esc="doc.nonconformance_id.name if doc.nonconformance_id else '-'"/></td>
+                            <td><strong>Severity</strong></td>
+                            <td><span t-esc="dict(doc._fields['severity'].selection).get(doc.severity)"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Owner</strong></td>
+                            <td><span t-field="doc.owner_id"/></td>
+                            <td><strong>QA Reviewer</strong></td>
+                            <td><span t-field="doc.qa_reviewer_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Detected</strong></td>
+                            <td><span t-field="doc.detected_date"/></td>
+                            <td><strong>Target Close</strong></td>
+                            <td><span t-field="doc.target_close_date"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Closed By</strong></td>
+                            <td><span t-field="doc.closed_by_id"/></td>
+                            <td><strong>Closed Date</strong></td>
+                            <td><span t-field="doc.closed_date"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Issue Summary</h4>
+                <p><span t-esc="doc.issue_summary or '-'"/></p>
+
+                <h4>Impact Assessment</h4>
+                <p><span t-esc="doc.impact_assessment or '-'"/></p>
+
+                <h4>Immediate Containment</h4>
+                <p><span t-esc="doc.immediate_containment or '-'"/></p>
+
+                <h4>Root Cause</h4>
+                <p><span t-esc="doc.root_cause or '-'"/></p>
+
+                <h4>Corrective Action Plan</h4>
+                <p><span t-esc="doc.corrective_action_plan or '-'"/></p>
+
+                <h4>Preventive Action Plan</h4>
+                <p><span t-esc="doc.preventive_action_plan or '-'"/></p>
+
+                <h4>Verification Plan</h4>
+                <p><span t-esc="doc.verification_plan or '-'"/></p>
+
+                <h4>Verification Result</h4>
+                <p><span t-esc="doc.verification_result or '-'"/></p>
+
+                <h4>Effectiveness Conclusion</h4>
+                <p><span t-esc="doc.effectiveness_conclusion or '-'"/></p>
+
+                <h4>Action Items</h4>
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Seq</th>
+                            <th>Action</th>
+                            <th>Owner</th>
+                            <th>Due</th>
+                            <th>Status</th>
+                            <th>Done</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc.action_ids" t-as="a">
+                            <td><span t-esc="a.sequence"/></td>
+                            <td><span t-esc="a.name"/></td>
+                            <td><span t-field="a.owner_id"/></td>
+                            <td><span t-field="a.due_date"/></td>
+                            <td><span t-esc="dict(a._fields['state'].selection).get(a.state)"/></td>
+                            <td><span t-field="a.done_date"/></td>
+                            <td><span t-esc="a.result_note or '-'"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Closure Note</h4>
+                <p><span t-esc="doc.closure_note or '-'"/></p>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_lab_custody_investigation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="laboratory_management.report_lab_custody_investigation_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

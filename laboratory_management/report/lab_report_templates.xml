@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_lab_sample_classic_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2><t t-esc="doc.report_template_id.title or 'Laboratory Report'"/></h2>
+                <p><strong>Accession:</strong> <span t-field="doc.name"/></p>
+                <p><strong>Patient:</strong> <span t-field="doc.patient_id"/></p>
+                <p><strong>Client:</strong> <span t-field="doc.client_id"/></p>
+                <p><strong>Physician:</strong> <span t-esc="doc.physician_name or '-'"/></p>
+                <p><strong>Collection Date:</strong> <span t-field="doc.collection_date"/></p>
+                <p><strong>Report Date:</strong> <span t-field="doc.report_date"/></p>
+                <p><strong>Revision:</strong> R<span t-esc="doc.report_revision"/> <t t-if="doc.is_amended">(Amended)</t></p>
+                <p><strong>Verified By:</strong> <span t-field="doc.verified_by_id"/> (<span t-field="doc.verified_date"/>)</p>
+                <p><strong>Technical Review:</strong> <span t-esc="dict(doc._fields['technical_review_state'].selection).get(doc.technical_review_state)"/> - <span t-esc="doc.technical_reviewer_id.name or '-'"/></p>
+                <p><strong>Medical Review:</strong> <span t-esc="dict(doc._fields['medical_review_state'].selection).get(doc.medical_review_state)"/> - <span t-esc="doc.medical_reviewer_id.name or '-'"/></p>
+
+                <table class="table table-sm table-bordered mt16">
+                    <thead>
+                        <tr>
+                            <th>Analysis</th>
+                            <th>Result</th>
+                            <th>Unit</th>
+                            <th t-if="doc.report_template_id.show_reference">Reference</th>
+                            <th t-if="doc.report_template_id.show_flag">Flag</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc.analysis_ids" t-as="line">
+                            <td><span t-field="line.service_id"/></td>
+                            <td><span t-esc="line.result_value or '-'"/></td>
+                            <td><span t-esc="line.unit or '-'"/></td>
+                            <td t-if="doc.report_template_id.show_reference"><span t-esc="line.ref_min"/> - <span t-esc="line.ref_max"/></td>
+                            <td t-if="doc.report_template_id.show_flag"><span t-esc="dict(line._fields['result_flag'].selection).get(line.result_flag)"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p t-if="doc.report_template_id.show_notes" class="mt16"><strong>Notes:</strong> <span t-field="doc.note"/></p>
+                <div
+                    t-if="doc.report_template_id.show_ai_summary_in_pdf and doc.ai_review_state == 'approved' and doc.ai_interpretation_text"
+                    class="mt16"
+                >
+                    <strong>AI Interpretation Summary:</strong>
+                    <div style="white-space: pre-wrap; margin-top: 6px;">
+                        <t t-esc="doc.ai_interpretation_text"/>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_lab_sample_classic">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="laboratory_management.report_lab_sample_classic_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_lab_sample_clinical_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2 style="margin-bottom: 6px;"><t t-esc="doc.report_template_id.title or 'Clinical Summary Report'"/></h2>
+                <p><strong>Accession:</strong> <span t-field="doc.name"/> | <strong>Patient:</strong> <span t-field="doc.patient_id"/></p>
+                <p><strong>Priority:</strong> <span t-esc="dict(doc._fields['priority'].selection).get(doc.priority)"/> | <strong>Reported:</strong> <span t-field="doc.report_date"/></p>
+                <p><strong>Revision:</strong> R<span t-esc="doc.report_revision"/> <t t-if="doc.is_amended">(Amended)</t></p>
+                <p><strong>Verified By:</strong> <span t-field="doc.verified_by_id"/> (<span t-field="doc.verified_date"/>)</p>
+                <p><strong>Technical Review:</strong> <span t-esc="dict(doc._fields['technical_review_state'].selection).get(doc.technical_review_state)"/> - <span t-esc="doc.technical_reviewer_id.name or '-'"/></p>
+                <p><strong>Medical Review:</strong> <span t-esc="dict(doc._fields['medical_review_state'].selection).get(doc.medical_review_state)"/> - <span t-esc="doc.medical_reviewer_id.name or '-'"/></p>
+
+                <table class="table table-sm table-bordered mt16">
+                    <thead>
+                        <tr>
+                            <th>Analysis</th>
+                            <th>Result</th>
+                            <th t-if="doc.report_template_id.show_reference">Range</th>
+                            <th>Interpretation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc.analysis_ids" t-as="line">
+                            <td><span t-field="line.service_id"/></td>
+                            <td><span t-esc="line.result_value or '-'"/> <span t-esc="line.unit or ''"/></td>
+                            <td t-if="doc.report_template_id.show_reference"><span t-esc="line.ref_min"/> - <span t-esc="line.ref_max"/></td>
+                            <td>
+                                <t t-if="line.result_flag == 'high'">Above reference range</t>
+                                <t t-if="line.result_flag == 'low'">Below reference range</t>
+                                <t t-if="line.result_flag == 'normal'">Within reference range</t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p t-if="doc.report_template_id.show_notes" class="mt16"><strong>Clinical Notes:</strong> <span t-field="doc.note"/></p>
+                <div
+                    t-if="doc.report_template_id.show_ai_summary_in_pdf and doc.ai_review_state == 'approved' and doc.ai_interpretation_text"
+                    class="mt16"
+                >
+                    <strong>AI Interpretation Summary:</strong>
+                    <div style="white-space: pre-wrap; margin-top: 6px;">
+                        <t t-esc="doc.ai_interpretation_text"/>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_lab_sample_clinical">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="laboratory_management.report_lab_sample_clinical_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_lab_sample_compact_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h3><t t-esc="doc.report_template_id.title or 'Compact Laboratory Report'"/> - <span t-field="doc.name"/></h3>
+                <p><strong>Patient:</strong> <span t-field="doc.patient_id"/> | <strong>Date:</strong> <span t-field="doc.report_date"/> | <strong>Rev:</strong> R<span t-esc="doc.report_revision"/></p>
+                <p><strong>Verified By:</strong> <span t-field="doc.verified_by_id"/></p>
+                <p><strong>Technical Review:</strong> <span t-esc="dict(doc._fields['technical_review_state'].selection).get(doc.technical_review_state)"/></p>
+                <p><strong>Medical Review:</strong> <span t-esc="dict(doc._fields['medical_review_state'].selection).get(doc.medical_review_state)"/></p>
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Analysis</th>
+                            <th>Result</th>
+                            <th t-if="doc.report_template_id.show_flag">Flag</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc.analysis_ids" t-as="line">
+                            <td><span t-field="line.service_id"/></td>
+                            <td><span t-esc="line.result_value or '-'"/> <span t-esc="line.unit or ''"/></td>
+                            <td t-if="doc.report_template_id.show_flag"><span t-esc="dict(line._fields['result_flag'].selection).get(line.result_flag)"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p t-if="doc.report_template_id.show_notes"><strong>Notes:</strong> <span t-field="doc.note"/></p>
+                <div
+                    t-if="doc.report_template_id.show_ai_summary_in_pdf and doc.ai_review_state == 'approved' and doc.ai_interpretation_text"
+                    class="mt16"
+                >
+                    <strong>AI Interpretation Summary:</strong>
+                    <div style="white-space: pre-wrap; margin-top: 6px;">
+                        <t t-esc="doc.ai_interpretation_text"/>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_lab_sample_compact">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="laboratory_management.report_lab_sample_compact_document"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_lab_sample_label_document">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <div style="width: 95mm; border: 1px solid #111; padding: 8mm; margin: 0 auto;">
+                    <h4 style="margin: 0 0 6px 0;">Lab Sample Label</h4>
+                    <p style="margin: 0;"><strong>Accession:</strong> <span t-field="doc.name"/></p>
+                    <p style="margin: 0;"><strong>Patient:</strong> <span t-field="doc.patient_id"/></p>
+                    <p style="margin: 0 0 8px 0;"><strong>Collected:</strong> <span t-field="doc.collection_date"/></p>
+                    <div style="text-align: center; margin-top: 6px;">
+                        <img t-att-src="'/report/barcode/Code128/%s?width=520&amp;height=120&amp;humanreadable=1' % (doc.name or '')" alt="barcode"/>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_lab_sample_label">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="laboratory_management.report_lab_sample_label_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="review_reason_auto_disabled" model="lab.review.reason.template">
+        <field name="sequence">10</field>
+        <field name="name">Auto verification disabled</field>
+        <field name="code">auto_disabled</field>
+        <field name="message">This service is configured for manual review. Analyst/reviewer verification is required.</field>
+        <field name="recommendation">Review instrument raw data and verify result integrity before release.</field>
+        <field name="sla_hours">4</field>
+    </record>
+
+    <record id="review_reason_critical" model="lab.review.reason.template">
+        <field name="sequence">20</field>
+        <field name="name">Critical result</field>
+        <field name="code">critical</field>
+        <field name="message">Result is within critical threshold and must be reviewed by authorized personnel.</field>
+        <field name="recommendation">Escalate to reviewer immediately and perform critical value notification workflow.</field>
+        <field name="sla_hours">1</field>
+    </record>
+
+    <record id="review_reason_out_of_range" model="lab.review.reason.template">
+        <field name="sequence">30</field>
+        <field name="name">Out-of-range result</field>
+        <field name="code">out_of_range</field>
+        <field name="message">Result is outside reference range and requires manual verification.</field>
+        <field name="recommendation">Confirm sample identity, check analyzer flags, and verify with clinical context.</field>
+        <field name="sla_hours">2</field>
+    </record>
+
+    <record id="review_reason_qc_not_passed" model="lab.review.reason.template">
+        <field name="sequence">40</field>
+        <field name="name">QC not passed</field>
+        <field name="code">qc_not_passed</field>
+        <field name="message">Latest QC run is not PASS; automatic verification is blocked.</field>
+        <field name="recommendation">Run QC again and only release results after QC status returns to PASS.</field>
+        <field name="sla_hours">2</field>
+    </record>
+
+    <record id="review_reason_delta_fail" model="lab.review.reason.template">
+        <field name="sequence">50</field>
+        <field name="name">Delta check failed</field>
+        <field name="code">delta_fail</field>
+        <field name="message">Difference versus previous patient result exceeds configured delta threshold.</field>
+        <field name="recommendation">Review patient history and recollection risk; consider retest if inconsistent.</field>
+        <field name="sla_hours">3</field>
+    </record>
+</odoo>

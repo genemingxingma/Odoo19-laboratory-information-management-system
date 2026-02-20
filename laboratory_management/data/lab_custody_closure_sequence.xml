@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_lab_custody_receive_session" model="ir.sequence">
+        <field name="name">Custody Receive Session</field>
+        <field name="code">lab.custody.receive.session</field>
+        <field name="prefix">CRS%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_lab_custody_investigation" model="ir.sequence">
+        <field name="name">Custody Investigation</field>
+        <field name="code">lab.custody.investigation</field>
+        <field name="prefix">INV%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

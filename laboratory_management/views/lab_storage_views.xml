@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_storage_location_list" model="ir.ui.view">
+        <field name="name">lab.storage.location.list</field>
+        <field name="model">lab.storage.location</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="occupancy_rate &gt; 85" decoration-danger="occupancy_rate &gt;= 100">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="zone"/>
+                <field name="temperature_min"/>
+                <field name="temperature_max"/>
+                <field name="capacity"/>
+                <field name="current_sample_count"/>
+                <field name="occupancy_rate"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_storage_location_form" model="ir.ui.view">
+        <field name="name">lab.storage.location.form</field>
+        <field name="model">lab.storage.location</field>
+        <field name="arch" type="xml">
+            <form string="Storage Location">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_samples" icon="fa-flask">
+                            <field name="current_sample_count" widget="statinfo" string="Samples"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="zone"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="temperature_min"/>
+                            <field name="temperature_max"/>
+                            <field name="capacity"/>
+                            <field name="occupancy_rate" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_storage_location_search" model="ir.ui.view">
+        <field name="name">lab.storage.location.search</field>
+        <field name="model">lab.storage.location</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="zone"/>
+                <filter name="f_storage_active" string="Active" domain="[('active','=',True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_storage_location" model="ir.actions.act_window">
+        <field name="name">Storage Locations</field>
+        <field name="res_model">lab.storage.location</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_storage_location_search"/>
+    </record>
+
+    <record id="view_lab_storage_event_list" model="ir.ui.view">
+        <field name="name">lab.sample.storage.event.list</field>
+        <field name="model">lab.sample.storage.event</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="event_time"/>
+                <field name="sample_id"/>
+                <field name="event_type"/>
+                <field name="from_location_id"/>
+                <field name="to_location_id"/>
+                <field name="box"/>
+                <field name="slot"/>
+                <field name="user_id"/>
+                <field name="note"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_storage_event_form" model="ir.ui.view">
+        <field name="name">lab.sample.storage.event.form</field>
+        <field name="model">lab.sample.storage.event</field>
+        <field name="arch" type="xml">
+            <form string="Storage Event">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sample_id"/>
+                            <field name="event_type"/>
+                            <field name="event_time"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="from_location_id"/>
+                            <field name="to_location_id"/>
+                            <field name="box"/>
+                            <field name="slot"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_storage_event_search" model="ir.ui.view">
+        <field name="name">lab.sample.storage.event.search</field>
+        <field name="model">lab.sample.storage.event</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sample_id"/>
+                <field name="event_type"/>
+                <field name="user_id"/>
+                <field name="from_location_id"/>
+                <field name="to_location_id"/>
+                <filter name="f_storage_store" string="Store" domain="[('event_type','=','store')]"/>
+                <filter name="f_storage_move" string="Move" domain="[('event_type','=','move')]"/>
+                <filter name="f_storage_retrieve" string="Retrieve" domain="[('event_type','=','retrieve')]"/>
+                <filter name="f_storage_dispose" string="Dispose" domain="[('event_type','=','dispose')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_storage_event" model="ir.actions.act_window">
+        <field name="name">Storage Events</field>
+        <field name="res_model">lab.sample.storage.event</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_storage_event_search"/>
+    </record>
+
+    <record id="view_lab_disposal_record_list" model="ir.ui.view">
+        <field name="name">lab.sample.disposal.record.list</field>
+        <field name="model">lab.sample.disposal.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="sample_id"/>
+                <field name="disposal_date"/>
+                <field name="method"/>
+                <field name="reason"/>
+                <field name="disposed_by_id"/>
+                <field name="witness_name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_disposal_record_form" model="ir.ui.view">
+        <field name="name">lab.sample.disposal.record.form</field>
+        <field name="model">lab.sample.disposal.record</field>
+        <field name="arch" type="xml">
+            <form string="Disposal Record">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="sample_id"/>
+                            <field name="disposal_date"/>
+                            <field name="disposed_by_id"/>
+                        </group>
+                        <group>
+                            <field name="method"/>
+                            <field name="reason"/>
+                            <field name="witness_name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_disposal_record_search" model="ir.ui.view">
+        <field name="name">lab.sample.disposal.record.search</field>
+        <field name="model">lab.sample.disposal.record</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="sample_id"/>
+                <field name="method"/>
+                <field name="disposed_by_id"/>
+                <filter name="f_disposal_incineration" string="Incineration" domain="[('method','=','incineration')]"/>
+                <filter name="f_disposal_biohazard" string="Biohazard" domain="[('method','=','biohazard')]"/>
+                <filter name="f_disposal_vendor" string="Vendor Return" domain="[('method','=','vendor_return')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_disposal_record" model="ir.actions.act_window">
+        <field name="name">Disposal Records</field>
+        <field name="res_model">lab.sample.disposal.record</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_disposal_record_search"/>
+    </record>
+
+    <record id="action_lab_sample_storage_queue" model="ir.actions.act_window">
+        <field name="name">Storage Queue</field>
+        <field name="res_model">lab.sample</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('storage_state','in',('stored','retrieved'))]</field>
+    </record>
+
+    <record id="action_lab_sample_storage_overdue" model="ir.actions.act_window">
+        <field name="name">Storage Overdue</field>
+        <field name="res_model">lab.sample</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('storage_is_overdue','=',True)]</field>
+    </record>
+
+    <record id="view_lab_sample_storage_tree_inherit" model="ir.ui.view">
+        <field name="name">lab.sample.list.storage.inherit</field>
+        <field name="model">lab.sample</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sample_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="storage_state"/>
+                <field name="storage_location_id"/>
+                <field name="storage_due_date"/>
+                <field name="storage_is_overdue"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_form_storage_inherit" model="ir.ui.view">
+        <field name="name">lab.sample.form.storage.inherit</field>
+        <field name="model">lab.sample</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sample_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_store_sample" type="object" string="Store Sample" groups="laboratory_management.group_lab_analyst,laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="storage_state == 'stored' or state in ('draft','cancel')"/>
+                <button name="action_retrieve_sample" type="object" string="Retrieve Sample" groups="laboratory_management.group_lab_analyst,laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="storage_state != 'stored'"/>
+                <button name="action_return_to_storage" type="object" string="Return Storage" groups="laboratory_management.group_lab_analyst,laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="storage_state != 'retrieved'"/>
+                <button name="action_dispose_sample" type="object" string="Dispose Sample" groups="laboratory_management.group_lab_manager" invisible="storage_state not in ('stored','retrieved')"/>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_storage_events" icon="fa-history">
+                    <field name="storage_event_count" widget="statinfo" string="Storage Events"/>
+                </button>
+                <button class="oe_stat_button" type="object" name="action_view_disposal_records" icon="fa-trash">
+                    <field name="disposal_record_count" widget="statinfo" string="Disposals"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Storage">
+                    <group>
+                        <group>
+                            <field name="storage_state" readonly="1"/>
+                            <field name="storage_location_id"/>
+                            <field name="storage_box"/>
+                            <field name="storage_slot"/>
+                            <field name="storage_retention_days"/>
+                        </group>
+                        <group>
+                            <field name="storage_stored_date" readonly="1"/>
+                            <field name="storage_retrieved_date" readonly="1"/>
+                            <field name="storage_disposed_date" readonly="1"/>
+                            <field name="storage_due_date" readonly="1"/>
+                            <field name="storage_is_overdue" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="storage_note"/>
+                    </group>
+                    <group string="Storage Events">
+                        <field name="storage_event_ids" readonly="1">
+                            <list>
+                                <field name="event_time"/>
+                                <field name="event_type"/>
+                                <field name="from_location_id"/>
+                                <field name="to_location_id"/>
+                                <field name="box"/>
+                                <field name="slot"/>
+                                <field name="user_id"/>
+                                <field name="note"/>
+                            </list>
+                        </field>
+                    </group>
+                    <group string="Disposal Records">
+                        <field name="disposal_record_ids" readonly="1">
+                            <list>
+                                <field name="name"/>
+                                <field name="disposal_date"/>
+                                <field name="method"/>
+                                <field name="reason"/>
+                                <field name="disposed_by_id"/>
+                                <field name="witness_name"/>
+                            </list>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_lab_storage_queue" name="Storage Queue" parent="menu_laboratory_operations" action="action_lab_sample_storage_queue" sequence="20"/>
+    <menuitem id="menu_lab_storage_overdue" name="Storage Overdue" parent="menu_laboratory_quality" action="action_lab_sample_storage_overdue" sequence="16"/>
+    <menuitem id="menu_lab_storage_event" name="Storage Events" parent="menu_laboratory_quality" action="action_lab_storage_event" sequence="17"/>
+    <menuitem id="menu_lab_disposal_record" name="Disposal Records" parent="menu_laboratory_quality" action="action_lab_disposal_record" sequence="18"/>
+    <menuitem id="menu_lab_storage_location" name="Storage Locations" parent="menu_laboratory_config" action="action_lab_storage_location" sequence="40"/>
+</odoo>

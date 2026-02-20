@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_custody_investigation_bulk_update_wizard_form" model="ir.ui.view">
+        <field name="name">lab.custody.investigation.bulk.update.wizard.form</field>
+        <field name="model">lab.custody.investigation.bulk.update.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Update Investigations">
+                <sheet>
+                    <group>
+                        <field name="investigation_ids" widget="many2many_tags"/>
+                    </group>
+
+                    <group string="Batch Updates">
+                        <group>
+                            <field name="apply_owner"/>
+                            <field name="owner_id" invisible="not apply_owner"/>
+                        </group>
+                        <group>
+                            <field name="apply_state"/>
+                            <field name="state" invisible="not apply_state"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="apply_target_date"/>
+                            <field name="target_close_date" invisible="not apply_target_date"/>
+                        </group>
+                        <group>
+                            <field name="apply_sla_policy"/>
+                            <field name="sla_policy_id" invisible="not apply_sla_policy"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <field name="add_internal_note"/>
+                        <field name="internal_note" invisible="not add_internal_note"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_apply" type="object" string="Apply" class="btn-primary"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_custody_investigation_bulk_update_wizard" model="ir.actions.act_window">
+        <field name="name">Bulk Update Investigations</field>
+        <field name="res_model">lab.custody.investigation.bulk.update.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_server_lab_custody_investigation_bulk_update" model="ir.actions.server">
+        <field name="name">Bulk Update Investigations</field>
+        <field name="model_id" ref="model_lab_custody_investigation"/>
+        <field name="binding_model_id" ref="model_lab_custody_investigation"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Bulk Update Investigations',
+    'res_model': 'lab.custody.investigation.bulk.update.wizard',
+    'view_mode': 'form',
+    'target': 'new',
+    'context': {
+        'default_investigation_ids': [(6, 0, records.ids)],
+        'active_ids': records.ids,
+    }
+}
+        </field>
+    </record>
+</odoo>

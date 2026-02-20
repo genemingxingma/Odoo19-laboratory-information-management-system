@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_sample_form_review_inherit" model="ir.ui.view">
+        <field name="name">lab.sample.form.review.inherit</field>
+        <field name="model">lab.sample</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sample_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_release_report']" position="before">
+                <button
+                    name="action_withdraw_report"
+                    type="object"
+                    string="Withdraw Report"
+                    groups="laboratory_management.group_lab_manager"
+                    invisible="state != 'reported' or report_publication_state == 'withdrawn'"
+                />
+                <button
+                    name="action_reissue_report"
+                    type="object"
+                    string="Reissue Report"
+                    groups="laboratory_management.group_lab_manager"
+                    invisible="report_publication_state != 'withdrawn'"
+                />
+                <button
+                    name="action_request_dual_review"
+                    type="object"
+                    string="Request Dual Review"
+                    groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"
+                    invisible="state not in ('to_verify','verified')"
+                />
+                <button
+                    name="action_approve_technical_review"
+                    type="object"
+                    string="Approve Technical"
+                    class="btn-primary"
+                    groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"
+                    invisible="state not in ('verified','reported') or technical_review_state == 'approved'"
+                />
+                <button
+                    name="action_reject_technical_review"
+                    type="object"
+                    string="Reject Technical"
+                    groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"
+                    invisible="state not in ('verified','reported')"
+                />
+                <button
+                    name="action_reopen_technical_review"
+                    type="object"
+                    string="Reopen Technical"
+                    groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"
+                    invisible="technical_review_state == 'pending'"
+                />
+                <button
+                    name="action_approve_medical_review"
+                    type="object"
+                    string="Approve Medical"
+                    class="btn-primary"
+                    groups="laboratory_management.group_lab_manager"
+                    invisible="state not in ('verified','reported') or medical_review_state == 'approved'"
+                />
+                <button
+                    name="action_reject_medical_review"
+                    type="object"
+                    string="Reject Medical"
+                    groups="laboratory_management.group_lab_manager"
+                    invisible="state not in ('verified','reported')"
+                />
+                <button
+                    name="action_reopen_medical_review"
+                    type="object"
+                    string="Reopen Medical"
+                    groups="laboratory_management.group_lab_manager"
+                    invisible="medical_review_state == 'pending'"
+                />
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_dispatches" icon="fa-paper-plane">
+                    <field name="dispatch_count" widget="statinfo" string="Dispatches"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="review_release_ready" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//page[field[@name='ai_review_log_ids']]" position="after">
+                <page string="Dual Review">
+                    <group>
+                        <group>
+                            <field name="review_required_for_release" readonly="1"/>
+                            <field name="review_release_ready" readonly="1"/>
+                            <field name="review_block_reason" readonly="1" invisible="not review_block_reason"/>
+                            <field name="report_publication_state" readonly="1"/>
+                            <field name="report_withdrawn_by_id" readonly="1" invisible="not report_withdrawn_by_id"/>
+                            <field name="report_withdrawn_at" readonly="1" invisible="not report_withdrawn_at"/>
+                        </group>
+                        <group>
+                            <field name="report_withdraw_input" placeholder="Reason required before clicking Withdraw Report"/>
+                            <field name="report_withdrawn_reason" readonly="1" invisible="not report_withdrawn_reason"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <div class="o_form_label">Technical Review</div>
+                            <field name="technical_review_state" readonly="1"/>
+                            <field name="technical_reviewer_id" readonly="1"/>
+                            <field name="technical_reviewed_at" readonly="1"/>
+                            <field name="technical_review_note"/>
+                        </group>
+                        <group>
+                            <div class="o_form_label">Medical Review</div>
+                            <field name="medical_review_state" readonly="1"/>
+                            <field name="medical_reviewer_id" readonly="1"/>
+                            <field name="medical_reviewed_at" readonly="1"/>
+                            <field name="medical_review_note"/>
+                        </group>
+                    </group>
+                </page>
+
+                <page string="Dual Review Timeline">
+                    <field name="review_log_ids" readonly="1">
+                        <list>
+                            <field name="event_time"/>
+                            <field name="stage"/>
+                            <field name="action"/>
+                            <field name="user_id"/>
+                            <field name="note"/>
+                        </list>
+                    </field>
+                </page>
+
+                <page string="Report Dispatches">
+                    <field name="dispatch_ids" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="channel"/>
+                            <field name="state"/>
+                            <field name="sent_at"/>
+                            <field name="viewed_at"/>
+                            <field name="downloaded_at"/>
+                            <field name="acknowledged_at"/>
+                            <field name="reminder_count"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_list_review_inherit" model="ir.ui.view">
+        <field name="name">lab.sample.list.review.inherit</field>
+        <field name="model">lab.sample</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sample_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="technical_review_state"/>
+                <field name="medical_review_state"/>
+                <field name="review_release_ready"/>
+                <field name="report_publication_state"/>
+                <field name="dispatch_count"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_search_review_inherit" model="ir.ui.view">
+        <field name="name">lab.sample.search.review.inherit</field>
+        <field name="model">lab.sample</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sample_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='f_reported']" position="after">
+                <filter name="f_review_pending" string="Review Pending" domain="['|',('technical_review_state','in',('pending','rejected')),('medical_review_state','in',('pending','rejected'))]"/>
+                <filter name="f_dispatch_unacked" string="Unacked Dispatch" domain="[('dispatch_ids.state','in',('sent','viewed','downloaded'))]"/>
+                <filter name="f_withdrawn" string="Withdrawn" domain="[('report_publication_state','=','withdrawn')]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

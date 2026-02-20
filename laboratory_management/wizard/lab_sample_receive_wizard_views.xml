@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_sample_receive_wizard_form" model="ir.ui.view">
+        <field name="name">lab.sample.receive.wizard.form</field>
+        <field name="model">lab.sample.receive.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Receive Sample">
+                <sheet>
+                    <group>
+                        <field name="accession" placeholder="Scan barcode or input accession..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_receive_sample" type="object" string="Receive" class="btn-primary"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_sample_receive_wizard" model="ir.actions.act_window">
+        <field name="name">Receive Sample</field>
+        <field name="res_model">lab.sample.receive.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_lab_sample_receive" name="Receive Sample" parent="menu_laboratory_operations" action="action_lab_sample_receive_wizard" sequence="11" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+</odoo>

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_sop_workflow_profile_list" model="ir.ui.view">
+        <field name="name">lab.sop.workflow.profile.list</field>
+        <field name="model">lab.sop.workflow.profile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="department"/>
+                <field name="sample_type"/>
+                <field name="priority"/>
+                <field name="request_type"/>
+                <field name="fasting_rule"/>
+                <field name="request_time_window"/>
+                <field name="sop_id"/>
+                <field name="retest_strategy_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_sop_workflow_profile_form" model="ir.ui.view">
+        <field name="name">lab.sop.workflow.profile.form</field>
+        <field name="model">lab.sop.workflow.profile</field>
+        <field name="arch" type="xml">
+            <form string="SOP Workflow Profile">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="department"/>
+                            <field name="sample_type"/>
+                            <field name="priority"/>
+                            <field name="request_type"/>
+                            <field name="fasting_rule"/>
+                            <field name="request_time_window"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="client_required"/>
+                            <field name="client_tag_ids" widget="many2many_tags"/>
+                            <field name="service_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="sop_id"/>
+                            <field name="retest_strategy_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_sop_workflow_profile" model="ir.actions.act_window">
+        <field name="name">Workflow Profiles</field>
+        <field name="res_model">lab.sop.workflow.profile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_sop_decision_threshold_profile_list" model="ir.ui.view">
+        <field name="name">lab.sop.decision.threshold.profile.list</field>
+        <field name="model">lab.sop.decision.threshold.profile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="department"/>
+                <field name="min_critical_count"/>
+                <field name="min_out_of_range_count"/>
+                <field name="min_manual_review_count"/>
+                <field name="min_retest_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_sop_decision_threshold_profile_form" model="ir.ui.view">
+        <field name="name">lab.sop.decision.threshold.profile.form</field>
+        <field name="model">lab.sop.decision.threshold.profile</field>
+        <field name="arch" type="xml">
+            <form string="Decision Threshold Profile">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="department"/>
+                            <field name="min_critical_count"/>
+                            <field name="min_out_of_range_count"/>
+                            <field name="min_manual_review_count"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="min_retest_count"/>
+                            <field name="min_delta_abs"/>
+                            <field name="max_delta_abs"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_sop_decision_threshold_profile" model="ir.actions.act_window">
+        <field name="name">Decision Threshold Profiles</field>
+        <field name="res_model">lab.sop.decision.threshold.profile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_sop_exception_decision_list" model="ir.ui.view">
+        <field name="name">lab.sop.exception.decision.list</field>
+        <field name="model">lab.sop.exception.decision</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="department"/>
+                <field name="trigger"/>
+                <field name="severity"/>
+                <field name="action"/>
+                <field name="threshold_profile_id"/>
+                <field name="route_group_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_sop_exception_decision_form" model="ir.ui.view">
+        <field name="name">lab.sop.exception.decision.form</field>
+        <field name="model">lab.sop.exception.decision</field>
+        <field name="arch" type="xml">
+            <form string="SOP Exception Decision">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="department"/>
+                            <field name="sample_type"/>
+                            <field name="priority"/>
+                            <field name="request_type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="trigger"/>
+                            <field name="severity"/>
+                            <field name="require_critical"/>
+                            <field name="threshold_profile_id"/>
+                        </group>
+                        <group>
+                            <field name="action"/>
+                            <field name="route_group_id"/>
+                            <field name="ncr_severity" invisible="action != 'ncr'"/>
+                            <field name="stop_execution"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="min_retest_count"/>
+                            <field name="max_retest_count"/>
+                        </group>
+                        <group>
+                            <field name="min_delta_abs"/>
+                            <field name="max_delta_abs"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_sop_exception_decision" model="ir.actions.act_window">
+        <field name="name">Exception Decisions</field>
+        <field name="res_model">lab.sop.exception.decision</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_sop_exception_decision_run_list" model="ir.ui.view">
+        <field name="name">lab.sop.exception.decision.run.list</field>
+        <field name="model">lab.sop.exception.decision.run</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="run_time"/>
+                <field name="execution_id"/>
+                <field name="sample_id"/>
+                <field name="trigger"/>
+                <field name="severity"/>
+                <field name="decision_id"/>
+                <field name="matched"/>
+                <field name="result_action"/>
+                <field name="note"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_sop_exception_decision_run_form" model="ir.ui.view">
+        <field name="name">lab.sop.exception.decision.run.form</field>
+        <field name="model">lab.sop.exception.decision.run</field>
+        <field name="arch" type="xml">
+            <form string="Decision Run" create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="run_time"/>
+                            <field name="execution_id"/>
+                            <field name="sample_id"/>
+                        </group>
+                        <group>
+                            <field name="trigger"/>
+                            <field name="severity"/>
+                            <field name="decision_id"/>
+                            <field name="result_action"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="matched"/>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_sop_exception_decision_run" model="ir.actions.act_window">
+        <field name="name">Decision Runs</field>
+        <field name="res_model">lab.sop.exception.decision.run</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_sample_form_sop_profile_matrix_inherit" model="ir.ui.view">
+        <field name="name">lab.sample.form.sop.profile.matrix.inherit</field>
+        <field name="model">lab.sample</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sample_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sop_step_code']" position="after">
+                <field name="workflow_profile_id" readonly="1"/>
+                <field name="workflow_route_note" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_sop_execution_form_sop_profile_matrix_inherit" model="ir.ui.view">
+        <field name="name">lab.sop.execution.form.sop.profile.matrix.inherit</field>
+        <field name="model">lab.sop.execution</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sop_execution_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_decision_runs" string="Decision Runs" type="object" invisible="decision_run_count == 0"/>
+            </xpath>
+            <xpath expr="//field[@name='retest_strategy_id']" position="after">
+                <field name="decision_run_count" readonly="1"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Decision Runs">
+                    <field name="decision_run_ids" readonly="1">
+                        <list>
+                            <field name="run_time"/>
+                            <field name="trigger"/>
+                            <field name="severity"/>
+                            <field name="decision_id"/>
+                            <field name="matched"/>
+                            <field name="result_action"/>
+                            <field name="note"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_lab_sop_workflow_profile" name="Workflow Profiles" parent="menu_laboratory_config" action="action_lab_sop_workflow_profile" sequence="30"/>
+    <menuitem id="menu_lab_sop_decision_threshold_profile" name="Decision Thresholds" parent="menu_laboratory_config" action="action_lab_sop_decision_threshold_profile" sequence="31"/>
+    <menuitem id="menu_lab_sop_exception_decision" name="Exception Decisions" parent="menu_laboratory_config" action="action_lab_sop_exception_decision" sequence="32"/>
+    <menuitem id="menu_lab_sop_exception_decision_run" name="Decision Runs" parent="menu_laboratory_quality" action="action_lab_sop_exception_decision_run" sequence="47"/>
+</odoo>

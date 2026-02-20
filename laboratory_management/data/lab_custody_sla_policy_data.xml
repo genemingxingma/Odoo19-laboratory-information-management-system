@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_custody_sla_policy_default" model="lab.custody.sla.policy">
+        <field name="sequence">10</field>
+        <field name="name">Default Custody SLA Policy</field>
+        <field name="is_default">True</field>
+        <field name="active">True</field>
+        <field name="note">Default SLA policy for custody investigations.</field>
+    </record>
+
+    <record id="lab_custody_sla_policy_default_minor" model="lab.custody.sla.policy.line">
+        <field name="policy_id" ref="lab_custody_sla_policy_default"/>
+        <field name="severity">minor</field>
+        <field name="target_hours">72</field>
+        <field name="warning_hours">12</field>
+        <field name="require_qa_signoff">False</field>
+        <field name="require_effectiveness">True</field>
+        <field name="auto_escalate">True</field>
+        <field name="escalation_hours_l1">8</field>
+        <field name="escalation_hours_l2">24</field>
+        <field name="escalation_hours_l3">48</field>
+    </record>
+
+    <record id="lab_custody_sla_policy_default_major" model="lab.custody.sla.policy.line">
+        <field name="policy_id" ref="lab_custody_sla_policy_default"/>
+        <field name="severity">major</field>
+        <field name="target_hours">48</field>
+        <field name="warning_hours">8</field>
+        <field name="require_qa_signoff">True</field>
+        <field name="require_effectiveness">True</field>
+        <field name="auto_escalate">True</field>
+        <field name="escalation_hours_l1">4</field>
+        <field name="escalation_hours_l2">12</field>
+        <field name="escalation_hours_l3">24</field>
+    </record>
+
+    <record id="lab_custody_sla_policy_default_critical" model="lab.custody.sla.policy.line">
+        <field name="policy_id" ref="lab_custody_sla_policy_default"/>
+        <field name="severity">critical</field>
+        <field name="target_hours">24</field>
+        <field name="warning_hours">4</field>
+        <field name="require_qa_signoff">True</field>
+        <field name="require_effectiveness">True</field>
+        <field name="auto_escalate">True</field>
+        <field name="escalation_hours_l1">2</field>
+        <field name="escalation_hours_l2">6</field>
+        <field name="escalation_hours_l3">12</field>
+    </record>
+</odoo>

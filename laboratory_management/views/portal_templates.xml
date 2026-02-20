@@ -1,0 +1,1139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_laboratory" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <div class="o_portal_category row g-2 mt-3" id="portal_laboratory_category">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="icon" t-value="'/laboratory_management/static/src/img/portal_lab_reports.svg'"/>
+                    <t t-set="title">Lab Reports</t>
+                    <t t-set="url" t-value="'/my/lab/samples'"/>
+                    <t t-set="text">Track sample status and view released reports</t>
+                    <t t-set="placeholder_count" t-value="'lab_sample_count'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="icon" t-value="'/laboratory_management/static/src/img/portal_lab_requests.svg'"/>
+                    <t t-set="title">Test Requests</t>
+                    <t t-set="url" t-value="'/my/lab/requests'"/>
+                    <t t-set="text">Submit test requests and track request lifecycle</t>
+                    <t t-set="placeholder_count" t-value="'lab_test_request_count'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="icon" t-value="'/web/static/img/icons/money.png'"/>
+                    <t t-set="title">Request Invoices</t>
+                    <t t-set="url" t-value="'/my/lab/invoices'"/>
+                    <t t-set="text">Check invoice balances and submit payment references</t>
+                    <t t-set="placeholder_count" t-value="'lab_request_invoice_count'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="icon" t-value="'/web/static/img/icons/cart.png'"/>
+                    <t t-set="title">Professional Purchase</t>
+                    <t t-set="url" t-value="'/my/lab/professional/purchase'"/>
+                    <t t-set="text">Professional customers create lab service purchase orders</t>
+                    <t t-set="placeholder_count" t-value="'0'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="icon" t-value="'/web/static/img/icons/clock.png'"/>
+                    <t t-set="title">Custody Batches</t>
+                    <t t-set="url" t-value="'/my/lab/custody/batches'"/>
+                    <t t-set="text">Track handover and receive session progress</t>
+                    <t t-set="placeholder_count" t-value="'lab_custody_batch_count'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="icon" t-value="'/web/static/img/icons/settings.png'"/>
+                    <t t-set="title">Custody Investigations</t>
+                    <t t-set="url" t-value="'/my/lab/custody/investigations'"/>
+                    <t t-set="text">Follow investigation, CAPA and closure status</t>
+                    <t t-set="placeholder_count" t-value="'lab_custody_investigation_count'"/>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="portal_my_lab_samples" name="Portal Lab Samples">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">My Lab Samples</t>
+            </t>
+            <h3 class="mb-3">My Lab Samples</h3>
+            <t t-if="not records">
+                <div class="alert alert-info">No lab sample records found.</div>
+            </t>
+            <t t-if="records">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Accession</th>
+                            <th>Patient</th>
+                            <th>Status</th>
+                            <th>Collected At</th>
+                            <th>Reported At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="records" t-as="rec">
+                            <td><a t-att-href="'/my/lab/samples/%s' % rec.id"><t t-esc="rec.name"/></a></td>
+                            <td><t t-esc="rec.patient_id.name"/></td>
+                            <td><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></td>
+                            <td><t t-esc="rec.collection_date or '-'"/></td>
+                            <td><t t-esc="rec.report_date or '-'"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <t t-call="portal.pager"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_lab_sample_detail" name="Portal Lab Sample Detail">
+        <t t-call="portal.portal_layout">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">Sample <t t-esc="record.name"/></h3>
+                <div>
+                    <a t-if="record.state in ('verified', 'reported') and record.report_publication_state == 'active'" t-att-href="'/my/lab/samples/%s/report/h5' % record.id" class="btn btn-primary me-2">View H5 Report</a>
+                    <a t-if="record.state in ('verified', 'reported') and record.report_publication_state == 'active'" t-att-href="'/my/lab/samples/%s/report/pdf' % record.id" class="btn btn-outline-primary me-2">Download PDF</a>
+                    <a href="/my/lab/samples" class="btn btn-secondary">Back</a>
+                </div>
+            </div>
+            <t t-if="record.report_publication_state == 'withdrawn'">
+                <div class="alert alert-warning">
+                    This report is withdrawn and currently unavailable for external access.
+                </div>
+            </t>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p><strong>Patient:</strong> <t t-esc="record.patient_id.name"/></p>
+                    <p><strong>Physician:</strong> <t t-esc="record.physician_name or '-'"/></p>
+                    <p><strong>Template:</strong> <t t-esc="record.report_template_id.name or '-'"/></p>
+                    <p><strong>Revision:</strong> R<t t-esc="record.report_revision"/> <t t-if="record.is_amended">(Amended)</t></p>
+                    <p><strong>Status:</strong> <t t-esc="dict(record._fields['state'].selection).get(record.state)"/></p>
+                    <p><strong>Collection Date:</strong> <t t-esc="record.collection_date or '-'"/></p>
+                    <p><strong>Report Date:</strong> <t t-esc="record.report_date or '-'"/></p>
+                </div>
+            </div>
+
+            <h5>Analysis Results</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Analysis</th>
+                        <th>Result</th>
+                        <th>Range</th>
+                        <th>Flag</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="record.analysis_ids" t-as="line">
+                        <td><t t-esc="line.service_id.name"/></td>
+                        <td><t t-esc="line.result_value or '-'"/> <t t-esc="line.unit or ''"/></td>
+                        <td><t t-esc="line.ref_min"/> - <t t-esc="line.ref_max"/></td>
+                        <td><t t-esc="dict(line._fields['result_flag'].selection).get(line.result_flag)"/></td>
+                        <td><t t-esc="dict(line._fields['state'].selection).get(line.state)"/></td>
+                    </tr>
+                </tbody>
+            </table>
+            <t t-if="record.ai_portal_visible">
+                <div class="card mt-3">
+                    <div class="card-header"><strong>AI Interpretation (Preview)</strong></div>
+                    <div class="card-body"><pre style="white-space: pre-wrap;"><t t-esc="record.ai_interpretation_text"/></pre></div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_lab_sample_report_h5" name="Portal Lab Sample H5 Report">
+        <t t-call="portal.portal_layout">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">H5 Report - <t t-esc="record.name"/></h3>
+                <div>
+                    <a t-att-href="'/my/lab/samples/%s/report/pdf' % record.id" class="btn btn-primary me-2">Download PDF</a>
+                    <a t-att-href="'/my/lab/samples/%s' % record.id" class="btn btn-secondary">Back to Sample</a>
+                </div>
+            </div>
+            <t t-if="record.report_publication_state == 'withdrawn'">
+                <div class="alert alert-warning">
+                    This report is withdrawn and currently unavailable for external access.
+                </div>
+            </t>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Accession:</strong> <t t-esc="record.name"/></p>
+                            <p><strong>Patient:</strong> <t t-esc="record.patient_id.name"/></p>
+                            <p><strong>Client:</strong> <t t-esc="record.client_id.name or '-'"/></p>
+                            <p><strong>Physician:</strong> <t t-esc="record.physician_name or '-'"/></p>
+                            <p><strong>Template:</strong> <t t-esc="record.report_template_id.name or '-'"/></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Status:</strong> <t t-esc="dict(record._fields['state'].selection).get(record.state)"/></p>
+                            <p><strong>Revision:</strong> R<t t-esc="record.report_revision"/> <t t-if="record.is_amended">(Amended)</t></p>
+                            <p><strong>Collection Date:</strong> <t t-esc="record.collection_date or '-'"/></p>
+                            <p><strong>Verified Date:</strong> <t t-esc="record.verified_date or '-'"/></p>
+                            <p><strong>Report Date:</strong> <t t-esc="record.report_date or '-'"/></p>
+                        </div>
+                    </div>
+                    <t t-if="dispatch">
+                        <hr/>
+                        <p><strong>Dispatch State:</strong> <t t-esc="dict(dispatch._fields['state'].selection).get(dispatch.state)"/></p>
+                        <p t-if="dispatch.sent_at"><strong>Sent:</strong> <t t-esc="dispatch.sent_at"/></p>
+                        <p t-if="dispatch.viewed_at"><strong>Viewed:</strong> <t t-esc="dispatch.viewed_at"/></p>
+                        <p t-if="dispatch.downloaded_at"><strong>Downloaded:</strong> <t t-esc="dispatch.downloaded_at"/></p>
+                        <p t-if="dispatch.acknowledged_at"><strong>Acknowledged:</strong> <t t-esc="dispatch.acknowledged_at"/> (<t t-esc="dispatch.acknowledged_by_name or '-'"/>)</p>
+                    </t>
+                </div>
+            </div>
+
+            <h5>Results</h5>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Analysis</th>
+                        <th>Result</th>
+                        <th>Unit</th>
+                        <th>Reference</th>
+                        <th>Flag</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="record.analysis_ids" t-as="line">
+                        <td><t t-esc="line.service_id.name"/></td>
+                        <td><t t-esc="line.result_value or '-'"/></td>
+                        <td><t t-esc="line.unit or '-'"/></td>
+                        <td><t t-esc="line.ref_min"/> - <t t-esc="line.ref_max"/></td>
+                        <td><t t-esc="dict(line._fields['result_flag'].selection).get(line.result_flag)"/></td>
+                        <td><t t-esc="dict(line._fields['state'].selection).get(line.state)"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="card mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong>AI Interpretation</strong>
+                </div>
+                <div class="card-body">
+                    <div t-if="record.ai_portal_visible">
+                        <p><strong>Status:</strong> <t t-esc="dict(record._fields['ai_interpretation_state'].selection).get(record.ai_interpretation_state)"/></p>
+                        <p t-if="record.ai_interpretation_model"><strong>Model:</strong> <t t-esc="record.ai_interpretation_model"/></p>
+                        <p t-if="record.ai_interpretation_updated_at"><strong>Updated:</strong> <t t-esc="record.ai_interpretation_updated_at"/></p>
+                        <pre style="white-space: pre-wrap;"><t t-esc="record.ai_interpretation_text"/></pre>
+                    </div>
+                    <div t-if="not record.ai_portal_visible" class="text-muted">
+                        AI interpretation is currently under internal review and not published yet.
+                    </div>
+                    <div class="text-muted mt-2">
+                        This AI interpretation is for informational reference only, not a medical diagnosis.
+                    </div>
+                    <t t-if="dispatch and dispatch.state != 'acknowledged'">
+                        <hr/>
+                        <h6>Acknowledge Report</h6>
+                        <form t-att-action="'/my/lab/samples/%s/report/ack' % record.id" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="mb-2">
+                                <label class="form-label">Signer Name</label>
+                                <input type="text" name="ack_name" class="form-control" t-att-value="request.env.user.name"/>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Note</label>
+                                <textarea name="ack_note" class="form-control" rows="2"/>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="ack_consent" name="ack_consent" required="required"/>
+                                <label class="form-check-label" for="ack_consent">
+                                    I confirm receipt of this report and agree to record my acknowledgement.
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-sm btn-primary">Acknowledge</button>
+                        </form>
+                    </t>
+                    <t t-if="record.ai_review_log_ids">
+                        <hr/>
+                        <h6>AI Review Timeline</h6>
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Action</th>
+                                    <th>Reviewer</th>
+                                    <th>Note</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="record.ai_review_log_ids[:10]" t-as="l">
+                                    <td><t t-esc="l.reviewed_at or '-'"/></td>
+                                    <td><t t-esc="dict(l._fields['action'].selection).get(l.action)"/></td>
+                                    <td><t t-esc="l.reviewer_id.name or '-'"/></td>
+                                    <td><t t-esc="l.note or '-'"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_my_lab_custody_batches" name="Portal Custody Batches">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Custody Batches</t>
+            </t>
+            <h3 class="mb-3">Custody Batches</h3>
+            <p class="text-muted">Track dispatch, receive sessions, discrepancies and related investigations.</p>
+            <t t-if="not records">
+                <div class="alert alert-info">No custody batch records found.</div>
+            </t>
+            <t t-if="records">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Batch</th>
+                            <th>State</th>
+                            <th>From / To</th>
+                            <th>Dispatch</th>
+                            <th>Receive</th>
+                            <th>Samples</th>
+                            <th>Exceptions</th>
+                            <th>Investigations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="records" t-as="rec">
+                            <td><a t-att-href="'/my/lab/custody/batches/%s' % rec.id"><t t-esc="rec.name"/></a></td>
+                            <td><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></td>
+                            <td><t t-esc="(rec.from_location or '-') + ' -> ' + (rec.to_location or '-')"/></td>
+                            <td><t t-esc="rec.dispatch_time or '-'"/></td>
+                            <td><t t-esc="rec.received_time or '-'"/></td>
+                            <td><t t-esc="rec.sample_count"/></td>
+                            <td><t t-esc="rec.exception_count"/></td>
+                            <td><t t-esc="rec.investigation_count"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <t t-call="portal.pager"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_lab_custody_batch_detail" name="Portal Custody Batch Detail">
+        <t t-call="portal.portal_layout">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">Custody Batch <t t-esc="record.name"/></h3>
+                <div>
+                    <a t-att-href="'/my/lab/custody/batches/%s/manifest' % record.id" class="btn btn-primary me-2">Download Manifest</a>
+                    <a href="/my/lab/custody/batches" class="btn btn-secondary">Back</a>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>State:</strong> <t t-esc="dict(record._fields['state'].selection).get(record.state)"/></p>
+                            <p><strong>From:</strong> <t t-esc="record.from_user_id.name or '-'"/> / <t t-esc="record.from_location or '-'"/></p>
+                            <p><strong>To:</strong> <t t-esc="record.to_user_id.name or '-'"/> / <t t-esc="record.to_location or '-'"/></p>
+                            <p><strong>Tracking #:</strong> <t t-esc="record.tracking_number or '-'"/></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Dispatch:</strong> <t t-esc="record.dispatch_time or '-'"/></p>
+                            <p><strong>Received:</strong> <t t-esc="record.received_time or '-'"/></p>
+                            <p><strong>Package Condition:</strong> <t t-esc="dict(record._fields['package_condition'].selection).get(record.package_condition)"/></p>
+                            <p><strong>Closure State:</strong> <t t-esc="dict(record._fields['closure_state'].selection).get(record.closure_state)"/></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h5>Sample Lines</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Sample</th>
+                        <th>State</th>
+                        <th>Exception Type</th>
+                        <th>Severity</th>
+                        <th>NCR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="record.line_ids" t-as="line">
+                        <td><t t-esc="line.sample_id.name"/></td>
+                        <td><t t-esc="dict(line._fields['state'].selection).get(line.state)"/></td>
+                        <td><t t-esc="line.exception_template_id.name if line.exception_template_id else '-'"/></td>
+                        <td><t t-esc="dict(line._fields['exception_severity'].selection).get(line.exception_severity) if line.exception_severity else '-'"/></td>
+                        <td><t t-esc="line.nonconformance_id.name if line.nonconformance_id else '-'"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h5 class="mt-4">Receive Sessions</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Session</th>
+                        <th>State</th>
+                        <th>Receiver</th>
+                        <th>Witness</th>
+                        <th>QA</th>
+                        <th>Result</th>
+                        <th>Discrepancy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="record.receive_session_ids" t-as="s">
+                        <td><t t-esc="s.name"/></td>
+                        <td><t t-esc="dict(s._fields['state'].selection).get(s.state)"/></td>
+                        <td><t t-esc="s.receiver_id.name or '-'"/></td>
+                        <td><t t-esc="s.witness_id.name or '-'"/></td>
+                        <td><t t-esc="s.qa_reviewer_id.name or '-'"/></td>
+                        <td><t t-esc="dict(s._fields['checklist_result'].selection).get(s.checklist_result)"/></td>
+                        <td><t t-esc="s.discrepancy_line_count"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h5 class="mt-4">Investigations</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Investigation</th>
+                        <th>State</th>
+                        <th>Severity</th>
+                        <th>Owner</th>
+                        <th>SLA</th>
+                        <th>Escalation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="record.investigation_ids" t-as="i">
+                        <td><a t-att-href="'/my/lab/custody/investigations/%s' % i.id"><t t-esc="i.name"/></a></td>
+                        <td><t t-esc="dict(i._fields['state'].selection).get(i.state)"/></td>
+                        <td><t t-esc="dict(i._fields['severity'].selection).get(i.severity)"/></td>
+                        <td><t t-esc="i.owner_id.name or '-'"/></td>
+                        <td><t t-esc="dict(i._fields['sla_state'].selection).get(i.sla_state) if i.sla_state else '-'"/></td>
+                        <td><t t-esc="dict(i._fields['escalation_level'].selection).get(i.escalation_level) if i.escalation_level else '-'"/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </t>
+    </template>
+
+    <template id="portal_my_lab_custody_investigations" name="Portal Custody Investigations">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Custody Investigations</t>
+            </t>
+            <h3 class="mb-3">Custody Investigations</h3>
+            <t t-if="not records">
+                <div class="alert alert-info">No investigation records found.</div>
+            </t>
+            <t t-if="records">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Investigation</th>
+                            <th>Batch</th>
+                            <th>Sample</th>
+                            <th>State</th>
+                            <th>Severity</th>
+                            <th>Owner</th>
+                            <th>SLA</th>
+                            <th>Escalation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="records" t-as="rec">
+                            <td><a t-att-href="'/my/lab/custody/investigations/%s' % rec.id"><t t-esc="rec.name"/></a></td>
+                            <td><t t-esc="rec.batch_id.name or '-'"/></td>
+                            <td><t t-esc="rec.sample_id.name or '-'"/></td>
+                            <td><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></td>
+                            <td><t t-esc="dict(rec._fields['severity'].selection).get(rec.severity)"/></td>
+                            <td><t t-esc="rec.owner_id.name or '-'"/></td>
+                            <td><t t-esc="dict(rec._fields['sla_state'].selection).get(rec.sla_state) if rec.sla_state else '-'"/></td>
+                            <td><t t-esc="dict(rec._fields['escalation_level'].selection).get(rec.escalation_level) if rec.escalation_level else '-'"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <t t-call="portal.pager"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_lab_custody_investigation_detail" name="Portal Custody Investigation Detail">
+        <t t-call="portal.portal_layout">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">Investigation <t t-esc="record.name"/></h3>
+                <div>
+                    <a t-att-href="'/my/lab/custody/investigations/%s/summary' % record.id" class="btn btn-primary me-2">Download Summary</a>
+                    <a href="/my/lab/custody/investigations" class="btn btn-secondary">Back</a>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Batch:</strong> <t t-esc="record.batch_id.name or '-'"/></p>
+                            <p><strong>Sample:</strong> <t t-esc="record.sample_id.name or '-'"/></p>
+                            <p><strong>NCR:</strong> <t t-esc="record.nonconformance_id.name if record.nonconformance_id else '-'"/></p>
+                            <p><strong>Status:</strong> <t t-esc="dict(record._fields['state'].selection).get(record.state)"/></p>
+                            <p><strong>Severity:</strong> <t t-esc="dict(record._fields['severity'].selection).get(record.severity)"/></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Owner:</strong> <t t-esc="record.owner_id.name or '-'"/></p>
+                            <p><strong>QA Reviewer:</strong> <t t-esc="record.qa_reviewer_id.name or '-'"/></p>
+                            <p><strong>SLA State:</strong> <t t-esc="dict(record._fields['sla_state'].selection).get(record.sla_state) if record.sla_state else '-'"/></p>
+                            <p><strong>Escalation:</strong> <t t-esc="dict(record._fields['escalation_level'].selection).get(record.escalation_level) if record.escalation_level else '-'"/></p>
+                            <p><strong>QA Signed:</strong> <t t-esc="record.qa_signed_by_id.name if record.qa_signed_by_id else '-'"/></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h5>Issue &amp; CAPA</h5>
+            <div class="card mb-3"><div class="card-body"><strong>Issue:</strong> <t t-esc="record.issue_summary or '-'"/></div></div>
+            <div class="card mb-3"><div class="card-body"><strong>Impact:</strong> <t t-esc="record.impact_assessment or '-'"/></div></div>
+            <div class="card mb-3"><div class="card-body"><strong>Containment:</strong> <t t-esc="record.immediate_containment or '-'"/></div></div>
+            <div class="card mb-3"><div class="card-body"><strong>Root Cause:</strong> <t t-esc="record.root_cause or '-'"/></div></div>
+            <div class="card mb-3"><div class="card-body"><strong>Corrective Action:</strong> <t t-esc="record.corrective_action_plan or '-'"/></div></div>
+            <div class="card mb-3"><div class="card-body"><strong>Preventive Action:</strong> <t t-esc="record.preventive_action_plan or '-'"/></div></div>
+            <div class="card mb-3"><div class="card-body"><strong>Verification Plan:</strong> <t t-esc="record.verification_plan or '-'"/></div></div>
+            <div class="card mb-3"><div class="card-body"><strong>Verification Result:</strong> <t t-esc="record.verification_result or '-'"/></div></div>
+            <div class="card mb-3"><div class="card-body"><strong>Effectiveness:</strong> <t t-esc="record.effectiveness_conclusion or '-'"/></div></div>
+
+            <h5>Action Items</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Owner</th>
+                        <th>Due</th>
+                        <th>Status</th>
+                        <th>Done</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="record.action_ids" t-as="a">
+                        <td><t t-esc="a.name"/></td>
+                        <td><t t-esc="a.owner_id.name or '-'"/></td>
+                        <td><t t-esc="a.due_date or '-'"/></td>
+                        <td><t t-esc="dict(a._fields['state'].selection).get(a.state)"/></td>
+                        <td><t t-esc="a.done_date or '-'"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h5>Escalation Logs</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Level</th>
+                        <th>By</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="record.escalation_log_ids" t-as="e">
+                        <td><t t-esc="e.triggered_at or '-'"/></td>
+                        <td><t t-esc="dict(e._fields['level'].selection).get(e.level)"/></td>
+                        <td><t t-esc="e.triggered_by_id.name or '-'"/></td>
+                        <td><t t-esc="e.message or '-'"/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </t>
+    </template>
+
+    <template id="portal_my_lab_test_requests" name="Portal Test Requests">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Test Requests</t>
+            </t>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">My Test Requests</h3>
+                <a href="/my/lab/requests/new" class="btn btn-primary">New Request</a>
+            </div>
+            <t t-if="not records">
+                <div class="alert alert-info">No test request records found.</div>
+            </t>
+            <t t-if="records">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Request No.</th>
+                            <th>Patient</th>
+                            <th>Priority</th>
+                            <th>Collection</th>
+                            <th>Estimated Report</th>
+                            <th>Amount</th>
+                            <th>State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="records" t-as="rec">
+                            <td><a t-att-href="'/my/lab/requests/%s' % rec.id"><t t-esc="rec.name"/></a></td>
+                            <td><t t-esc="rec.patient_id.name or rec.patient_name or '-'"/></td>
+                            <td><t t-esc="dict(rec._fields['priority'].selection).get(rec.priority)"/></td>
+                            <td><t t-esc="rec.requested_collection_date or '-'"/></td>
+                            <td><t t-esc="rec.estimated_report_date or '-'"/></td>
+                            <td><t t-esc="rec.amount_total"/> <t t-esc="rec.currency_id.name"/></td>
+                            <td><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <t t-call="portal.pager"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_lab_test_request_new" name="Portal New Test Request">
+        <t t-call="portal.portal_layout">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">Create Test Request</h3>
+                <a href="/my/lab/requests" class="btn btn-secondary">Back</a>
+            </div>
+            <t t-if="request.params.get('error') == 'service'">
+                <div class="alert alert-danger">Please select a service.</div>
+            </t>
+            <t t-if="request.params.get('error') == 'profile'">
+                <div class="alert alert-danger">Please select a profile.</div>
+            </t>
+            <form action="/my/lab/requests/new" method="post" class="card">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Request Type</label>
+                            <select class="form-select" name="request_type">
+                                <option value="individual">Individual</option>
+                                <option value="institution">Institution</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Priority</label>
+                            <select class="form-select" name="priority">
+                                <option value="routine">Routine</option>
+                                <option value="urgent">Urgent</option>
+                                <option value="stat">STAT</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Patient Name</label>
+                            <input type="text" class="form-control" name="patient_name" required="required"/>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Patient ID / Passport</label>
+                            <input type="text" class="form-control" name="patient_identifier"/>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Patient Phone</label>
+                            <input type="text" class="form-control" name="patient_phone"/>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Physician</label>
+                            <input type="text" class="form-control" name="physician_name"/>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Sample Type</label>
+                            <select class="form-select" name="sample_type">
+                                <option value="blood">Blood</option>
+                                <option value="urine">Urine</option>
+                                <option value="stool">Stool</option>
+                                <option value="swab">Swab</option>
+                                <option value="serum">Serum</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Report Template</label>
+                            <select class="form-select" name="preferred_template_id">
+                                <option value="">Default</option>
+                                <t t-foreach="templates" t-as="tpl">
+                                    <option t-att-value="tpl.id"><t t-esc="tpl.name"/></option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="fasting_required" id="fasting_required"/>
+                                <label class="form-check-label" for="fasting_required">Fasting required</label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                    <h5>Requested Test</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Line Type</label>
+                            <select class="form-select" name="line_type">
+                                <option value="service">Service</option>
+                                <option value="profile">Profile</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Service</label>
+                            <select class="form-select" name="service_id">
+                                <option value="">Select service</option>
+                                <t t-foreach="services" t-as="s">
+                                    <option t-att-value="s.id"><t t-esc="s.name"/> (<t t-esc="s.code"/>)</option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Profile</label>
+                            <select class="form-select" name="profile_id">
+                                <option value="">Select profile</option>
+                                <t t-foreach="profiles" t-as="p">
+                                    <option t-att-value="p.id"><t t-esc="p.name"/> (<t t-esc="p.code"/>)</option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" name="quantity" value="1" min="1"/>
+                        </div>
+                        <div class="col-md-10 mb-2">
+                            <label class="form-label">Clinical Note</label>
+                            <textarea class="form-control" name="clinical_note" rows="2"/>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label">Line Note</label>
+                            <input type="text" class="form-control" name="line_note"/>
+                        </div>
+                    </div>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" name="submit_now" id="submit_now" checked="checked"/>
+                        <label class="form-check-label" for="submit_now">Submit request immediately</label>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <button type="submit" class="btn btn-primary">Create Request</button>
+                </div>
+            </form>
+        </t>
+    </template>
+
+    <template id="portal_my_lab_test_request_detail" name="Portal Test Request Detail">
+        <t t-call="portal.portal_layout">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">Request <t t-esc="record.name"/></h3>
+                <div>
+                    <t t-if="record.state in ('draft','cancelled')">
+                        <form t-att-action="'/my/lab/requests/%s/submit' % record.id" method="post" class="d-inline">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <button type="submit" class="btn btn-primary me-2">Submit</button>
+                        </form>
+                    </t>
+                    <a href="/my/lab/requests" class="btn btn-secondary">Back</a>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Requester:</strong> <t t-esc="record.requester_partner_id.name"/></p>
+                            <p><strong>Patient:</strong> <t t-esc="record.patient_id.name or record.patient_name or '-'"/></p>
+                            <p><strong>Physician:</strong> <t t-esc="record.physician_name or '-'"/></p>
+                            <p><strong>Priority:</strong> <t t-esc="dict(record._fields['priority'].selection).get(record.priority)"/></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Status:</strong> <t t-esc="dict(record._fields['state'].selection).get(record.state)"/></p>
+                            <p><strong>Collection:</strong> <t t-esc="record.requested_collection_date or '-'"/></p>
+                            <p><strong>Estimated Report:</strong> <t t-esc="record.estimated_report_date or '-'"/></p>
+                            <p><strong>Quote Valid Until:</strong> <t t-esc="record.quote_valid_until or '-'"/></p>
+                            <p t-if="record.state == 'quoted'"><strong>Quote Days Left:</strong> <t t-esc="record.quote_days_left"/></p>
+                            <p><strong>Total:</strong> <t t-esc="record.amount_total"/> <t t-esc="record.currency_id.name"/></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h5>Requested Tests</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Service / Profile</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Discount %</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="record.line_ids" t-as="line">
+                        <td><t t-esc="dict(line._fields['line_type'].selection).get(line.line_type)"/></td>
+                        <td>
+                            <t t-if="line.line_type == 'service'"><t t-esc="line.service_id.name"/></t>
+                            <t t-if="line.line_type == 'profile'"><t t-esc="line.profile_id.name"/></t>
+                        </td>
+                        <td><t t-esc="line.quantity"/></td>
+                        <td><t t-esc="line.unit_price"/></td>
+                        <td><t t-esc="line.discount_percent"/></td>
+                        <td><t t-esc="line.subtotal"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <t t-if="record.sample_ids">
+                <h5 class="mt-4">Generated Samples</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sample</th>
+                            <th>Status</th>
+                            <th>Collection Date</th>
+                            <th>Report Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="record.sample_ids" t-as="s">
+                            <td><a t-att-href="'/my/lab/samples/%s' % s.id"><t t-esc="s.name"/></a></td>
+                            <td><t t-esc="dict(s._fields['state'].selection).get(s.state)"/></td>
+                            <td><t t-esc="s.collection_date or '-'"/></td>
+                            <td><t t-esc="s.report_date or '-'"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+
+            <t t-if="record.quote_revision_ids">
+                <h5 class="mt-4">Quote Revision History</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Revision</th>
+                            <th>Created At</th>
+                            <th>By</th>
+                            <th>Amount</th>
+                            <th>Valid Until</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="record.quote_revision_ids" t-as="qv">
+                            <td>R<t t-esc="qv.revision_no"/></td>
+                            <td><t t-esc="qv.created_at or '-'"/></td>
+                            <td><t t-esc="qv.created_by_id.name or '-'"/></td>
+                            <td><t t-esc="qv.amount_total"/> <t t-esc="qv.currency_id.name"/></td>
+                            <td><t t-esc="qv.quote_valid_until or '-'"/></td>
+                            <td><t t-esc="qv.reason or '-'"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_lab_request_invoices" name="Portal Request Invoices">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Request Invoices</t>
+            </t>
+            <h3 class="mb-3">Request Invoices</h3>
+            <t t-if="not records">
+                <div class="alert alert-info">No request invoice records found.</div>
+            </t>
+            <t t-if="records">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Request</th>
+                            <th>Invoice Date</th>
+                            <th>Due Date</th>
+                            <th>Total</th>
+                            <th>Paid</th>
+                            <th>Residual</th>
+                            <th>State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="records" t-as="rec">
+                            <td><a t-att-href="'/my/lab/invoices/%s' % rec.id"><t t-esc="rec.name"/></a></td>
+                            <td><a t-att-href="'/my/lab/requests/%s' % rec.request_id.id"><t t-esc="rec.request_id.name"/></a></td>
+                            <td><t t-esc="rec.invoice_date or '-'"/></td>
+                            <td><t t-esc="rec.due_date or '-'"/></td>
+                            <td><t t-esc="rec.amount_total"/> <t t-esc="rec.currency_id.name"/></td>
+                            <td><t t-esc="rec.amount_paid"/> <t t-esc="rec.currency_id.name"/></td>
+                            <td><t t-esc="rec.amount_residual"/> <t t-esc="rec.currency_id.name"/></td>
+                            <td><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <t t-call="portal.pager"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_lab_request_invoice_detail" name="Portal Request Invoice Detail">
+        <t t-call="portal.portal_layout">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">Invoice <t t-esc="record.name"/></h3>
+                <a href="/my/lab/invoices" class="btn btn-secondary">Back</a>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Request:</strong> <a t-att-href="'/my/lab/requests/%s' % record.request_id.id"><t t-esc="record.request_id.name"/></a></p>
+                            <p><strong>Partner:</strong> <t t-esc="record.partner_id.name"/></p>
+                            <p><strong>Invoice Date:</strong> <t t-esc="record.invoice_date or '-'"/></p>
+                            <p><strong>Due Date:</strong> <t t-esc="record.due_date or '-'"/></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>State:</strong> <t t-esc="dict(record._fields['state'].selection).get(record.state)"/></p>
+                            <p><strong>Payment State:</strong> <t t-esc="dict(record._fields['payment_state'].selection).get(record.payment_state)"/></p>
+                            <p><strong>Total:</strong> <t t-esc="record.amount_total"/> <t t-esc="record.currency_id.name"/></p>
+                            <p><strong>Residual:</strong> <t t-esc="record.amount_residual"/> <t t-esc="record.currency_id.name"/></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h5>Invoice Lines</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Discount %</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="record.line_ids" t-as="line">
+                        <td><t t-esc="line.description"/></td>
+                        <td><t t-esc="line.quantity"/></td>
+                        <td><t t-esc="line.unit_price"/></td>
+                        <td><t t-esc="line.discount_percent"/></td>
+                        <td><t t-esc="line.subtotal"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h5 class="mt-4">Payments</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Payment</th>
+                        <th>Date</th>
+                        <th>Channel</th>
+                        <th>Reference</th>
+                        <th>Amount</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="record.payment_ids" t-as="p">
+                        <td><t t-esc="p.name"/></td>
+                        <td><t t-esc="p.payment_date or '-'"/></td>
+                        <td><t t-esc="dict(p._fields['channel'].selection).get(p.channel)"/></td>
+                        <td><t t-esc="p.reference or '-'"/></td>
+                        <td><t t-esc="p.amount"/> <t t-esc="record.currency_id.name"/></td>
+                        <td><t t-esc="dict(p._fields['state'].selection).get(p.state)"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <t t-if="record.state in ('issued','partially_paid')">
+                <div class="card mt-4">
+                    <div class="card-header"><strong>Submit Payment</strong></div>
+                    <div class="card-body">
+                        <t t-if="request.params.get('pay_error') == 'amount'">
+                            <div class="alert alert-danger">Payment amount must be greater than 0.</div>
+                        </t>
+                        <t t-if="request.params.get('pay_error') == 'state'">
+                            <div class="alert alert-warning">Current invoice state does not allow payment submission.</div>
+                        </t>
+                        <form t-att-action="'/my/lab/invoices/%s/pay' % record.id" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="row">
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label">Amount</label>
+                                    <input type="number" step="0.01" min="0.01" class="form-control" name="amount" t-att-value="record.amount_residual"/>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label">Channel</label>
+                                    <select name="channel" class="form-select">
+                                        <option value="bank">Bank Transfer</option>
+                                        <option value="cash">Cash</option>
+                                        <option value="card">Card</option>
+                                        <option value="wallet">Wallet</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label">Reference</label>
+                                    <input type="text" class="form-control" name="reference"/>
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <label class="form-label">Note</label>
+                                    <textarea class="form-control" rows="2" name="note"/>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit Payment</button>
+                        </form>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_lab_professional_purchase" name="Portal Professional Purchase">
+        <t t-call="portal.portal_layout">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">Professional Purchase</h3>
+                <a href="/shop" class="btn btn-outline-secondary">Public Shop</a>
+            </div>
+            <p class="text-muted">
+                Professional customers (institution/hospital/doctor) can create service purchase orders here.
+            </p>
+            <t t-if="request.params.get('error') == 'product'">
+                <div class="alert alert-danger">Please select a valid professional test product.</div>
+            </t>
+            <t t-if="history_templates">
+                <div class="card mb-3">
+                    <div class="card-header"><strong>Reuse From Purchase History</strong></div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Order</th>
+                                        <th>Date</th>
+                                        <th>Items</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="history_templates" t-as="h">
+                                        <td><t t-esc="h['order'].name"/></td>
+                                        <td><t t-esc="h['order'].date_order or '-'"/></td>
+                                        <td>
+                                            <ul class="mb-0">
+                                                <li t-foreach="h['lines']" t-as="ln">
+                                                    <t t-esc="ln['product_name']"/> x <t t-esc="ln['qty']"/>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <form action="/my/lab/professional/purchase" method="post" class="d-inline">
+                                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                <input type="hidden" name="reuse_order_id" t-att-value="h['order'].id"/>
+                                                <input type="hidden" name="submit_mode" value="quote"/>
+                                                <button type="submit" class="btn btn-sm btn-outline-primary">Reuse as Quote</button>
+                                            </form>
+                                            <form action="/my/lab/professional/purchase" method="post" class="d-inline">
+                                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                <input type="hidden" name="reuse_order_id" t-att-value="h['order'].id"/>
+                                                <input type="hidden" name="submit_mode" value="confirm"/>
+                                                <button type="submit" class="btn btn-sm btn-primary">Reuse and Confirm</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <form action="/my/lab/professional/purchase" method="post" class="card">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <div class="card-body">
+                    <h6 class="mb-2">Service Lines (up to 3)</h6>
+                    <div class="table-responsive mb-3">
+                        <table class="table table-sm table-bordered align-middle">
+                            <thead>
+                                <tr>
+                                    <th style="width: 70%">Medical Test Product</th>
+                                    <th style="width: 30%">Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <select class="form-select" name="product_id_1">
+                                            <option value="">Select a service</option>
+                                            <t t-foreach="products" t-as="p">
+                                                <option t-att-value="p.id">
+                                                    <t t-esc="p.display_name"/>
+                                                    <t t-if="p.lab_service_id"> - Service: <t t-esc="p.lab_service_id.name"/></t>
+                                                    <t t-if="p.lab_profile_id"> - Profile: <t t-esc="p.lab_profile_id.name"/></t>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" value="1" name="quantity_1" class="form-control"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select class="form-select" name="product_id_2">
+                                            <option value="">(Optional) Select another service</option>
+                                            <t t-foreach="products" t-as="p">
+                                                <option t-att-value="p.id">
+                                                    <t t-esc="p.display_name"/>
+                                                    <t t-if="p.lab_service_id"> - Service: <t t-esc="p.lab_service_id.name"/></t>
+                                                    <t t-if="p.lab_profile_id"> - Profile: <t t-esc="p.lab_profile_id.name"/></t>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" value="0" name="quantity_2" class="form-control"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select class="form-select" name="product_id_3">
+                                            <option value="">(Optional) Select another service</option>
+                                            <t t-foreach="products" t-as="p">
+                                                <option t-att-value="p.id">
+                                                    <t t-esc="p.display_name"/>
+                                                    <t t-if="p.lab_service_id"> - Service: <t t-esc="p.lab_service_id.name"/></t>
+                                                    <t t-if="p.lab_profile_id"> - Profile: <t t-esc="p.lab_profile_id.name"/></t>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" min="0" value="0" name="quantity_3" class="form-control"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Submit Mode</label>
+                            <select class="form-select" name="submit_mode">
+                                <option value="quote">Create Quotation</option>
+                                <option value="confirm">Confirm Order Now</option>
+                                <option value="cart">Add To Cart</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label">Order Note</label>
+                            <textarea class="form-control" rows="2" name="note"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <button class="btn btn-primary" type="submit">Create Purchase Order</button>
+                </div>
+            </form>
+        </t>
+    </template>
+</odoo>

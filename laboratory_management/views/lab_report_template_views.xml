@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_report_template_list" model="ir.ui.view">
+        <field name="name">lab.report.template.list</field>
+        <field name="model">lab.report.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="title"/>
+                <field name="ai_interpretation_enabled"/>
+                <field name="ai_auto_generate_on_release"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_report_template_form" model="ir.ui.view">
+        <field name="name">lab.report.template.form</field>
+        <field name="model">lab.report.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="title"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="show_reference"/>
+                            <field name="show_flag"/>
+                            <field name="show_notes"/>
+                            <field name="show_ai_summary_in_pdf"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="General">
+                            <group>
+                                <field name="note"/>
+                            </group>
+                        </page>
+                        <page string="AI Interpretation">
+                            <group>
+                                <group>
+                                    <field name="ai_interpretation_enabled"/>
+                                    <field name="ai_auto_generate_on_release" invisible="not ai_interpretation_enabled"/>
+                                    <field name="ai_temperature" invisible="not ai_interpretation_enabled"/>
+                                </group>
+                                <group>
+                                    <div class="o_form_label">Placeholders</div>
+                                    <div>
+                                        <p>
+                                            Available variables:
+                                            <code>{sample_name}</code>,
+                                            <code>{accession}</code>,
+                                            <code>{patient_name}</code>,
+                                            <code>{client_name}</code>,
+                                            <code>{physician_name}</code>,
+                                            <code>{report_template}</code>,
+                                            <code>{priority}</code>,
+                                            <code>{state}</code>,
+                                            <code>{collection_date}</code>,
+                                            <code>{report_date}</code>,
+                                            <code>{verified_date}</code>,
+                                            <code>{analysis_lines}</code>,
+                                            <code>{abnormal_lines}</code>,
+                                            <code>{analysis_count}</code>,
+                                            <code>{abnormal_count}</code>,
+                                            <code>{report_revision}</code>,
+                                            <code>{is_amended}</code>,
+                                            <code>{sample_note}</code>,
+                                            <code>{amendment_note}</code>,
+                                            <code>{template_note}</code>,
+                                            <code>{report_snapshot}</code>,
+                                            <code>{output_language}</code>.
+                                        </p>
+                                    </div>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="ai_system_prompt" widget="text" placeholder="System prompt for OpenAI"/>
+                            </group>
+                            <group>
+                                <field name="ai_user_prompt_template" widget="text" placeholder="User prompt template with placeholders"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_report_template" model="ir.actions.act_window">
+        <field name="name">Report Templates</field>
+        <field name="res_model">lab.report.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lab_report_template" name="Report Templates" parent="menu_laboratory_config" action="action_lab_report_template" sequence="30"/>
+</odoo>

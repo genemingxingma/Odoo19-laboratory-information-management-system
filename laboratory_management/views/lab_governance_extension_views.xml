@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_department_exception_template_list" model="ir.ui.view">
+        <field name="name">lab.department.exception.template.list</field>
+        <field name="model">lab.department.exception.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="department"/>
+                <field name="sample_type"/>
+                <field name="trigger_event"/>
+                <field name="route_action"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_department_exception_template_form" model="ir.ui.view">
+        <field name="name">lab.department.exception.template.form</field>
+        <field name="model">lab.department.exception.template</field>
+        <field name="arch" type="xml">
+            <form string="Department Exception Template">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="department"/>
+                            <field name="sample_type"/>
+                            <field name="trigger_event"/>
+                        </group>
+                        <group>
+                            <field name="severity"/>
+                            <field name="route_action"/>
+                            <field name="task_workstation" invisible="route_action not in ('task','task_ncr')"/>
+                            <field name="task_priority" invisible="route_action not in ('task','task_ncr')"/>
+                            <field name="owner_group_id"/>
+                            <field name="sla_hours"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="title_template"/>
+                        <field name="note_template"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_department_exception_template" model="ir.actions.act_window">
+        <field name="name">Department Exception Templates</field>
+        <field name="res_model">lab.department.exception.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_permission_audit_snapshot_list" model="ir.ui.view">
+        <field name="name">lab.permission.audit.snapshot.list</field>
+        <field name="model">lab.permission.audit.snapshot</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="missing_count &gt; 0" decoration-warning="warning_count &gt; 0">
+                <field name="name"/>
+                <field name="audit_time"/>
+                <field name="generated_by_id"/>
+                <field name="total_checks"/>
+                <field name="ok_count"/>
+                <field name="warning_count"/>
+                <field name="missing_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_permission_audit_snapshot_form" model="ir.ui.view">
+        <field name="name">lab.permission.audit.snapshot.form</field>
+        <field name="model">lab.permission.audit.snapshot</field>
+        <field name="arch" type="xml">
+            <form string="Permission Audit Snapshot">
+                <header>
+                    <button name="action_generate" type="object" string="Generate" class="btn-primary"/>
+                    <button name="action_open_missing" type="object" string="Open Missing/Warning"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="audit_time"/>
+                            <field name="generated_by_id" readonly="1"/>
+                            <field name="include_custom_groups"/>
+                            <field name="additional_group_ids" widget="many2many_tags" invisible="not include_custom_groups"/>
+                        </group>
+                        <group>
+                            <field name="total_checks" readonly="1"/>
+                            <field name="ok_count" readonly="1"/>
+                            <field name="warning_count" readonly="1"/>
+                            <field name="missing_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="summary" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids" readonly="1">
+                                <list decoration-danger="status == 'missing'" decoration-warning="status == 'warning'" decoration-success="status == 'ok'">
+                                    <field name="group_id"/>
+                                    <field name="workstation"/>
+                                    <field name="status"/>
+                                    <field name="issue"/>
+                                    <field name="expected"/>
+                                    <field name="actual"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_permission_audit_snapshot" model="ir.actions.act_window">
+        <field name="name">Permission Audit Snapshots</field>
+        <field name="res_model">lab.permission.audit.snapshot</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_permission_audit_wizard_form" model="ir.ui.view">
+        <field name="name">lab.permission.audit.wizard.form</field>
+        <field name="model">lab.permission.audit.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Permission Audit Wizard">
+                <sheet>
+                    <group>
+                        <field name="include_custom_groups"/>
+                        <field name="additional_group_ids" widget="many2many_tags" invisible="not include_custom_groups"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_generate_snapshot" type="object" string="Generate Snapshot" class="btn-primary"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_permission_audit_wizard" model="ir.actions.act_window">
+        <field name="name">Run Permission Audit</field>
+        <field name="res_model">lab.permission.audit.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_lab_interface_reconciliation_report_list" model="ir.ui.view">
+        <field name="name">lab.interface.reconciliation.report.list</field>
+        <field name="model">lab.interface.reconciliation.report</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="mismatch_lines &gt; 0">
+                <field name="name"/>
+                <field name="period_start"/>
+                <field name="period_end"/>
+                <field name="endpoint_id"/>
+                <field name="total_lines"/>
+                <field name="mismatch_lines"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_interface_reconciliation_report_form" model="ir.ui.view">
+        <field name="name">lab.interface.reconciliation.report.form</field>
+        <field name="model">lab.interface.reconciliation.report</field>
+        <field name="arch" type="xml">
+            <form string="Interface Reconciliation Report">
+                <header>
+                    <button name="action_generate" type="object" string="Generate" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                            <field name="endpoint_id"/>
+                        </group>
+                        <group>
+                            <field name="total_lines" readonly="1"/>
+                            <field name="mismatch_lines" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids" readonly="1">
+                                <list decoration-danger="is_mismatch">
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="expected_value"/>
+                                    <field name="actual_value"/>
+                                    <field name="delta_value"/>
+                                    <field name="is_mismatch"/>
+                                    <field name="sample_id"/>
+                                    <field name="detail"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_interface_reconciliation_report" model="ir.actions.act_window">
+        <field name="name">Interface Reconciliation Reports</field>
+        <field name="res_model">lab.interface.reconciliation.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_governance_workbench_wizard_form" model="ir.ui.view">
+        <field name="name">lab.governance.workbench.wizard.form</field>
+        <field name="model">lab.governance.workbench.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Governance Workbench" create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="period_days"/>
+                        </group>
+                        <group>
+                            <button name="action_refresh" type="object" string="Refresh" class="btn-primary"/>
+                            <button name="action_open_overdue_tasks" type="object" string="Overdue Tasks"/>
+                            <button name="action_open_interface_mismatch" type="object" string="Interface Mismatch"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="task_overdue_count" readonly="1"/>
+                            <field name="task_escalated_count" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="permission_missing_count" readonly="1"/>
+                            <field name="interface_mismatch_count" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button special="cancel" string="Close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_governance_workbench_wizard" model="ir.actions.act_window">
+        <field name="name">Governance Workbench</field>
+        <field name="res_model">lab.governance.workbench.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_lab_sample_form_governance_inherit" model="ir.ui.view">
+        <field name="name">lab.sample.form.governance.inherit</field>
+        <field name="model">lab.sample</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sample_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_apply_exception_template" icon="fa-shield">
+                    <field name="exception_template_count" widget="statinfo" string="Exception Templates"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_lab_governance_workbench" name="Governance Workbench" parent="menu_laboratory_quality" action="action_lab_governance_workbench_wizard" sequence="43"/>
+    <menuitem id="menu_lab_interface_reconciliation_report" name="Interface Reconciliation" parent="menu_laboratory_quality" action="action_lab_interface_reconciliation_report" sequence="44"/>
+    <menuitem id="menu_lab_permission_audit_snapshot" name="Permission Audits" parent="menu_laboratory_quality" action="action_lab_permission_audit_snapshot" sequence="45"/>
+
+    <menuitem id="menu_lab_department_exception_template" name="Exception Templates" parent="menu_laboratory_config" action="action_lab_department_exception_template" sequence="28"/>
+    <menuitem id="menu_lab_permission_audit_wizard" name="Run Permission Audit" parent="menu_laboratory_config" action="action_lab_permission_audit_wizard" sequence="29"/>
+</odoo>

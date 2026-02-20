@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_custody_exception_template_damaged" model="lab.custody.exception.template">
+        <field name="sequence">10</field>
+        <field name="name">Damaged Package</field>
+        <field name="code">DAMAGED_PKG</field>
+        <field name="default_severity">major</field>
+        <field name="description">Package damaged on handover; inspect sample integrity and container closure.</field>
+    </record>
+
+    <record id="lab_custody_exception_template_temp_out" model="lab.custody.exception.template">
+        <field name="sequence">20</field>
+        <field name="name">Temperature Excursion</field>
+        <field name="code">TEMP_EXCURSION</field>
+        <field name="default_severity">critical</field>
+        <field name="description">Measured transport temperature is outside qualified range.</field>
+    </record>
+
+    <record id="lab_custody_exception_template_seal" model="lab.custody.exception.template">
+        <field name="sequence">30</field>
+        <field name="name">Seal Mismatch</field>
+        <field name="code">SEAL_MISMATCH</field>
+        <field name="default_severity">critical</field>
+        <field name="description">Seal code mismatch or seal tamper evidence detected during receipt.</field>
+    </record>
+
+    <record id="lab_custody_exception_template_missing" model="lab.custody.exception.template">
+        <field name="sequence">40</field>
+        <field name="name">Missing Sample</field>
+        <field name="code">MISSING_SAMPLE</field>
+        <field name="default_severity">critical</field>
+        <field name="description">Expected sample not found in package during receiving.</field>
+    </record>
+</odoo>

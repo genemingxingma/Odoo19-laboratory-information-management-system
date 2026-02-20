@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_custody_sla_policy_list" model="ir.ui.view">
+        <field name="name">lab.custody.sla.policy.list</field>
+        <field name="model">lab.custody.sla.policy</field>
+        <field name="arch" type="xml">
+            <list decoration-success="is_default" decoration-muted="not active">
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="is_default"/>
+                <field name="active"/>
+                <field name="note"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_sla_policy_form" model="ir.ui.view">
+        <field name="name">lab.custody.sla.policy.form</field>
+        <field name="model">lab.custody.sla.policy</field>
+        <field name="arch" type="xml">
+            <form string="Custody SLA Policy">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="is_default"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    <separator string="SLA Lines"/>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="severity"/>
+                            <field name="target_hours"/>
+                            <field name="warning_hours"/>
+                            <field name="require_qa_signoff"/>
+                            <field name="require_effectiveness"/>
+                            <field name="auto_escalate"/>
+                            <field name="escalation_hours_l1"/>
+                            <field name="escalation_hours_l2"/>
+                            <field name="escalation_hours_l3"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_sla_policy_search" model="ir.ui.view">
+        <field name="name">lab.custody.sla.policy.search</field>
+        <field name="model">lab.custody.sla.policy</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter name="f_sla_default" string="Default" domain="[('is_default','=',True)]"/>
+                <filter name="f_sla_active" string="Active" domain="[('active','=',True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_custody_sla_policy" model="ir.actions.act_window">
+        <field name="name">Custody SLA Policies</field>
+        <field name="res_model">lab.custody.sla.policy</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_custody_sla_policy_search"/>
+    </record>
+
+    <record id="view_lab_custody_escalation_log_list" model="ir.ui.view">
+        <field name="name">lab.custody.escalation.log.list</field>
+        <field name="model">lab.custody.escalation.log</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="level == 'l3'" decoration-warning="level == 'l2'" decoration-info="level == 'l1'">
+                <field name="investigation_id"/>
+                <field name="level"/>
+                <field name="triggered_at"/>
+                <field name="triggered_by_id"/>
+                <field name="message"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_escalation_log_form" model="ir.ui.view">
+        <field name="name">lab.custody.escalation.log.form</field>
+        <field name="model">lab.custody.escalation.log</field>
+        <field name="arch" type="xml">
+            <form string="Escalation Log">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="investigation_id"/>
+                            <field name="level"/>
+                            <field name="triggered_at"/>
+                            <field name="triggered_by_id"/>
+                        </group>
+                        <group>
+                            <field name="message"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_escalation_log_search" model="ir.ui.view">
+        <field name="name">lab.custody.escalation.log.search</field>
+        <field name="model">lab.custody.escalation.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="investigation_id"/>
+                <field name="level"/>
+                <field name="triggered_by_id"/>
+                <filter name="f_esc_l1" string="L1" domain="[('level','=','l1')]"/>
+                <filter name="f_esc_l2" string="L2" domain="[('level','=','l2')]"/>
+                <filter name="f_esc_l3" string="L3" domain="[('level','=','l3')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_custody_escalation_log" model="ir.actions.act_window">
+        <field name="name">Custody Escalation Logs</field>
+        <field name="res_model">lab.custody.escalation.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_custody_escalation_log_search"/>
+    </record>
+
+    <record id="view_lab_custody_investigation_list_sla_inherit" model="ir.ui.view">
+        <field name="name">lab.custody.investigation.list.sla.inherit</field>
+        <field name="model">lab.custody.investigation</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_custody_investigation_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='target_close_date']" position="after">
+                <field name="sla_deadline"/>
+                <field name="sla_remaining_hours"/>
+                <field name="sla_state"/>
+                <field name="escalation_level"/>
+                <field name="qa_signed_by_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_investigation_search_sla_inherit" model="ir.ui.view">
+        <field name="name">lab.custody.investigation.search.sla.inherit</field>
+        <field name="model">lab.custody.investigation</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_custody_investigation_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="sla_state"/>
+                <field name="escalation_level"/>
+                <filter name="f_inv_sla_warning" string="SLA Warning" domain="[('sla_state','=','warning')]"/>
+                <filter name="f_inv_sla_breach" string="SLA Breach" domain="[('sla_state','=','breach')]"/>
+                <filter name="f_inv_escalated" string="Escalated" domain="[('escalation_level','!=','none')]"/>
+                <filter name="f_inv_need_qa_signoff" string="Need QA Signoff" domain="[('require_qa_signoff','=',True),('qa_signed_by_id','=',False),('state','not in',('closed','cancel'))]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_investigation_form_sla_inherit" model="ir.ui.view">
+        <field name="name">lab.custody.investigation.form.sla.inherit</field>
+        <field name="model">lab.custody.investigation</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_custody_investigation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_recompute_sla" type="object" string="Recompute SLA" invisible="state in ('closed','cancel')"/>
+                <button name="action_escalate_manual" type="object" string="Escalate" invisible="state in ('closed','cancel')"/>
+                <button name="action_qa_signoff" type="object" string="QA Signoff" class="btn-primary" invisible="state in ('closed','cancel') or qa_signed_by_id"/>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_escalation_logs" icon="fa-level-up">
+                    <field name="escalation_log_count" widget="statinfo" string="Escalations"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//sheet/group" position="after">
+                <group string="SLA Governance">
+                    <group>
+                        <field name="sla_policy_id"/>
+                        <field name="sla_target_hours"/>
+                        <field name="sla_warning_hours"/>
+                        <field name="sla_deadline" readonly="1"/>
+                        <field name="sla_remaining_hours" readonly="1"/>
+                        <field name="sla_state" readonly="1"/>
+                        <field name="escalation_level" readonly="1"/>
+                        <field name="sla_breach_notified" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="require_qa_signoff"/>
+                        <field name="require_effectiveness"/>
+                        <field name="qa_signed_by_id" readonly="1"/>
+                        <field name="qa_signed_at" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Escalation Logs">
+                    <field name="escalation_log_ids" readonly="1">
+                        <list decoration-danger="level == 'l3'" decoration-warning="level == 'l2'" decoration-info="level == 'l1'">
+                            <field name="triggered_at"/>
+                            <field name="level"/>
+                            <field name="triggered_by_id"/>
+                            <field name="message"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_lab_custody_escalation_log" name="Custody Escalations" parent="menu_laboratory_quality" action="action_lab_custody_escalation_log" sequence="23"/>
+    <menuitem id="menu_lab_custody_sla_policy" name="Custody SLA Policies" parent="menu_laboratory_config" action="action_lab_custody_sla_policy" sequence="42"/>
+</odoo>

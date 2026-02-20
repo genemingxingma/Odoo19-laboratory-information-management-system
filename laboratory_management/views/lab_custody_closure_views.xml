@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_custody_receive_wizard_form" model="ir.ui.view">
+        <field name="name">lab.custody.receive.wizard.form</field>
+        <field name="model">lab.custody.receive.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Receive Session">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="batch_id"/>
+                            <field name="receiver_id"/>
+                            <field name="witness_id"/>
+                            <field name="auto_start"/>
+                        </group>
+                        <group>
+                            <field name="receive_temp"/>
+                            <field name="package_condition"/>
+                            <field name="seal_intact"/>
+                            <field name="seal_note" invisible="seal_intact"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_create_session" type="object" string="Create" class="btn-primary"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_custody_receive_wizard" model="ir.actions.act_window">
+        <field name="name">Create Receive Session</field>
+        <field name="res_model">lab.custody.receive.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_lab_custody_receive_session_list" model="ir.ui.view">
+        <field name="name">lab.custody.receive.session.list</field>
+        <field name="model">lab.custody.receive.session</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state in ('draft', 'in_progress')" decoration-warning="state in ('submitted', 'rejected')" decoration-success="state in ('approved', 'done')" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="batch_id"/>
+                <field name="state"/>
+                <field name="receiver_id"/>
+                <field name="witness_id"/>
+                <field name="qa_reviewer_id"/>
+                <field name="receive_temp"/>
+                <field name="package_condition"/>
+                <field name="checklist_result"/>
+                <field name="total_line_count"/>
+                <field name="discrepancy_line_count"/>
+                <field name="submitted_at"/>
+                <field name="approved_at"/>
+                <field name="done_at"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_receive_session_form" model="ir.ui.view">
+        <field name="name">lab.custody.receive.session.form</field>
+        <field name="model">lab.custody.receive.session</field>
+        <field name="arch" type="xml">
+            <form string="Receive Session">
+                <header>
+                    <button name="action_start" type="object" string="Start" class="btn-primary" invisible="state not in ('draft', 'rejected')"/>
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary" invisible="state != 'in_progress'"/>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary" invisible="state != 'submitted'"/>
+                    <button name="action_reject" type="object" string="Reject" invisible="state not in ('submitted', 'approved')"/>
+                    <button name="action_finalize" type="object" string="Finalize" class="btn-primary" invisible="state != 'approved'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('done', 'cancel')"/>
+                    <button name="action_reset_draft" type="object" string="Reset Draft" invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,submitted,approved,done,cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_receive_lines" icon="fa-list">
+                            <field name="total_line_count" widget="statinfo" string="Lines"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_receive_lines" icon="fa-check">
+                            <field name="ok_line_count" widget="statinfo" string="OK"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_receive_lines" icon="fa-exclamation-triangle">
+                            <field name="discrepancy_line_count" widget="statinfo" string="Discrepancy"/>
+                        </button>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="batch_id" readonly="state != 'draft'"/>
+                            <field name="receiver_id" readonly="state not in ('draft', 'in_progress')"/>
+                            <field name="witness_id" readonly="state not in ('draft', 'in_progress')"/>
+                            <field name="qa_reviewer_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="started_at" readonly="1"/>
+                            <field name="submitted_at" readonly="1"/>
+                            <field name="approved_at" readonly="1"/>
+                            <field name="done_at" readonly="1"/>
+                            <field name="is_dual_confirmed" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="receive_temp" readonly="state not in ('draft', 'in_progress')"/>
+                            <field name="package_condition" readonly="state not in ('draft', 'in_progress')"/>
+                            <field name="seal_intact" readonly="state not in ('draft', 'in_progress')"/>
+                            <field name="seal_note" readonly="state not in ('draft', 'in_progress')"/>
+                        </group>
+                        <group>
+                            <field name="checklist_result" readonly="1"/>
+                            <field name="total_line_count" readonly="1"/>
+                            <field name="ok_line_count" readonly="1"/>
+                            <field name="discrepancy_line_count" readonly="1"/>
+                            <field name="waived_line_count" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Receipt Lines">
+                            <field name="line_ids" readonly="state in ('approved', 'done', 'cancel')">
+                                <list editable="bottom" decoration-danger="state == 'discrepancy'" decoration-muted="state == 'waived'">
+                                    <field name="sample_id" readonly="1"/>
+                                    <field name="expected_present" readonly="state in ('ok', 'waived')"/>
+                                    <field name="actual_present" readonly="state == 'waived'"/>
+                                    <field name="container_ok" readonly="state == 'waived'"/>
+                                    <field name="label_ok" readonly="state == 'waived'"/>
+                                    <field name="quantity_ok" readonly="state == 'waived'"/>
+                                    <field name="temperature_ok" readonly="state == 'waived'"/>
+                                    <field name="discrepancy_type" readonly="state == 'ok'"/>
+                                    <field name="state" readonly="1"/>
+                                    <field name="nonconformance_id" readonly="1"/>
+                                    <button name="action_mark_discrepancy" type="object" string="Discrepancy" icon="fa-warning" invisible="state == 'discrepancy'"/>
+                                    <button name="action_mark_waived" type="object" string="Waive" icon="fa-ban" invisible="state == 'waived'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <group>
+                                <field name="note" readonly="state in ('done', 'cancel')"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_receive_session_search" model="ir.ui.view">
+        <field name="name">lab.custody.receive.session.search</field>
+        <field name="model">lab.custody.receive.session</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="batch_id"/>
+                <field name="receiver_id"/>
+                <field name="witness_id"/>
+                <field name="qa_reviewer_id"/>
+                <field name="state"/>
+                <field name="checklist_result"/>
+                <filter name="f_receive_draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="f_receive_inprogress" string="In Progress" domain="[('state','=','in_progress')]"/>
+                <filter name="f_receive_submitted" string="Submitted" domain="[('state','=','submitted')]"/>
+                <filter name="f_receive_approved" string="Approved" domain="[('state','=','approved')]"/>
+                <filter name="f_receive_done" string="Done" domain="[('state','=','done')]"/>
+                <filter name="f_receive_ng" string="Not Pass" domain="[('checklist_result','=','ng')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_custody_receive_session" model="ir.actions.act_window">
+        <field name="name">Receive Sessions</field>
+        <field name="res_model">lab.custody.receive.session</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_custody_receive_session_search"/>
+    </record>
+
+    <record id="view_lab_custody_receive_session_line_list" model="ir.ui.view">
+        <field name="name">lab.custody.receive.session.line.list</field>
+        <field name="model">lab.custody.receive.session.line</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state == 'discrepancy'" decoration-muted="state == 'waived'" decoration-success="state == 'ok'">
+                <field name="session_id"/>
+                <field name="batch_line_id"/>
+                <field name="sample_id"/>
+                <field name="expected_present"/>
+                <field name="actual_present"/>
+                <field name="container_ok"/>
+                <field name="label_ok"/>
+                <field name="quantity_ok"/>
+                <field name="temperature_ok"/>
+                <field name="discrepancy_type"/>
+                <field name="state"/>
+                <field name="nonconformance_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_receive_session_line_form" model="ir.ui.view">
+        <field name="name">lab.custody.receive.session.line.form</field>
+        <field name="model">lab.custody.receive.session.line</field>
+        <field name="arch" type="xml">
+            <form string="Receive Session Line">
+                <header>
+                    <button name="action_mark_discrepancy" type="object" string="Mark Discrepancy" class="btn-primary" invisible="state == 'discrepancy'"/>
+                    <button name="action_mark_waived" type="object" string="Waive" invisible="state == 'waived'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="ok,discrepancy,waived"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="session_id"/>
+                            <field name="batch_line_id"/>
+                            <field name="sample_id"/>
+                            <field name="nonconformance_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="expected_present"/>
+                            <field name="actual_present"/>
+                            <field name="container_ok"/>
+                            <field name="label_ok"/>
+                            <field name="quantity_ok"/>
+                            <field name="temperature_ok"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="discrepancy_type"/>
+                        <field name="discrepancy_note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_receive_session_line_search" model="ir.ui.view">
+        <field name="name">lab.custody.receive.session.line.search</field>
+        <field name="model">lab.custody.receive.session.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="session_id"/>
+                <field name="sample_id"/>
+                <field name="state"/>
+                <field name="discrepancy_type"/>
+                <filter name="f_rcv_ok" string="OK" domain="[('state','=','ok')]"/>
+                <filter name="f_rcv_discrepancy" string="Discrepancy" domain="[('state','=','discrepancy')]"/>
+                <filter name="f_rcv_waived" string="Waived" domain="[('state','=','waived')]"/>
+                <filter name="f_rcv_temp" string="Temp Issue" domain="[('discrepancy_type','=','temperature')]"/>
+                <filter name="f_rcv_missing" string="Missing" domain="[('discrepancy_type','=','missing')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_custody_receive_session_line" model="ir.actions.act_window">
+        <field name="name">Receive Session Lines</field>
+        <field name="res_model">lab.custody.receive.session.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_custody_receive_session_line_search"/>
+    </record>
+
+    <record id="view_lab_custody_investigation_list" model="ir.ui.view">
+        <field name="name">lab.custody.investigation.list</field>
+        <field name="model">lab.custody.investigation</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="severity == 'critical'" decoration-warning="is_overdue and state not in ('closed','cancel')" decoration-success="state == 'closed'">
+                <field name="name"/>
+                <field name="batch_id"/>
+                <field name="batch_line_id"/>
+                <field name="sample_id"/>
+                <field name="nonconformance_id"/>
+                <field name="state"/>
+                <field name="severity"/>
+                <field name="owner_id"/>
+                <field name="qa_reviewer_id"/>
+                <field name="target_close_date"/>
+                <field name="is_overdue"/>
+                <field name="action_count"/>
+                <field name="done_action_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_investigation_form" model="ir.ui.view">
+        <field name="name">lab.custody.investigation.form</field>
+        <field name="model">lab.custody.investigation</field>
+        <field name="arch" type="xml">
+            <form string="Custody Investigation">
+                <header>
+                    <button name="action_open" type="object" string="Open" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_start_root_cause" type="object" string="Root Cause" class="btn-primary" invisible="state not in ('open','draft')"/>
+                    <button name="action_plan_capa" type="object" string="Plan CAPA" class="btn-primary" invisible="state != 'root_cause'"/>
+                    <button name="action_move_verification" type="object" string="To Verification" class="btn-primary" invisible="state != 'capa'"/>
+                    <button name="action_close" type="object" string="Close" class="btn-primary" invisible="state != 'verification'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('closed','cancel')"/>
+                    <button name="action_reset_draft" type="object" string="Reset Draft" invisible="state != 'cancel'"/>
+                    <button name="action_print_summary" type="object" string="Print Summary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,root_cause,capa,verification,closed,cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_actions" icon="fa-tasks">
+                            <field name="action_count" widget="statinfo" string="Actions"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_actions" icon="fa-check">
+                            <field name="done_action_count" widget="statinfo" string="Done"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="batch_id"/>
+                            <field name="batch_line_id"/>
+                            <field name="sample_id"/>
+                            <field name="nonconformance_id"/>
+                        </group>
+                        <group>
+                            <field name="owner_id"/>
+                            <field name="qa_reviewer_id"/>
+                            <field name="severity"/>
+                            <field name="detected_date"/>
+                            <field name="target_close_date"/>
+                            <field name="is_overdue" readonly="1"/>
+                            <field name="closed_by_id" readonly="1"/>
+                            <field name="closed_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Issue">
+                            <group>
+                                <field name="issue_summary"/>
+                                <field name="impact_assessment"/>
+                                <field name="immediate_containment"/>
+                            </group>
+                        </page>
+                        <page string="Root Cause">
+                            <group>
+                                <field name="root_cause"/>
+                            </group>
+                        </page>
+                        <page string="CAPA Plan">
+                            <group>
+                                <field name="corrective_action_plan"/>
+                                <field name="preventive_action_plan"/>
+                            </group>
+                            <group string="Action Items">
+                                <field name="action_ids">
+                                    <list editable="bottom" decoration-success="state == 'done'" decoration-muted="state == 'cancel'">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="owner_id"/>
+                                        <field name="due_date"/>
+                                        <field name="state"/>
+                                        <field name="done_date" readonly="1"/>
+                                        <button name="action_start" type="object" string="Start" icon="fa-play" invisible="state != 'todo'"/>
+                                        <button name="action_done" type="object" string="Done" icon="fa-check" invisible="state == 'done'"/>
+                                        <button name="action_cancel" type="object" string="Cancel" icon="fa-ban" invisible="state in ('done','cancel')"/>
+                                        <button name="action_reset_todo" type="object" string="Reset" icon="fa-undo" invisible="state == 'todo'"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Verification">
+                            <group>
+                                <field name="verification_plan"/>
+                                <field name="verification_result"/>
+                                <field name="effectiveness_conclusion"/>
+                            </group>
+                        </page>
+                        <page string="Closure">
+                            <group>
+                                <field name="closure_note"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_investigation_search" model="ir.ui.view">
+        <field name="name">lab.custody.investigation.search</field>
+        <field name="model">lab.custody.investigation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="batch_id"/>
+                <field name="sample_id"/>
+                <field name="nonconformance_id"/>
+                <field name="owner_id"/>
+                <field name="qa_reviewer_id"/>
+                <field name="state"/>
+                <field name="severity"/>
+                <filter name="f_inv_open" string="Open Cases" domain="[('state','in',('open','root_cause','capa','verification'))]"/>
+                <filter name="f_inv_overdue" string="Overdue" domain="[('target_close_date','&lt;',context_today()),('state','not in',('closed','cancel'))]"/>
+                <filter name="f_inv_critical" string="Critical" domain="[('severity','=','critical')]"/>
+                <filter name="f_inv_closed" string="Closed" domain="[('state','=','closed')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_custody_investigation" model="ir.actions.act_window">
+        <field name="name">Custody Investigations</field>
+        <field name="res_model">lab.custody.investigation</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_custody_investigation_search"/>
+    </record>
+
+    <record id="view_lab_custody_investigation_action_list" model="ir.ui.view">
+        <field name="name">lab.custody.investigation.action.list</field>
+        <field name="model">lab.custody.investigation.action</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="state in ('todo','doing') and due_date and due_date &lt; context_today()" decoration-success="state == 'done'" decoration-muted="state == 'cancel'">
+                <field name="investigation_id"/>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="owner_id"/>
+                <field name="due_date"/>
+                <field name="state"/>
+                <field name="done_date"/>
+                <field name="result_note"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_investigation_action_form" model="ir.ui.view">
+        <field name="name">lab.custody.investigation.action.form</field>
+        <field name="model">lab.custody.investigation.action</field>
+        <field name="arch" type="xml">
+            <form string="Investigation Action">
+                <header>
+                    <button name="action_start" type="object" string="Start" class="btn-primary" invisible="state != 'todo'"/>
+                    <button name="action_done" type="object" string="Done" class="btn-primary" invisible="state == 'done'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('done','cancel')"/>
+                    <button name="action_reset_todo" type="object" string="Reset" invisible="state == 'todo'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="todo,doing,done,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="investigation_id"/>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="owner_id"/>
+                        </group>
+                        <group>
+                            <field name="due_date"/>
+                            <field name="done_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                        <field name="result_note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_investigation_action_search" model="ir.ui.view">
+        <field name="name">lab.custody.investigation.action.search</field>
+        <field name="model">lab.custody.investigation.action</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="investigation_id"/>
+                <field name="name"/>
+                <field name="owner_id"/>
+                <field name="state"/>
+                <filter name="f_inv_action_todo" string="To Do" domain="[('state','=','todo')]"/>
+                <filter name="f_inv_action_doing" string="In Progress" domain="[('state','=','doing')]"/>
+                <filter name="f_inv_action_done" string="Done" domain="[('state','=','done')]"/>
+                <filter name="f_inv_action_overdue" string="Overdue" domain="[('due_date','&lt;',context_today()),('state','not in',('done','cancel'))]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_custody_investigation_action" model="ir.actions.act_window">
+        <field name="name">Investigation Actions</field>
+        <field name="res_model">lab.custody.investigation.action</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_custody_investigation_action_search"/>
+    </record>
+
+    <record id="view_lab_sample_custody_batch_form_closure_inherit" model="ir.ui.view">
+        <field name="name">lab.sample.custody.batch.form.closure.inherit</field>
+        <field name="model">lab.sample.custody.batch</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sample_custody_batch_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_receive_wizard" type="object" string="Receive Session" class="btn-primary" invisible="state not in ('in_transit','received')"/>
+                <button name="action_auto_create_investigations" type="object" string="Create Investigations" invisible="exception_count == 0"/>
+                <button name="action_print_manifest" type="object" string="Print Manifest"/>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_receive_sessions" icon="fa-inbox">
+                    <field name="receive_session_count" widget="statinfo" string="Receive Sessions"/>
+                </button>
+                <button class="oe_stat_button" type="object" name="action_view_investigations" icon="fa-search">
+                    <field name="investigation_count" widget="statinfo" string="Investigations"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//sheet" position="inside">
+                <group string="Closure Status">
+                    <group>
+                        <field name="closure_state"/>
+                    </group>
+                    <group>
+                        <field name="closure_note"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_nonconformance_form_custody_closure_inherit" model="ir.ui.view">
+        <field name="name">lab.nonconformance.form.custody.closure.inherit</field>
+        <field name="model">lab.nonconformance</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_nonconformance_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button class="oe_stat_button" type="object" name="action_view_investigations" icon="fa-search">
+                        <field name="investigation_count" widget="statinfo" string="Investigations"/>
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_lab_custody_receive_session" name="Receive Sessions" parent="menu_laboratory_operations" action="action_lab_custody_receive_session" sequence="26"/>
+    <menuitem id="menu_lab_custody_investigation" name="Custody Investigations" parent="menu_laboratory_quality" action="action_lab_custody_investigation" sequence="21"/>
+    <menuitem id="menu_lab_custody_investigation_action" name="Investigation Actions" parent="menu_laboratory_quality" action="action_lab_custody_investigation_action" sequence="22"/>
+</odoo>

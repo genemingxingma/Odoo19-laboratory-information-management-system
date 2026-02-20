@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_instrument_list" model="ir.ui.view">
+        <field name="name">lab.instrument.list</field>
+        <field name="model">lab.instrument</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="department"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_instrument_form" model="ir.ui.view">
+        <field name="name">lab.instrument.form</field>
+        <field name="model">lab.instrument</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="department"/>
+                        <field name="active"/>
+                    </group>
+                    <notebook>
+                        <page string="Test Mapping">
+                            <field name="mapping_ids">
+                                <list editable="bottom">
+                                    <field name="instrument_test_code"/>
+                                    <field name="service_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_instrument" model="ir.actions.act_window">
+        <field name="name">Instruments</field>
+        <field name="res_model">lab.instrument</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lab_instrument" name="Instruments" parent="menu_laboratory_config" action="action_lab_instrument" sequence="50"/>
+</odoo>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_lab_user" model="res.groups">
+        <field name="name">Lab User</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_lab_reception" model="res.groups">
+        <field name="name">Lab Reception</field>
+        <field name="implied_ids" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+    </record>
+
+    <record id="group_lab_analyst" model="res.groups">
+        <field name="name">Lab Analyst</field>
+        <field name="implied_ids" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+    </record>
+
+    <record id="group_lab_reviewer" model="res.groups">
+        <field name="name">Lab Reviewer</field>
+        <field name="implied_ids" eval="[(4, ref('laboratory_management.group_lab_analyst'))]"/>
+    </record>
+
+    <record id="group_lab_manager" model="res.groups">
+        <field name="name">Lab Manager</field>
+        <field name="implied_ids" eval="[(4, ref('laboratory_management.group_lab_reviewer'))]"/>
+    </record>
+
+    <record id="group_lab_quality_manager" model="res.groups">
+        <field name="name">Lab Quality Manager</field>
+        <field name="implied_ids" eval="[(4, ref('laboratory_management.group_lab_reviewer'))]"/>
+    </record>
+
+    <record id="group_lab_interface_admin" model="res.groups">
+        <field name="name">Lab Interface Admin</field>
+        <field name="implied_ids" eval="[(4, ref('laboratory_management.group_lab_manager'))]"/>
+    </record>
+
+    <record id="rule_lab_sample_portal_own" model="ir.rule">
+        <field name="name">Portal: Own Lab Samples</field>
+        <field name="model_id" ref="model_lab_sample"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('patient_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_lab_analysis_portal_own" model="ir.rule">
+        <field name="name">Portal: Own Lab Analyses</field>
+        <field name="model_id" ref="model_lab_sample_analysis"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('sample_id.patient_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('sample_id.client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_lab_report_dispatch_portal_own" model="ir.rule">
+        <field name="name">Portal: Own Report Dispatches</field>
+        <field name="model_id" ref="model_lab_report_dispatch"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('sample_id.patient_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('sample_id.client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_lab_report_ack_signature_portal_own" model="ir.rule">
+        <field name="name">Portal: Own Ack Signatures</field>
+        <field name="model_id" ref="model_lab_report_ack_signature"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('sample_id.patient_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('sample_id.client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_lab_test_request_portal_own" model="ir.rule">
+        <field name="name">Portal: Own Test Requests</field>
+        <field name="model_id" ref="model_lab_test_request"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('requester_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('client_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_lab_test_request_line_portal_own" model="ir.rule">
+        <field name="name">Portal: Own Test Request Lines</field>
+        <field name="model_id" ref="model_lab_test_request_line"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('request_id.requester_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('request_id.client_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_lab_test_request_timeline_portal_own" model="ir.rule">
+        <field name="name">Portal: Own Test Request Timeline</field>
+        <field name="model_id" ref="model_lab_test_request_timeline"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('request_id.requester_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('request_id.client_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_lab_test_request_quote_revision_portal_own" model="ir.rule">
+        <field name="name">Portal: Own Test Request Quote Revisions</field>
+        <field name="model_id" ref="model_lab_test_request_quote_revision"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('request_id.requester_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('request_id.client_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_lab_request_invoice_portal_own" model="ir.rule">
+        <field name="name">Portal: Own Request Invoices</field>
+        <field name="model_id" ref="model_lab_request_invoice"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('request_id.requester_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('request_id.client_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_lab_request_invoice_line_portal_own" model="ir.rule">
+        <field name="name">Portal: Own Request Invoice Lines</field>
+        <field name="model_id" ref="model_lab_request_invoice_line"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('invoice_id.request_id.requester_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('invoice_id.request_id.client_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <record id="rule_lab_request_payment_portal_own" model="ir.rule">
+        <field name="name">Portal: Own Request Payments</field>
+        <field name="model_id" ref="model_lab_request_payment"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">['|', ('request_id.requester_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('request_id.client_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_lab_request_invoice" model="ir.sequence">
+        <field name="name">Lab Request Invoice</field>
+        <field name="code">lab.request.invoice</field>
+        <field name="prefix">LRI%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_lab_request_payment" model="ir.sequence">
+        <field name="name">Lab Request Payment</field>
+        <field name="code">lab.request.payment</field>
+        <field name="prefix">LRP%(y)s%(month)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

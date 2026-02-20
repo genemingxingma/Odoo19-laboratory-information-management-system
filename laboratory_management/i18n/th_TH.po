@@ -1,0 +1,3045 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* laboratory_management
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20260217\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-19 14:12+0000\n"
+"PO-Revision-Date: 2026-02-19 14:12+0000\n"
+"Last-Translator: \n"
+"Language-Team: Thai\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: th_TH\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: laboratory_management
+#: model:ir.actions.report,print_report_name:laboratory_management.action_report_lab_sample_clinical
+msgid "'Clinical Report - %s' % (object.name)"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.report,print_report_name:laboratory_management.action_report_lab_sample_compact
+msgid "'Compact Report - %s' % (object.name)"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.report,print_report_name:laboratory_management.action_report_lab_sample_classic
+msgid "'Lab Report - %s' % (object.name)"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.report,print_report_name:laboratory_management.action_report_lab_sample_label
+msgid "'Label - %s' % (object.name)"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+msgid "(Amended)"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_label_document
+msgid "<strong>Accession:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+msgid "<strong>Client:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+msgid "<strong>Clinical Notes:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_label_document
+msgid "<strong>Collected:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+msgid "<strong>Collection Date:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
+msgid "<strong>Notes:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_label_document
+msgid "<strong>Patient:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+msgid "<strong>Physician:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+msgid "<strong>Priority:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+msgid "<strong>Report Date:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+msgid "<strong>Revision:</strong> R"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+msgid "<strong>Status:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+msgid "<strong>Template:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
+msgid "<strong>Verified By:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_qc.py:0
+msgid "A QC run already exists for this material at the same datetime."
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+msgid "Above reference range"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__access_warning
+msgid "Access warning"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__accession
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
+msgid "Accession"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_receive_wizard__accession
+msgid "Accession / Barcode"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__accession_barcode
+msgid "Accession Barcode"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__name
+msgid "Accession No."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_needaction
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__message_needaction
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__message_needaction
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_needaction
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__action_type
+msgid "Action Type"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__active
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile__active
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__active
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__active
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__active
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__active
+msgid "Active"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__activity_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__activity_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_exception_decoration
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__activity_exception_decoration
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__activity_exception_decoration
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_exception_decoration
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_state
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__activity_state
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__activity_state
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_state
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_type_icon
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__activity_type_icon
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__activity_type_icon
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_type_icon
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Add at least one analysis before receiving sample."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_custody__event_type__aliquot
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__aliquot
+msgid "Aliquot"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__aliquot_count
+msgid "Aliquot Count"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Aliquot created from %s"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__aliquot_ids
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Aliquots"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "All analyses completed, moved to verification queue"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "All analyses must be done before moving to verification."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "All profile services are already added."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__amend
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Amend Report"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__amended_by_id
+msgid "Amended By"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__amended_date
+msgid "Amended Date"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Amended report to revision R%s"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__amendment
+msgid "Amendment"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Amendment History"
+msgstr "ประวัติการแก้ไข"
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__amendment_note
+msgid "Amendment Note"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__amendment_ids
+msgid "Amendments"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__analysis_ids
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Analyses"
+msgstr "รายการตรวจ"
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Analyses started"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__analysis_id
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__source_type__analysis
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
+msgid "Analysis"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_profile
+msgid "Analysis Profile"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_profile_line
+msgid "Analysis Profile Line"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_profile
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_profile
+msgid "Analysis Profiles"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_analysis_queue
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_analysis_queue
+msgid "Analysis Queue"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+msgid "Analysis Results"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_service
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_service
+msgid "Analysis Services"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+msgid "Analysis line not found for mapped service"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
+msgid "Analysis line not found for service code"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__analyst_id
+msgid "Analyst"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__state__assigned
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_search
+msgid "Assigned"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_attachment_count
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__message_attachment_count
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__message_attachment_count
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_attachment_count
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__auto_mark_done
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__auto_mark_done
+msgid "Auto Mark Done"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+msgid "Back"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+msgid "Below reference range"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__blood
+msgid "Blood"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
+msgid "CAPA"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__owner_id
+msgid "CAPA Owner"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__capa
+msgid "CAPA Planned"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_instrument_result_import_wizard_form
+msgid ""
+"CSV Columns: accession, instrument_code, test_code, result, remark(optional)"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_result_import_wizard_form
+msgid "CSV Columns: accession, service_code, result, remark(optional)"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+msgid ""
+"CSV columns required: accession, instrument_code, test_code, result, "
+"remark(optional)."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
+msgid ""
+"CSV columns required: accession, service_code, result, remark(optional)."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+#: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
+msgid "CSV must be UTF-8 encoded."
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_instrument_result_import_wizard_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_result_import_wizard_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_receive_wizard_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_transfer_custody_wizard_form
+msgid "Cancel"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__cancel
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__cancel
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__cancel
+msgid "Cancelled"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__client_id
+msgid "Client/Institution"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument__department__chemistry
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__department__chemistry
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__department__chemistry
+msgid "Clinical Chemistry"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_workbench_wizard_form
+msgid "Close"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__close_note
+msgid "Close Note"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__closed
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_search
+msgid "Closed"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__closed_by_id
+msgid "Closed By"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__closed_date
+msgid "Closed Date"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__code
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile__code
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__code
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__code
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__code
+msgid "Code"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
+msgid "Collected At"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__collection_date
+msgid "Collection Date"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument_result_import_wizard__delimiter__,
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_result_import_wizard__delimiter__,
+msgid "Comma (,)"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_laboratory_config
+msgid "Configuration"
+msgstr "การตั้งค่า"
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__corrective_action
+msgid "Corrective Action"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_capa.py:0
+msgid "Corrective and preventive actions are required before closing."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__aliquot
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Create Aliquot"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Created aliquot %s"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile_line__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_receive_wizard__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__create_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile_line__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_receive_wizard__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__create_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__severity__critical
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_search
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_search
+msgid "Critical"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__critical_count
+msgid "Critical Count"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__critical_max
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__critical_max
+msgid "Critical Max"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__critical_min
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__critical_min
+msgid "Critical Min"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Critical Result: %s"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid ""
+"Critical result detected: %(service)s = %(result)s %(unit)s (sample "
+"%(sample)s)"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Critical result review required"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__current_custodian_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__from_user_id
+msgid "Current Custodian"
+msgstr "ผู้ดูแลปัจจุบัน"
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__custody_location
+msgid "Current Location"
+msgstr "ตำแหน่งปัจจุบัน"
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__custody_ids
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Custody Trail"
+msgstr "ประวัติการดูแล"
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Custody transferred"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,help:laboratory_management.field_lab_sample__access_url
+msgid "Customer Portal URL"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__date_from
+msgid "Date From"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__date_to
+msgid "Date To"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__days_to_expiry
+msgid "Days To Expiry"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__delimiter
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__delimiter
+msgid "Delimiter"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__department
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__department
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__department
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__department
+msgid "Department"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__description
+msgid "Description"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__detected_by_id
+msgid "Detected By"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__detected_date
+msgid "Detected Date"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile_line__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_receive_wizard__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__display_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job__status__done
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__state__done
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__state__done
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_search
+msgid "Done"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__done_analysis
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__done_analysis
+msgid "Done Analysis"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+msgid "Download Report"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__draft
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__draft
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__draft
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__state__draft
+msgid "Draft"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__due_date
+msgid "Due Date"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__effectiveness_check
+msgid "Effectiveness Check"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__event_time
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__event_time
+msgid "Event Time"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__event_type
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__event_type
+msgid "Event Type"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__expected_report_date
+msgid "Expected Report Date"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_reagent_lot_search
+msgid "Expired"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_reagent_lot_search
+msgid "Expiring 7 Days"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__expiry_date
+msgid "Expiry Date"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job__status__failed
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job_line__status__failed
+msgid "Failed"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__failed_rows
+msgid "Failed Rows"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__file_data
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__file_data
+msgid "File Data"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__file_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__file_name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__file_name
+msgid "File Name"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__finished_at
+msgid "Finished At"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
+msgid "Flag"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_follower_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__message_follower_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__message_follower_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_follower_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_partner_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__message_partner_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__message_partner_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_partner_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,help:laboratory_management.field_lab_import_job__activity_type_icon
+#: model:ir.model.fields,help:laboratory_management.field_lab_nonconformance__activity_type_icon
+#: model:ir.model.fields,help:laboratory_management.field_lab_qc_run__activity_type_icon
+#: model:ir.model.fields,help:laboratory_management.field_lab_sample__activity_type_icon
+#: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__from_user_id
+msgid "From User"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__has_message
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__has_message
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__has_message
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__has_message
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument__department__hematology
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__department__hematology
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__department__hematology
+msgid "Hematology"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__result_flag__high
+msgid "High"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile_line__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_receive_wizard__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__id
+msgid "ID"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_exception_icon
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__activity_exception_icon
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__activity_exception_icon
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_exception_icon
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,help:laboratory_management.field_lab_import_job__activity_exception_icon
+#: model:ir.model.fields,help:laboratory_management.field_lab_nonconformance__activity_exception_icon
+#: model:ir.model.fields,help:laboratory_management.field_lab_qc_run__activity_exception_icon
+#: model:ir.model.fields,help:laboratory_management.field_lab_sample__activity_exception_icon
+#: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,help:laboratory_management.field_lab_import_job__message_needaction
+#: model:ir.model.fields,help:laboratory_management.field_lab_nonconformance__message_needaction
+#: model:ir.model.fields,help:laboratory_management.field_lab_qc_run__message_needaction
+#: model:ir.model.fields,help:laboratory_management.field_lab_sample__message_needaction
+#: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,help:laboratory_management.field_lab_import_job__message_has_error
+#: model:ir.model.fields,help:laboratory_management.field_lab_import_job__message_has_sms_error
+#: model:ir.model.fields,help:laboratory_management.field_lab_nonconformance__message_has_error
+#: model:ir.model.fields,help:laboratory_management.field_lab_nonconformance__message_has_sms_error
+#: model:ir.model.fields,help:laboratory_management.field_lab_qc_run__message_has_error
+#: model:ir.model.fields,help:laboratory_management.field_lab_qc_run__message_has_sms_error
+#: model:ir.model.fields,help:laboratory_management.field_lab_sample__message_has_error
+#: model:ir.model.fields,help:laboratory_management.field_lab_sample__message_has_sms_error
+#: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__message_has_error
+#: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__immediate_action
+msgid "Immediate Action"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument__department__immunology
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__department__immunology
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__department__immunology
+msgid "Immunology"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_instrument_result_import_wizard_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_result_import_wizard_form
+msgid "Import"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_instrument_result_import_wizard
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_instrument_result_import
+msgid "Import Instrument Results"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_instrument_result_import_wizard_form
+msgid "Import Instrument Results (CSV)"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_import_job
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_import_job
+msgid "Import Jobs"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_result_import_wizard_form
+msgid "Import Lab Results (CSV)"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__line_ids
+msgid "Import Lines"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_result_import_wizard
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_result_import
+msgid "Import Results"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__import_type
+msgid "Import Type"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
+msgid "Import completed. Success: %(u)s, Failed: %(f)s"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__in_progress
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__in_progress
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__state__in_progress
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_search
+msgid "In Progress"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__in_progress_count
+msgid "In Progress Count"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__instrument_id
+msgid "Instrument"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job__import_type__instrument_csv
+msgid "Instrument CSV Result Import"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+msgid "Instrument CSV import finished."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+msgid "Instrument CSV import started."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__instrument_code
+msgid "Instrument Code"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+msgid "Instrument Import"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_instrument_result_import_wizard
+msgid "Instrument Result Import Wizard"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__instrument_test_code
+msgid "Instrument Test Code"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_instrument_test_map
+msgid "Instrument Test Mapping"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+msgid "Instrument import completed. Success: %(u)s, Failed: %(f)s"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+msgid "Instrument not found"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_instrument
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_instrument
+msgid "Instruments"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+msgid "Interpretation"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__investigation
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
+msgid "Investigation"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__is_amended
+msgid "Is Amended"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__is_critical
+msgid "Is Critical"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__is_expired
+msgid "Is Expired"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__is_expiring_soon
+msgid "Is Expiring Soon"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_is_follower
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__message_is_follower
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__message_is_follower
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_is_follower
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__is_out_of_range
+msgid "Is Out Of Range"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__is_overdue
+msgid "Is Overdue"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__is_retest
+msgid "Is Retest"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
+msgid "Issue"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__job_id
+msgid "Job"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_kpi_dashboard_wizard
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_kpi_dashboard
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
+msgid "KPI Dashboard"
+msgstr ""
+
+#. module: laboratory_management
+#: model:res.groups,name:laboratory_management.group_lab_analyst
+msgid "Lab Analyst"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_instrument
+msgid "Lab Instrument"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_kpi_dashboard_wizard
+msgid "Lab KPI Dashboard"
+msgstr ""
+
+#. module: laboratory_management
+#: model:res.groups,name:laboratory_management.group_lab_manager
+msgid "Lab Manager"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_reagent_lot
+msgid "Lab Reagent Lot"
+msgstr ""
+
+#. module: laboratory_management
+#: model:res.groups,name:laboratory_management.group_lab_reception
+msgid "Lab Reception"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.report,name:laboratory_management.action_report_lab_sample_classic
+msgid "Lab Report (Classic)"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.report,name:laboratory_management.action_report_lab_sample_clinical
+msgid "Lab Report (Clinical)"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.report,name:laboratory_management.action_report_lab_sample_compact
+msgid "Lab Report (Compact)"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_home_laboratory
+msgid "Lab Reports"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_result_import_wizard
+msgid "Lab Result Import Wizard"
+msgstr ""
+
+#. module: laboratory_management
+#: model:res.groups,name:laboratory_management.group_lab_reviewer
+msgid "Lab Reviewer"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_sample_amendment
+msgid "Lab Sample Amendment History"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_sample_custody
+msgid "Lab Sample Chain of Custody"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_sample_signoff
+msgid "Lab Sample Electronic Sign-off"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_label_document
+msgid "Lab Sample Label"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_sample_receive_wizard
+msgid "Lab Sample Receive Wizard"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_sample_timeline
+msgid "Lab Sample Timeline"
+msgstr ""
+
+#. module: laboratory_management
+#: model:res.groups,name:laboratory_management.group_lab_user
+msgid "Lab User"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_workbench_wizard
+msgid "Lab Workbench"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.server,name:laboratory_management.ir_cron_lab_reagent_expiry_notify_ir_actions_server
+msgid "Lab: Notify Expiring Reagent Lots"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.server,name:laboratory_management.ir_cron_lab_overdue_sample_notify_ir_actions_server
+msgid "Lab: Notify Overdue Samples"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_laboratory_root
+msgid "Laboratory"
+msgstr "ห้องปฏิบัติการ"
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_service
+msgid "Laboratory Analysis Service"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_import_job
+msgid "Laboratory Import Job"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_import_job_line
+msgid "Laboratory Import Job Line"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_nonconformance
+msgid "Laboratory Nonconformance / CAPA"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_report_template
+msgid "Laboratory Report Template"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Laboratory Sample"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_sample
+msgid "Laboratory Sample (Accession)"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_workbench_wizard_form
+msgid "Laboratory Workbench"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_worksheet
+msgid "Laboratory Worksheet"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile_line__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_receive_wizard__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__write_uid
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile_line__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_receive_wizard__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__write_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid ""
+"Latest QC for %(service)s is rejected (rule: %(rule)s). Please run QC again "
+"before releasing results."
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_worksheet_form
+msgid "Load Pending"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Load Profile Tests"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__location
+msgid "Location"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__lot_number
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__lot_number
+msgid "Lot Number"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__result_flag__low
+msgid "Low"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__severity__major
+msgid "Major"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__source_type__manual
+msgid "Manual"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job__import_type__manual_csv
+msgid "Manual CSV Result Import"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
+msgid "Manual CSV import finished."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
+msgid "Manual CSV import started."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+msgid "Mapping not found"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_worksheet_form
+msgid "Mark Done"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__message
+msgid "Message"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_has_error
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__message_has_error
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__message_has_error
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_has_error
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__message_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__message_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument__department__microbiology
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__department__microbiology
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__department__microbiology
+msgid "Microbiology"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__severity__minor
+msgid "Minor"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
+msgid "Missing accession or service_code"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+msgid "Missing accession, instrument_code, or test_code"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__my_activity_date_deadline
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__my_activity_date_deadline
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__my_activity_date_deadline
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__my_activity_date_deadline
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
+msgid "My Lab Samples"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile__name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__name
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__name
+msgid "Name"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__location
+msgid "New Location"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_date_deadline
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__activity_date_deadline
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__activity_date_deadline
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_date_deadline
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_summary
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__activity_summary
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__activity_summary
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_summary
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_type_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__activity_type_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__activity_type_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_type_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "No active analyses available for verification."
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
+msgid "No lab sample records found."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_worksheet.py:0
+msgid "No pending analyses found for this department."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_sample_transfer_custody_wizard.py:0
+msgid "No sample selected."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_nonconformance
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_nonconformance
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
+msgid "Nonconformance / CAPA"
+msgstr "ข้อบกพร่อง / CAPA"
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__nonconformance_count
+msgid "Nonconformance Count"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Nonconformances"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__result_flag__normal
+msgid "Normal"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__note
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__note
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__note
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__note
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__note
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__note
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__note
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__note
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__note
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__note
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__note
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__note
+msgid "Note"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_needaction_counter
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__message_needaction_counter
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__message_needaction_counter
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_needaction_counter
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_has_error_counter
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__message_has_error_counter
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__message_has_error_counter
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_has_error_counter
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,help:laboratory_management.field_lab_import_job__message_needaction_counter
+#: model:ir.model.fields,help:laboratory_management.field_lab_nonconformance__message_needaction_counter
+#: model:ir.model.fields,help:laboratory_management.field_lab_qc_run__message_needaction_counter
+#: model:ir.model.fields,help:laboratory_management.field_lab_sample__message_needaction_counter
+#: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,help:laboratory_management.field_lab_import_job__message_has_error_counter
+#: model:ir.model.fields,help:laboratory_management.field_lab_nonconformance__message_has_error_counter
+#: model:ir.model.fields,help:laboratory_management.field_lab_qc_run__message_has_error_counter
+#: model:ir.model.fields,help:laboratory_management.field_lab_sample__message_has_error_counter
+#: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__result_type__numeric
+msgid "Numeric"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Numeric result expected for service %s"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Only released reports can be amended."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Only verified samples can be released."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__open
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_search
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_workbench_wizard_form
+msgid "Open"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
+msgid "Open Overdue Samples"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
+msgid "Open QC Rejects"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
+msgid "Open Retest Lines"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__opened_date
+msgid "Opened Date"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_laboratory_operations
+msgid "Operations"
+msgstr "ปฏิบัติการ"
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__operator_id
+msgid "Operator"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument__department__other
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__department__other
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__other
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__department__other
+msgid "Other"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_search
+msgid "Overdue"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__overdue_count
+msgid "Overdue Count"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_kpi_dashboard_wizard.py:0
+msgid "Overdue Samples"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__parent_sample_id
+msgid "Parent Sample"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_qc_run__status__pass
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_qc_run_search
+msgid "Pass"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__patient_id
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
+msgid "Patient"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__state__pending
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_search
+msgid "Pending"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__pending_receive_count
+msgid "Pending Receive Count"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__physician_name
+msgid "Physician Name"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
+msgid "Plan CAPA"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__planned_date
+msgid "Planned Date"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
+msgid "Please input accession/barcode."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Please input result value for %s"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Please select an analysis profile first."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Please select the assignee user."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+#: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
+msgid "Please upload a CSV file."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__access_url
+msgid "Portal Access URL"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__preventive_action
+msgid "Preventive Action"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__analyst_id
+msgid "Primary Analyst"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Print Barcode Label"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Print Report"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__priority
+msgid "Priority"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile_line__profile_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__profile_id
+msgid "Profile"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile__line_ids
+msgid "Profile Services"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__source_type__qc
+msgid "QC"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
+msgid "QC KPI"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_qc_material
+msgid "QC Material"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_qc_material
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_qc_material
+msgid "QC Materials"
+msgstr "วัสดุ QC"
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_qc.py:0
+msgid "QC Rejected: %s"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_qc_run
+msgid "QC Run"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_qc_run
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_qc_run
+msgid "QC Runs"
+msgstr "รอบ QC"
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "QC is required for %(service)s, but no QC run exists."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_qc.py:0
+msgid "QC run %(run)s was rejected by rule %(rule)s (z-score=%(z)s)."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__qc_material_id
+msgid "Qc Material"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__qc_reject_count
+msgid "Qc Reject Count"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__qc_reject_rate
+msgid "Qc Reject Rate"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__qc_run_id
+msgid "Qc Run"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_laboratory_quality
+msgid "Quality"
+msgstr "คุณภาพ"
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+msgid "Range"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__reagent_lot_id
+msgid "Reagent Lot"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_reagent_lot
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_reagent_lot
+msgid "Reagent Lots"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Reagent lot %(lot)s is expired and cannot be used."
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Reason for amendment (used when clicking Amend Report)"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_custody__event_type__receive
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__receive
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_receive_wizard_form
+msgid "Receive"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_sample_receive_wizard
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sample_receive
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_receive_wizard_form
+msgid "Receive Sample"
+msgstr "รับตัวอย่าง"
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__received
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__received
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_search
+msgid "Received"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__received_date
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__received_date
+msgid "Received Date"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+msgid "Reference"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__ref_max
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__ref_max
+msgid "Reference Max"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__ref_min
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__ref_min
+msgid "Reference Min"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
+msgid "Refresh KPI"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_custody__event_type__register
+msgid "Register"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_qc_run__status__reject
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_qc_run_search
+msgid "Reject"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__state__rejected
+msgid "Rejected"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_kpi_dashboard_wizard.py:0
+msgid "Rejected QC Runs"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_custody__event_type__release
+msgid "Release"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__release
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Release Report"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__report_date
+msgid "Report Date"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__report_revision
+msgid "Report Revision"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__report_template_id
+msgid "Report Template"
+msgstr "เทมเพลตรายงาน"
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_report_template
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_report_template
+msgid "Report Templates"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Report amended to revision R%s"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Report amended without detailed note."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Report released"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Report released to requester"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__reported
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__reported
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_search
+msgid "Reported"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
+msgid "Reported At"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__retest
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_form
+msgid "Request Retest"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__require_qc
+msgid "Require QC Pass Before Result Release"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__require_reagent_lot
+msgid "Require Reagent Lot"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Reset to Draft"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Reset to draft"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_user_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__activity_user_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__activity_user_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_user_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
+msgid "Result"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__result_flag
+msgid "Result Flag"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
+msgid "Result Import"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__result_note
+msgid "Result Note"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__result_type
+msgid "Result Type"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__result_value
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__result_value
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__result_value
+msgid "Result Value"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_sample_to_verify
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sample_to_verify
+msgid "Results to Verify"
+msgstr "ผลรอตรวจสอบ"
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Results verified"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__retest
+msgid "Retest"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_kpi_dashboard_wizard.py:0
+msgid "Retest Analysis"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__retest_count
+msgid "Retest Count"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
+msgid "Retest KPI"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__retest_of_id
+msgid "Retest Of"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__retest_rate
+msgid "Retest Rate"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Retest requested for %(service)s (new analysis line #%(line)s)."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Retest requested for %s"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__retest_ids
+msgid "Retests"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__revision
+msgid "Revision"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__root_cause
+msgid "Root Cause"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__routine
+msgid "Routine"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__row_no
+msgid "Row No"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__rule_triggered
+msgid "Rule Triggered"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__run_date
+msgid "Run Date"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job__status__running
+msgid "Running"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_has_sms_error
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__message_has_sms_error
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__message_has_sms_error
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_has_sms_error
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__stat
+msgid "STAT"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__sample_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__sample_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__sample_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__sample_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__sample_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__sample_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__sample_id
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__source_type__sample
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+msgid "Sample"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
+msgid "Sample %s already received."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
+msgid "Sample %s received successfully."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_sample_analysis
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_form
+msgid "Sample Analysis"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.report,name:laboratory_management.action_report_lab_sample_label
+msgid "Sample Barcode Label"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__sample_type
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__sample_type
+msgid "Sample Type"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Sample cancelled"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
+msgid "Sample is already reported."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
+msgid "Sample is cancelled and cannot be received."
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
+#: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
+msgid "Sample not found"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
+msgid "Sample not found: %s"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Sample received"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Sample received at accessioning desk"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Sample registered"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_sample
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sample
+msgid "Samples / Accessions"
+msgstr "ตัวอย่าง / เลขรับตัวอย่าง"
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_receive_wizard_form
+msgid "Scan barcode or input accession..."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__access_token
+msgid "Security Token"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument_result_import_wizard__delimiter__;
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_result_import_wizard__delimiter__;
+msgid "Semicolon (;)"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__serum
+msgid "Serum"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__service_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__service_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_profile_line__service_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__service_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__service_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__service_id
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__service_id
+msgid "Service"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "Service %(service)s requires reagent lot before marking done."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__service_code
+msgid "Service Code"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__severity
+msgid "Severity"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__show_flag
+msgid "Show Flag"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__show_notes
+msgid "Show Notes"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__show_reference
+msgid "Show Reference"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__signoff_ids
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Sign-offs"
+msgstr "บันทึกการลงนาม"
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__signature_ref
+msgid "Signature Ref"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__signed_at
+msgid "Signed At"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__signed_by_id
+msgid "Signed By"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__source_type
+msgid "Source Type"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_worksheet_form
+msgid "Start"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Start Analyses"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__start
+msgid "Start Analysis"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
+msgid "Start Investigation"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__started_at
+msgid "Started At"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__state
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__state
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__state
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__state
+msgid "State"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__status
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__status
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__status
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
+msgid "Status"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,help:laboratory_management.field_lab_import_job__activity_state
+#: model:ir.model.fields,help:laboratory_management.field_lab_nonconformance__activity_state
+#: model:ir.model.fields,help:laboratory_management.field_lab_qc_run__activity_state
+#: model:ir.model.fields,help:laboratory_management.field_lab_sample__activity_state
+#: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__std_dev
+msgid "Std Dev"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__stool
+msgid "Stool"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job_line__status__success
+msgid "Success"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__success_rows
+msgid "Success Rows"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__swab
+msgid "Swab"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
+msgid "TAT KPI"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument_result_import_wizard__delimiter__
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_result_import_wizard__delimiter__
+msgid "Tab"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__target_value
+msgid "Target Value"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__tat_on_time_samples
+msgid "Tat On Time Samples"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__tat_overdue_samples
+msgid "Tat Overdue Samples"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__tat_rate
+msgid "Tat Rate"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__test_code
+msgid "Test Code"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__mapping_ids
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_instrument_form
+msgid "Test Mapping"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__result_type__text
+msgid "Text"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_worksheet.py:0
+msgid "There are unfinished analyses in this worksheet."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__timeline_ids
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Timeline"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__title
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__title
+msgid "Title"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__to_user_id
+msgid "To User"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__to_verify
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__to_verify
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_search
+msgid "To Verify"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__to_verify_count
+msgid "To Verify Count"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__total_analysis
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__total_analysis
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__total_analysis
+msgid "Total Analysis"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__total_qc_runs
+msgid "Total Qc Runs"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__total_reported_samples
+msgid "Total Reported Samples"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__total_rows
+msgid "Total Rows"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_home_laboratory
+msgid "Track sample status and view released reports"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_custody__event_type__transfer
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_transfer_custody_wizard_form
+msgid "Transfer"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_transfer_custody_wizard_form
+msgid "Transfer Custody"
+msgstr "โอนการดูแลตัวอย่าง"
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__note
+msgid "Transfer Note"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model,name:laboratory_management.model_lab_sample_transfer_custody_wizard
+msgid "Transfer Sample Custody Wizard"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__to_user_id
+msgid "Transfer To"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_sample_transfer_custody_wizard.py:0
+msgid "Transfer target must be a different user."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__turnaround_hours
+msgid "Turnaround Hours"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,help:laboratory_management.field_lab_import_job__activity_exception_decoration
+#: model:ir.model.fields,help:laboratory_management.field_lab_nonconformance__activity_exception_decoration
+#: model:ir.model.fields,help:laboratory_management.field_lab_qc_run__activity_exception_decoration
+#: model:ir.model.fields,help:laboratory_management.field_lab_sample__activity_exception_decoration
+#: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__unit
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_service__unit
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
+msgid "Unit"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__urgent
+msgid "Urgent"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__urine
+msgid "Urine"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__user_id
+msgid "User"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__vendor
+msgid "Vendor"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__verified
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__state__verified
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__verified
+msgid "Verified"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__verified_analysis
+msgid "Verified Analysis"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__verified_by_id
+msgid "Verified By"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__verified_date
+msgid "Verified Date"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__verify
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_form
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
+msgid "Verify"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields.selection,name:laboratory_management.selection__lab_qc_run__status__warning
+#: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_qc_run_search
+msgid "Warning"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__website_message_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__website_message_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__website_message_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__website_message_ids
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,help:laboratory_management.field_lab_import_job__website_message_ids
+#: model:ir.model.fields,help:laboratory_management.field_lab_nonconformance__website_message_ids
+#: model:ir.model.fields,help:laboratory_management.field_lab_qc_run__website_message_ids
+#: model:ir.model.fields,help:laboratory_management.field_lab_sample__website_message_ids
+#: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+msgid "Within reference range"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_workbench_wizard
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_workbench
+msgid "Workbench"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__worksheet_id
+msgid "Worksheet"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__analysis_ids
+msgid "Worksheet Analyses"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_worksheet
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_worksheet
+msgid "Worksheets"
+msgstr ""
+
+#. module: laboratory_management
+#: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__z_score
+msgid "Z Score"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_label_document
+msgid "barcode"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "parent_sample_id"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_kpi_dashboard_wizard.py:0
+msgid "run_date"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/models/lab_sample.py:0
+msgid "sample_id"
+msgstr ""
+
+#. module: laboratory_management
+#. odoo-python
+#: code:addons/laboratory_management/wizard/lab_kpi_dashboard_wizard.py:0
+msgid "sample_id.report_date"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
+msgid "| <strong>Date:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+msgid "| <strong>Patient:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
+msgid "| <strong>Reported:</strong>"
+msgstr ""
+
+#. module: laboratory_management
+#: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
+msgid "| <strong>Rev:</strong> R"
+msgstr ""
+
+#. module: laboratory_management
+msgid "Show AI Summary in PDF"
+msgstr "แสดงสรุป AI ใน PDF"
+
+#. module: laboratory_management
+msgid "AI Interpretation Summary:"
+msgstr "สรุปการตีความโดย AI:"
+
+#. module: laboratory_management
+msgid "Approve AI"
+msgstr "อนุมัติ AI"
+
+#. module: laboratory_management
+msgid "Reject AI"
+msgstr "ปฏิเสธ AI"
+
+#. module: laboratory_management
+msgid "AI Reviewed By"
+msgstr "ผู้ตรวจทาน AI"
+
+#. module: laboratory_management
+msgid "AI Reviewed At"
+msgstr "เวลาตรวจทาน AI"
+
+#. module: laboratory_management
+msgid "AI Review Note"
+msgstr "หมายเหตุการตรวจทาน AI"
+
+#. module: laboratory_management
+msgid "AI Visible in Portal"
+msgstr "แสดง AI ในพอร์ทัล"
+
+#. module: laboratory_management
+msgid "No Review"
+msgstr "ยังไม่ตรวจทาน"
+
+#. module: laboratory_management
+msgid "Pending Review"
+msgstr "รอตรวจทาน"
+
+#. module: laboratory_management
+msgid "Approved"
+msgstr "อนุมัติแล้ว"
+
+#. module: laboratory_management
+msgid "Rejected"
+msgstr "ปฏิเสธแล้ว"
+
+#. module: laboratory_management
+msgid "Only generated AI interpretation can be approved."
+msgstr "อนุมัติได้เฉพาะผลตีความ AI ที่สร้างแล้วเท่านั้น"
+
+#. module: laboratory_management
+msgid "Only generated AI interpretation can be rejected."
+msgstr "ปฏิเสธได้เฉพาะผลตีความ AI ที่สร้างแล้วเท่านั้น"
+
+#. module: laboratory_management
+msgid "AI interpretation approved for portal/report display."
+msgstr "อนุมัติผลตีความ AI แล้ว สามารถแสดงในพอร์ทัล/รายงานได้"
+
+#. module: laboratory_management
+msgid "AI interpretation rejected from portal/report display."
+msgstr "ปฏิเสธผลตีความ AI แล้ว จะไม่แสดงในพอร์ทัล/รายงาน"
+
+#. module: laboratory_management
+msgid "AI interpretation is currently under internal review and not published yet."
+msgstr "ผลตีความ AI อยู่ระหว่างการตรวจทานภายใน และยังไม่เผยแพร่"
+
+#. module: laboratory_management
+msgid "Rejection reason is required. Please fill AI Review Note before rejecting."
+msgstr "ต้องระบุเหตุผลในการปฏิเสธ กรุณากรอกหมายเหตุการตรวจทาน AI ก่อน"
+
+#. module: laboratory_management
+msgid "AI interpretation is locked after approval and cannot be refreshed from portal."
+msgstr "ผลตีความ AI ถูกล็อกหลังอนุมัติ และไม่สามารถรีเฟรชจากพอร์ทัลได้"
+
+#. module: laboratory_management
+msgid "Review AI interpretation"
+msgstr "ตรวจทานผลตีความ AI"
+
+#. module: laboratory_management
+msgid "Review and approve/reject AI interpretation for sample %s."
+msgstr "กรุณาตรวจทานและอนุมัติ/ปฏิเสธผลตีความ AI สำหรับตัวอย่าง %s"
+
+#. module: laboratory_management
+msgid "AI interpretation review completed."
+msgstr "การตรวจทานผลตีความ AI เสร็จสิ้น"
+
+#. module: laboratory_management
+msgid "Reopened"
+msgstr "เปิดใหม่"
+
+#. module: laboratory_management
+msgid "Interpretation changed and requires re-approval."
+msgstr "ผลตีความมีการเปลี่ยนแปลงและต้องอนุมัติใหม่"
+
+#. module: laboratory_management
+msgid "AI Review Timeline"
+msgstr "ไทม์ไลน์การตรวจทาน AI"
+
+#. module: laboratory_management
+msgid "AI Pending Review"
+msgstr "AI รอตรวจทาน"

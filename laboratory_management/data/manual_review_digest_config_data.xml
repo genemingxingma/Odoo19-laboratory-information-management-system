@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="manual_review_digest_default_config" model="lab.manual.review.digest.config">
+        <field name="name">Default Digest Config</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

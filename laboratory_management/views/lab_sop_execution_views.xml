@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_sop_retest_strategy_list" model="ir.ui.view">
+        <field name="name">lab.sop.retest.strategy.list</field>
+        <field name="model">lab.sop.retest.strategy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="department"/>
+                <field name="sample_type"/>
+                <field name="max_total_attempts"/>
+                <field name="cooldown_minutes"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_sop_retest_strategy_form" model="ir.ui.view">
+        <field name="name">lab.sop.retest.strategy.form</field>
+        <field name="model">lab.sop.retest.strategy</field>
+        <field name="arch" type="xml">
+            <form string="Retest Strategy">
+                <header>
+                    <button name="action_validate_rule_matrix" type="object" string="Validate Rules" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="department"/>
+                            <field name="sample_type"/>
+                        </group>
+                        <group>
+                            <field name="max_total_attempts"/>
+                            <field name="cooldown_minutes"/>
+                            <field name="recollect_after_attempt"/>
+                            <field name="escalate_after_attempt"/>
+                            <field name="rule_warning_count" readonly="1"/>
+                            <field name="owner_group_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rules">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="trigger"/>
+                                    <field name="severity"/>
+                                    <field name="action"/>
+                                    <field name="min_attempt"/>
+                                    <field name="max_attempt"/>
+                                    <field name="service_ids" widget="many2many_tags"/>
+                                    <field name="require_reason"/>
+                                    <field name="route_to_group_id"/>
+                                    <field name="has_overlap" readonly="1"/>
+                                    <field name="overlap_note" readonly="1"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_sop_retest_strategy" model="ir.actions.act_window">
+        <field name="name">Retest Strategies</field>
+        <field name="res_model">lab.sop.retest.strategy</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_sop_execution_list" model="ir.ui.view">
+        <field name="name">lab.sop.execution.list</field>
+        <field name="model">lab.sop.execution</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state == 'exception'" decoration-success="state == 'completed'" decoration-warning="state == 'running'">
+                <field name="name"/>
+                <field name="sample_id"/>
+                <field name="sop_id"/>
+                <field name="state"/>
+                <field name="current_step_id"/>
+                <field name="total_steps"/>
+                <field name="done_steps"/>
+                <field name="failed_steps"/>
+                <field name="completion_rate" widget="percentage"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_sop_execution_form" model="ir.ui.view">
+        <field name="name">lab.sop.execution.form</field>
+        <field name="model">lab.sop.execution</field>
+        <field name="arch" type="xml">
+            <form string="SOP Execution">
+                <header>
+                    <button name="action_start" string="Start" type="object" class="btn-primary" invisible="state not in ('draft','exception')"/>
+                    <button name="action_complete_current_step" string="Complete Current Step" type="object" invisible="state != 'running'"/>
+                    <button name="action_fail_current_step" string="Fail Current Step" type="object" invisible="state != 'running'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,exception,completed,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="sample_id" readonly="1"/>
+                            <field name="sop_id" readonly="1"/>
+                            <field name="current_step_id" readonly="1"/>
+                            <field name="retest_strategy_id"/>
+                        </group>
+                        <group>
+                            <field name="total_steps" readonly="1"/>
+                            <field name="done_steps" readonly="1"/>
+                            <field name="failed_steps" readonly="1"/>
+                            <field name="completion_rate" widget="percentage" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="exception_reason"/>
+                    </group>
+                    <notebook>
+                        <page string="Steps">
+                            <field name="step_ids" readonly="1">
+                                <list decoration-danger="state == 'failed'" decoration-success="state == 'done'" decoration-warning="state == 'ready'">
+                                    <field name="sequence"/>
+                                    <field name="step_code"/>
+                                    <field name="name"/>
+                                    <field name="workstation_role"/>
+                                    <field name="required"/>
+                                    <field name="state"/>
+                                    <field name="owner_user_id"/>
+                                    <field name="started_at"/>
+                                    <field name="finished_at"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Events">
+                            <field name="event_ids" readonly="1">
+                                <list>
+                                    <field name="event_time"/>
+                                    <field name="event_type"/>
+                                    <field name="user_id"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_sop_execution" model="ir.actions.act_window">
+        <field name="name">SOP Executions</field>
+        <field name="res_model">lab.sop.execution</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_sop_execution_event_list" model="ir.ui.view">
+        <field name="name">lab.sop.execution.event.list</field>
+        <field name="model">lab.sop.execution.event</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="event_time"/>
+                <field name="execution_id"/>
+                <field name="sample_id"/>
+                <field name="event_type"/>
+                <field name="user_id"/>
+                <field name="note"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_lab_sop_execution_event" model="ir.actions.act_window">
+        <field name="name">SOP Events</field>
+        <field name="res_model">lab.sop.execution.event</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_lab_sop_execution_dashboard_wizard_form" model="ir.ui.view">
+        <field name="name">lab.sop.execution.dashboard.wizard.form</field>
+        <field name="model">lab.sop.execution.dashboard.wizard</field>
+        <field name="arch" type="xml">
+            <form string="SOP Execution Dashboard" create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="department"/>
+                            <field name="period_days"/>
+                        </group>
+                        <group>
+                            <button name="action_refresh" type="object" string="Refresh" class="btn-primary"/>
+                            <button name="action_open_executions" type="object" string="Open Executions" class="btn-secondary"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="total_execution" readonly="1"/>
+                            <field name="running_execution" readonly="1"/>
+                            <field name="exception_execution" readonly="1"/>
+                            <field name="completed_execution" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="avg_completion_rate" readonly="1" widget="percentage"/>
+                            <field name="avg_step_duration_minutes" readonly="1"/>
+                            <field name="manual_review_routed" readonly="1"/>
+                            <field name="escalated_count" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button special="cancel" string="Close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_sop_execution_dashboard_wizard" model="ir.actions.act_window">
+        <field name="name">SOP Dashboard</field>
+        <field name="res_model">lab.sop.execution.dashboard.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_lab_sample_form_sop_execution_inherit" model="ir.ui.view">
+        <field name="name">lab.sample.form.sop.execution.inherit</field>
+        <field name="model">lab.sample</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sample_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sop_step_code']" position="after">
+                <field name="sop_execution_id" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_lab_sop_execution_dashboard" name="SOP Dashboard" parent="menu_laboratory_operations" action="action_lab_sop_execution_dashboard_wizard" sequence="4"/>
+    <menuitem id="menu_lab_sop_execution" name="SOP Executions" parent="menu_laboratory_operations" action="action_lab_sop_execution" sequence="5"/>
+    <menuitem id="menu_lab_sop_execution_event" name="SOP Events" parent="menu_laboratory_quality" action="action_lab_sop_execution_event" sequence="41"/>
+    <menuitem id="menu_lab_sop_retest_strategy" name="Retest Strategies" parent="menu_laboratory_config" action="action_lab_sop_retest_strategy" sequence="25"/>
+</odoo>

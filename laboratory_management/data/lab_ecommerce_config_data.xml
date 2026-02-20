@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="param_lab_ecommerce_request_flow" model="ir.config_parameter">
+        <field name="key">laboratory_management.ecommerce_request_flow</field>
+        <field name="value">approved</field>
+    </record>
+
+    <record id="param_lab_ecommerce_split_requests" model="ir.config_parameter">
+        <field name="key">laboratory_management.ecommerce_split_requests</field>
+        <field name="value">0</field>
+    </record>
+</odoo>

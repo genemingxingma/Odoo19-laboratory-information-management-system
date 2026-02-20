@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_workbench_wizard_form" model="ir.ui.view">
+        <field name="name">lab.workbench.wizard.form</field>
+        <field name="model">lab.workbench.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Laboratory Workbench" create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="pending_receive_count" readonly="1"/>
+                            <button name="action_open_receive" string="Open" type="object" class="btn-secondary"/>
+                        </group>
+                        <group>
+                            <field name="in_progress_count" readonly="1"/>
+                            <button name="action_open_in_progress" string="Open" type="object" class="btn-secondary"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="to_verify_count" readonly="1"/>
+                            <button name="action_open_to_verify" string="Open" type="object" class="btn-secondary"/>
+                        </group>
+                        <group>
+                            <field name="overdue_count" readonly="1"/>
+                            <button name="action_open_overdue" string="Open" type="object" class="btn-secondary"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="critical_count" readonly="1"/>
+                            <button name="action_open_critical" string="Open" type="object" class="btn-secondary"/>
+                        </group>
+                        <group>
+                            <field name="submitted_request_count" readonly="1"/>
+                            <button name="action_open_submitted_requests" string="Open" type="object" class="btn-secondary"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="quoted_request_count" readonly="1"/>
+                            <button name="action_open_quoted_requests" string="Open" type="object" class="btn-secondary"/>
+                        </group>
+                        <group>
+                            <field name="manual_review_overdue_count" readonly="1"/>
+                            <button name="action_open_manual_review_overdue" string="Open" type="object" class="btn-secondary"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="ncr_open_count" readonly="1"/>
+                            <button name="action_open_ncr_open" string="Open" type="object" class="btn-secondary"/>
+                        </group>
+                        <group>
+                            <field name="interface_failed_count" readonly="1"/>
+                            <button name="action_open_interface_failed" string="Open" type="object" class="btn-secondary"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="qc_reject_count" readonly="1"/>
+                            <button name="action_open_qc_reject" string="Open" type="object" class="btn-secondary"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button special="cancel" string="Close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_workbench_wizard" model="ir.actions.act_window">
+        <field name="name">Workbench</field>
+        <field name="res_model">lab.workbench.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_lab_workbench" name="Workbench" parent="menu_laboratory_operations" action="action_lab_workbench_wizard" sequence="1"/>
+</odoo>

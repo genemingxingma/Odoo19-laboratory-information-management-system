@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_service_list" model="ir.ui.view">
+        <field name="name">lab.service.list</field>
+        <field name="model">lab.service</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="department"/>
+                <field name="sample_type"/>
+                <field name="result_type"/>
+                <field name="turnaround_hours"/>
+                <field name="list_price"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_service_form" model="ir.ui.view">
+        <field name="name">lab.service.form</field>
+        <field name="model">lab.service</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="department"/>
+                            <field name="sample_type"/>
+                        </group>
+                        <group>
+                            <field name="result_type"/>
+                            <field name="list_price"/>
+                            <field name="billable_product_id"/>
+                            <field name="unit"/>
+                            <field name="ref_min" invisible="result_type != 'numeric'"/>
+                            <field name="ref_max" invisible="result_type != 'numeric'"/>
+                            <field name="critical_min" invisible="result_type != 'numeric'"/>
+                            <field name="critical_max" invisible="result_type != 'numeric'"/>
+                            <field name="require_qc"/>
+                            <field name="require_reagent_lot"/>
+                            <field name="auto_verify_enabled"/>
+                            <field name="auto_verify_allow_out_of_range" invisible="not auto_verify_enabled"/>
+                            <field name="auto_verify_require_qc_pass" invisible="not auto_verify_enabled or not require_qc"/>
+                            <field name="delta_check_enabled"/>
+                            <field name="delta_check_method" invisible="not delta_check_enabled or result_type != 'numeric'"/>
+                            <field name="delta_check_threshold" invisible="not delta_check_enabled or result_type != 'numeric'"/>
+                            <field name="turnaround_hours"/>
+                            <field name="sop_id"/>
+                            <field name="retest_policy_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_service" model="ir.actions.act_window">
+        <field name="name">Analysis Services</field>
+        <field name="res_model">lab.service</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lab_service" name="Analysis Services" parent="menu_laboratory_config" action="action_lab_service" sequence="10"/>
+</odoo>

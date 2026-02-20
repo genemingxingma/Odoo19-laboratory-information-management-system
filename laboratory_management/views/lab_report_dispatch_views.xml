@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_report_dispatch_list" model="ir.ui.view">
+        <field name="name">lab.report.dispatch.list</field>
+        <field name="model">lab.report.dispatch</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state in ('viewed','downloaded')" decoration-success="state == 'acknowledged'" decoration-danger="state == 'cancel'">
+                <field name="name"/>
+                <field name="sample_id"/>
+                <field name="partner_id"/>
+                <field name="channel"/>
+                <field name="state"/>
+                <field name="sent_at"/>
+                <field name="viewed_at"/>
+                <field name="downloaded_at"/>
+                <field name="acknowledged_at"/>
+                <field name="reminder_count"/>
+                <field name="last_reminder_at"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_report_dispatch_search" model="ir.ui.view">
+        <field name="name">lab.report.dispatch.search</field>
+        <field name="model">lab.report.dispatch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="sample_id"/>
+                <field name="partner_id"/>
+                <field name="state"/>
+                <field name="channel"/>
+                <filter name="f_draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="f_sent" string="Sent" domain="[('state','=','sent')]"/>
+                <filter name="f_viewed" string="Viewed" domain="[('state','=','viewed')]"/>
+                <filter name="f_downloaded" string="Downloaded" domain="[('state','=','downloaded')]"/>
+                <filter name="f_ack" string="Acknowledged" domain="[('state','=','acknowledged')]"/>
+                <filter name="f_unacked" string="Unacknowledged" domain="[('state','in',('sent','viewed','downloaded'))]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_report_dispatch_form" model="ir.ui.view">
+        <field name="name">lab.report.dispatch.form</field>
+        <field name="model">lab.report.dispatch</field>
+        <field name="arch" type="xml">
+            <form string="Report Dispatch">
+                <header>
+                    <button name="action_mark_sent" type="object" string="Mark Sent" class="btn-primary" invisible="state in ('sent','viewed','downloaded','acknowledged','cancel')"/>
+                    <button name="action_mark_viewed" type="object" string="Mark Viewed" invisible="state in ('viewed','downloaded','acknowledged','cancel')"/>
+                    <button name="action_mark_downloaded" type="object" string="Mark Downloaded" invisible="state in ('downloaded','acknowledged','cancel')"/>
+                    <button name="action_acknowledge" type="object" string="Mark Acknowledged" class="btn-primary" invisible="state in ('acknowledged','cancel')"/>
+                    <button name="action_send_reminder" type="object" string="Send Reminder" invisible="state in ('acknowledged','cancel','draft')"/>
+                    <button name="action_view_signatures" type="object" string="Signatures" invisible="signature_count == 0"/>
+                    <button name="action_cancel_dispatch" type="object" string="Cancel" invisible="state == 'cancel'"/>
+                    <button name="action_reset_dispatch" type="object" string="Reset" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent,viewed,downloaded,acknowledged,cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_send_reminder" icon="fa-bell" invisible="state in ('acknowledged','cancel')">
+                            <field name="reminder_count" widget="statinfo" string="Reminders"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_signatures" icon="fa-pencil-square-o">
+                            <field name="signature_count" widget="statinfo" string="Signatures"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="sample_id" readonly="1"/>
+                            <field name="partner_id"/>
+                            <field name="channel"/>
+                            <field name="token" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="sent_at" readonly="1"/>
+                            <field name="viewed_at" readonly="1"/>
+                            <field name="downloaded_at" readonly="1"/>
+                            <field name="acknowledged_at" readonly="1"/>
+                            <field name="acknowledged_by_name" readonly="1"/>
+                            <field name="last_reminder_at" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="acknowledged_note"/>
+                    </group>
+                    <notebook>
+                        <page string="Signatures">
+                            <field name="signature_ids" readonly="1">
+                                <list>
+                                    <field name="signed_at"/>
+                                    <field name="signer_name"/>
+                                    <field name="consent"/>
+                                    <field name="partner_id"/>
+                                    <field name="ip_address"/>
+                                    <field name="signature_hash"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Logs">
+                            <field name="log_ids" readonly="1">
+                                <list>
+                                    <field name="event_time"/>
+                                    <field name="event_type"/>
+                                    <field name="user_id"/>
+                                    <field name="message"/>
+                                    <field name="extra"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_report_dispatch" model="ir.actions.act_window">
+        <field name="name">Report Dispatches</field>
+        <field name="res_model">lab.report.dispatch</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_report_dispatch_search"/>
+    </record>
+
+    <record id="action_lab_report_dispatch_unacked" model="ir.actions.act_window">
+        <field name="name">Unacknowledged Dispatches</field>
+        <field name="res_model">lab.report.dispatch</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_report_dispatch_search"/>
+        <field name="domain">[('state','in',('sent','viewed','downloaded'))]</field>
+    </record>
+
+    <record id="view_lab_report_ack_signature_list" model="ir.ui.view">
+        <field name="name">lab.report.ack.signature.list</field>
+        <field name="model">lab.report.ack.signature</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="signed_at"/>
+                <field name="sample_id"/>
+                <field name="dispatch_id"/>
+                <field name="signer_name"/>
+                <field name="consent"/>
+                <field name="partner_id"/>
+                <field name="ip_address"/>
+                <field name="signature_hash"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_report_ack_signature_form" model="ir.ui.view">
+        <field name="name">lab.report.ack.signature.form</field>
+        <field name="model">lab.report.ack.signature</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="signed_at" readonly="1"/>
+                            <field name="sample_id" readonly="1"/>
+                            <field name="dispatch_id" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="user_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="signer_name" readonly="1"/>
+                            <field name="consent" readonly="1"/>
+                            <field name="ip_address" readonly="1"/>
+                            <field name="user_agent" readonly="1"/>
+                            <field name="signature_hash" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="sign_note" readonly="1"/>
+                        <field name="payload_json" readonly="1" widget="text"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_report_ack_signature" model="ir.actions.act_window">
+        <field name="name">Ack Signatures</field>
+        <field name="res_model">lab.report.ack.signature</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lab_report_dispatch" name="Report Dispatches" parent="menu_laboratory_quality" action="action_lab_report_dispatch" sequence="16" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_report_dispatch_unacked" name="Unacknowledged Dispatches" parent="menu_laboratory_quality" action="action_lab_report_dispatch_unacked" sequence="17" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_report_ack_signature" name="Ack Signatures" parent="menu_laboratory_quality" action="action_lab_report_ack_signature" sequence="18" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
+</odoo>

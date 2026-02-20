@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_department_exception_template_form_version_inherit" model="ir.ui.view">
+        <field name="name">lab.department.exception.template.form.version.inherit</field>
+        <field name="model">lab.department.exception.template</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_department_exception_template_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group[1]/field[@name='code']" position="after">
+                <field name="template_key"/>
+                <field name="version_no"/>
+                <field name="is_current" readonly="1"/>
+                <field name="previous_version_id" readonly="1"/>
+                <field name="superseded_by_id" readonly="1"/>
+                <field name="effective_from"/>
+                <field name="effective_to" readonly="1"/>
+            </xpath>
+            <xpath expr="//form" position="inside">
+                <header>
+                    <button name="action_new_version" type="object" string="New Version" class="btn-primary"/>
+                    <button name="action_activate_current" type="object" string="Activate Current"/>
+                    <button name="action_retire_template" type="object" string="Retire"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_permission_audit_snapshot_form_repair_inherit" model="ir.ui.view">
+        <field name="name">lab.permission.audit.snapshot.form.repair.inherit</field>
+        <field name="model">lab.permission.audit.snapshot</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_permission_audit_snapshot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_repair_plan" type="object" string="Create Repair Plan"/>
+            </xpath>
+            <xpath expr="//field[@name='missing_count']" position="after">
+                <field name="repair_plan_count" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_permission_audit_repair_list" model="ir.ui.view">
+        <field name="name">lab.permission.audit.repair.list</field>
+        <field name="model">lab.permission.audit.repair</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'applied'" decoration-warning="state == 'prepared'">
+                <field name="name"/>
+                <field name="snapshot_id"/>
+                <field name="state"/>
+                <field name="total_lines"/>
+                <field name="applied_lines"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_permission_audit_repair_form" model="ir.ui.view">
+        <field name="name">lab.permission.audit.repair.form</field>
+        <field name="model">lab.permission.audit.repair</field>
+        <field name="arch" type="xml">
+            <form string="Permission Repair Plan">
+                <header>
+                    <button name="action_prepare" type="object" string="Prepare" class="btn-primary" invisible="state not in ('draft','prepared')"/>
+                    <button name="action_apply" type="object" string="Apply" invisible="state != 'prepared'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('applied','cancel')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,prepared,applied,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="snapshot_id"/>
+                        </group>
+                        <group>
+                            <field name="total_lines" readonly="1"/>
+                            <field name="applied_lines" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids" readonly="state == 'applied'">
+                                <list editable="bottom" decoration-danger="state == 'error'" decoration-success="state == 'applied'">
+                                    <field name="snapshot_line_id"/>
+                                    <field name="group_id"/>
+                                    <field name="workstation"/>
+                                    <field name="can_view"/>
+                                    <field name="can_create"/>
+                                    <field name="can_edit"/>
+                                    <field name="can_approve"/>
+                                    <field name="can_release"/>
+                                    <field name="can_administer"/>
+                                    <field name="state"/>
+                                    <field name="result_note"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_permission_audit_repair" model="ir.actions.act_window">
+        <field name="name">Permission Repair Plans</field>
+        <field name="res_model">lab.permission.audit.repair</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_interface_reconciliation_report_form_export_inherit" model="ir.ui.view">
+        <field name="name">lab.interface.reconciliation.report.form.export.inherit</field>
+        <field name="model">lab.interface.reconciliation.report</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_interface_reconciliation_report_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_export_wizard" type="object" string="Export CSV"/>
+                <button name="action_open_mismatch_lines" type="object" string="Mismatch Lines"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_interface_reconciliation_export_wizard_form" model="ir.ui.view">
+        <field name="name">lab.interface.reconciliation.export.wizard.form</field>
+        <field name="model">lab.interface.reconciliation.export.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Export Reconciliation CSV">
+                <sheet>
+                    <group>
+                        <field name="report_id"/>
+                        <field name="include_only_mismatch"/>
+                    </group>
+                    <group>
+                        <field name="file_name" readonly="1"/>
+                        <field name="file_data" readonly="1" filename="file_name"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_generate_csv" type="object" string="Generate CSV" class="btn-primary"/>
+                    <button special="cancel" string="Close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_interface_reconciliation_export_wizard" model="ir.actions.act_window">
+        <field name="name">Export Reconciliation CSV</field>
+        <field name="res_model">lab.interface.reconciliation.export.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_lab_permission_audit_repair" name="Permission Repairs" parent="menu_laboratory_quality" action="action_lab_permission_audit_repair" sequence="46"/>
+</odoo>

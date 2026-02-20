@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_workstation_role_profile_list" model="ir.ui.view">
+        <field name="name">lab.workstation.role.profile.list</field>
+        <field name="model">lab.workstation.role.profile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="department"/>
+                <field name="workstation"/>
+                <field name="user_id"/>
+                <field name="group_id"/>
+                <field name="max_open_tasks"/>
+                <field name="open_task_count"/>
+                <field name="load_ratio"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_workstation_role_profile_form" model="ir.ui.view">
+        <field name="name">lab.workstation.role.profile.form</field>
+        <field name="model">lab.workstation.role.profile</field>
+        <field name="arch" type="xml">
+            <form string="Workstation Role Profile">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="department"/>
+                            <field name="workstation"/>
+                            <field name="user_id"/>
+                            <field name="group_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="max_open_tasks"/>
+                            <field name="min_idle_minutes"/>
+                            <field name="allow_overdue_pick"/>
+                            <field name="auto_claim_enabled"/>
+                        </group>
+                        <group>
+                            <field name="routine_weight"/>
+                            <field name="urgent_weight"/>
+                            <field name="stat_weight"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="open_task_count" readonly="1"/>
+                            <field name="load_ratio" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_workstation_role_profile" model="ir.actions.act_window">
+        <field name="name">Role Profiles</field>
+        <field name="res_model">lab.workstation.role.profile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_workstation_assignment_rule_list" model="ir.ui.view">
+        <field name="name">lab.workstation.assignment.rule.list</field>
+        <field name="model">lab.workstation.assignment.rule</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="department"/>
+                <field name="workstation"/>
+                <field name="priority"/>
+                <field name="mode"/>
+                <field name="required_group_id"/>
+                <field name="fallback_group_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_workstation_assignment_rule_form" model="ir.ui.view">
+        <field name="name">lab.workstation.assignment.rule.form</field>
+        <field name="model">lab.workstation.assignment.rule</field>
+        <field name="arch" type="xml">
+            <form string="Workstation Assignment Rule">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="department"/>
+                            <field name="workstation"/>
+                            <field name="priority"/>
+                            <field name="mode"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="required_group_id"/>
+                            <field name="fallback_group_id"/>
+                            <field name="respect_profile_limits"/>
+                            <field name="allow_overdue"/>
+                        </group>
+                        <group>
+                            <field name="max_candidate_scan"/>
+                            <field name="last_user_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_workstation_assignment_rule" model="ir.actions.act_window">
+        <field name="name">Assignment Rules</field>
+        <field name="res_model">lab.workstation.assignment.rule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_workstation_task_form_governance_inherit" model="ir.ui.view">
+        <field name="name">lab.workstation.task.form.governance.inherit</field>
+        <field name="model">lab.workstation.task</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_workstation_task_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='assigned_group_id']" position="after">
+                <field name="assignment_rule_id" readonly="1"/>
+                <field name="role_profile_id" readonly="1"/>
+                <field name="queue_score" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_task_board_wizard_form_governance_inherit" model="ir.ui.view">
+        <field name="name">lab.task.board.wizard.form.governance.inherit</field>
+        <field name="model">lab.task.board.wizard</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_task_board_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[last()]" position="after">
+                <group>
+                    <group>
+                        <field name="unassigned_count" readonly="1"/>
+                        <button name="action_open_unassigned" type="object" string="Open"/>
+                    </group>
+                    <group>
+                        <field name="my_open_count" readonly="1"/>
+                        <button name="action_open_my_open" type="object" string="Open"/>
+                    </group>
+                </group>
+                <group>
+                    <group>
+                        <field name="my_overdue_count" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_workstation_my_workbench_wizard_form" model="ir.ui.view">
+        <field name="name">lab.workstation.my.workbench.wizard.form</field>
+        <field name="model">lab.workstation.my.workbench.wizard</field>
+        <field name="arch" type="xml">
+            <form string="My Workbench" create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="department"/>
+                            <field name="workstation"/>
+                            <field name="include_overdue"/>
+                        </group>
+                        <group>
+                            <field name="candidate_limit"/>
+                            <button name="action_refresh" type="object" class="btn-primary" string="Refresh"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="candidate_count" readonly="1"/>
+                            <button name="action_open_candidates" type="object" string="Open Candidates"/>
+                        </group>
+                        <group>
+                            <field name="my_open_count" readonly="1"/>
+                            <field name="my_overdue_count" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_auto_claim_top" type="object" string="Auto Claim" class="btn-primary"/>
+                    <button special="cancel" string="Close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_workstation_my_workbench_wizard" model="ir.actions.act_window">
+        <field name="name">My Workbench</field>
+        <field name="res_model">lab.workstation.my.workbench.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_lab_workstation_my_workbench" name="My Workbench" parent="menu_laboratory_operations" action="action_lab_workstation_my_workbench_wizard" sequence="5"/>
+    <menuitem id="menu_lab_workstation_role_profile" name="Role Profiles" parent="menu_laboratory_config" action="action_lab_workstation_role_profile" sequence="28"/>
+    <menuitem id="menu_lab_workstation_assignment_rule" name="Assignment Rules" parent="menu_laboratory_config" action="action_lab_workstation_assignment_rule" sequence="29"/>
+</odoo>

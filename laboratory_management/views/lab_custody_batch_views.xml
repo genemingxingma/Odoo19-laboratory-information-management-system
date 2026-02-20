@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_sample_custody_batch_list" model="ir.ui.view">
+        <field name="name">lab.sample.custody.batch.list</field>
+        <field name="model">lab.sample.custody.batch</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state == 'draft'" decoration-warning="state == 'in_transit'" decoration-success="state == 'received'" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="from_user_id"/>
+                <field name="to_user_id"/>
+                <field name="from_location"/>
+                <field name="to_location"/>
+                <field name="dispatch_time"/>
+                <field name="received_time"/>
+                <field name="sample_count"/>
+                <field name="in_transit_count"/>
+                <field name="done_count"/>
+                <field name="exception_count"/>
+                <field name="nonconformance_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_custody_batch_form" model="ir.ui.view">
+        <field name="name">lab.sample.custody.batch.form</field>
+        <field name="model">lab.sample.custody.batch</field>
+        <field name="arch" type="xml">
+            <form string="Custody Batch">
+                <header>
+                    <button name="action_dispatch" type="object" string="Dispatch" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_mark_received" type="object" string="Mark Received" class="btn-primary" invisible="state != 'in_transit'"/>
+                    <button name="action_create_exception_ncrs" type="object" string="Create Exception NCRs" invisible="exception_count == 0"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('received','cancel')"/>
+                    <button name="action_reset_draft" type="object" string="Reset Draft" invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_transit,received,cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_dispatch" icon="fa-send" invisible="state != 'draft'">
+                            <field name="sample_count" widget="statinfo" string="Ready to Dispatch"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_mark_received" icon="fa-check" invisible="state != 'in_transit'">
+                            <field name="in_transit_count" widget="statinfo" string="In Transit"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_mark_received" icon="fa-archive" invisible="state != 'in_transit'">
+                            <field name="done_count" widget="statinfo" string="Received"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_nonconformances" icon="fa-exclamation-triangle">
+                            <field name="nonconformance_count" widget="statinfo" string="NCR"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_signoffs" icon="fa-pencil-square-o">
+                            <field name="signoff_count" widget="statinfo" string="Sign-offs"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="from_user_id" readonly="state != 'draft'"/>
+                            <field name="to_user_id" readonly="state != 'draft'"/>
+                            <field name="from_location" readonly="state != 'draft'"/>
+                            <field name="to_location" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="dispatch_time" readonly="1"/>
+                            <field name="received_time" readonly="1"/>
+                            <field name="package_count" readonly="state != 'draft'"/>
+                            <field name="tracking_number" readonly="state != 'draft'"/>
+                            <field name="seal_code" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="courier_name" readonly="state != 'draft'"/>
+                            <field name="courier_phone" readonly="state != 'draft'"/>
+                            <field name="package_condition" readonly="state != 'draft'"/>
+                            <field name="auto_ncr_on_exception" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="expected_temp_min" readonly="state != 'draft'"/>
+                            <field name="expected_temp_max" readonly="state != 'draft'"/>
+                            <field name="measured_temp_dispatch" readonly="state != 'draft'"/>
+                            <field name="measured_temp_receive" readonly="state == 'draft'"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note" readonly="state != 'draft'"/>
+                    </group>
+                    <separator string="Batch Samples"/>
+                    <group>
+                        <button
+                            name="%(action_lab_custody_batch_add_samples_wizard)d"
+                            type="action"
+                            string="Add Samples"
+                            class="btn-secondary"
+                            invisible="state != 'draft'"
+                            context="{'default_batch_id': id}"
+                        />
+                    </group>
+                    <field name="line_ids" readonly="state == 'received'">
+                        <list editable="bottom" create="state == 'draft'" delete="state == 'draft'" decoration-danger="state == 'exception'">
+                            <field name="sample_id" readonly="state != 'draft'"/>
+                            <field name="from_user_id" readonly="1"/>
+                            <field name="to_user_id" readonly="state != 'draft'"/>
+                            <field name="from_location" readonly="1"/>
+                            <field name="to_location" readonly="state != 'draft'"/>
+                            <field name="state" readonly="1"/>
+                            <field name="exception_template_id" readonly="state == 'done'"/>
+                            <field name="exception_severity" readonly="state == 'done'"/>
+                            <field name="nonconformance_id" readonly="1"/>
+                            <field name="receive_note" readonly="state != 'in_transit'"/>
+                            <button name="action_confirm_received" string="Confirm" type="object" icon="fa-check" invisible="state != 'in_transit'"/>
+                            <button name="action_mark_exception" string="Exception" type="object" icon="fa-warning" invisible="state not in ('draft','in_transit')"/>
+                            <button name="action_create_nonconformance" string="Create NCR" type="object" icon="fa-exclamation-triangle" invisible="state != 'exception' or nonconformance_id"/>
+                        </list>
+                    </field>
+                    <group string="Sign-offs">
+                        <field name="signoff_ids" readonly="1">
+                            <list>
+                                <field name="signed_at"/>
+                                <field name="action_type"/>
+                                <field name="signed_by_id"/>
+                                <field name="signature_ref"/>
+                                <field name="note"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_custody_batch_search" model="ir.ui.view">
+        <field name="name">lab.sample.custody.batch.search</field>
+        <field name="model">lab.sample.custody.batch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="from_user_id"/>
+                <field name="to_user_id"/>
+                <field name="tracking_number"/>
+                <filter name="f_cb_draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="f_cb_transit" string="In Transit" domain="[('state','=','in_transit')]"/>
+                <filter name="f_cb_received" string="Received" domain="[('state','=','received')]"/>
+                <filter name="f_cb_cancel" string="Cancelled" domain="[('state','=','cancel')]"/>
+                <filter name="f_cb_exception" string="Has Exception" domain="[('line_ids.state','=','exception')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_sample_custody_batch" model="ir.actions.act_window">
+        <field name="name">Custody Batches</field>
+        <field name="res_model">lab.sample.custody.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_sample_custody_batch_search"/>
+        <field name="context">{'default_from_user_id': uid}</field>
+    </record>
+
+    <record id="view_lab_sample_custody_batch_line_list" model="ir.ui.view">
+        <field name="name">lab.sample.custody.batch.line.list</field>
+        <field name="model">lab.sample.custody.batch.line</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="state == 'exception'" decoration-info="state == 'in_transit'" decoration-success="state == 'done'">
+                <field name="batch_id"/>
+                <field name="sample_id"/>
+                <field name="from_user_id"/>
+                <field name="to_user_id"/>
+                <field name="from_location"/>
+                <field name="to_location"/>
+                <field name="state"/>
+                <field name="exception_template_id"/>
+                <field name="exception_severity"/>
+                <field name="nonconformance_id"/>
+                <field name="event_id"/>
+                <field name="receive_note"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_custody_batch_line_form" model="ir.ui.view">
+        <field name="name">lab.sample.custody.batch.line.form</field>
+        <field name="model">lab.sample.custody.batch.line</field>
+        <field name="arch" type="xml">
+            <form string="Custody Batch Line">
+                <header>
+                    <button name="action_confirm_received" string="Confirm Received" type="object" class="btn-primary" invisible="state != 'in_transit'"/>
+                    <button name="action_mark_exception" string="Mark Exception" type="object" invisible="state in ('done','exception')"/>
+                    <button name="action_create_nonconformance" string="Create NCR" type="object" class="btn-primary" invisible="state != 'exception' or nonconformance_id"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_transit,done,exception"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="batch_id"/>
+                            <field name="sample_id"/>
+                            <field name="from_user_id"/>
+                            <field name="to_user_id"/>
+                        </group>
+                        <group>
+                            <field name="from_location"/>
+                            <field name="to_location"/>
+                            <field name="event_id" readonly="1"/>
+                            <field name="receive_note"/>
+                        </group>
+                    </group>
+                    <group string="Exception">
+                        <group>
+                            <field name="exception_date" readonly="1"/>
+                            <field name="exception_template_id"/>
+                            <field name="exception_severity"/>
+                        </group>
+                        <group>
+                            <field name="nonconformance_id" readonly="1"/>
+                            <field name="exception_detail"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_custody_batch_line_search" model="ir.ui.view">
+        <field name="name">lab.sample.custody.batch.line.search</field>
+        <field name="model">lab.sample.custody.batch.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="batch_id"/>
+                <field name="sample_id"/>
+                <field name="from_user_id"/>
+                <field name="to_user_id"/>
+                <field name="exception_template_id"/>
+                <filter name="f_cbl_draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="f_cbl_transit" string="In Transit" domain="[('state','=','in_transit')]"/>
+                <filter name="f_cbl_done" string="Done" domain="[('state','=','done')]"/>
+                <filter name="f_cbl_exception" string="Exception" domain="[('state','=','exception')]"/>
+                <filter name="f_cbl_has_ncr" string="Has NCR" domain="[('nonconformance_id','!=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_sample_custody_batch_line" model="ir.actions.act_window">
+        <field name="name">Custody Batch Lines</field>
+        <field name="res_model">lab.sample.custody.batch.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_sample_custody_batch_line_search"/>
+    </record>
+
+    <record id="view_lab_sample_custody_batch_signoff_list" model="ir.ui.view">
+        <field name="name">lab.sample.custody.batch.signoff.list</field>
+        <field name="model">lab.sample.custody.batch.signoff</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="batch_id"/>
+                <field name="signed_at"/>
+                <field name="action_type"/>
+                <field name="signed_by_id"/>
+                <field name="signature_ref"/>
+                <field name="note"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_custody_batch_signoff_form" model="ir.ui.view">
+        <field name="name">lab.sample.custody.batch.signoff.form</field>
+        <field name="model">lab.sample.custody.batch.signoff</field>
+        <field name="arch" type="xml">
+            <form string="Custody Batch Sign-off">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="batch_id"/>
+                            <field name="action_type"/>
+                            <field name="signed_at"/>
+                        </group>
+                        <group>
+                            <field name="signed_by_id"/>
+                            <field name="signature_ref"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_custody_batch_signoff_search" model="ir.ui.view">
+        <field name="name">lab.sample.custody.batch.signoff.search</field>
+        <field name="model">lab.sample.custody.batch.signoff</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="batch_id"/>
+                <field name="signed_by_id"/>
+                <field name="action_type"/>
+                <filter name="f_signoff_dispatch" string="Dispatch" domain="[('action_type','=','dispatch')]"/>
+                <filter name="f_signoff_receive" string="Receive" domain="[('action_type','=','receive')]"/>
+                <filter name="f_signoff_qa" string="QA Review" domain="[('action_type','=','qa_review')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_sample_custody_batch_signoff" model="ir.actions.act_window">
+        <field name="name">Custody Sign-offs</field>
+        <field name="res_model">lab.sample.custody.batch.signoff</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_sample_custody_batch_signoff_search"/>
+    </record>
+
+    <record id="view_lab_custody_exception_template_list" model="ir.ui.view">
+        <field name="name">lab.custody.exception.template.list</field>
+        <field name="model">lab.custody.exception.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="default_severity"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_exception_template_form" model="ir.ui.view">
+        <field name="name">lab.custody.exception.template.form</field>
+        <field name="model">lab.custody.exception.template</field>
+        <field name="arch" type="xml">
+            <form string="Custody Exception Template">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="default_severity"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_custody_exception_template_search" model="ir.ui.view">
+        <field name="name">lab.custody.exception.template.search</field>
+        <field name="model">lab.custody.exception.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="default_severity"/>
+                <filter name="f_cet_active" string="Active" domain="[('active','=',True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_custody_exception_template" model="ir.actions.act_window">
+        <field name="name">Custody Exception Templates</field>
+        <field name="res_model">lab.custody.exception.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_custody_exception_template_search"/>
+    </record>
+
+    <record id="view_lab_nonconformance_form_custody_inherit" model="ir.ui.view">
+        <field name="name">lab.nonconformance.form.custody.inherit</field>
+        <field name="model">lab.nonconformance</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_nonconformance_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='qc_run_id']" position="after">
+                <field name="custody_batch_id"/>
+                <field name="custody_batch_line_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_form_custody_batch_inherit" model="ir.ui.view">
+        <field name="name">lab.sample.form.custody.batch.inherit</field>
+        <field name="model">lab.sample</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sample_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_custody_batches" icon="fa-truck">
+                    <field name="custody_batch_count" widget="statinfo" string="Custody Batches"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_lab_custody_batch" name="Custody Batches" parent="menu_laboratory_operations" action="action_lab_sample_custody_batch" sequence="25"/>
+    <menuitem id="menu_lab_custody_batch_line" name="Custody Batch Lines" parent="menu_laboratory_quality" action="action_lab_sample_custody_batch_line" sequence="19"/>
+    <menuitem id="menu_lab_custody_batch_signoff" name="Custody Sign-offs" parent="menu_laboratory_quality" action="action_lab_sample_custody_batch_signoff" sequence="20"/>
+    <menuitem id="menu_lab_custody_exception_template" name="Custody Exception Templates" parent="menu_laboratory_config" action="action_lab_custody_exception_template" sequence="41"/>
+</odoo>

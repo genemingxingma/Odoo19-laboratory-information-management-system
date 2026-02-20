@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_lab_overdue_sample_notify" model="ir.cron">
+        <field name="name">Lab: Notify Overdue Samples</field>
+        <field name="model_id" ref="model_lab_sample"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_notify_overdue_samples()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_reagent_expiry_notify" model="ir.cron">
+        <field name="name">Lab: Notify Expiring Reagent Lots</field>
+        <field name="model_id" ref="model_lab_reagent_lot"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_notify_expiring_lots()</field>
+        <field name="interval_number">12</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_manual_review_overdue_notify" model="ir.cron">
+        <field name="name">Lab: Notify Overdue Manual Reviews</field>
+        <field name="model_id" ref="model_lab_sample_analysis"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_notify_overdue_manual_reviews()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_manual_review_daily_digest" model="ir.cron">
+        <field name="name">Lab: Daily Manual Review Digest</field>
+        <field name="model_id" ref="model_lab_sample_analysis"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_send_daily_manual_review_digest()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_storage_due_notify" model="ir.cron">
+        <field name="name">Lab: Notify Storage Retention Overdue</field>
+        <field name="model_id" ref="model_lab_sample"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_notify_storage_due()</field>
+        <field name="interval_number">6</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_custody_investigation_overdue_notify" model="ir.cron">
+        <field name="name">Lab: Notify Overdue Custody Investigations</field>
+        <field name="model_id" ref="model_lab_custody_investigation"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_notify_overdue_investigations()</field>
+        <field name="interval_number">6</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_custody_sla_escalate" model="ir.cron">
+        <field name="name">Lab: Custody SLA Escalation</field>
+        <field name="model_id" ref="model_lab_custody_investigation"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_escalate_sla()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_ai_interpretation_retry" model="ir.cron">
+        <field name="name">Lab: Retry AI Interpretation Errors</field>
+        <field name="model_id" ref="model_lab_sample"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_retry_ai_interpretation_errors()</field>
+        <field name="interval_number">2</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_report_dispatch_ack_reminder" model="ir.cron">
+        <field name="name">Lab: Report Dispatch Acknowledgement Reminder</field>
+        <field name="model_id" ref="model_lab_report_dispatch"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_dispatch_ack_reminder()</field>
+        <field name="interval_number">4</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+
+    <record id="ir_cron_lab_quality_kpi_capture" model="ir.cron">
+        <field name="name">Lab: Capture Quality KPI Snapshot</field>
+        <field name="model_id" ref="model_lab_quality_kpi_snapshot"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_capture_kpi()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_quality_program_overdue_notify" model="ir.cron">
+        <field name="name">Lab: Notify Overdue Quality Program Lines</field>
+        <field name="model_id" ref="model_lab_quality_program_reminder_mixin"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_notify_quality_program_overdue()</field>
+        <field name="interval_number">12</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_test_request_quote_expiry_followup" model="ir.cron">
+        <field name="name">Lab: Test Request Quote Expiry Follow-up</field>
+        <field name="model_id" ref="model_lab_test_request"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_quote_expiry_followup()</field>
+        <field name="interval_number">8</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_request_invoice_unpaid_followup" model="ir.cron">
+        <field name="name">Lab: Unpaid Request Invoice Follow-up</field>
+        <field name="model_id" ref="model_lab_request_invoice"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_unpaid_invoice_followup()</field>
+        <field name="interval_number">12</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_interface_job_process_pending" model="ir.cron">
+        <field name="name">Lab: Process Interface Jobs</field>
+        <field name="model_id" ref="model_lab_interface_job"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_process_interface_jobs()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_compliance_snapshot_monthly" model="ir.cron">
+        <field name="name">Lab: Generate Compliance Snapshot</field>
+        <field name="model_id" ref="model_lab_compliance_snapshot"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate_monthly_snapshot()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_sop_exception_sla_escalate" model="ir.cron">
+        <field name="name">Lab: SOP Exception SLA Escalation</field>
+        <field name="model_id" ref="model_lab_sop_exception_sla_monitor"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_escalate_overdue_sop_exceptions()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+</odoo>

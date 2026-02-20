@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_quality_program_list" model="ir.ui.view">
+        <field name="name">lab.quality.program.list</field>
+        <field name="model">lab.quality.program</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="overdue_line &gt; 0" decoration-success="state == 'closed'">
+                <field name="name"/>
+                <field name="year"/>
+                <field name="owner_id"/>
+                <field name="state"/>
+                <field name="total_line"/>
+                <field name="completed_line"/>
+                <field name="overdue_line"/>
+                <field name="completion_rate" widget="percentage"/>
+                <field name="audit_count"/>
+                <field name="training_count"/>
+                <field name="kpi_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_quality_program_search" model="ir.ui.view">
+        <field name="name">lab.quality.program.search</field>
+        <field name="model">lab.quality.program</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="year"/>
+                <field name="owner_id"/>
+                <field name="state"/>
+                <filter name="f_draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="f_active" string="Active" domain="[('state','=','active')]"/>
+                <filter name="f_closed" string="Closed" domain="[('state','=','closed')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_quality_program_form" model="ir.ui.view">
+        <field name="name">lab.quality.program.form</field>
+        <field name="model">lab.quality.program</field>
+        <field name="arch" type="xml">
+            <form string="Quality Program">
+                <header>
+                    <button name="action_generate_default_lines" type="object" string="Generate Default Lines" invisible="state != 'draft'"/>
+                    <button name="action_activate" type="object" string="Activate" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_close" type="object" string="Close" class="btn-primary" invisible="state != 'active'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state == 'cancel'"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,closed,cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_audits" icon="fa-check-square-o">
+                            <field name="audit_count" widget="statinfo" string="Audits"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_trainings" icon="fa-graduation-cap">
+                            <field name="training_count" widget="statinfo" string="Trainings"/>
+                        </button>
+                        <button class="oe_stat_button" type="object" name="action_view_kpi" icon="fa-line-chart">
+                            <field name="kpi_count" widget="statinfo" string="KPI"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="year"/>
+                            <field name="owner_id"/>
+                        </group>
+                        <group>
+                            <field name="total_line" readonly="1"/>
+                            <field name="completed_line" readonly="1"/>
+                            <field name="overdue_line" readonly="1"/>
+                            <field name="completion_rate" widget="percentage" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="objective" placeholder="Program objective, quality targets, strategic focus"/>
+                    </group>
+                    <notebook>
+                        <page string="Program Lines">
+                            <field name="line_ids">
+                                <list editable="bottom" decoration-danger="is_overdue" decoration-success="state == 'done'">
+                                    <field name="sequence"/>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="department"/>
+                                    <field name="category"/>
+                                    <field name="owner_id"/>
+                                    <field name="deadline"/>
+                                    <field name="completed_date"/>
+                                    <field name="score"/>
+                                    <field name="target"/>
+                                    <field name="is_passed"/>
+                                    <field name="state"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="sequence"/>
+                                            <field name="name"/>
+                                            <field name="code"/>
+                                            <field name="owner_id"/>
+                                            <field name="department"/>
+                                            <field name="category"/>
+                                        </group>
+                                        <group>
+                                            <field name="deadline"/>
+                                            <field name="completed_date" readonly="1"/>
+                                            <field name="score"/>
+                                            <field name="target"/>
+                                            <field name="is_passed" readonly="1"/>
+                                            <field name="state"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <field name="result_note"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Audits">
+                            <field name="audit_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="audit_date"/>
+                                    <field name="lead_auditor_id"/>
+                                    <field name="state"/>
+                                    <field name="major_count"/>
+                                    <field name="minor_count"/>
+                                    <field name="open_count"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Trainings">
+                            <field name="training_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="topic"/>
+                                    <field name="training_date"/>
+                                    <field name="trainer_id"/>
+                                    <field name="state"/>
+                                    <field name="attendee_count"/>
+                                    <field name="pass_count"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="KPI Snapshots">
+                            <field name="kpi_snapshot_ids" readonly="1">
+                                <list>
+                                    <field name="snapshot_date"/>
+                                    <field name="total_samples"/>
+                                    <field name="reported_samples"/>
+                                    <field name="overdue_samples"/>
+                                    <field name="manual_review_queue"/>
+                                    <field name="critical_results"/>
+                                    <field name="ncr_open"/>
+                                    <field name="dispatch_unacked"/>
+                                    <field name="on_time_rate" widget="percentage"/>
+                                    <field name="overdue_rate" widget="percentage"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_quality_audit_list" model="ir.ui.view">
+        <field name="name">lab.quality.audit.list</field>
+        <field name="model">lab.quality.audit</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="open_count &gt; 0 and state == 'completed'" decoration-success="state == 'closed'">
+                <field name="name"/>
+                <field name="program_id"/>
+                <field name="audit_date"/>
+                <field name="lead_auditor_id"/>
+                <field name="state"/>
+                <field name="major_count"/>
+                <field name="minor_count"/>
+                <field name="obs_count"/>
+                <field name="open_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_quality_audit_search" model="ir.ui.view">
+        <field name="name">lab.quality.audit.search</field>
+        <field name="model">lab.quality.audit</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="program_id"/>
+                <field name="lead_auditor_id"/>
+                <field name="state"/>
+                <filter name="f_running" string="Running" domain="[('state','=','running')]"/>
+                <filter name="f_completed" string="Completed" domain="[('state','=','completed')]"/>
+                <filter name="f_closed" string="Closed" domain="[('state','=','closed')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_quality_audit_form" model="ir.ui.view">
+        <field name="name">lab.quality.audit.form</field>
+        <field name="model">lab.quality.audit</field>
+        <field name="arch" type="xml">
+            <form string="Internal Audit">
+                <header>
+                    <button name="action_start" type="object" string="Start" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_complete" type="object" string="Complete" class="btn-primary" invisible="state != 'running'"/>
+                    <button name="action_close" type="object" string="Close" class="btn-primary" invisible="state != 'completed'"/>
+                    <button name="action_reset" type="object" string="Reset" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,completed,closed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="program_id"/>
+                            <field name="audit_date"/>
+                            <field name="lead_auditor_id"/>
+                        </group>
+                        <group>
+                            <field name="auditor_ids" widget="many2many_tags"/>
+                            <field name="auditee_ids" widget="many2many_tags"/>
+                            <field name="major_count" readonly="1"/>
+                            <field name="open_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="scope"/>
+                        <field name="summary"/>
+                    </group>
+                    <notebook>
+                        <page string="Findings">
+                            <field name="finding_ids">
+                                <list editable="bottom" decoration-danger="is_overdue" decoration-success="state == 'closed'">
+                                    <field name="title"/>
+                                    <field name="severity"/>
+                                    <field name="owner_id"/>
+                                    <field name="target_date"/>
+                                    <field name="close_date"/>
+                                    <field name="is_overdue"/>
+                                    <field name="state"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="title"/>
+                                            <field name="severity"/>
+                                            <field name="owner_id"/>
+                                            <field name="target_date"/>
+                                            <field name="close_date" readonly="1"/>
+                                            <field name="state"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <field name="description"/>
+                                        <field name="corrective_action"/>
+                                        <field name="effectiveness_note"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_quality_training_list" model="ir.ui.view">
+        <field name="name">lab.quality.training.list</field>
+        <field name="model">lab.quality.training</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="program_id"/>
+                <field name="topic"/>
+                <field name="training_date"/>
+                <field name="trainer_id"/>
+                <field name="duration_hour"/>
+                <field name="state"/>
+                <field name="attendee_count"/>
+                <field name="pass_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_quality_training_search" model="ir.ui.view">
+        <field name="name">lab.quality.training.search</field>
+        <field name="model">lab.quality.training</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="program_id"/>
+                <field name="topic"/>
+                <field name="state"/>
+                <filter name="f_schedule" string="Scheduled" domain="[('state','=','scheduled')]"/>
+                <filter name="f_done" string="Done" domain="[('state','=','done')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_quality_training_form" model="ir.ui.view">
+        <field name="name">lab.quality.training.form</field>
+        <field name="model">lab.quality.training</field>
+        <field name="arch" type="xml">
+            <form string="Training Session">
+                <header>
+                    <button name="action_schedule" type="object" string="Schedule" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_done" type="object" string="Done" class="btn-primary" invisible="state not in ('scheduled','draft')"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state == 'cancel'"/>
+                    <button name="action_reset" type="object" string="Reset" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,scheduled,done,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="program_id"/>
+                            <field name="topic"/>
+                            <field name="training_date"/>
+                        </group>
+                        <group>
+                            <field name="trainer_id"/>
+                            <field name="duration_hour"/>
+                            <field name="attendee_count" readonly="1"/>
+                            <field name="pass_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="Attendees">
+                            <field name="attendee_ids">
+                                <list editable="bottom">
+                                    <field name="user_id"/>
+                                    <field name="attended"/>
+                                    <field name="score"/>
+                                    <field name="passed" readonly="1"/>
+                                    <field name="comment"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_quality_kpi_list" model="ir.ui.view">
+        <field name="name">lab.quality.kpi.snapshot.list</field>
+        <field name="model">lab.quality.kpi.snapshot</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="program_id"/>
+                <field name="snapshot_date"/>
+                <field name="total_samples"/>
+                <field name="reported_samples"/>
+                <field name="overdue_samples"/>
+                <field name="manual_review_queue"/>
+                <field name="critical_results"/>
+                <field name="ncr_open"/>
+                <field name="dispatch_unacked"/>
+                <field name="on_time_rate" widget="percentage"/>
+                <field name="overdue_rate" widget="percentage"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_quality_kpi_search" model="ir.ui.view">
+        <field name="name">lab.quality.kpi.snapshot.search</field>
+        <field name="model">lab.quality.kpi.snapshot</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="program_id"/>
+                <field name="snapshot_date"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_quality_program" model="ir.actions.act_window">
+        <field name="name">Quality Programs</field>
+        <field name="res_model">lab.quality.program</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_quality_program_search"/>
+    </record>
+
+    <record id="action_lab_quality_audit" model="ir.actions.act_window">
+        <field name="name">Internal Audits</field>
+        <field name="res_model">lab.quality.audit</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_quality_audit_search"/>
+    </record>
+
+    <record id="action_lab_quality_training" model="ir.actions.act_window">
+        <field name="name">Training Sessions</field>
+        <field name="res_model">lab.quality.training</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_quality_training_search"/>
+    </record>
+
+    <record id="action_lab_quality_kpi_snapshot" model="ir.actions.act_window">
+        <field name="name">KPI Snapshots</field>
+        <field name="res_model">lab.quality.kpi.snapshot</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_lab_quality_kpi_search"/>
+    </record>
+
+    <record id="action_lab_quality_capture_kpi" model="ir.actions.server">
+        <field name="name">Capture KPI Snapshot</field>
+        <field name="model_id" ref="model_lab_quality_kpi_snapshot"/>
+        <field name="state">code</field>
+        <field name="code">model.action_capture_kpi()</field>
+    </record>
+
+    <menuitem id="menu_lab_quality_program" name="Quality Programs" parent="menu_laboratory_quality" action="action_lab_quality_program" sequence="30"/>
+    <menuitem id="menu_lab_quality_audit" name="Internal Audits" parent="menu_laboratory_quality" action="action_lab_quality_audit" sequence="31"/>
+    <menuitem id="menu_lab_quality_training" name="Training Sessions" parent="menu_laboratory_quality" action="action_lab_quality_training" sequence="32"/>
+    <menuitem id="menu_lab_quality_kpi" name="KPI Snapshots" parent="menu_laboratory_quality" action="action_lab_quality_kpi_snapshot" sequence="33"/>
+</odoo>

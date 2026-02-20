@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_manual_review_report_wizard_form" model="ir.ui.view">
+        <field name="name">lab.manual.review.report.wizard.form</field>
+        <field name="model">lab.manual.review.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Manual Review Report">
+                <sheet>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <button name="action_refresh" type="object" string="Refresh Report" class="btn-primary"/>
+                    </group>
+                    <group string="Summary">
+                        <field name="pending_manual_reviews" readonly="1"/>
+                        <field name="overdue_manual_reviews" readonly="1"/>
+                        <field name="completed_manual_reviews" readonly="1"/>
+                        <field name="on_time_completed" readonly="1"/>
+                        <field name="on_time_rate" readonly="1" widget="percentage"/>
+                        <field name="avg_review_hours" readonly="1"/>
+                    </group>
+                    <group>
+                        <button name="action_open_pending" type="object" string="Open Pending Reviews"/>
+                        <button name="action_open_overdue" type="object" string="Open Overdue Reviews"/>
+                        <button name="action_open_completed" type="object" string="Open Completed Reviews"/>
+                        <button name="action_export_csv" type="object" string="Export CSV" class="btn-secondary"/>
+                    </group>
+                    <group string="Reason Breakdown">
+                        <field name="line_ids" nolabel="1">
+                            <list>
+                                <field name="reason_code"/>
+                                <field name="pending_count"/>
+                                <field name="completed_count"/>
+                            </list>
+                        </field>
+                    </group>
+                    <group string="Reviewer Performance">
+                        <field name="reviewer_line_ids" nolabel="1">
+                            <list>
+                                <field name="reviewer_id"/>
+                                <field name="completed_count"/>
+                                <field name="overdue_completed_count"/>
+                                <field name="avg_review_hours"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <button special="cancel" string="Close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_manual_review_report_wizard" model="ir.actions.act_window">
+        <field name="name">Manual Review Report</field>
+        <field name="res_model">lab.manual.review.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_lab_manual_review_report_wizard"
+        name="Manual Review Report"
+        parent="menu_laboratory_quality"
+        action="action_lab_manual_review_report_wizard"
+        sequence="15"
+    />
+</odoo>

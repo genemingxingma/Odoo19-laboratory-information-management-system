@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_profile_list" model="ir.ui.view">
+        <field name="name">lab.profile.list</field>
+        <field name="model">lab.profile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_profile_form" model="ir.ui.view">
+        <field name="name">lab.profile.form</field>
+        <field name="model">lab.profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="active"/>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="service_id"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_profile" model="ir.actions.act_window">
+        <field name="name">Analysis Profiles</field>
+        <field name="res_model">lab.profile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lab_profile" name="Analysis Profiles" parent="menu_laboratory_config" action="action_lab_profile" sequence="20"/>
+</odoo>

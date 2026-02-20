@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_template_form_inherit_lab_ecommerce" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.lab.ecommerce</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Lab Ecommerce">
+                    <group>
+                        <group>
+                            <field name="is_lab_test_product"/>
+                            <field name="lab_sale_target" invisible="not is_lab_test_product"/>
+                            <field name="lab_service_id" invisible="not is_lab_test_product"/>
+                            <field name="lab_profile_id" invisible="not is_lab_test_product"/>
+                            <field name="lab_default_priority" invisible="not is_lab_test_product"/>
+                        </group>
+                        <group>
+                            <field name="lab_turnaround_note" invisible="not is_lab_test_product"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sale_order_form_inherit_lab_ecommerce" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.lab.ecommerce</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_lab_requests" icon="fa-flask" invisible="lab_request_count == 0">
+                    <field name="lab_request_count" widget="statinfo" string="Lab Requests"/>
+                </button>
+                <button
+                    class="oe_stat_button"
+                    type="object"
+                    name="action_sync_lab_requests"
+                    icon="fa-refresh"
+                    string="Sync Lab"
+                    invisible="state not in ('sale','done')"
+                    groups="laboratory_management.group_lab_manager"
+                />
+            </xpath>
+            <xpath expr="//group[@name='sale_info']" position="inside">
+                <field name="lab_purchase_type" readonly="1"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Lab Requests" invisible="lab_request_count == 0">
+                    <field name="lab_request_ids" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="request_type"/>
+                            <field name="patient_id"/>
+                            <field name="patient_name"/>
+                            <field name="state"/>
+                            <field name="billing_state"/>
+                            <field name="sample_count"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sale_order_line_list_inherit_lab_ecommerce" model="ir.ui.view">
+        <field name="name">sale.order.line.list.inherit.lab.ecommerce</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_order_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="is_lab_test_line" readonly="1"/>
+                <field name="lab_service_id" readonly="1" optional="hide"/>
+                <field name="lab_profile_id" readonly="1" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_lab_ecommerce_products" model="ir.actions.act_window">
+        <field name="name">Lab Ecommerce Products</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_lab_test_product', '=', True)]</field>
+    </record>
+
+    <menuitem id="menu_lab_ecommerce_products" name="Lab Ecommerce Products" parent="menu_laboratory_config" action="action_lab_ecommerce_products" sequence="25" groups="laboratory_management.group_lab_manager"/>
+</odoo>
