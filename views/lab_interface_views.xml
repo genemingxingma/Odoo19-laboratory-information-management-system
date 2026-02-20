@@ -12,6 +12,7 @@
                 <field name="protocol"/>
                 <field name="endpoint_url"/>
                 <field name="inbound_url"/>
+                <field name="outbound_ack_url"/>
                 <field name="queued_count"/>
                 <field name="success_count"/>
                 <field name="failed_count"/>
@@ -43,6 +44,7 @@
                             <field name="auth_type"/>
                             <field name="endpoint_url"/>
                             <field name="inbound_url" readonly="1"/>
+                            <field name="outbound_ack_url" readonly="1"/>
                             <field name="timeout_seconds"/>
                             <field name="retry_limit"/>
                             <field name="dead_letter_enabled"/>
@@ -134,6 +136,8 @@
                             <field name="processed_at" readonly="1"/>
                             <field name="next_retry_at" readonly="1"/>
                             <field name="ack_code" readonly="1"/>
+                            <field name="ack_received_at" readonly="1"/>
+                            <field name="ack_source_ip" readonly="1"/>
                             <field name="response_code" readonly="1"/>
                         </group>
                     </group>

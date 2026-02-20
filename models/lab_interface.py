@@ -34,6 +34,7 @@ class LabInterfaceEndpoint(models.Model):
     )
     endpoint_url = fields.Char()
     inbound_url = fields.Char(compute="_compute_inbound_url")
+    outbound_ack_url = fields.Char(compute="_compute_outbound_ack_url")
     username = fields.Char()
     password = fields.Char()
     token = fields.Char()
@@ -72,6 +73,12 @@ class LabInterfaceEndpoint(models.Model):
         base = self.env["ir.config_parameter"].sudo().get_param("web.base.url") or ""
         for rec in self:
             rec.inbound_url = ("%s/lab/interface/inbound/%s" % (base.rstrip("/"), rec.code)) if rec.code else False
+
+    @api.depends("code")
+    def _compute_outbound_ack_url(self):
+        base = self.env["ir.config_parameter"].sudo().get_param("web.base.url") or ""
+        for rec in self:
+            rec.outbound_ack_url = ("%s/lab/interface/outbound/%s/ack" % (base.rstrip("/"), rec.code)) if rec.code else False
 
     @api.depends("job_ids.state")
     def _compute_job_stats(self):
@@ -156,6 +163,45 @@ class LabInterfaceEndpoint(models.Model):
         job.action_process()
         return job
 
+    def register_outbound_ack(
+        self,
+        *,
+        ack_code,
+        job_name=False,
+        job_id=False,
+        external_uid=False,
+        ack_message=False,
+        source_ip=False,
+        payload=False,
+    ):
+        self.ensure_one()
+        if self.direction not in ("outbound", "bidirectional"):
+            raise UserError(_("Endpoint %s does not allow outbound acknowledgements.") % self.display_name)
+        if self.allowed_ip_list and source_ip:
+            allowed = {x.strip() for x in (self.allowed_ip_list or "").split(",") if x.strip()}
+            if allowed and source_ip not in allowed:
+                raise UserError(_("Source IP is not allowed for endpoint %s.") % self.display_name)
+        if ack_code not in ("AA", "AE", "AR"):
+            raise UserError(_("Unsupported ACK code %s.") % ack_code)
+
+        domain = [("endpoint_id", "=", self.id), ("direction", "=", "outbound")]
+        job = self.env["lab.interface.job"]
+        if job_id:
+            job = self.env["lab.interface.job"].search(domain + [("id", "=", int(job_id))], limit=1)
+        if not job and job_name:
+            job = self.env["lab.interface.job"].search(domain + [("name", "=", job_name)], limit=1)
+        if not job and external_uid:
+            job = self.env["lab.interface.job"].search(domain + [("external_uid", "=", external_uid)], limit=1)
+        if not job:
+            raise UserError(_("No outbound interface job matched the acknowledgement criteria."))
+
+        return job.action_apply_ack(
+            ack_code=ack_code,
+            ack_message=ack_message or "",
+            source_ip=source_ip or "",
+            payload=payload or {},
+        )
+
 
 class LabInterfaceJob(models.Model):
     _name = "lab.interface.job"
@@ -205,6 +251,8 @@ class LabInterfaceJob(models.Model):
     response_code = fields.Char(readonly=True)
     response_body = fields.Text(readonly=True)
     ack_code = fields.Selection([("AA", "AA"), ("AE", "AE"), ("AR", "AR")], readonly=True)
+    ack_received_at = fields.Datetime(readonly=True)
+    ack_source_ip = fields.Char(readonly=True)
     dead_letter_reason = fields.Text(readonly=True)
     error_message = fields.Text(readonly=True)
     queued_at = fields.Datetime(default=fields.Datetime.now, readonly=True)
@@ -288,6 +336,56 @@ class LabInterfaceJob(models.Model):
         if protocol == "astm":
             return "200", "ASTM_ACK|%s" % self.name
         return "200", json.dumps({"status": "ok", "job": self.name, "payload": payload})
+
+    def _extract_ack_code(self, response_code, response_body):
+        self.ensure_one()
+        code = str(response_code or "")
+        body = response_body or ""
+        if isinstance(body, bytes):
+            body = body.decode("utf-8", errors="ignore")
+        text = str(body).strip()
+        if not text:
+            return "AA"
+        if self.endpoint_id.protocol == "hl7v2":
+            upper = text.upper()
+            for ack in ("|AA|", "|AE|", "|AR|"):
+                if ack in upper:
+                    return ack.strip("|")
+            if upper.startswith("MSH|") and "\rMSA|AA|" in upper:
+                return "AA"
+            if upper.startswith("MSH|") and "\rMSA|AE|" in upper:
+                return "AE"
+            if upper.startswith("MSH|") and "\rMSA|AR|" in upper:
+                return "AR"
+            if upper.startswith("AA|"):
+                return "AA"
+            if upper.startswith("AE|"):
+                return "AE"
+            if upper.startswith("AR|"):
+                return "AR"
+            return "AA"
+        if text.startswith("{") and text.endswith("}"):
+            try:
+                data = json.loads(text)
+            except Exception:  # noqa: BLE001
+                data = {}
+            ack = (data.get("ack_code") or data.get("ack") or "").upper()
+            if ack in ("AA", "AE", "AR"):
+                return ack
+            ok = data.get("ok")
+            if ok is False:
+                return "AE"
+            if code and code.isdigit() and int(code) >= 400:
+                return "AE"
+            return "AA"
+        if code and code.isdigit() and int(code) >= 400:
+            return "AE"
+        upper = text.upper()
+        if upper.startswith("AE") or " ERROR" in upper:
+            return "AE"
+        if upper.startswith("AR") or " REJECT" in upper:
+            return "AR"
+        return "AA"
 
     def _process_inbound(self, payload):
         self.ensure_one()
@@ -379,12 +477,15 @@ class LabInterfaceJob(models.Model):
                     code, response = rec._process_inbound(payload)
                 else:
                     code, response = rec._simulate_dispatch(payload)
+                ack_code = rec._extract_ack_code(code, response)
+                if ack_code in ("AE", "AR"):
+                    raise UserError(_("Remote acknowledgement rejected message: %s") % (response or ack_code))
                 rec.write(
                     {
                         "state": "done",
                         "response_code": code,
                         "response_body": response,
-                        "ack_code": "AA",
+                        "ack_code": ack_code,
                         "processed_at": fields.Datetime.now(),
                         "error_message": False,
                         "dead_letter_reason": False,
@@ -436,6 +537,47 @@ class LabInterfaceJob(models.Model):
             result={"message": message},
             state=final_state,
         )
+
+    def action_apply_ack(self, *, ack_code, ack_message=False, source_ip=False, payload=False):
+        for rec in self:
+            if rec.direction != "outbound":
+                raise UserError(_("Only outbound jobs can apply remote acknowledgements."))
+            if rec.state == "cancel":
+                raise UserError(_("Cancelled job cannot receive acknowledgement updates."))
+            payload_text = payload if isinstance(payload, str) else json.dumps(payload or {}, ensure_ascii=False, indent=2)
+            rec.write(
+                {
+                    "ack_code": ack_code,
+                    "ack_received_at": fields.Datetime.now(),
+                    "ack_source_ip": source_ip or False,
+                    "response_body": ack_message or rec.response_body,
+                    "response_code": rec.response_code or "ACK",
+                }
+            )
+            if ack_code in ("AE", "AR"):
+                rec._mark_failure(ack_message or _("Remote system returned %s acknowledgement.") % ack_code)
+            elif rec.state != "done":
+                rec.write(
+                    {
+                        "state": "done",
+                        "processed_at": fields.Datetime.now(),
+                        "error_message": False,
+                        "dead_letter_reason": False,
+                        "next_retry_at": False,
+                    }
+                )
+            self.env["lab.interface.audit.log"].log_event(
+                action="ack",
+                direction=rec.direction,
+                endpoint=rec.endpoint_id,
+                job=rec,
+                external_uid=rec.external_uid,
+                source_ip=source_ip,
+                payload=payload_text or rec.payload_json or rec.payload_text,
+                result={"ack_code": ack_code, "message": ack_message or ""},
+                state=rec.state,
+            )
+        return True
 
     def action_requeue(self):
         for rec in self:

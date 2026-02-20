@@ -33,7 +33,7 @@ class LaboratoryInterfaceApi(http.Controller):
 
     @http.route(
         "/lab/interface/inbound/<string:endpoint_code>",
-        type="json",
+        type="jsonrpc",
         auth="public",
         methods=["POST"],
         csrf=False,
@@ -180,3 +180,38 @@ class LaboratoryInterfaceApi(http.Controller):
                 headers=[("Content-Type", "application/fhir+json; charset=utf-8")],
                 status=400,
             )
+
+    @http.route(
+        "/lab/interface/outbound/<string:endpoint_code>/ack",
+        type="jsonrpc",
+        auth="public",
+        methods=["POST"],
+        csrf=False,
+    )
+    def interface_outbound_ack(self, endpoint_code, **kwargs):
+        endpoint = request.env["lab.interface.endpoint"].sudo().search(
+            [("code", "=", endpoint_code), ("active", "=", True)],
+            limit=1,
+        )
+        if not endpoint:
+            return {"ok": False, "error": "endpoint_not_found"}
+        if endpoint.direction not in ("outbound", "bidirectional"):
+            return {"ok": False, "error": "direction_not_allowed"}
+        if not self._authorize_endpoint(endpoint):
+            return {"ok": False, "error": "unauthorized"}
+
+        body = request.jsonrequest or {}
+        source_ip = request.httprequest.remote_addr or ""
+        try:
+            endpoint.register_outbound_ack(
+                ack_code=(body.get("ack_code") or "").upper(),
+                job_name=body.get("job_name"),
+                job_id=body.get("job_id"),
+                external_uid=body.get("external_uid"),
+                ack_message=body.get("message") or "",
+                source_ip=source_ip,
+                payload=body.get("payload") or {},
+            )
+            return {"ok": True}
+        except Exception as err:  # noqa: BLE001
+            return {"ok": False, "error": str(err)}

@@ -400,3 +400,69 @@ class TestSopInterfaceCompliance(TransactionCase):
         self.assertEqual(job.state, "done")
         after = self.env["lab.interface.audit.log"].search_count([])
         self.assertGreater(after, initial)
+
+    def test_20_outbound_ack_accept_keeps_job_done(self):
+        request = self.env["lab.test.request"].create(
+            {
+                "requester_partner_id": self.partner.id,
+                "request_type": "individual",
+                "patient_name": self.partner.name,
+                "priority": "routine",
+                "sample_type": "blood",
+                "line_ids": [(0, 0, {"line_type": "service", "service_id": self.service.id, "quantity": 1})],
+            }
+        )
+        request.action_submit()
+        job = request.interface_job_ids[:1]
+        job.action_process()
+        self.assertEqual(job.state, "done")
+
+        self.endpoint.register_outbound_ack(
+            ack_code="AA",
+            job_name=job.name,
+            ack_message="accepted by HIS",
+            source_ip="127.0.0.1",
+            payload={"trace_id": "ACK-OK-1"},
+        )
+        self.assertEqual(job.state, "done")
+        self.assertEqual(job.ack_code, "AA")
+        self.assertTrue(job.ack_received_at)
+
+    def test_21_outbound_ack_reject_transitions_to_retry_or_fail(self):
+        endpoint = self.env["lab.interface.endpoint"].create(
+            {
+                "name": "ACK Endpoint",
+                "code": "ACK-001",
+                "system_type": "his",
+                "direction": "outbound",
+                "protocol": "rest",
+                "retry_limit": 1,
+                "dead_letter_enabled": False,
+            }
+        )
+        request = self.env["lab.test.request"].create(
+            {
+                "requester_partner_id": self.partner.id,
+                "request_type": "individual",
+                "patient_name": self.partner.name,
+                "priority": "routine",
+                "sample_type": "blood",
+                "line_ids": [(0, 0, {"line_type": "service", "service_id": self.service.id, "quantity": 1})],
+            }
+        )
+        request.action_submit()
+        job = request.interface_job_ids.filtered(lambda j: j.endpoint_id == endpoint)[:1]
+        self.assertTrue(job)
+        job.action_process()
+        self.assertEqual(job.state, "done")
+
+        endpoint.register_outbound_ack(
+            ack_code="AE",
+            job_name=job.name,
+            ack_message="receiver validation failed",
+            source_ip="127.0.0.1",
+            payload={"trace_id": "ACK-ERR-1"},
+        )
+        self.assertIn(job.state, ("retry", "failed"))
+        self.assertEqual(job.ack_code, "AE")
+        self.assertTrue(job.error_message)
