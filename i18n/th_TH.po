@@ -3056,3 +3056,371 @@ msgstr "ไทม์ไลน์การตรวจทาน AI"
 msgid "AI Pending Review"
 msgstr "AI รอตรวจทาน"
 
+
+#. module: laboratory_management
+msgid "AI Interpretations"
+msgstr "การแปลผลโดย AI"
+
+#. module: laboratory_management
+msgid "Ack Signatures"
+msgstr "ลายเซ็นการรับทราบ"
+
+#. module: laboratory_management
+msgid "Assignment Rules"
+msgstr "กฎการมอบหมาย"
+
+#. module: laboratory_management
+msgid "Catalog & Templates"
+msgstr "แคตตาล็อกและเทมเพลต"
+
+#. module: laboratory_management
+msgid "Compliance Audit Reports"
+msgstr "รายงานตรวจสอบการปฏิบัติตาม"
+
+#. module: laboratory_management
+msgid "Compliance Reports"
+msgstr "รายงานการปฏิบัติตาม"
+
+#. module: laboratory_management
+msgid "Custody Batch Lines"
+msgstr "รายการย่อยชุดส่งมอบ"
+
+#. module: laboratory_management
+msgid "Custody Batches"
+msgstr "ชุดส่งมอบ"
+
+#. module: laboratory_management
+msgid "Custody Escalations"
+msgstr "การยกระดับการส่งมอบ"
+
+#. module: laboratory_management
+msgid "Custody Exception Templates"
+msgstr "เทมเพลตข้อยกเว้นการส่งมอบ"
+
+#. module: laboratory_management
+msgid "Custody Investigations"
+msgstr "การสืบสวนการส่งมอบ"
+
+#. module: laboratory_management
+msgid "Custody Operations"
+msgstr "งานส่งมอบ"
+
+#. module: laboratory_management
+msgid "Custody Quality"
+msgstr "คุณภาพการส่งมอบ"
+
+#. module: laboratory_management
+msgid "Custody SLA Policies"
+msgstr "นโยบาย SLA การส่งมอบ"
+
+#. module: laboratory_management
+msgid "Custody Sign-offs"
+msgstr "การลงนามการส่งมอบ"
+
+#. module: laboratory_management
+msgid "Decision Runs"
+msgstr "รอบการตัดสินใจ"
+
+#. module: laboratory_management
+msgid "Decision Thresholds"
+msgstr "เกณฑ์การตัดสินใจ"
+
+#. module: laboratory_management
+msgid "Department Queue Rules"
+msgstr "กฎคิวของแผนก"
+
+#. module: laboratory_management
+msgid "Department SOP"
+msgstr "SOP ของแผนก"
+
+#. module: laboratory_management
+msgid "Department Workbench"
+msgstr "โต๊ะทำงานของแผนก"
+
+#. module: laboratory_management
+msgid "Digest Notification Config"
+msgstr "การตั้งค่าการแจ้งเตือนแบบสรุป"
+
+#. module: laboratory_management
+msgid "Disposal Records"
+msgstr "บันทึกการกำจัด"
+
+#. module: laboratory_management
+msgid "EQA Rounds"
+msgstr "รอบ EQA"
+
+#. module: laboratory_management
+msgid "EQA Schemes"
+msgstr "โครงการ EQA"
+
+#. module: laboratory_management
+msgid "Exception Decisions"
+msgstr "การตัดสินใจข้อยกเว้น"
+
+#. module: laboratory_management
+msgid "Exception Templates"
+msgstr "เทมเพลตข้อยกเว้น"
+
+#. module: laboratory_management
+msgid "Governance & Compliance"
+msgstr "ธรรมาภิบาลและการปฏิบัติตาม"
+
+#. module: laboratory_management
+msgid "Governance Workbench"
+msgstr "โต๊ะทำงานธรรมาภิบาล"
+
+#. module: laboratory_management
+msgid "HL7 Templates"
+msgstr "เทมเพลต HL7"
+
+#. module: laboratory_management
+msgid "Interface Analytics"
+msgstr "การวิเคราะห์อินเทอร์เฟซ"
+
+#. module: laboratory_management
+msgid "Interface Audit Logs"
+msgstr "บันทึกตรวจสอบอินเทอร์เฟซ"
+
+#. module: laboratory_management
+msgid "Interface Endpoints"
+msgstr "ปลายทางอินเทอร์เฟซ"
+
+#. module: laboratory_management
+msgid "Interface Jobs"
+msgstr "งานอินเทอร์เฟซ"
+
+#. module: laboratory_management
+msgid "Interface Reconciliation"
+msgstr "กระทบยอดอินเทอร์เฟซ"
+
+#. module: laboratory_management
+msgid "Interface Replay"
+msgstr "เล่นซ้ำอินเทอร์เฟซ"
+
+#. module: laboratory_management
+msgid "Interfaces & Imports"
+msgstr "อินเทอร์เฟซและการนำเข้า"
+
+#. module: laboratory_management
+msgid "Interfaces & Protocols"
+msgstr "อินเทอร์เฟซและโปรโตคอล"
+
+#. module: laboratory_management
+msgid "Internal Audits"
+msgstr "การตรวจสอบภายใน"
+
+#. module: laboratory_management
+msgid "Inventory & Storage"
+msgstr "คลังและการจัดเก็บ"
+
+#. module: laboratory_management
+msgid "Investigation Actions"
+msgstr "มาตรการสอบสวน"
+
+#. module: laboratory_management
+msgid "KPI Snapshots"
+msgstr "สแนปชอต KPI"
+
+#. module: laboratory_management
+msgid "Lab Ecommerce Products"
+msgstr "สินค้าตรวจแล็บอีคอมเมิร์ซ"
+
+#. module: laboratory_management
+msgid "Manual Review Queue"
+msgstr "คิวตรวจทานด้วยมือ"
+
+#. module: laboratory_management
+msgid "Mapping Profiles"
+msgstr "โปรไฟล์การแมป"
+
+#. module: laboratory_management
+msgid "My Manual Reviews"
+msgstr "งานตรวจทานด้วยมือของฉัน"
+
+#. module: laboratory_management
+msgid "My Workbench"
+msgstr "โต๊ะทำงานของฉัน"
+
+#. module: laboratory_management
+msgid "Operations Setup"
+msgstr "การตั้งค่าการปฏิบัติงาน"
+
+#. module: laboratory_management
+msgid "Overdue Invoices"
+msgstr "ใบแจ้งหนี้ค้างชำระ"
+
+#. module: laboratory_management
+msgid "Permission Audits"
+msgstr "การตรวจสอบสิทธิ์"
+
+#. module: laboratory_management
+msgid "Permission Matrix"
+msgstr "เมทริกซ์สิทธิ์"
+
+#. module: laboratory_management
+msgid "Permission Repairs"
+msgstr "การซ่อมสิทธิ์"
+
+#. module: laboratory_management
+msgid "QC & EQA"
+msgstr "QC และ EQA"
+
+#. module: laboratory_management
+msgid "QC Trend Profiles"
+msgstr "โปรไฟล์แนวโน้ม QC"
+
+#. module: laboratory_management
+msgid "QC Trend Snapshots"
+msgstr "สแนปชอตแนวโน้ม QC"
+
+#. module: laboratory_management
+msgid "Quality Programs"
+msgstr "โครงการคุณภาพ"
+
+#. module: laboratory_management
+msgid "Quote Revisions"
+msgstr "การแก้ไขใบเสนอราคา"
+
+#. module: laboratory_management
+msgid "Receive Sessions"
+msgstr "รอบการรับตัวอย่าง"
+
+#. module: laboratory_management
+msgid "Report Dispatches"
+msgstr "การส่งรายงาน"
+
+#. module: laboratory_management
+msgid "Report Follow-up"
+msgstr "การติดตามรายงาน"
+
+#. module: laboratory_management
+msgid "Request Intake"
+msgstr "รับคำขอ"
+
+#. module: laboratory_management
+msgid "Request Invoices"
+msgstr "ใบแจ้งหนี้คำขอ"
+
+#. module: laboratory_management
+msgid "Request Payments"
+msgstr "การชำระเงินคำขอ"
+
+#. module: laboratory_management
+msgid "Requests to Quote"
+msgstr "คำขอที่ต้องเสนอราคา"
+
+#. module: laboratory_management
+msgid "Requests to Triage"
+msgstr "คำขอที่ต้องคัดกรอง"
+
+#. module: laboratory_management
+msgid "Result Review"
+msgstr "ทบทวนผล"
+
+#. module: laboratory_management
+msgid "Retest Analytics"
+msgstr "การวิเคราะห์การทดสอบซ้ำ"
+
+#. module: laboratory_management
+msgid "Retest Policies"
+msgstr "นโยบายการทดสอบซ้ำ"
+
+#. module: laboratory_management
+msgid "Retest Strategies"
+msgstr "กลยุทธ์การทดสอบซ้ำ"
+
+#. module: laboratory_management
+msgid "Review Reason Templates"
+msgstr "เทมเพลตเหตุผลการทบทวน"
+
+#. module: laboratory_management
+msgid "Role Profiles"
+msgstr "โปรไฟล์บทบาท"
+
+#. module: laboratory_management
+msgid "Run Permission Audit"
+msgstr "เรียกใช้การตรวจสอบสิทธิ์"
+
+#. module: laboratory_management
+msgid "SOP & Rules"
+msgstr "SOP และกฎ"
+
+#. module: laboratory_management
+msgid "SOP Branch Rules"
+msgstr "กฎสาขา SOP"
+
+#. module: laboratory_management
+msgid "SOP Branch Runs"
+msgstr "รอบการทำงานสาขา SOP"
+
+#. module: laboratory_management
+msgid "SOP Dashboard"
+msgstr "แดชบอร์ด SOP"
+
+#. module: laboratory_management
+msgid "SOP Events"
+msgstr "เหตุการณ์ SOP"
+
+#. module: laboratory_management
+msgid "SOP Executions"
+msgstr "การดำเนินการ SOP"
+
+#. module: laboratory_management
+msgid "SOP Versions"
+msgstr "เวอร์ชัน SOP"
+
+#. module: laboratory_management
+msgid "Sample Workflow"
+msgstr "เวิร์กโฟลว์ตัวอย่าง"
+
+#. module: laboratory_management
+msgid "Storage Events"
+msgstr "เหตุการณ์การจัดเก็บ"
+
+#. module: laboratory_management
+msgid "Storage Locations"
+msgstr "ตำแหน่งจัดเก็บ"
+
+#. module: laboratory_management
+msgid "Storage Overdue"
+msgstr "การจัดเก็บเกินกำหนด"
+
+#. module: laboratory_management
+msgid "Storage Queue"
+msgstr "คิวจัดเก็บ"
+
+#. module: laboratory_management
+msgid "Task Board"
+msgstr "บอร์ดงาน"
+
+#. module: laboratory_management
+msgid "Task SLA Policies"
+msgstr "นโยบาย SLA งาน"
+
+#. module: laboratory_management
+msgid "Test Requests"
+msgstr "คำขอตรวจ"
+
+#. module: laboratory_management
+msgid "Training Sessions"
+msgstr "รอบการฝึกอบรม"
+
+#. module: laboratory_management
+msgid "Unacknowledged Dispatches"
+msgstr "การส่งที่ยังไม่รับทราบ"
+
+#. module: laboratory_management
+msgid "Workbench & Tasks"
+msgstr "โต๊ะทำงานและงาน"
+
+#. module: laboratory_management
+msgid "Workbench Rule Runs"
+msgstr "รอบการทำงานกฎโต๊ะทำงาน"
+
+#. module: laboratory_management
+msgid "Workflow Profiles"
+msgstr "โปรไฟล์เวิร์กโฟลว์"
+
+#. module: laboratory_management
+msgid "Workstation Tasks"
+msgstr "งานเวิร์กสเตชัน"

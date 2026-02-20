@@ -466,3 +466,89 @@ class TestSopInterfaceCompliance(TransactionCase):
         self.assertIn(job.state, ("retry", "failed"))
         self.assertEqual(job.ack_code, "AE")
         self.assertTrue(job.error_message)
+
+    def test_22_retry_strategy_exponential_backoff(self):
+        endpoint = self.env["lab.interface.endpoint"].create(
+            {
+                "name": "Backoff Endpoint",
+                "code": "ACK-EXP-001",
+                "system_type": "his",
+                "direction": "outbound",
+                "protocol": "rest",
+                "retry_limit": 5,
+                "retry_strategy": "exponential",
+                "retry_interval_minutes": 5,
+                "retry_backoff_factor": 2.0,
+                "retry_max_interval_minutes": 20,
+                "dead_letter_enabled": False,
+            }
+        )
+        request = self.env["lab.test.request"].create(
+            {
+                "requester_partner_id": self.partner.id,
+                "request_type": "individual",
+                "patient_name": self.partner.name,
+                "priority": "routine",
+                "sample_type": "blood",
+                "line_ids": [(0, 0, {"line_type": "service", "service_id": self.service.id, "quantity": 1})],
+            }
+        )
+        request.action_submit()
+        job = request.interface_job_ids.filtered(lambda j: j.endpoint_id == endpoint)[:1]
+        self.assertTrue(job)
+
+        # Attempt 1 -> AE => retry in 5m
+        job.action_process()
+        job.action_apply_ack(ack_code="AE", ack_message="attempt1")
+        self.assertEqual(job.state, "retry")
+        self.assertEqual(job.retry_delay_minutes, 5)
+        self.assertTrue(job.next_retry_at)
+
+        # Attempt 2 -> AE => retry in 10m
+        job.next_retry_at = fields.Datetime.now()
+        job.action_process()
+        job.action_apply_ack(ack_code="AE", ack_message="attempt2")
+        self.assertEqual(job.state, "retry")
+        self.assertEqual(job.retry_delay_minutes, 10)
+
+        # Attempt 3 -> AE => capped to 20m (not 20+)
+        job.next_retry_at = fields.Datetime.now()
+        job.action_process()
+        job.action_apply_ack(ack_code="AE", ack_message="attempt3")
+        self.assertEqual(job.state, "retry")
+        self.assertEqual(job.retry_delay_minutes, 20)
+
+    def test_23_retry_window_exceeded_stops_retry(self):
+        endpoint = self.env["lab.interface.endpoint"].create(
+            {
+                "name": "Window Endpoint",
+                "code": "ACK-WIN-001",
+                "system_type": "his",
+                "direction": "outbound",
+                "protocol": "rest",
+                "retry_limit": 5,
+                "retry_strategy": "fixed",
+                "retry_interval_minutes": 120,
+                "retry_window_hours": 1,
+                "dead_letter_enabled": False,
+            }
+        )
+        request = self.env["lab.test.request"].create(
+            {
+                "requester_partner_id": self.partner.id,
+                "request_type": "individual",
+                "patient_name": self.partner.name,
+                "priority": "routine",
+                "sample_type": "blood",
+                "line_ids": [(0, 0, {"line_type": "service", "service_id": self.service.id, "quantity": 1})],
+            }
+        )
+        request.action_submit()
+        job = request.interface_job_ids.filtered(lambda j: j.endpoint_id == endpoint)[:1]
+        self.assertTrue(job)
+
+        job.action_process()
+        job.action_apply_ack(ack_code="AE", ack_message="window check")
+        self.assertEqual(job.state, "failed")
+        self.assertFalse(job.next_retry_at)
+        self.assertIn("Retry window exceeded", job.error_message or "")

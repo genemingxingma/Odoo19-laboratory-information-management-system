@@ -3056,3 +3056,371 @@ msgstr "AI审核时间线"
 msgid "AI Pending Review"
 msgstr "AI待审核"
 
+
+#. module: laboratory_management
+msgid "AI Interpretations"
+msgstr "AI解读"
+
+#. module: laboratory_management
+msgid "Ack Signatures"
+msgstr "签收签名"
+
+#. module: laboratory_management
+msgid "Assignment Rules"
+msgstr "分配规则"
+
+#. module: laboratory_management
+msgid "Catalog & Templates"
+msgstr "目录与模板"
+
+#. module: laboratory_management
+msgid "Compliance Audit Reports"
+msgstr "合规审计报告"
+
+#. module: laboratory_management
+msgid "Compliance Reports"
+msgstr "合规报告"
+
+#. module: laboratory_management
+msgid "Custody Batch Lines"
+msgstr "交接批次明细"
+
+#. module: laboratory_management
+msgid "Custody Batches"
+msgstr "交接批次"
+
+#. module: laboratory_management
+msgid "Custody Escalations"
+msgstr "交接升级记录"
+
+#. module: laboratory_management
+msgid "Custody Exception Templates"
+msgstr "交接异常模板"
+
+#. module: laboratory_management
+msgid "Custody Investigations"
+msgstr "交接调查"
+
+#. module: laboratory_management
+msgid "Custody Operations"
+msgstr "交接作业"
+
+#. module: laboratory_management
+msgid "Custody Quality"
+msgstr "交接质量"
+
+#. module: laboratory_management
+msgid "Custody SLA Policies"
+msgstr "交接SLA策略"
+
+#. module: laboratory_management
+msgid "Custody Sign-offs"
+msgstr "交接签核"
+
+#. module: laboratory_management
+msgid "Decision Runs"
+msgstr "决策运行记录"
+
+#. module: laboratory_management
+msgid "Decision Thresholds"
+msgstr "决策阈值"
+
+#. module: laboratory_management
+msgid "Department Queue Rules"
+msgstr "科室队列规则"
+
+#. module: laboratory_management
+msgid "Department SOP"
+msgstr "科室SOP"
+
+#. module: laboratory_management
+msgid "Department Workbench"
+msgstr "科室工作台"
+
+#. module: laboratory_management
+msgid "Digest Notification Config"
+msgstr "摘要通知配置"
+
+#. module: laboratory_management
+msgid "Disposal Records"
+msgstr "处置记录"
+
+#. module: laboratory_management
+msgid "EQA Rounds"
+msgstr "室间质评轮次"
+
+#. module: laboratory_management
+msgid "EQA Schemes"
+msgstr "室间质评方案"
+
+#. module: laboratory_management
+msgid "Exception Decisions"
+msgstr "异常决策"
+
+#. module: laboratory_management
+msgid "Exception Templates"
+msgstr "异常模板"
+
+#. module: laboratory_management
+msgid "Governance & Compliance"
+msgstr "治理与合规"
+
+#. module: laboratory_management
+msgid "Governance Workbench"
+msgstr "治理工作台"
+
+#. module: laboratory_management
+msgid "HL7 Templates"
+msgstr "HL7模板"
+
+#. module: laboratory_management
+msgid "Interface Analytics"
+msgstr "接口分析"
+
+#. module: laboratory_management
+msgid "Interface Audit Logs"
+msgstr "接口审计日志"
+
+#. module: laboratory_management
+msgid "Interface Endpoints"
+msgstr "接口端点"
+
+#. module: laboratory_management
+msgid "Interface Jobs"
+msgstr "接口任务"
+
+#. module: laboratory_management
+msgid "Interface Reconciliation"
+msgstr "接口对账"
+
+#. module: laboratory_management
+msgid "Interface Replay"
+msgstr "接口重放"
+
+#. module: laboratory_management
+msgid "Interfaces & Imports"
+msgstr "接口与导入"
+
+#. module: laboratory_management
+msgid "Interfaces & Protocols"
+msgstr "接口与协议"
+
+#. module: laboratory_management
+msgid "Internal Audits"
+msgstr "内部审计"
+
+#. module: laboratory_management
+msgid "Inventory & Storage"
+msgstr "库存与存储"
+
+#. module: laboratory_management
+msgid "Investigation Actions"
+msgstr "调查措施"
+
+#. module: laboratory_management
+msgid "KPI Snapshots"
+msgstr "KPI快照"
+
+#. module: laboratory_management
+msgid "Lab Ecommerce Products"
+msgstr "实验室电商产品"
+
+#. module: laboratory_management
+msgid "Manual Review Queue"
+msgstr "人工复核队列"
+
+#. module: laboratory_management
+msgid "Mapping Profiles"
+msgstr "映射配置"
+
+#. module: laboratory_management
+msgid "My Manual Reviews"
+msgstr "我的人工复核"
+
+#. module: laboratory_management
+msgid "My Workbench"
+msgstr "我的工作台"
+
+#. module: laboratory_management
+msgid "Operations Setup"
+msgstr "运营设置"
+
+#. module: laboratory_management
+msgid "Overdue Invoices"
+msgstr "逾期发票"
+
+#. module: laboratory_management
+msgid "Permission Audits"
+msgstr "权限审计"
+
+#. module: laboratory_management
+msgid "Permission Matrix"
+msgstr "权限矩阵"
+
+#. module: laboratory_management
+msgid "Permission Repairs"
+msgstr "权限修复"
+
+#. module: laboratory_management
+msgid "QC & EQA"
+msgstr "质控与室间质评"
+
+#. module: laboratory_management
+msgid "QC Trend Profiles"
+msgstr "质控趋势配置"
+
+#. module: laboratory_management
+msgid "QC Trend Snapshots"
+msgstr "质控趋势快照"
+
+#. module: laboratory_management
+msgid "Quality Programs"
+msgstr "质量项目"
+
+#. module: laboratory_management
+msgid "Quote Revisions"
+msgstr "报价修订"
+
+#. module: laboratory_management
+msgid "Receive Sessions"
+msgstr "接收会话"
+
+#. module: laboratory_management
+msgid "Report Dispatches"
+msgstr "报告发送"
+
+#. module: laboratory_management
+msgid "Report Follow-up"
+msgstr "报告跟踪"
+
+#. module: laboratory_management
+msgid "Request Intake"
+msgstr "申请受理"
+
+#. module: laboratory_management
+msgid "Request Invoices"
+msgstr "申请发票"
+
+#. module: laboratory_management
+msgid "Request Payments"
+msgstr "申请付款"
+
+#. module: laboratory_management
+msgid "Requests to Quote"
+msgstr "待报价申请"
+
+#. module: laboratory_management
+msgid "Requests to Triage"
+msgstr "待分诊申请"
+
+#. module: laboratory_management
+msgid "Result Review"
+msgstr "结果复核"
+
+#. module: laboratory_management
+msgid "Retest Analytics"
+msgstr "复检分析"
+
+#. module: laboratory_management
+msgid "Retest Policies"
+msgstr "复检策略"
+
+#. module: laboratory_management
+msgid "Retest Strategies"
+msgstr "复检方案"
+
+#. module: laboratory_management
+msgid "Review Reason Templates"
+msgstr "复核原因模板"
+
+#. module: laboratory_management
+msgid "Role Profiles"
+msgstr "角色配置"
+
+#. module: laboratory_management
+msgid "Run Permission Audit"
+msgstr "执行权限审计"
+
+#. module: laboratory_management
+msgid "SOP & Rules"
+msgstr "SOP与规则"
+
+#. module: laboratory_management
+msgid "SOP Branch Rules"
+msgstr "SOP分支规则"
+
+#. module: laboratory_management
+msgid "SOP Branch Runs"
+msgstr "SOP分支运行记录"
+
+#. module: laboratory_management
+msgid "SOP Dashboard"
+msgstr "SOP看板"
+
+#. module: laboratory_management
+msgid "SOP Events"
+msgstr "SOP事件"
+
+#. module: laboratory_management
+msgid "SOP Executions"
+msgstr "SOP执行"
+
+#. module: laboratory_management
+msgid "SOP Versions"
+msgstr "SOP版本"
+
+#. module: laboratory_management
+msgid "Sample Workflow"
+msgstr "样本流程"
+
+#. module: laboratory_management
+msgid "Storage Events"
+msgstr "存储事件"
+
+#. module: laboratory_management
+msgid "Storage Locations"
+msgstr "存储位置"
+
+#. module: laboratory_management
+msgid "Storage Overdue"
+msgstr "存储超期"
+
+#. module: laboratory_management
+msgid "Storage Queue"
+msgstr "存储队列"
+
+#. module: laboratory_management
+msgid "Task Board"
+msgstr "任务看板"
+
+#. module: laboratory_management
+msgid "Task SLA Policies"
+msgstr "任务SLA策略"
+
+#. module: laboratory_management
+msgid "Test Requests"
+msgstr "检测申请"
+
+#. module: laboratory_management
+msgid "Training Sessions"
+msgstr "培训场次"
+
+#. module: laboratory_management
+msgid "Unacknowledged Dispatches"
+msgstr "未签收发送"
+
+#. module: laboratory_management
+msgid "Workbench & Tasks"
+msgstr "工作台与任务"
+
+#. module: laboratory_management
+msgid "Workbench Rule Runs"
+msgstr "工作台规则运行"
+
+#. module: laboratory_management
+msgid "Workflow Profiles"
+msgstr "流程配置"
+
+#. module: laboratory_management
+msgid "Workstation Tasks"
+msgstr "工作站任务"

@@ -2,22 +2,25 @@
     "name": "Laboratory Management",
     "summary": "SENAITE-style laboratory workflow",
     "description": """
-Laboratory management workflow implemented on Odoo:
+Laboratory management workflow implemented on Odoo.
+
+Features:
 
 - Analysis service catalog and profiles
 - Sample accessioning and lifecycle
 - Analysis execution and worksheet batching
 - Result verification and report release
-- More portal functions. Enjoy....
+- More portal functions and AI functions
 """,
-    "version": "19.0.2.0.0",
+    "version": "19.0.2.0.6",
     "category": "Healthcare",
     "author": "mamingxing",
     "website": "https://imytest.local",
     "license": "LGPL-3",
+    "images": ["static/description/icon.png"],
     "depends": ["base", "mail", "portal", "website", "account", "product", "base_setup", "sale", "website_sale"],
     "assets": {
-        "web.assets_backend": [
+        "web.assets_web": [
             "laboratory_management/static/src/scss/chatter_sidebar.scss",
         ],
         "web.assets_frontend": [
@@ -102,6 +105,7 @@ Laboratory management workflow implemented on Odoo:
         "wizard/lab_custody_investigation_bulk_update_wizard_views.xml",
         "wizard/lab_result_import_wizard_views.xml",
         "wizard/lab_instrument_result_import_wizard_views.xml",
+        "views/lab_menu_restructure_views.xml",
         "views/portal_templates.xml",
     ],
     "installable": True,

@@ -4,7 +4,7 @@
         id="menu_laboratory_root"
         name="Laboratory"
         sequence="10"
-        groups="laboratory_management.group_lab_user"
+        groups="base.group_user"
         web_icon="laboratory_management,static/description/icon.png"
     />
 
@@ -12,7 +12,4 @@
     <menuitem id="menu_laboratory_quality" name="Quality" parent="menu_laboratory_root" sequence="20" groups="laboratory_management.group_lab_reviewer"/>
     <menuitem id="menu_laboratory_config" name="Configuration" parent="menu_laboratory_root" sequence="90" groups="laboratory_management.group_lab_manager"/>
 
-    <record id="menu_laboratory_root" model="ir.ui.menu">
-        <field name="group_ids" eval="[(6, 0, [ref('laboratory_management.group_lab_user')])]"/>
-    </record>
 </odoo>

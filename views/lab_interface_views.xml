@@ -47,6 +47,11 @@
                             <field name="outbound_ack_url" readonly="1"/>
                             <field name="timeout_seconds"/>
                             <field name="retry_limit"/>
+                            <field name="retry_strategy"/>
+                            <field name="retry_interval_minutes"/>
+                            <field name="retry_backoff_factor" invisible="retry_strategy != 'exponential'"/>
+                            <field name="retry_max_interval_minutes"/>
+                            <field name="retry_window_hours"/>
                             <field name="dead_letter_enabled"/>
                             <field name="outbound_mapping_profile_id"/>
                             <field name="inbound_mapping_profile_id"/>
@@ -132,6 +137,7 @@
                         </group>
                         <group>
                             <field name="attempt_count" readonly="1"/>
+                            <field name="retry_delay_minutes" readonly="1"/>
                             <field name="queued_at" readonly="1"/>
                             <field name="processed_at" readonly="1"/>
                             <field name="next_retry_at" readonly="1"/>

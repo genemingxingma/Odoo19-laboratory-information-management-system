@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Operations -->
+    <menuitem id="menu_lab_ops_requests" name="Request Intake" parent="menu_laboratory_operations" sequence="10"/>
+    <menuitem id="menu_lab_ops_samples" name="Sample Workflow" parent="menu_laboratory_operations" sequence="20"/>
+    <menuitem id="menu_lab_ops_tasks" name="Workbench &amp; Tasks" parent="menu_laboratory_operations" sequence="30"/>
+    <menuitem id="menu_lab_ops_interfaces" name="Interfaces &amp; Imports" parent="menu_laboratory_operations" sequence="40"/>
+    <menuitem id="menu_lab_ops_custody" name="Custody Operations" parent="menu_laboratory_operations" sequence="50"/>
+
+    <!-- Quality -->
+    <menuitem id="menu_lab_quality_review" name="Result Review" parent="menu_laboratory_quality" sequence="10"/>
+    <menuitem id="menu_lab_quality_qc" name="QC &amp; EQA" parent="menu_laboratory_quality" sequence="20"/>
+    <menuitem id="menu_lab_quality_custody" name="Custody Quality" parent="menu_laboratory_quality" sequence="30"/>
+    <menuitem id="menu_lab_quality_governance" name="Governance &amp; Compliance" parent="menu_laboratory_quality" sequence="40"/>
+    <menuitem id="menu_lab_quality_reports" name="Report Follow-up" parent="menu_laboratory_quality" sequence="50"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_lab_config_catalog" name="Catalog &amp; Templates" parent="menu_laboratory_config" sequence="10"/>
+    <menuitem id="menu_lab_config_sop" name="SOP &amp; Rules" parent="menu_laboratory_config" sequence="20"/>
+    <menuitem id="menu_lab_config_interface" name="Interfaces &amp; Protocols" parent="menu_laboratory_config" sequence="30"/>
+    <menuitem id="menu_lab_config_operations" name="Operations Setup" parent="menu_laboratory_config" sequence="40"/>
+    <menuitem id="menu_lab_config_inventory" name="Inventory &amp; Storage" parent="menu_laboratory_config" sequence="50"/>
+
+    <record id="menu_lab_test_request" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_requests"/></record>
+    <record id="menu_lab_test_request_triage" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_requests"/></record>
+    <record id="menu_lab_test_request_quote" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_requests"/></record>
+    <record id="menu_lab_test_request_quote_revision" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_requests"/></record>
+    <record id="menu_lab_request_invoice" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_requests"/></record>
+    <record id="menu_lab_request_invoice_overdue" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_requests"/></record>
+    <record id="menu_lab_request_payment" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_requests"/></record>
+
+    <record id="menu_lab_sample" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_samples"/></record>
+    <record id="menu_lab_analysis_queue" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_samples"/></record>
+    <record id="menu_lab_worksheet" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_samples"/></record>
+    <record id="menu_lab_storage_queue" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_samples"/></record>
+
+    <record id="menu_lab_sop_execution_dashboard" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_tasks"/></record>
+    <record id="menu_lab_sop_execution" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_tasks"/></record>
+    <record id="menu_lab_workstation_my_workbench" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_tasks"/></record>
+    <record id="menu_lab_department_workbench" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_tasks"/></record>
+    <record id="menu_lab_workbench_rule_runs" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_tasks"/></record>
+    <record id="menu_lab_task_board" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_tasks"/></record>
+    <record id="menu_lab_workstation_task" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_tasks"/></record>
+
+    <record id="menu_lab_interface_job" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_interfaces"/></record>
+    <record id="menu_lab_interface_audit_log" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_interfaces"/></record>
+    <record id="menu_lab_interface_replay_batch" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_interfaces"/></record>
+    <record id="menu_lab_import_job" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_interfaces"/></record>
+
+    <record id="menu_lab_custody_batch" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_custody"/></record>
+    <record id="menu_lab_custody_receive_session" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_ops_custody"/></record>
+
+    <record id="menu_lab_sample_to_verify" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_review"/></record>
+    <record id="menu_lab_manual_review_queue" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_review"/></record>
+    <record id="menu_lab_my_manual_review_queue" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_review"/></record>
+    <record id="menu_lab_sample_ai_pending_review" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_review"/></record>
+    <record id="menu_lab_sample_ai_interpretation" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_review"/></record>
+    <record id="menu_lab_sop_execution_event" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_review"/></record>
+    <record id="menu_lab_sop_exception_decision_run" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_review"/></record>
+    <record id="menu_lab_retest_analytics_report" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_review"/></record>
+
+    <record id="menu_lab_qc_material" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_qc"/></record>
+    <record id="menu_lab_qc_run" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_qc"/></record>
+    <record id="menu_lab_qc_trend_profile" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_qc"/></record>
+    <record id="menu_lab_qc_trend_snapshot" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_qc"/></record>
+    <record id="menu_lab_quality_program" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_qc"/></record>
+    <record id="menu_lab_quality_audit" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_qc"/></record>
+    <record id="menu_lab_quality_training" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_qc"/></record>
+    <record id="menu_lab_quality_kpi" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_qc"/></record>
+    <record id="menu_lab_eqa_scheme" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_qc"/></record>
+    <record id="menu_lab_eqa_round" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_qc"/></record>
+    <record id="menu_lab_compliance_snapshot" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_qc"/></record>
+
+    <record id="menu_lab_custody_batch_line" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_custody"/></record>
+    <record id="menu_lab_custody_batch_signoff" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_custody"/></record>
+    <record id="menu_lab_custody_investigation" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_custody"/></record>
+    <record id="menu_lab_custody_investigation_action" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_custody"/></record>
+    <record id="menu_lab_custody_escalation_log" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_custody"/></record>
+
+    <record id="menu_lab_nonconformance" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_governance"/></record>
+    <record id="menu_lab_governance_workbench" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_governance"/></record>
+    <record id="menu_lab_interface_reconciliation_report" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_governance"/></record>
+    <record id="menu_lab_permission_audit_snapshot" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_governance"/></record>
+    <record id="menu_lab_permission_audit_repair" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_governance"/></record>
+    <record id="menu_lab_compliance_audit_report" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_governance"/></record>
+    <record id="menu_lab_interface_analytics_report" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_governance"/></record>
+    <record id="menu_lab_sop_branch_run" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_governance"/></record>
+
+    <record id="menu_lab_report_dispatch" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_reports"/></record>
+    <record id="menu_lab_report_dispatch_unacked" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_reports"/></record>
+    <record id="menu_lab_report_ack_signature" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_reports"/></record>
+    <record id="menu_lab_storage_overdue" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_reports"/></record>
+    <record id="menu_lab_storage_event" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_reports"/></record>
+    <record id="menu_lab_disposal_record" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_quality_reports"/></record>
+
+    <record id="menu_lab_service" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_catalog"/></record>
+    <record id="menu_lab_profile" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_catalog"/></record>
+    <record id="menu_lab_report_template" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_catalog"/></record>
+    <record id="menu_lab_review_reason_template" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_catalog"/></record>
+    <record id="menu_lab_ecommerce_products" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_catalog"/></record>
+
+    <record id="menu_lab_department_sop" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_sop"/></record>
+    <record id="menu_lab_department_sop_version" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_sop"/></record>
+    <record id="menu_lab_retest_policy" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_sop"/></record>
+    <record id="menu_lab_sop_retest_strategy" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_sop"/></record>
+    <record id="menu_lab_permission_matrix" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_sop"/></record>
+    <record id="menu_lab_sop_workflow_profile" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_sop"/></record>
+    <record id="menu_lab_sop_decision_threshold_profile" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_sop"/></record>
+    <record id="menu_lab_sop_exception_decision" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_sop"/></record>
+    <record id="menu_lab_sop_branch_rule" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_sop"/></record>
+    <record id="menu_lab_task_sla_policy" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_sop"/></record>
+
+    <record id="menu_lab_interface_endpoint" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_interface"/></record>
+    <record id="menu_lab_interface_mapping_profile" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_interface"/></record>
+    <record id="menu_lab_hl7_template" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_interface"/></record>
+    <record id="menu_lab_department_queue_rule" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_interface"/></record>
+
+    <record id="menu_lab_workstation_role_profile" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_operations"/></record>
+    <record id="menu_lab_workstation_assignment_rule" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_operations"/></record>
+    <record id="menu_lab_permission_audit_wizard" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_operations"/></record>
+    <record id="menu_lab_manual_review_digest_config" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_operations"/></record>
+    <record id="menu_lab_department_exception_template" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_operations"/></record>
+    <record id="menu_lab_custody_exception_template" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_operations"/></record>
+    <record id="menu_lab_custody_sla_policy" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_operations"/></record>
+
+    <record id="menu_lab_storage_location" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_inventory"/></record>
+    <record id="menu_lab_reagent_lot" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_inventory"/></record>
+    <record id="menu_lab_instrument" model="ir.ui.menu"><field name="parent_id" ref="menu_lab_config_inventory"/></record>
+</odoo>

@@ -55,6 +55,18 @@ class LabInterfaceEndpoint(models.Model):
     dead_letter_enabled = fields.Boolean(default=True)
     timeout_seconds = fields.Integer(default=30)
     retry_limit = fields.Integer(default=3)
+    retry_strategy = fields.Selection(
+        [("fixed", "Fixed Delay"), ("exponential", "Exponential Backoff")],
+        default="fixed",
+        required=True,
+    )
+    retry_interval_minutes = fields.Integer(default=10)
+    retry_backoff_factor = fields.Float(default=2.0)
+    retry_max_interval_minutes = fields.Integer(default=120)
+    retry_window_hours = fields.Integer(
+        default=24,
+        help="Maximum retry window since first queue time. 0 means no retry window limit.",
+    )
     mapping_schema = fields.Text(
         help="JSON mapping definition from internal fields to endpoint payload schema.",
     )
@@ -87,11 +99,44 @@ class LabInterfaceEndpoint(models.Model):
             rec.failed_count = len(rec.job_ids.filtered(lambda j: j.state in ("failed", "dead_letter")))
             rec.queued_count = len(rec.job_ids.filtered(lambda j: j.state in ("queued", "retry")))
 
-    @api.constrains("retry_limit", "timeout_seconds")
+    @api.constrains(
+        "retry_limit",
+        "timeout_seconds",
+        "retry_interval_minutes",
+        "retry_backoff_factor",
+        "retry_max_interval_minutes",
+        "retry_window_hours",
+    )
     def _check_limits(self):
         for rec in self:
             if rec.retry_limit < 0 or rec.timeout_seconds <= 0:
                 raise UserError(_("Retry limit must be >=0 and timeout must be >0."))
+            if rec.retry_interval_minutes <= 0:
+                raise UserError(_("Retry interval must be > 0 minutes."))
+            if rec.retry_backoff_factor < 1.0:
+                raise UserError(_("Retry backoff factor must be >= 1.0."))
+            if rec.retry_max_interval_minutes < 0:
+                raise UserError(_("Retry max interval must be >= 0 minutes."))
+            if rec.retry_window_hours < 0:
+                raise UserError(_("Retry window must be >= 0 hours."))
+
+    def _compute_retry_delay_minutes(self, attempt_count):
+        self.ensure_one()
+        base = max(int(self.retry_interval_minutes or 1), 1)
+        if self.retry_strategy == "exponential":
+            exponent = max((attempt_count or 1) - 1, 0)
+            delay = int(round(base * ((self.retry_backoff_factor or 1.0) ** exponent)))
+        else:
+            delay = base
+        if self.retry_max_interval_minutes:
+            delay = min(delay, int(self.retry_max_interval_minutes))
+        return max(delay, 1)
+
+    def _retry_deadline_for(self, queued_at):
+        self.ensure_one()
+        if not self.retry_window_hours:
+            return False
+        return fields.Datetime.add(queued_at or fields.Datetime.now(), hours=self.retry_window_hours)
 
     def action_view_jobs(self):
         self.ensure_one()
@@ -259,6 +304,7 @@ class LabInterfaceJob(models.Model):
     processed_at = fields.Datetime(readonly=True)
     attempt_count = fields.Integer(default=0, readonly=True)
     next_retry_at = fields.Datetime()
+    retry_delay_minutes = fields.Integer(readonly=True)
     audit_log_ids = fields.One2many("lab.interface.audit.log", "job_id", string="Audit Logs", readonly=True)
 
     @api.model_create_multi
@@ -515,15 +561,32 @@ class LabInterfaceJob(models.Model):
                 final_state = "dead_letter"
             else:
                 final_state = "failed"
+            retry_at = False
+            retry_delay = 0
         else:
-            final_state = "retry"
+            retry_delay = self.endpoint_id._compute_retry_delay_minutes(self.attempt_count)
+            retry_at = fields.Datetime.add(fields.Datetime.now(), minutes=retry_delay)
+            deadline = self.endpoint_id._retry_deadline_for(self.queued_at)
+            if deadline and retry_at > deadline:
+                final_state = "dead_letter" if self.endpoint_id.dead_letter_enabled else "failed"
+                message = _(
+                    "%(msg)s\nRetry window exceeded (deadline: %(deadline)s)."
+                ) % {
+                    "msg": message or "",
+                    "deadline": fields.Datetime.to_string(deadline),
+                }
+                retry_at = False
+                retry_delay = 0
+            else:
+                final_state = "retry"
         values = {
             "state": final_state,
             "error_message": message,
             "ack_code": "AE" if final_state in ("retry", "failed") else "AR",
             "dead_letter_reason": message if final_state == "dead_letter" else False,
             "processed_at": fields.Datetime.now(),
-            "next_retry_at": fields.Datetime.add(fields.Datetime.now(), minutes=10) if final_state == "retry" else False,
+            "next_retry_at": retry_at if final_state == "retry" else False,
+            "retry_delay_minutes": retry_delay if final_state == "retry" else 0,
         }
         self.write(values)
         self.env["lab.interface.audit.log"].log_event(
@@ -592,6 +655,9 @@ class LabInterfaceJob(models.Model):
                     "response_body": False,
                     "ack_code": False,
                     "next_retry_at": False,
+                    "retry_delay_minutes": 0,
+                    "attempt_count": 0,
+                    "queued_at": fields.Datetime.now(),
                 }
             )
             self.env["lab.interface.audit.log"].log_event(
