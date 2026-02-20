@@ -3424,3 +3424,469 @@ msgstr "โปรไฟล์เวิร์กโฟลว์"
 #. module: laboratory_management
 msgid "Workstation Tasks"
 msgstr "งานเวิร์กสเตชัน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_compliance_audit_report
+msgid "Compliance Audit Reports"
+msgstr "รายงานตรวจสอบการปฏิบัติตาม"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_compliance_snapshot
+msgid "Compliance Reports"
+msgstr "รายงานการปฏิบัติตาม"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_config_catalog
+msgid "Catalog & Templates"
+msgstr "แคตตาล็อกและเทมเพลต"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_config_interface
+msgid "Interfaces & Protocols"
+msgstr "อินเทอร์เฟซและโปรโตคอล"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_config_inventory
+msgid "Inventory & Storage"
+msgstr "คลังและการจัดเก็บ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_config_operations
+msgid "Operations Setup"
+msgstr "การตั้งค่าการปฏิบัติงาน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_config_sop
+msgid "SOP & Rules"
+msgstr "SOP และกฎ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_custody_batch
+msgid "Custody Batches"
+msgstr "ชุดส่งมอบ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_custody_batch_line
+msgid "Custody Batch Lines"
+msgstr "รายการย่อยชุดส่งมอบ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_custody_batch_signoff
+msgid "Custody Sign-offs"
+msgstr "การลงนามการส่งมอบ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_custody_escalation_log
+msgid "Custody Escalations"
+msgstr "การยกระดับการส่งมอบ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_custody_exception_template
+msgid "Custody Exception Templates"
+msgstr "เทมเพลตข้อยกเว้นการส่งมอบ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_custody_investigation
+msgid "Custody Investigations"
+msgstr "การสืบสวนการส่งมอบ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_custody_investigation_action
+msgid "Investigation Actions"
+msgstr "มาตรการสอบสวน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_custody_receive_session
+msgid "Receive Sessions"
+msgstr "รอบการรับตัวอย่าง"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_custody_sla_policy
+msgid "Custody SLA Policies"
+msgstr "นโยบาย SLA การส่งมอบ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_department_exception_template
+msgid "Exception Templates"
+msgstr "เทมเพลตข้อยกเว้น"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_department_queue_rule
+msgid "Department Queue Rules"
+msgstr "กฎคิวของแผนก"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_department_sop
+msgid "Department SOP"
+msgstr "SOP ของแผนก"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_department_sop_version
+msgid "SOP Versions"
+msgstr "เวอร์ชัน SOP"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_department_workbench
+msgid "Department Workbench"
+msgstr "โต๊ะทำงานของแผนก"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_disposal_record
+msgid "Disposal Records"
+msgstr "บันทึกการกำจัด"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_ecommerce_products
+msgid "Lab Ecommerce Products"
+msgstr "สินค้าตรวจแล็บอีคอมเมิร์ซ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_eqa_round
+msgid "EQA Rounds"
+msgstr "รอบ EQA"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_eqa_scheme
+msgid "EQA Schemes"
+msgstr "โครงการ EQA"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_governance_workbench
+msgid "Governance Workbench"
+msgstr "โต๊ะทำงานธรรมาภิบาล"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_hl7_template
+msgid "HL7 Templates"
+msgstr "เทมเพลต HL7"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_interface_analytics_report
+msgid "Interface Analytics"
+msgstr "การวิเคราะห์อินเทอร์เฟซ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_interface_audit_log
+msgid "Interface Audit Logs"
+msgstr "บันทึกตรวจสอบอินเทอร์เฟซ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_interface_endpoint
+msgid "Interface Endpoints"
+msgstr "ปลายทางอินเทอร์เฟซ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_interface_job
+msgid "Interface Jobs"
+msgstr "งานอินเทอร์เฟซ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_interface_mapping_profile
+msgid "Mapping Profiles"
+msgstr "โปรไฟล์การแมป"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_interface_reconciliation_report
+msgid "Interface Reconciliation"
+msgstr "กระทบยอดอินเทอร์เฟซ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_interface_replay_batch
+msgid "Interface Replay"
+msgstr "เล่นซ้ำอินเทอร์เฟซ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_manual_review_digest_config
+msgid "Digest Notification Config"
+msgstr "การตั้งค่าการแจ้งเตือนแบบสรุป"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_manual_review_queue
+msgid "Manual Review Queue"
+msgstr "คิวตรวจทานด้วยมือ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_my_manual_review_queue
+msgid "My Manual Reviews"
+msgstr "งานตรวจทานด้วยมือของฉัน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_ops_custody
+msgid "Custody Operations"
+msgstr "งานส่งมอบ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_ops_interfaces
+msgid "Interfaces & Imports"
+msgstr "อินเทอร์เฟซและการนำเข้า"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_ops_requests
+msgid "Request Intake"
+msgstr "รับคำขอ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_ops_samples
+msgid "Sample Workflow"
+msgstr "เวิร์กโฟลว์ตัวอย่าง"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_ops_tasks
+msgid "Workbench & Tasks"
+msgstr "โต๊ะทำงานและงาน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_permission_audit_repair
+msgid "Permission Repairs"
+msgstr "การซ่อมสิทธิ์"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_permission_audit_snapshot
+msgid "Permission Audits"
+msgstr "การตรวจสอบสิทธิ์"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_permission_audit_wizard
+msgid "Run Permission Audit"
+msgstr "เรียกใช้การตรวจสอบสิทธิ์"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_permission_matrix
+msgid "Permission Matrix"
+msgstr "เมทริกซ์สิทธิ์"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_qc_trend_profile
+msgid "QC Trend Profiles"
+msgstr "โปรไฟล์แนวโน้ม QC"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_qc_trend_snapshot
+msgid "QC Trend Snapshots"
+msgstr "สแนปชอตแนวโน้ม QC"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_quality_audit
+msgid "Internal Audits"
+msgstr "การตรวจสอบภายใน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_quality_custody
+msgid "Custody Quality"
+msgstr "คุณภาพการส่งมอบ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_quality_governance
+msgid "Governance & Compliance"
+msgstr "ธรรมาภิบาลและการปฏิบัติตาม"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_quality_kpi
+msgid "KPI Snapshots"
+msgstr "สแนปชอต KPI"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_quality_program
+msgid "Quality Programs"
+msgstr "โครงการคุณภาพ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_quality_qc
+msgid "QC & EQA"
+msgstr "QC และ EQA"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_quality_reports
+msgid "Report Follow-up"
+msgstr "การติดตามรายงาน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_quality_review
+msgid "Result Review"
+msgstr "ทบทวนผล"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_quality_training
+msgid "Training Sessions"
+msgstr "รอบการฝึกอบรม"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_report_ack_signature
+msgid "Ack Signatures"
+msgstr "ลายเซ็นการรับทราบ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_report_dispatch
+msgid "Report Dispatches"
+msgstr "การส่งรายงาน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_report_dispatch_unacked
+msgid "Unacknowledged Dispatches"
+msgstr "การส่งที่ยังไม่รับทราบ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_request_invoice
+msgid "Request Invoices"
+msgstr "ใบแจ้งหนี้คำขอ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_request_invoice_overdue
+msgid "Overdue Invoices"
+msgstr "ใบแจ้งหนี้ค้างชำระ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_request_payment
+msgid "Request Payments"
+msgstr "การชำระเงินคำขอ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_retest_analytics_report
+msgid "Retest Analytics"
+msgstr "การวิเคราะห์การทดสอบซ้ำ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_retest_policy
+msgid "Retest Policies"
+msgstr "นโยบายการทดสอบซ้ำ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_review_reason_template
+msgid "Review Reason Templates"
+msgstr "เทมเพลตเหตุผลการทบทวน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sample_ai_interpretation
+msgid "AI Interpretations"
+msgstr "การแปลผลโดย AI"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sample_ai_pending_review
+msgid "AI Pending Review"
+msgstr "AI รอตรวจทาน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sop_branch_rule
+msgid "SOP Branch Rules"
+msgstr "กฎสาขา SOP"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sop_branch_run
+msgid "SOP Branch Runs"
+msgstr "รอบการทำงานสาขา SOP"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sop_decision_threshold_profile
+msgid "Decision Thresholds"
+msgstr "เกณฑ์การตัดสินใจ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sop_exception_decision
+msgid "Exception Decisions"
+msgstr "การตัดสินใจข้อยกเว้น"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sop_exception_decision_run
+msgid "Decision Runs"
+msgstr "รอบการตัดสินใจ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sop_execution
+msgid "SOP Executions"
+msgstr "การดำเนินการ SOP"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sop_execution_dashboard
+msgid "SOP Dashboard"
+msgstr "แดชบอร์ด SOP"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sop_execution_event
+msgid "SOP Events"
+msgstr "เหตุการณ์ SOP"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sop_retest_strategy
+msgid "Retest Strategies"
+msgstr "กลยุทธ์การทดสอบซ้ำ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_sop_workflow_profile
+msgid "Workflow Profiles"
+msgstr "โปรไฟล์เวิร์กโฟลว์"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_storage_event
+msgid "Storage Events"
+msgstr "เหตุการณ์การจัดเก็บ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_storage_location
+msgid "Storage Locations"
+msgstr "ตำแหน่งจัดเก็บ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_storage_overdue
+msgid "Storage Overdue"
+msgstr "การจัดเก็บเกินกำหนด"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_storage_queue
+msgid "Storage Queue"
+msgstr "คิวจัดเก็บ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_task_board
+msgid "Task Board"
+msgstr "บอร์ดงาน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_task_sla_policy
+msgid "Task SLA Policies"
+msgstr "นโยบาย SLA งาน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_test_request
+msgid "Test Requests"
+msgstr "คำขอตรวจ"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_test_request_quote
+msgid "Requests to Quote"
+msgstr "คำขอที่ต้องเสนอราคา"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_test_request_quote_revision
+msgid "Quote Revisions"
+msgstr "การแก้ไขใบเสนอราคา"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_test_request_triage
+msgid "Requests to Triage"
+msgstr "คำขอที่ต้องคัดกรอง"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_workbench_rule_runs
+msgid "Workbench Rule Runs"
+msgstr "รอบการทำงานกฎโต๊ะทำงาน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_workstation_assignment_rule
+msgid "Assignment Rules"
+msgstr "กฎการมอบหมาย"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_workstation_my_workbench
+msgid "My Workbench"
+msgstr "โต๊ะทำงานของฉัน"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_workstation_role_profile
+msgid "Role Profiles"
+msgstr "โปรไฟล์บทบาท"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_workstation_task
+msgid "Workstation Tasks"
+msgstr "งานเวิร์กสเตชัน"
+

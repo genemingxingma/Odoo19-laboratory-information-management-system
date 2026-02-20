@@ -552,3 +552,59 @@ class TestSopInterfaceCompliance(TransactionCase):
         self.assertEqual(job.state, "failed")
         self.assertFalse(job.next_retry_at)
         self.assertIn("Retry window exceeded", job.error_message or "")
+
+    def test_24_outbound_idempotency_avoids_duplicate_jobs(self):
+        request = self.env["lab.test.request"].create(
+            {
+                "requester_partner_id": self.partner.id,
+                "request_type": "individual",
+                "patient_name": self.partner.name,
+                "priority": "routine",
+                "sample_type": "blood",
+                "line_ids": [(0, 0, {"line_type": "service", "service_id": self.service.id, "quantity": 1})],
+            }
+        )
+        request.action_submit()
+        initial = request.interface_job_ids.filtered(lambda j: j.message_type == "order")
+        self.assertTrue(initial)
+        request._queue_interface_message("order")
+        after = request.interface_job_ids.filtered(lambda j: j.message_type == "order")
+        self.assertEqual(len(after), len(initial))
+
+    def test_25_ack_timeout_escalation_marks_job_overdue(self):
+        endpoint = self.env["lab.interface.endpoint"].create(
+            {
+                "name": "ACK Timeout Endpoint",
+                "code": "ACK-TIMEOUT-01",
+                "system_type": "his",
+                "direction": "outbound",
+                "protocol": "rest",
+                "require_outbound_ack": True,
+                "ack_timeout_minutes": 1,
+                "retry_limit": 1,
+                "dead_letter_enabled": False,
+            }
+        )
+        request = self.env["lab.test.request"].create(
+            {
+                "requester_partner_id": self.partner.id,
+                "request_type": "individual",
+                "patient_name": self.partner.name,
+                "priority": "routine",
+                "sample_type": "blood",
+                "line_ids": [(0, 0, {"line_type": "service", "service_id": self.service.id, "quantity": 1})],
+            }
+        )
+        request.action_submit()
+        job = request.interface_job_ids.filtered(lambda j: j.endpoint_id == endpoint)[:1]
+        self.assertTrue(job)
+        job.action_process()
+        self.assertEqual(job.state, "done")
+        self.assertEqual(job.ack_timeout_state, "pending")
+        self.assertFalse(job.ack_received_at)
+
+        job.ack_deadline_at = fields.Datetime.add(fields.Datetime.now(), minutes=-2)
+        self.env["lab.interface.job"]._cron_escalate_ack_timeout()
+
+        self.assertEqual(job.ack_timeout_state, "overdue")
+        self.assertTrue(job.ack_escalated_at)

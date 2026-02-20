@@ -12,7 +12,7 @@ Features:
 - Result verification and report release
 - More portal functions and AI functions
 """,
-    "version": "19.0.2.0.6",
+    "version": "19.0.2.0.8",
     "category": "Healthcare",
     "author": "mamingxing",
     "website": "https://imytest.local",
@@ -110,4 +110,5 @@ Features:
     ],
     "installable": True,
     "application": True,
+    "post_init_hook": "post_init_hook",
 }

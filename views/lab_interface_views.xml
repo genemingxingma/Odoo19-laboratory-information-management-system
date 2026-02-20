@@ -52,6 +52,9 @@
                             <field name="retry_backoff_factor" invisible="retry_strategy != 'exponential'"/>
                             <field name="retry_max_interval_minutes"/>
                             <field name="retry_window_hours"/>
+                            <field name="require_outbound_ack"/>
+                            <field name="ack_timeout_minutes"/>
+                            <field name="ack_escalation_group_id" invisible="not require_outbound_ack"/>
                             <field name="dead_letter_enabled"/>
                             <field name="outbound_mapping_profile_id"/>
                             <field name="inbound_mapping_profile_id"/>
@@ -107,6 +110,7 @@
                 <field name="sample_id"/>
                 <field name="state"/>
                 <field name="attempt_count"/>
+                <field name="ack_timeout_state"/>
                 <field name="queued_at"/>
                 <field name="processed_at"/>
             </list>
@@ -131,6 +135,7 @@
                             <field name="direction"/>
                             <field name="message_type"/>
                             <field name="external_uid"/>
+                            <field name="idempotency_key" readonly="1"/>
                             <field name="source_ip" readonly="1"/>
                             <field name="request_id"/>
                             <field name="sample_id"/>
@@ -143,6 +148,9 @@
                             <field name="next_retry_at" readonly="1"/>
                             <field name="ack_code" readonly="1"/>
                             <field name="ack_received_at" readonly="1"/>
+                            <field name="ack_deadline_at" readonly="1"/>
+                            <field name="ack_timeout_state" readonly="1"/>
+                            <field name="ack_escalated_at" readonly="1"/>
                             <field name="ack_source_ip" readonly="1"/>
                             <field name="response_code" readonly="1"/>
                         </group>

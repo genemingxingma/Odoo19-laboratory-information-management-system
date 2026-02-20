@@ -2,6 +2,7 @@ import json
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from ..hooks import sync_menu_i18n
 
 
 class LabInterfaceEndpoint(models.Model):
@@ -67,6 +68,9 @@ class LabInterfaceEndpoint(models.Model):
         default=24,
         help="Maximum retry window since first queue time. 0 means no retry window limit.",
     )
+    require_outbound_ack = fields.Boolean(default=False)
+    ack_timeout_minutes = fields.Integer(default=60)
+    ack_escalation_group_id = fields.Many2one("res.groups", string="ACK Escalation Group")
     mapping_schema = fields.Text(
         help="JSON mapping definition from internal fields to endpoint payload schema.",
     )
@@ -79,6 +83,11 @@ class LabInterfaceEndpoint(models.Model):
     queued_count = fields.Integer(compute="_compute_job_stats")
 
     _code_uniq = models.Constraint("unique(code)", "Interface endpoint code must be unique.")
+
+    @api.model
+    def action_sync_menu_translations(self):
+        sync_menu_i18n(self.env)
+        return True
 
     @api.depends("code")
     def _compute_inbound_url(self):
@@ -106,6 +115,7 @@ class LabInterfaceEndpoint(models.Model):
         "retry_backoff_factor",
         "retry_max_interval_minutes",
         "retry_window_hours",
+        "ack_timeout_minutes",
     )
     def _check_limits(self):
         for rec in self:
@@ -119,6 +129,8 @@ class LabInterfaceEndpoint(models.Model):
                 raise UserError(_("Retry max interval must be >= 0 minutes."))
             if rec.retry_window_hours < 0:
                 raise UserError(_("Retry window must be >= 0 hours."))
+            if rec.ack_timeout_minutes <= 0:
+                raise UserError(_("ACK timeout must be > 0 minutes."))
 
     def _compute_retry_delay_minutes(self, attempt_count):
         self.ensure_one()
@@ -295,9 +307,17 @@ class LabInterfaceJob(models.Model):
     source_ip = fields.Char(readonly=True)
     response_code = fields.Char(readonly=True)
     response_body = fields.Text(readonly=True)
+    idempotency_key = fields.Char(index=True, copy=False, readonly=True)
     ack_code = fields.Selection([("AA", "AA"), ("AE", "AE"), ("AR", "AR")], readonly=True)
     ack_received_at = fields.Datetime(readonly=True)
     ack_source_ip = fields.Char(readonly=True)
+    ack_deadline_at = fields.Datetime(readonly=True)
+    ack_timeout_state = fields.Selection(
+        [("none", "None"), ("pending", "Pending"), ("overdue", "Overdue")],
+        default="none",
+        readonly=True,
+    )
+    ack_escalated_at = fields.Datetime(readonly=True)
     dead_letter_reason = fields.Text(readonly=True)
     error_message = fields.Text(readonly=True)
     queued_at = fields.Datetime(default=fields.Datetime.now, readonly=True)
@@ -313,6 +333,48 @@ class LabInterfaceJob(models.Model):
             if vals.get("name", "New") == "New":
                 vals["name"] = "IFJ/%s" % fields.Datetime.now().strftime("%Y%m%d%H%M%S")
         return super().create(vals_list)
+
+    @api.model
+    def _build_outbound_idempotency_key(self, endpoint, message_type, request=False, sample=False):
+        parts = [endpoint.code or str(endpoint.id), message_type]
+        if request:
+            parts.append("REQ:%s" % (request.name or request.id))
+        if sample:
+            revision = sample.report_revision or 1
+            parts.append("SMP:%s:R%s" % ((sample.name or sample.id), revision))
+        return "|".join(str(p) for p in parts if p)
+
+    @api.model
+    def _get_or_create_outbound_job(self, *, endpoint, message_type, request=False, sample=False):
+        idempotency_key = self._build_outbound_idempotency_key(
+            endpoint=endpoint,
+            message_type=message_type,
+            request=request,
+            sample=sample,
+        )
+        existing = self.search(
+            [
+                ("endpoint_id", "=", endpoint.id),
+                ("direction", "=", "outbound"),
+                ("message_type", "=", message_type),
+                ("idempotency_key", "=", idempotency_key),
+                ("state", "not in", ("cancel", "failed", "dead_letter")),
+            ],
+            order="id desc",
+            limit=1,
+        )
+        if existing:
+            return existing
+        return self.create(
+            {
+                "endpoint_id": endpoint.id,
+                "direction": "outbound",
+                "message_type": message_type,
+                "request_id": request.id if request else False,
+                "sample_id": sample.id if sample else False,
+                "idempotency_key": idempotency_key,
+            }
+        )
 
     def _build_payload(self):
         self.ensure_one()
@@ -526,12 +588,20 @@ class LabInterfaceJob(models.Model):
                 ack_code = rec._extract_ack_code(code, response)
                 if ack_code in ("AE", "AR"):
                     raise UserError(_("Remote acknowledgement rejected message: %s") % (response or ack_code))
+                ack_required = bool(rec.direction == "outbound" and rec.endpoint_id.require_outbound_ack)
                 rec.write(
                     {
                         "state": "done",
                         "response_code": code,
                         "response_body": response,
-                        "ack_code": ack_code,
+                        "ack_code": False if ack_required else ack_code,
+                        "ack_deadline_at": (
+                            fields.Datetime.add(fields.Datetime.now(), minutes=rec.endpoint_id.ack_timeout_minutes)
+                            if ack_required
+                            else False
+                        ),
+                        "ack_timeout_state": "pending" if ack_required else "none",
+                        "ack_escalated_at": False,
                         "processed_at": fields.Datetime.now(),
                         "error_message": False,
                         "dead_letter_reason": False,
@@ -613,6 +683,9 @@ class LabInterfaceJob(models.Model):
                     "ack_code": ack_code,
                     "ack_received_at": fields.Datetime.now(),
                     "ack_source_ip": source_ip or False,
+                    "ack_deadline_at": False,
+                    "ack_timeout_state": "none",
+                    "ack_escalated_at": False,
                     "response_body": ack_message or rec.response_body,
                     "response_code": rec.response_code or "ACK",
                 }
@@ -658,6 +731,11 @@ class LabInterfaceJob(models.Model):
                     "retry_delay_minutes": 0,
                     "attempt_count": 0,
                     "queued_at": fields.Datetime.now(),
+                    "ack_received_at": False,
+                    "ack_source_ip": False,
+                    "ack_deadline_at": False,
+                    "ack_timeout_state": "none",
+                    "ack_escalated_at": False,
                 }
             )
             self.env["lab.interface.audit.log"].log_event(
@@ -693,6 +771,65 @@ class LabInterfaceJob(models.Model):
     def _cron_process_interface_jobs(self):
         return self.action_process_pending(limit=200)
 
+    @api.model
+    def _cron_escalate_ack_timeout(self):
+        now = fields.Datetime.now()
+        jobs = self.search(
+            [
+                ("direction", "=", "outbound"),
+                ("state", "=", "done"),
+                ("ack_timeout_state", "=", "pending"),
+                ("ack_received_at", "=", False),
+                ("ack_deadline_at", "!=", False),
+                ("ack_deadline_at", "<", now),
+            ],
+            limit=200,
+        )
+        if not jobs:
+            return True
+        todo = self.env.ref("mail.mail_activity_data_todo")
+        for rec in jobs:
+            rec.write(
+                {
+                    "ack_timeout_state": "overdue",
+                    "ack_escalated_at": now,
+                    "error_message": _(
+                        "Outbound ACK timeout exceeded at %(deadline)s."
+                    )
+                    % {"deadline": fields.Datetime.to_string(rec.ack_deadline_at)},
+                }
+            )
+            escalation_group = rec.endpoint_id.ack_escalation_group_id or self.env.ref(
+                "laboratory_management.group_lab_reviewer", raise_if_not_found=False
+            )
+            users = escalation_group.user_ids if escalation_group and escalation_group.user_ids else self.env.user
+            for user in users:
+                self.env["mail.activity"].create(
+                    {
+                        "activity_type_id": todo.id,
+                        "user_id": user.id,
+                        "res_model_id": self.env["ir.model"]._get_id("lab.interface.job"),
+                        "res_id": rec.id,
+                        "summary": _("Interface ACK timeout"),
+                        "note": _(
+                            "Job %(job)s for endpoint %(endpoint)s did not receive ACK before deadline."
+                        )
+                        % {"job": rec.name, "endpoint": rec.endpoint_id.display_name},
+                    }
+                )
+            self.env["lab.interface.audit.log"].log_event(
+                action="ack_timeout",
+                direction=rec.direction,
+                endpoint=rec.endpoint_id,
+                job=rec,
+                external_uid=rec.external_uid,
+                source_ip=rec.source_ip,
+                payload=rec.payload_json or rec.payload_text,
+                result={"deadline": fields.Datetime.to_string(rec.ack_deadline_at)},
+                state=rec.state,
+            )
+        return True
+
 
 class LabTestRequestInterfaceMixin(models.Model):
     _inherit = "lab.test.request"
@@ -716,13 +853,10 @@ class LabTestRequestInterfaceMixin(models.Model):
                 ]
             )
             for endpoint in endpoints:
-                jobs.create(
-                    {
-                        "endpoint_id": endpoint.id,
-                        "direction": "outbound",
-                        "message_type": message_type,
-                        "request_id": rec.id,
-                    }
+                jobs._get_or_create_outbound_job(
+                    endpoint=endpoint,
+                    message_type=message_type,
+                    request=rec,
                 )
 
     def action_submit(self):
@@ -754,6 +888,7 @@ class LabSampleInterfaceMixin(models.Model):
 
     def _queue_interface_report(self):
         endpoint_obj = self.env["lab.interface.endpoint"]
+        jobs = self.env["lab.interface.job"]
         for rec in self:
             endpoints = endpoint_obj.search(
                 [
@@ -763,14 +898,11 @@ class LabSampleInterfaceMixin(models.Model):
                 ]
             )
             for endpoint in endpoints:
-                self.env["lab.interface.job"].create(
-                    {
-                        "endpoint_id": endpoint.id,
-                        "direction": "outbound",
-                        "message_type": "report",
-                        "sample_id": rec.id,
-                        "request_id": rec.request_id.id,
-                    }
+                jobs._get_or_create_outbound_job(
+                    endpoint=endpoint,
+                    message_type="report",
+                    request=rec.request_id,
+                    sample=rec,
                 )
 
     def action_release_report(self):

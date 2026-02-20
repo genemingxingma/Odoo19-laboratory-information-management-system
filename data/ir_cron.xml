@@ -141,6 +141,16 @@
         <field name="active" eval="True"/>
     </record>
 
+    <record id="ir_cron_lab_interface_ack_timeout" model="ir.cron">
+        <field name="name">Lab: Escalate Interface ACK Timeout</field>
+        <field name="model_id" ref="model_lab_interface_job"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_escalate_ack_timeout()</field>
+        <field name="interval_number">10</field>
+        <field name="interval_type">minutes</field>
+        <field name="active" eval="True"/>
+    </record>
+
     <record id="ir_cron_lab_compliance_snapshot_monthly" model="ir.cron">
         <field name="name">Lab: Generate Compliance Snapshot</field>
         <field name="model_id" ref="model_lab_compliance_snapshot"/>
