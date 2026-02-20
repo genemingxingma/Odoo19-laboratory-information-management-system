@@ -1,5 +1,6 @@
 #portal_laboratory_category {
     margin-top: 0.75rem !important;
+    --bs-gutter-y: 0.75rem !important;
 }
 
 #portal_laboratory_category .o_portal_index_card {
@@ -8,7 +9,8 @@
 
 #portal_laboratory_category .o_portal_index_card > a {
     align-items: flex-start;
-    min-height: 118px;
+    height: 118px;
+    overflow: hidden;
 }
 
 #portal_laboratory_category .o_portal_index_card .o_portal_icon {
