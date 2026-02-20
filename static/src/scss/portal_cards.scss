@@ -1,10 +1,20 @@
 #portal_laboratory_category {
     margin-top: 0.75rem !important;
-    --bs-gutter-y: 0.75rem !important;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+    #portal_laboratory_category {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 #portal_laboratory_category .o_portal_index_card {
     margin-bottom: 0 !important;
+    width: auto !important;
+    padding: 0 !important;
 }
 
 #portal_laboratory_category .o_portal_index_card > a {
