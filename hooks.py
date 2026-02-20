@@ -1,5 +1,3 @@
-import html
-import re
 from pathlib import Path
 
 from odoo import SUPERUSER_ID, api
@@ -30,39 +28,75 @@ def _parse_po(msg_file):
     return terms
 
 
-def _extract_menu_xmlids(module_dir):
-    menu_names = {}
-    for view_path in (Path(module_dir) / "views").glob("*.xml"):
-        text = view_path.read_text(encoding="utf-8")
-        for match in re.finditer(r"<menuitem\s+([^>]+)>?", text):
-            attrs = match.group(1)
-            menu_id = re.search(r'id="([^"]+)"', attrs)
-            menu_name = re.search(r'name="([^"]+)"', attrs)
-            if menu_id and menu_name:
-                xmlid = f"laboratory_management.{menu_id.group(1)}"
-                menu_names[xmlid] = html.unescape(menu_name.group(1))
-    return menu_names
-
-
 def sync_menu_i18n(env):
     module_dir = Path(__file__).resolve().parent
-    menu_names = _extract_menu_xmlids(module_dir)
     zh_terms = _parse_po(module_dir / "i18n" / "zh_CN.po")
     th_terms = _parse_po(module_dir / "i18n" / "th_TH.po")
+    menu_ids = env["ir.model.data"].search(
+        [("module", "=", "laboratory_management"), ("model", "=", "ir.ui.menu")]
+    ).mapped("res_id")
+    if not menu_ids:
+        return
 
-    for xmlid, source_name in menu_names.items():
-        menu = env.ref(xmlid, raise_if_not_found=False)
-        if not menu:
-            continue
-        zh_name = zh_terms.get(source_name)
-        th_name = th_terms.get(source_name)
-        if zh_name:
-            menu.with_context(lang="zh_CN").name = zh_name
-        if th_name:
-            menu.with_context(lang="th_TH").name = th_name
+    cr = env.cr
+    for source_name, zh_name in zh_terms.items():
+        cr.execute(
+            """
+            UPDATE ir_ui_menu
+               SET name = jsonb_set(coalesce(name, '{}'::jsonb), '{zh_CN}', to_jsonb(%s::text), true),
+                   write_date = now()
+             WHERE id = ANY(%s)
+               AND name->>'en_US' = %s
+            """,
+            [zh_name, menu_ids, source_name],
+        )
+    for source_name, th_name in th_terms.items():
+        cr.execute(
+            """
+            UPDATE ir_ui_menu
+               SET name = jsonb_set(coalesce(name, '{}'::jsonb), '{th_TH}', to_jsonb(%s::text), true),
+                   write_date = now()
+             WHERE id = ANY(%s)
+               AND name->>'en_US' = %s
+            """,
+            [th_name, menu_ids, source_name],
+        )
+
+
+def sync_field_i18n(env):
+    module_dir = Path(__file__).resolve().parent
+    zh_terms = _parse_po(module_dir / "i18n" / "zh_CN.po")
+    th_terms = _parse_po(module_dir / "i18n" / "th_TH.po")
+    cr = env.cr
+    for source_name, zh_name in zh_terms.items():
+        cr.execute(
+            """
+            UPDATE ir_model_fields
+               SET field_description = jsonb_set(coalesce(field_description, '{}'::jsonb), '{zh_CN}', to_jsonb(%s::text), true),
+                   write_date = now()
+             WHERE model LIKE 'lab.%%'
+               AND field_description->>'en_US' = %s
+            """,
+            [zh_name, source_name],
+        )
+    for source_name, th_name in th_terms.items():
+        cr.execute(
+            """
+            UPDATE ir_model_fields
+               SET field_description = jsonb_set(coalesce(field_description, '{}'::jsonb), '{th_TH}', to_jsonb(%s::text), true),
+                   write_date = now()
+             WHERE model LIKE 'lab.%%'
+               AND field_description->>'en_US' = %s
+            """,
+            [th_name, source_name],
+        )
+
+
+def sync_i18n_terms(env):
+    sync_menu_i18n(env)
+    sync_field_i18n(env)
 
 
 def post_init_hook(cr, registry):
     env = api.Environment(cr, SUPERUSER_ID, {})
-    sync_menu_i18n(env)
-
+    sync_i18n_terms(env)

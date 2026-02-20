@@ -1,4 +1,4 @@
-from odoo import fields, http
+from odoo import _, fields, http
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager
 from odoo.http import request
 
@@ -217,10 +217,10 @@ class LaboratoryPortal(CustomerPortal):
     def portal_my_samples(self, page=1, sortby="date", **kwargs):
         domain = self._sample_domain_for_current_user()
         sortings = {
-            "date": {"label": "Newest", "order": "id desc"},
-            "name": {"label": "Accession", "order": "name asc"},
-            "state": {"label": "Status", "order": "state asc, id desc"},
-            "report": {"label": "Report Date", "order": "report_date desc, id desc"},
+            "date": {"label": _("Newest"), "order": "id desc"},
+            "name": {"label": _("Accession"), "order": "name asc"},
+            "state": {"label": _("Status"), "order": "state asc, id desc"},
+            "report": {"label": _("Report Date"), "order": "report_date desc, id desc"},
         }
         sort_order = sortings.get(sortby, sortings["date"])["order"]
 
@@ -344,10 +344,10 @@ class LaboratoryPortal(CustomerPortal):
     def portal_my_test_requests(self, page=1, sortby="date", **kwargs):
         domain = self._request_domain_for_current_user()
         sortings = {
-            "date": {"label": "Newest", "order": "id desc"},
-            "name": {"label": "Request No.", "order": "name asc"},
-            "state": {"label": "State", "order": "state asc, id desc"},
-            "amount": {"label": "Amount", "order": "amount_total desc, id desc"},
+            "date": {"label": _("Newest"), "order": "id desc"},
+            "name": {"label": _("Request No."), "order": "name asc"},
+            "state": {"label": _("State"), "order": "state asc, id desc"},
+            "amount": {"label": _("Amount"), "order": "amount_total desc, id desc"},
         }
         sort_order = sortings.get(sortby, sortings["date"])["order"]
 
@@ -450,11 +450,11 @@ class LaboratoryPortal(CustomerPortal):
     def portal_my_request_invoices(self, page=1, sortby="date", **kwargs):
         domain = self._request_invoice_domain_for_current_user()
         sortings = {
-            "date": {"label": "Newest", "order": "id desc"},
-            "name": {"label": "Invoice No.", "order": "name asc"},
-            "due": {"label": "Due Date", "order": "due_date asc, id desc"},
-            "state": {"label": "State", "order": "state asc, id desc"},
-            "residual": {"label": "Outstanding", "order": "amount_residual desc, id desc"},
+            "date": {"label": _("Newest"), "order": "id desc"},
+            "name": {"label": _("Invoice No."), "order": "name asc"},
+            "due": {"label": _("Due Date"), "order": "due_date asc, id desc"},
+            "state": {"label": _("State"), "order": "state asc, id desc"},
+            "residual": {"label": _("Outstanding"), "order": "amount_residual desc, id desc"},
         }
         sort_order = sortings.get(sortby, sortings["date"])["order"]
 
@@ -514,7 +514,7 @@ class LaboratoryPortal(CustomerPortal):
             }
         )
         invoice.message_post(
-            body="Portal payment submission received and pending review.",
+            body=_("Portal payment submission received and pending review."),
             subtype_xmlid="mail.mt_note",
         )
         return request.redirect("/my/lab/invoices/%s" % invoice_id)
@@ -595,10 +595,10 @@ class LaboratoryPortal(CustomerPortal):
     def portal_my_custody_batches(self, page=1, sortby="date", **kwargs):
         domain = self._batch_domain_for_current_user()
         sortings = {
-            "date": {"label": "Newest", "order": "id desc"},
-            "name": {"label": "Batch", "order": "name asc"},
-            "state": {"label": "State", "order": "state asc, id desc"},
-            "dispatch": {"label": "Dispatch", "order": "dispatch_time desc, id desc"},
+            "date": {"label": _("Newest"), "order": "id desc"},
+            "name": {"label": _("Batch"), "order": "name asc"},
+            "state": {"label": _("State"), "order": "state asc, id desc"},
+            "dispatch": {"label": _("Dispatch"), "order": "dispatch_time desc, id desc"},
         }
         sort_order = sortings.get(sortby, sortings["date"])["order"]
 
@@ -655,11 +655,11 @@ class LaboratoryPortal(CustomerPortal):
     def portal_my_custody_investigations(self, page=1, sortby="date", **kwargs):
         domain = self._investigation_domain_for_current_user()
         sortings = {
-            "date": {"label": "Newest", "order": "id desc"},
-            "name": {"label": "Investigation", "order": "name asc"},
-            "state": {"label": "State", "order": "state asc, id desc"},
-            "severity": {"label": "Severity", "order": "severity desc, id desc"},
-            "deadline": {"label": "Deadline", "order": "target_close_date asc, id desc"},
+            "date": {"label": _("Newest"), "order": "id desc"},
+            "name": {"label": _("Investigation"), "order": "name asc"},
+            "state": {"label": _("State"), "order": "state asc, id desc"},
+            "severity": {"label": _("Severity"), "order": "severity desc, id desc"},
+            "deadline": {"label": _("Deadline"), "order": "target_close_date asc, id desc"},
         }
         sort_order = sortings.get(sortby, sortings["date"])["order"]
 

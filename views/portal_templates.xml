@@ -16,6 +16,7 @@
                     <t t-set="url" t-value="'/my/lab/requests'"/>
                     <t t-set="text">Submit test requests and track request lifecycle</t>
                     <t t-set="placeholder_count" t-value="'lab_test_request_count'"/>
+                    <t t-set="config_card" t-value="True"/>
                 </t>
                 <t t-call="portal.portal_docs_entry">
                     <t t-set="icon" t-value="'/web/static/img/icons/money.png'"/>

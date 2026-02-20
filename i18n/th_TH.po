@@ -41,41 +41,41 @@ msgstr "'Label - %s' % (object.name)"
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 msgid "(Amended)"
-msgstr "(Amended)"
+msgstr "(แก้ไขเพิ่มเติม)"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_label_document
 msgid "<strong>Accession:</strong>"
-msgstr "<strong>Accession:</strong>"
+msgstr "<strong>ภาคยานุวัติ:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 msgid "<strong>Client:</strong>"
-msgstr "<strong>Client:</strong>"
+msgstr "<strong>ลูกค้า:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 msgid "<strong>Clinical Notes:</strong>"
-msgstr "<strong>Clinical Notes:</strong>"
+msgstr "<strong>หมายเหตุทางคลินิก:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_label_document
 msgid "<strong>Collected:</strong>"
-msgstr "<strong>Collected:</strong>"
+msgstr "<strong>รวบรวมแล้ว:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 msgid "<strong>Collection Date:</strong>"
-msgstr "<strong>Collection Date:</strong>"
+msgstr "<strong>วันที่เรียกเก็บเงิน:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
 msgid "<strong>Notes:</strong>"
-msgstr "<strong>Notes:</strong>"
+msgstr "<strong>หมายเหตุ:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
@@ -83,85 +83,85 @@ msgstr "<strong>Notes:</strong>"
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_label_document
 msgid "<strong>Patient:</strong>"
-msgstr "<strong>Patient:</strong>"
+msgstr "<strong>ผู้ป่วย:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 msgid "<strong>Physician:</strong>"
-msgstr "<strong>Physician:</strong>"
+msgstr "<strong>แพทย์:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 msgid "<strong>Priority:</strong>"
-msgstr "<strong>Priority:</strong>"
+msgstr "<strong>ลำดับความสำคัญ:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 msgid "<strong>Report Date:</strong>"
-msgstr "<strong>Report Date:</strong>"
+msgstr "<strong>วันที่รายงาน:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 msgid "<strong>Revision:</strong> R"
-msgstr "<strong>Revision:</strong> R"
+msgstr "<strong>การแก้ไข:</strong> อาร์"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 msgid "<strong>Status:</strong>"
-msgstr "<strong>Status:</strong>"
+msgstr "<strong>สถานะ:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 msgid "<strong>Template:</strong>"
-msgstr "<strong>Template:</strong>"
+msgstr "<strong>แม่แบบ:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
 msgid "<strong>Verified By:</strong>"
-msgstr "<strong>Verified By:</strong>"
+msgstr "<strong>ตรวจสอบโดย:</strong>"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_qc.py:0
 msgid "A QC run already exists for this material at the same datetime."
-msgstr "A QC run already exists for this material at the same datetime."
+msgstr "มีการดำเนินการควบคุมคุณภาพสำหรับเนื้อหานี้แล้ว ณ วันที่และเวลาเดียวกัน"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 msgid "Above reference range"
-msgstr "Above reference range"
+msgstr "เหนือช่วงอ้างอิง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__access_warning
 msgid "Access warning"
-msgstr "Access warning"
+msgstr "คำเตือนการเข้าถึง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__accession
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
 msgid "Accession"
-msgstr "Accession"
+msgstr "ภาคยานุวัติ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_receive_wizard__accession
 msgid "Accession / Barcode"
-msgstr "Accession / Barcode"
+msgstr "ภาคยานุวัติ / บาร์โค้ด"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__accession_barcode
 msgid "Accession Barcode"
-msgstr "Accession Barcode"
+msgstr "บาร์โค้ดภาคยานุวัติ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__name
 msgid "Accession No."
-msgstr "Accession No."
+msgstr "เลขที่ภาคยานุวัติ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_needaction
@@ -170,12 +170,12 @@ msgstr "Accession No."
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_needaction
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_needaction
 msgid "Action Needed"
-msgstr "Action Needed"
+msgstr "จำเป็นต้องดำเนินการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__action_type
 msgid "Action Type"
-msgstr "Action Type"
+msgstr "ประเภทการดำเนินการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__active
@@ -185,7 +185,7 @@ msgstr "Action Type"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__active
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__active
 msgid "Active"
-msgstr "Active"
+msgstr "ใช้งานอยู่"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_ids
@@ -194,7 +194,7 @@ msgstr "Active"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_ids
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_ids
 msgid "Activities"
-msgstr "Activities"
+msgstr "กิจกรรม"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_exception_decoration
@@ -203,7 +203,7 @@ msgstr "Activities"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_exception_decoration
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr "Activity Exception Decoration"
+msgstr "กิจกรรมตกแต่งข้อยกเว้น"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_state
@@ -212,7 +212,7 @@ msgstr "Activity Exception Decoration"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_state
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_state
 msgid "Activity State"
-msgstr "Activity State"
+msgstr "สถานะกิจกรรม"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_type_icon
@@ -221,30 +221,30 @@ msgstr "Activity State"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_type_icon
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_type_icon
 msgid "Activity Type Icon"
-msgstr "Activity Type Icon"
+msgstr "ไอคอนประเภทกิจกรรม"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Add at least one analysis before receiving sample."
-msgstr "Add at least one analysis before receiving sample."
+msgstr "เพิ่มการวิเคราะห์อย่างน้อยหนึ่งรายการก่อนรับตัวอย่าง"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_custody__event_type__aliquot
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__aliquot
 msgid "Aliquot"
-msgstr "Aliquot"
+msgstr "ส่วนลงตัว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__aliquot_count
 msgid "Aliquot Count"
-msgstr "Aliquot Count"
+msgstr "จำนวนส่วนลงตัว"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Aliquot created from %s"
-msgstr "Aliquot created from %s"
+msgstr "Aliquot สร้างขึ้นจาก %s"
 
 #. module: laboratory_management
 #. odoo-python
@@ -252,52 +252,52 @@ msgstr "Aliquot created from %s"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__aliquot_ids
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Aliquots"
-msgstr "Aliquots"
+msgstr "ส่วนลงตัว"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "All analyses completed, moved to verification queue"
-msgstr "All analyses completed, moved to verification queue"
+msgstr "การวิเคราะห์ทั้งหมดเสร็จสิ้นแล้ว ย้ายไปยังคิวการตรวจสอบแล้ว"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "All analyses must be done before moving to verification."
-msgstr "All analyses must be done before moving to verification."
+msgstr "ต้องทำการวิเคราะห์ทั้งหมดก่อนจะย้ายไปยังการยืนยัน"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "All profile services are already added."
-msgstr "All profile services are already added."
+msgstr "เพิ่มบริการโปรไฟล์ทั้งหมดแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__amend
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Amend Report"
-msgstr "Amend Report"
+msgstr "แก้ไขรายงาน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__amended_by_id
 msgid "Amended By"
-msgstr "Amended By"
+msgstr "แก้ไขเพิ่มเติมโดย"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__amended_date
 msgid "Amended Date"
-msgstr "Amended Date"
+msgstr "วันที่แก้ไข"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Amended report to revision R%s"
-msgstr "Amended report to revision R%s"
+msgstr "แก้ไขรายงานเพื่อแก้ไข R%s"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__amendment
 msgid "Amendment"
-msgstr "Amendment"
+msgstr "การแก้ไข"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
@@ -307,12 +307,12 @@ msgstr "ประวัติการแก้ไข"
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__amendment_note
 msgid "Amendment Note"
-msgstr "Amendment Note"
+msgstr "หมายเหตุการแก้ไข"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__amendment_ids
 msgid "Amendments"
-msgstr "Amendments"
+msgstr "การแก้ไข"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__analysis_ids
@@ -324,7 +324,7 @@ msgstr "รายการตรวจ"
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Analyses started"
-msgstr "Analyses started"
+msgstr "การวิเคราะห์เริ่มต้นขึ้น"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__analysis_id
@@ -334,63 +334,63 @@ msgstr "Analyses started"
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
 msgid "Analysis"
-msgstr "Analysis"
+msgstr "การวิเคราะห์"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_profile
 msgid "Analysis Profile"
-msgstr "Analysis Profile"
+msgstr "โปรไฟล์การวิเคราะห์"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_profile_line
 msgid "Analysis Profile Line"
-msgstr "Analysis Profile Line"
+msgstr "เส้นโปรไฟล์การวิเคราะห์"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_profile
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_profile
 msgid "Analysis Profiles"
-msgstr "Analysis Profiles"
+msgstr "โปรไฟล์การวิเคราะห์"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_analysis_queue
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_analysis_queue
 msgid "Analysis Queue"
-msgstr "Analysis Queue"
+msgstr "คิวการวิเคราะห์"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 msgid "Analysis Results"
-msgstr "Analysis Results"
+msgstr "ผลการวิเคราะห์"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_service
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_service
 msgid "Analysis Services"
-msgstr "Analysis Services"
+msgstr "บริการวิเคราะห์"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
 msgid "Analysis line not found for mapped service"
-msgstr "Analysis line not found for mapped service"
+msgstr "ไม่พบบรรทัดการวิเคราะห์สำหรับบริการที่แมป"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
 msgid "Analysis line not found for service code"
-msgstr "Analysis line not found for service code"
+msgstr "ไม่พบบรรทัดการวิเคราะห์สำหรับรหัสบริการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__analyst_id
 msgid "Analyst"
-msgstr "Analyst"
+msgstr "นักวิเคราะห์"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__state__assigned
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_search
 msgid "Assigned"
-msgstr "Assigned"
+msgstr "มอบหมายแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_attachment_count
@@ -399,43 +399,43 @@ msgstr "Assigned"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_attachment_count
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_attachment_count
 msgid "Attachment Count"
-msgstr "Attachment Count"
+msgstr "จำนวนไฟล์แนบ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__auto_mark_done
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__auto_mark_done
 msgid "Auto Mark Done"
-msgstr "Auto Mark Done"
+msgstr "ทำเครื่องหมายอัตโนมัติว่าเสร็จสิ้น"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 msgid "Back"
-msgstr "Back"
+msgstr "กลับ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 msgid "Below reference range"
-msgstr "Below reference range"
+msgstr "ต่ำกว่าช่วงอ้างอิง"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__blood
 msgid "Blood"
-msgstr "Blood"
+msgstr "เลือด"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
 msgid "CAPA"
-msgstr "CAPA"
+msgstr "คาปา"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__owner_id
 msgid "CAPA Owner"
-msgstr "CAPA Owner"
+msgstr "เจ้าของคาปา"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__capa
 msgid "CAPA Planned"
-msgstr "CAPA Planned"
+msgstr "CAPA วางแผนไว้"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_instrument_result_import_wizard_form
@@ -447,7 +447,7 @@ msgstr ""
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_result_import_wizard_form
 msgid "CSV Columns: accession, service_code, result, remark(optional)"
-msgstr "CSV Columns: accession, service_code, result, remark(optional)"
+msgstr "คอลัมน์ CSV: ภาคยานุวัติ, service_code, ผลลัพธ์, หมายเหตุ (ไม่บังคับ)"
 
 #. module: laboratory_management
 #. odoo-python
@@ -472,7 +472,7 @@ msgstr ""
 #: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
 #: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
 msgid "CSV must be UTF-8 encoded."
-msgstr "CSV must be UTF-8 encoded."
+msgstr "CSV จะต้องเข้ารหัส UTF-8"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_instrument_result_import_wizard_form
@@ -482,54 +482,54 @@ msgstr "CSV must be UTF-8 encoded."
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_receive_wizard_form
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_transfer_custody_wizard_form
 msgid "Cancel"
-msgstr "Cancel"
+msgstr "ยกเลิก"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__cancel
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__cancel
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__cancel
 msgid "Cancelled"
-msgstr "Cancelled"
+msgstr "ยกเลิกแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__client_id
 msgid "Client/Institution"
-msgstr "Client/Institution"
+msgstr "ลูกค้า/สถาบัน"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument__department__chemistry
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__department__chemistry
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__department__chemistry
 msgid "Clinical Chemistry"
-msgstr "Clinical Chemistry"
+msgstr "เคมีคลินิก"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_workbench_wizard_form
 msgid "Close"
-msgstr "Close"
+msgstr "ปิด"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__close_note
 msgid "Close Note"
-msgstr "Close Note"
+msgstr "ปิดหมายเหตุ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__closed
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_search
 msgid "Closed"
-msgstr "Closed"
+msgstr "ปิดแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__closed_by_id
 msgid "Closed By"
-msgstr "Closed By"
+msgstr "ปิดโดย"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__closed_date
 msgid "Closed Date"
-msgstr "Closed Date"
+msgstr "วันที่ปิดทำการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__code
@@ -538,23 +538,23 @@ msgstr "Closed Date"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__code
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__code
 msgid "Code"
-msgstr "Code"
+msgstr "รหัส"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
 msgid "Collected At"
-msgstr "Collected At"
+msgstr "รวบรวมไว้ที่"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__collection_date
 msgid "Collection Date"
-msgstr "Collection Date"
+msgstr "วันที่รวบรวม"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument_result_import_wizard__delimiter__,
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_result_import_wizard__delimiter__,
 msgid "Comma (,)"
-msgstr "Comma (,)"
+msgstr "จุลภาค (,)"
 
 #. module: laboratory_management
 #: model:ir.ui.menu,name:laboratory_management.menu_laboratory_config
@@ -564,25 +564,25 @@ msgstr "การตั้งค่า"
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__corrective_action
 msgid "Corrective Action"
-msgstr "Corrective Action"
+msgstr "การดำเนินการแก้ไข"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_capa.py:0
 msgid "Corrective and preventive actions are required before closing."
-msgstr "Corrective and preventive actions are required before closing."
+msgstr "ต้องมีการดำเนินการแก้ไขและป้องกันก่อนปิด"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__aliquot
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Create Aliquot"
-msgstr "Create Aliquot"
+msgstr "สร้าง Aliquot"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Created aliquot %s"
-msgstr "Created aliquot %s"
+msgstr "สร้างส่วนลงตัว %s แล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__create_uid
@@ -611,7 +611,7 @@ msgstr "Created aliquot %s"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__create_uid
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__create_uid
 msgid "Created by"
-msgstr "Created by"
+msgstr "สร้างโดย"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__create_date
@@ -640,37 +640,37 @@ msgstr "Created by"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__create_date
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__create_date
 msgid "Created on"
-msgstr "Created on"
+msgstr "สร้างเมื่อ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__severity__critical
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_search
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_search
 msgid "Critical"
-msgstr "Critical"
+msgstr "สำคัญ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__critical_count
 msgid "Critical Count"
-msgstr "Critical Count"
+msgstr "การนับที่สำคัญ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__critical_max
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__critical_max
 msgid "Critical Max"
-msgstr "Critical Max"
+msgstr "คริติคอลสูงสุด"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__critical_min
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__critical_min
 msgid "Critical Min"
-msgstr "Critical Min"
+msgstr "วิกฤตขั้นต่ำ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Critical Result: %s"
-msgstr "Critical Result: %s"
+msgstr "ผลลัพธ์ที่สำคัญ: %s"
 
 #. module: laboratory_management
 #. odoo-python
@@ -686,7 +686,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Critical result review required"
-msgstr "Critical result review required"
+msgstr "จำเป็นต้องมีการตรวจสอบผลลัพธ์ที่สำคัญ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__current_custodian_id
@@ -709,33 +709,33 @@ msgstr "ประวัติการดูแล"
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Custody transferred"
-msgstr "Custody transferred"
+msgstr "โอนสิทธิ์การดูแลแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,help:laboratory_management.field_lab_sample__access_url
 msgid "Customer Portal URL"
-msgstr "Customer Portal URL"
+msgstr "URL พอร์ทัลลูกค้า"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__date_from
 msgid "Date From"
-msgstr "Date From"
+msgstr "วันที่จาก"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__date_to
 msgid "Date To"
-msgstr "Date To"
+msgstr "วันที่ถึง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__days_to_expiry
 msgid "Days To Expiry"
-msgstr "Days To Expiry"
+msgstr "วันหมดอายุ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__delimiter
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__delimiter
 msgid "Delimiter"
-msgstr "Delimiter"
+msgstr "ตัวคั่น"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__department
@@ -743,22 +743,22 @@ msgstr "Delimiter"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__department
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__department
 msgid "Department"
-msgstr "Department"
+msgstr "แผนก"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__description
 msgid "Description"
-msgstr "Description"
+msgstr "คำอธิบาย"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__detected_by_id
 msgid "Detected By"
-msgstr "Detected By"
+msgstr "ตรวจพบโดย"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__detected_date
 msgid "Detected Date"
-msgstr "Detected Date"
+msgstr "วันที่ตรวจพบ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__display_name
@@ -787,7 +787,7 @@ msgstr "Detected Date"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__display_name
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__display_name
 msgid "Display Name"
-msgstr "Display Name"
+msgstr "ชื่อที่แสดง"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job__status__done
@@ -795,18 +795,18 @@ msgstr "Display Name"
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__state__done
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_search
 msgid "Done"
-msgstr "Done"
+msgstr "เสร็จแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__done_analysis
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__done_analysis
 msgid "Done Analysis"
-msgstr "Done Analysis"
+msgstr "วิเคราะห์เสร็จแล้ว"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 msgid "Download Report"
-msgstr "Download Report"
+msgstr "ดาวน์โหลดรายงาน"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__draft
@@ -814,85 +814,85 @@ msgstr "Download Report"
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__draft
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__state__draft
 msgid "Draft"
-msgstr "Draft"
+msgstr "ร่าง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__due_date
 msgid "Due Date"
-msgstr "Due Date"
+msgstr "วันครบกำหนด"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__effectiveness_check
 msgid "Effectiveness Check"
-msgstr "Effectiveness Check"
+msgstr "การตรวจสอบประสิทธิผล"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__event_time
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__event_time
 msgid "Event Time"
-msgstr "Event Time"
+msgstr "เวลากิจกรรม"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__event_type
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__event_type
 msgid "Event Type"
-msgstr "Event Type"
+msgstr "ประเภทเหตุการณ์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__expected_report_date
 msgid "Expected Report Date"
-msgstr "Expected Report Date"
+msgstr "วันที่รายงานที่คาดหวัง"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_reagent_lot_search
 msgid "Expired"
-msgstr "Expired"
+msgstr "หมดอายุแล้ว"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_reagent_lot_search
 msgid "Expiring 7 Days"
-msgstr "Expiring 7 Days"
+msgstr "หมดอายุ 7 วัน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__expiry_date
 msgid "Expiry Date"
-msgstr "Expiry Date"
+msgstr "วันหมดอายุ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job__status__failed
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job_line__status__failed
 msgid "Failed"
-msgstr "Failed"
+msgstr "ล้มเหลว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__failed_rows
 msgid "Failed Rows"
-msgstr "Failed Rows"
+msgstr "แถวที่ล้มเหลว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__file_data
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__file_data
 msgid "File Data"
-msgstr "File Data"
+msgstr "ไฟล์ข้อมูล"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__file_name
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_result_import_wizard__file_name
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_result_import_wizard__file_name
 msgid "File Name"
-msgstr "File Name"
+msgstr "ชื่อไฟล์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__finished_at
 msgid "Finished At"
-msgstr "Finished At"
+msgstr "จบที่"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
 msgid "Flag"
-msgstr "Flag"
+msgstr "ธง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_follower_ids
@@ -901,7 +901,7 @@ msgstr "Flag"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_follower_ids
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_follower_ids
 msgid "Followers"
-msgstr "Followers"
+msgstr "ผู้ติดตาม"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_partner_ids
@@ -910,7 +910,7 @@ msgstr "Followers"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_partner_ids
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_partner_ids
 msgid "Followers (Partners)"
-msgstr "Followers (Partners)"
+msgstr "ผู้ติดตาม (พันธมิตร)"
 
 #. module: laboratory_management
 #: model:ir.model.fields,help:laboratory_management.field_lab_import_job__activity_type_icon
@@ -919,12 +919,12 @@ msgstr "Followers (Partners)"
 #: model:ir.model.fields,help:laboratory_management.field_lab_sample__activity_type_icon
 #: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
-msgstr "Font awesome icon e.g. fa-tasks"
+msgstr "ไอคอนตัวอักษรที่ยอดเยี่ยมเช่น fa-งาน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__from_user_id
 msgid "From User"
-msgstr "From User"
+msgstr "จากผู้ใช้"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__has_message
@@ -933,19 +933,19 @@ msgstr "From User"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__has_message
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__has_message
 msgid "Has Message"
-msgstr "Has Message"
+msgstr "มีข้อความ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument__department__hematology
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__department__hematology
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__department__hematology
 msgid "Hematology"
-msgstr "Hematology"
+msgstr "โลหิตวิทยา"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__result_flag__high
 msgid "High"
-msgstr "High"
+msgstr "สูง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__id
@@ -974,7 +974,7 @@ msgstr "High"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__id
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__id
 msgid "ID"
-msgstr "ID"
+msgstr "บัตรประจำตัวประชาชน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_exception_icon
@@ -983,7 +983,7 @@ msgstr "ID"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_exception_icon
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_exception_icon
 msgid "Icon"
-msgstr "Icon"
+msgstr "ไอคอน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,help:laboratory_management.field_lab_import_job__activity_exception_icon
@@ -992,7 +992,7 @@ msgstr "Icon"
 #: model:ir.model.fields,help:laboratory_management.field_lab_sample__activity_exception_icon
 #: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr "Icon to indicate an exception activity."
+msgstr "ไอคอนเพื่อระบุกิจกรรมข้อยกเว้น"
 
 #. module: laboratory_management
 #: model:ir.model.fields,help:laboratory_management.field_lab_import_job__message_needaction
@@ -1001,7 +1001,7 @@ msgstr "Icon to indicate an exception activity."
 #: model:ir.model.fields,help:laboratory_management.field_lab_sample__message_needaction
 #: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr "If checked, new messages require your attention."
+msgstr "หากเลือก ข้อความใหม่จะต้องได้รับการดูแลจากคุณ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,help:laboratory_management.field_lab_import_job__message_has_error
@@ -1015,69 +1015,69 @@ msgstr "If checked, new messages require your attention."
 #: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__message_has_error
 #: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr "If checked, some messages have a delivery error."
+msgstr "หากเลือก แสดงว่าบางข้อความมีข้อผิดพลาดในการส่ง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__immediate_action
 msgid "Immediate Action"
-msgstr "Immediate Action"
+msgstr "การดำเนินการทันที"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument__department__immunology
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__department__immunology
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__department__immunology
 msgid "Immunology"
-msgstr "Immunology"
+msgstr "ภูมิคุ้มกันวิทยา"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_instrument_result_import_wizard_form
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_result_import_wizard_form
 msgid "Import"
-msgstr "Import"
+msgstr "นำเข้า"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_instrument_result_import_wizard
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_instrument_result_import
 msgid "Import Instrument Results"
-msgstr "Import Instrument Results"
+msgstr "นำเข้าผลลัพธ์เครื่องมือ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_instrument_result_import_wizard_form
 msgid "Import Instrument Results (CSV)"
-msgstr "Import Instrument Results (CSV)"
+msgstr "นำเข้าผลลัพธ์ตราสาร (CSV)"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_import_job
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_import_job
 msgid "Import Jobs"
-msgstr "Import Jobs"
+msgstr "งานนำเข้า"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_result_import_wizard_form
 msgid "Import Lab Results (CSV)"
-msgstr "Import Lab Results (CSV)"
+msgstr "นำเข้าผลลัพธ์ห้องปฏิบัติการ (CSV)"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__line_ids
 msgid "Import Lines"
-msgstr "Import Lines"
+msgstr "เส้นนำเข้า"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_result_import_wizard
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_result_import
 msgid "Import Results"
-msgstr "Import Results"
+msgstr "นำเข้าผลลัพธ์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__import_type
 msgid "Import Type"
-msgstr "Import Type"
+msgstr "ประเภทการนำเข้า"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
 msgid "Import completed. Success: %(u)s, Failed: %(f)s"
-msgstr "Import completed. Success: %(u)s, Failed: %(f)s"
+msgstr "การนำเข้าเสร็จสมบูรณ์ สำเร็จ: %(u)s ล้มเหลว: %(f)s"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__in_progress
@@ -1085,109 +1085,109 @@ msgstr "Import completed. Success: %(u)s, Failed: %(f)s"
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__state__in_progress
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_search
 msgid "In Progress"
-msgstr "In Progress"
+msgstr "อยู่ระหว่างดำเนินการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__in_progress_count
 msgid "In Progress Count"
-msgstr "In Progress Count"
+msgstr "อยู่ระหว่างดำเนินการนับ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__instrument_id
 msgid "Instrument"
-msgstr "Instrument"
+msgstr "เครื่องดนตรี"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job__import_type__instrument_csv
 msgid "Instrument CSV Result Import"
-msgstr "Instrument CSV Result Import"
+msgstr "การนำเข้าผลลัพธ์ CSV ของเครื่องมือ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
 msgid "Instrument CSV import finished."
-msgstr "Instrument CSV import finished."
+msgstr "นำเข้า CSV เครื่องดนตรีเสร็จแล้ว"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
 msgid "Instrument CSV import started."
-msgstr "Instrument CSV import started."
+msgstr "เริ่มนำเข้า CSV ตราสารแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__instrument_code
 msgid "Instrument Code"
-msgstr "Instrument Code"
+msgstr "รหัสตราสาร"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
 msgid "Instrument Import"
-msgstr "Instrument Import"
+msgstr "การนำเข้าเครื่องมือ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_instrument_result_import_wizard
 msgid "Instrument Result Import Wizard"
-msgstr "Instrument Result Import Wizard"
+msgstr "ตัวช่วยสร้างการนำเข้าผลลัพธ์เครื่องมือ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__instrument_test_code
 msgid "Instrument Test Code"
-msgstr "Instrument Test Code"
+msgstr "รหัสทดสอบเครื่องมือ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_instrument_test_map
 msgid "Instrument Test Mapping"
-msgstr "Instrument Test Mapping"
+msgstr "การทำแผนที่ทดสอบเครื่องมือ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
 msgid "Instrument import completed. Success: %(u)s, Failed: %(f)s"
-msgstr "Instrument import completed. Success: %(u)s, Failed: %(f)s"
+msgstr "การนำเข้าเครื่องมือเสร็จสมบูรณ์ สำเร็จ: %(u)s ล้มเหลว: %(f)s"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
 msgid "Instrument not found"
-msgstr "Instrument not found"
+msgstr "ไม่พบเครื่องมือ"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_instrument
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_instrument
 msgid "Instruments"
-msgstr "Instruments"
+msgstr "เครื่องดนตรี"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 msgid "Interpretation"
-msgstr "Interpretation"
+msgstr "การตีความ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__investigation
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
 msgid "Investigation"
-msgstr "Investigation"
+msgstr "การสอบสวน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__is_amended
 msgid "Is Amended"
-msgstr "Is Amended"
+msgstr "มีการแก้ไข"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__is_critical
 msgid "Is Critical"
-msgstr "Is Critical"
+msgstr "เป็นสิ่งสำคัญ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__is_expired
 msgid "Is Expired"
-msgstr "Is Expired"
+msgstr "หมดอายุแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__is_expiring_soon
 msgid "Is Expiring Soon"
-msgstr "Is Expiring Soon"
+msgstr "กำลังจะหมดอายุเร็วๆ นี้"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_is_follower
@@ -1196,149 +1196,149 @@ msgstr "Is Expiring Soon"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_is_follower
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_is_follower
 msgid "Is Follower"
-msgstr "Is Follower"
+msgstr "เป็นผู้ตาม"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__is_out_of_range
 msgid "Is Out Of Range"
-msgstr "Is Out Of Range"
+msgstr "อยู่นอกขอบเขต"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__is_overdue
 msgid "Is Overdue"
-msgstr "Is Overdue"
+msgstr "เกินกำหนดชำระแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__is_retest
 msgid "Is Retest"
-msgstr "Is Retest"
+msgstr "เป็นการทดสอบซ้ำ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
 msgid "Issue"
-msgstr "Issue"
+msgstr "ปัญหา"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__job_id
 msgid "Job"
-msgstr "Job"
+msgstr "งาน"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_kpi_dashboard_wizard
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_kpi_dashboard
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
 msgid "KPI Dashboard"
-msgstr "KPI Dashboard"
+msgstr "แดชบอร์ด KPI"
 
 #. module: laboratory_management
 #: model:res.groups,name:laboratory_management.group_lab_analyst
 msgid "Lab Analyst"
-msgstr "Lab Analyst"
+msgstr "นักวิเคราะห์ห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_instrument
 msgid "Lab Instrument"
-msgstr "Lab Instrument"
+msgstr "เครื่องมือห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_kpi_dashboard_wizard
 msgid "Lab KPI Dashboard"
-msgstr "Lab KPI Dashboard"
+msgstr "แดชบอร์ด KPI ของห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:res.groups,name:laboratory_management.group_lab_manager
 msgid "Lab Manager"
-msgstr "Lab Manager"
+msgstr "ผู้จัดการห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_reagent_lot
 msgid "Lab Reagent Lot"
-msgstr "Lab Reagent Lot"
+msgstr "ล็อตรีเอเจนต์ในห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:res.groups,name:laboratory_management.group_lab_reception
 msgid "Lab Reception"
-msgstr "Lab Reception"
+msgstr "แผนกต้อนรับห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.actions.report,name:laboratory_management.action_report_lab_sample_classic
 msgid "Lab Report (Classic)"
-msgstr "Lab Report (Classic)"
+msgstr "รายงานห้องปฏิบัติการ (คลาสสิก)"
 
 #. module: laboratory_management
 #: model:ir.actions.report,name:laboratory_management.action_report_lab_sample_clinical
 msgid "Lab Report (Clinical)"
-msgstr "Lab Report (Clinical)"
+msgstr "รายงานห้องปฏิบัติการ (คลินิก)"
 
 #. module: laboratory_management
 #: model:ir.actions.report,name:laboratory_management.action_report_lab_sample_compact
 msgid "Lab Report (Compact)"
-msgstr "Lab Report (Compact)"
+msgstr "รายงานห้องปฏิบัติการ (กะทัดรัด)"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_home_laboratory
 msgid "Lab Reports"
-msgstr "Lab Reports"
+msgstr "รายงานห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_result_import_wizard
 msgid "Lab Result Import Wizard"
-msgstr "Lab Result Import Wizard"
+msgstr "ตัวช่วยสร้างการนำเข้าผลแล็บ"
 
 #. module: laboratory_management
 #: model:res.groups,name:laboratory_management.group_lab_reviewer
 msgid "Lab Reviewer"
-msgstr "Lab Reviewer"
+msgstr "ผู้ตรวจสอบห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_sample_amendment
 msgid "Lab Sample Amendment History"
-msgstr "Lab Sample Amendment History"
+msgstr "ประวัติการแก้ไขตัวอย่างแล็บ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_sample_custody
 msgid "Lab Sample Chain of Custody"
-msgstr "Lab Sample Chain of Custody"
+msgstr "ห่วงโซ่การดูแลตัวอย่างห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_sample_signoff
 msgid "Lab Sample Electronic Sign-off"
-msgstr "Lab Sample Electronic Sign-off"
+msgstr "ตัวอย่างการลงชื่อออกทางอิเล็กทรอนิกส์ในห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_label_document
 msgid "Lab Sample Label"
-msgstr "Lab Sample Label"
+msgstr "ฉลากตัวอย่างแล็บ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_sample_receive_wizard
 msgid "Lab Sample Receive Wizard"
-msgstr "Lab Sample Receive Wizard"
+msgstr "ตัวช่วยสร้างการรับตัวอย่างแล็บ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_sample_timeline
 msgid "Lab Sample Timeline"
-msgstr "Lab Sample Timeline"
+msgstr "เส้นเวลาตัวอย่างแล็บ"
 
 #. module: laboratory_management
 #: model:res.groups,name:laboratory_management.group_lab_user
 msgid "Lab User"
-msgstr "Lab User"
+msgstr "ผู้ใช้แล็บ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_workbench_wizard
 msgid "Lab Workbench"
-msgstr "Lab Workbench"
+msgstr "โต๊ะทำงานในห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.actions.server,name:laboratory_management.ir_cron_lab_reagent_expiry_notify_ir_actions_server
 msgid "Lab: Notify Expiring Reagent Lots"
-msgstr "Lab: Notify Expiring Reagent Lots"
+msgstr "ห้องปฏิบัติการ: แจ้งล็อตรีเอเจนต์ที่หมดอายุ"
 
 #. module: laboratory_management
 #: model:ir.actions.server,name:laboratory_management.ir_cron_lab_overdue_sample_notify_ir_actions_server
 msgid "Lab: Notify Overdue Samples"
-msgstr "Lab: Notify Overdue Samples"
+msgstr "ห้องปฏิบัติการ: แจ้งตัวอย่างที่ค้างชำระ"
 
 #. module: laboratory_management
 #: model:ir.ui.menu,name:laboratory_management.menu_laboratory_root
@@ -1348,47 +1348,47 @@ msgstr "ห้องปฏิบัติการ"
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_service
 msgid "Laboratory Analysis Service"
-msgstr "Laboratory Analysis Service"
+msgstr "บริการวิเคราะห์ทางห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_import_job
 msgid "Laboratory Import Job"
-msgstr "Laboratory Import Job"
+msgstr "งานนำเข้าห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_import_job_line
 msgid "Laboratory Import Job Line"
-msgstr "Laboratory Import Job Line"
+msgstr "สายงานนำเข้าห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_nonconformance
 msgid "Laboratory Nonconformance / CAPA"
-msgstr "Laboratory Nonconformance / CAPA"
+msgstr "ความไม่สอดคล้องของห้องปฏิบัติการ / CAPA"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_report_template
 msgid "Laboratory Report Template"
-msgstr "Laboratory Report Template"
+msgstr "เทมเพลตรายงานห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Laboratory Sample"
-msgstr "Laboratory Sample"
+msgstr "ตัวอย่างห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_sample
 msgid "Laboratory Sample (Accession)"
-msgstr "Laboratory Sample (Accession)"
+msgstr "ตัวอย่างห้องปฏิบัติการ (ภาคยานุวัติ)"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_workbench_wizard_form
 msgid "Laboratory Workbench"
-msgstr "Laboratory Workbench"
+msgstr "โต๊ะทำงานในห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_worksheet
 msgid "Laboratory Worksheet"
-msgstr "Laboratory Worksheet"
+msgstr "ใบงานห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__write_uid
@@ -1417,7 +1417,7 @@ msgstr "Laboratory Worksheet"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__write_uid
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__write_uid
 msgid "Last Updated by"
-msgstr "Last Updated by"
+msgstr "อัปเดตล่าสุดโดย"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__write_date
@@ -1446,7 +1446,7 @@ msgstr "Last Updated by"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__write_date
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__write_date
 msgid "Last Updated on"
-msgstr "Last Updated on"
+msgstr "อัปเดตล่าสุดเมื่อ"
 
 #. module: laboratory_management
 #. odoo-python
@@ -1461,72 +1461,72 @@ msgstr ""
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_worksheet_form
 msgid "Load Pending"
-msgstr "Load Pending"
+msgstr "กำลังโหลดรอดำเนินการ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Load Profile Tests"
-msgstr "Load Profile Tests"
+msgstr "โหลดการทดสอบโปรไฟล์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__location
 msgid "Location"
-msgstr "Location"
+msgstr "ที่ตั้ง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__lot_number
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__lot_number
 msgid "Lot Number"
-msgstr "Lot Number"
+msgstr "หมายเลขล็อต"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__result_flag__low
 msgid "Low"
-msgstr "Low"
+msgstr "ต่ำ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__severity__major
 msgid "Major"
-msgstr "Major"
+msgstr "เมเจอร์"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__source_type__manual
 msgid "Manual"
-msgstr "Manual"
+msgstr "คู่มือ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job__import_type__manual_csv
 msgid "Manual CSV Result Import"
-msgstr "Manual CSV Result Import"
+msgstr "การนำเข้าผลลัพธ์ CSV ด้วยตนเอง"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
 msgid "Manual CSV import finished."
-msgstr "Manual CSV import finished."
+msgstr "การนำเข้า CSV ด้วยตนเองเสร็จสิ้นแล้ว"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
 msgid "Manual CSV import started."
-msgstr "Manual CSV import started."
+msgstr "เริ่มต้นการนำเข้า CSV ด้วยตนเอง"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
 msgid "Mapping not found"
-msgstr "Mapping not found"
+msgstr "ไม่พบการแมป"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_form
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_worksheet_form
 msgid "Mark Done"
-msgstr "Mark Done"
+msgstr "มาร์คเสร็จแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__message
 msgid "Message"
-msgstr "Message"
+msgstr "ข้อความ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_has_error
@@ -1535,7 +1535,7 @@ msgstr "Message"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_has_error
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_has_error
 msgid "Message Delivery error"
-msgstr "Message Delivery error"
+msgstr "ข้อผิดพลาดในการส่งข้อความ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_ids
@@ -1544,31 +1544,31 @@ msgstr "Message Delivery error"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_ids
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_ids
 msgid "Messages"
-msgstr "Messages"
+msgstr "ข้อความ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument__department__microbiology
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__department__microbiology
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__department__microbiology
 msgid "Microbiology"
-msgstr "Microbiology"
+msgstr "จุลชีววิทยา"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__severity__minor
 msgid "Minor"
-msgstr "Minor"
+msgstr "ไมเนอร์"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
 msgid "Missing accession or service_code"
-msgstr "Missing accession or service_code"
+msgstr "ไม่มีภาคยานุวัติหรือ service_code"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
 msgid "Missing accession, instrument_code, or test_code"
-msgstr "Missing accession, instrument_code, or test_code"
+msgstr "ไม่มีภาคยานุวัติ, instruments_code หรือ test_code"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__my_activity_date_deadline
@@ -1577,12 +1577,12 @@ msgstr "Missing accession, instrument_code, or test_code"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__my_activity_date_deadline
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__my_activity_date_deadline
 msgid "My Activity Deadline"
-msgstr "My Activity Deadline"
+msgstr "กำหนดเวลากิจกรรมของฉัน"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
 msgid "My Lab Samples"
-msgstr "My Lab Samples"
+msgstr "ตัวอย่างแล็บของฉัน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__name
@@ -1596,12 +1596,12 @@ msgstr "My Lab Samples"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__name
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__name
 msgid "Name"
-msgstr "Name"
+msgstr "ชื่อ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__location
 msgid "New Location"
-msgstr "New Location"
+msgstr "ที่ตั้งใหม่"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_date_deadline
@@ -1610,7 +1610,7 @@ msgstr "New Location"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_date_deadline
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_date_deadline
 msgid "Next Activity Deadline"
-msgstr "Next Activity Deadline"
+msgstr "กำหนดเวลากิจกรรมถัดไป"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_summary
@@ -1619,7 +1619,7 @@ msgstr "Next Activity Deadline"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_summary
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_summary
 msgid "Next Activity Summary"
-msgstr "Next Activity Summary"
+msgstr "สรุปกิจกรรมถัดไป"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_type_id
@@ -1628,30 +1628,30 @@ msgstr "Next Activity Summary"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_type_id
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_type_id
 msgid "Next Activity Type"
-msgstr "Next Activity Type"
+msgstr "ประเภทกิจกรรมถัดไป"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "No active analyses available for verification."
-msgstr "No active analyses available for verification."
+msgstr "ไม่มีการวิเคราะห์ที่ใช้งานอยู่สำหรับการตรวจสอบ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
 msgid "No lab sample records found."
-msgstr "No lab sample records found."
+msgstr "ไม่พบบันทึกตัวอย่างในห้องปฏิบัติการ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_worksheet.py:0
 msgid "No pending analyses found for this department."
-msgstr "No pending analyses found for this department."
+msgstr "ไม่พบการวิเคราะห์ที่รอดำเนินการสำหรับแผนกนี้"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_sample_transfer_custody_wizard.py:0
 msgid "No sample selected."
-msgstr "No sample selected."
+msgstr "ไม่ได้เลือกตัวอย่าง"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_nonconformance
@@ -1663,19 +1663,19 @@ msgstr "ข้อบกพร่อง / CAPA"
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__nonconformance_count
 msgid "Nonconformance Count"
-msgstr "Nonconformance Count"
+msgstr "การนับความไม่สอดคล้องกัน"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Nonconformances"
-msgstr "Nonconformances"
+msgstr "ความไม่สอดคล้องกัน"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__result_flag__normal
 msgid "Normal"
-msgstr "Normal"
+msgstr "ปกติ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__note
@@ -1691,7 +1691,7 @@ msgstr "Normal"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__note
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__note
 msgid "Note"
-msgstr "Note"
+msgstr "หมายเหตุ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_needaction_counter
@@ -1700,7 +1700,7 @@ msgstr "Note"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_needaction_counter
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_needaction_counter
 msgid "Number of Actions"
-msgstr "Number of Actions"
+msgstr "จำนวนการกระทำ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_has_error_counter
@@ -1709,7 +1709,7 @@ msgstr "Number of Actions"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_has_error_counter
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_has_error_counter
 msgid "Number of errors"
-msgstr "Number of errors"
+msgstr "จำนวนข้อผิดพลาด"
 
 #. module: laboratory_management
 #: model:ir.model.fields,help:laboratory_management.field_lab_import_job__message_needaction_counter
@@ -1718,7 +1718,7 @@ msgstr "Number of errors"
 #: model:ir.model.fields,help:laboratory_management.field_lab_sample__message_needaction_counter
 #: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr "Number of messages requiring action"
+msgstr "จำนวนข้อความที่ต้องดำเนินการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,help:laboratory_management.field_lab_import_job__message_has_error_counter
@@ -1727,30 +1727,30 @@ msgstr "Number of messages requiring action"
 #: model:ir.model.fields,help:laboratory_management.field_lab_sample__message_has_error_counter
 #: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr "Number of messages with delivery error"
+msgstr "จำนวนข้อความที่มีข้อผิดพลาดในการส่ง"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__result_type__numeric
 msgid "Numeric"
-msgstr "Numeric"
+msgstr "ตัวเลข"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Numeric result expected for service %s"
-msgstr "Numeric result expected for service %s"
+msgstr "ผลลัพธ์ที่เป็นตัวเลขที่คาดหวังสำหรับบริการ %s"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Only released reports can be amended."
-msgstr "Only released reports can be amended."
+msgstr "เฉพาะรายงานที่เผยแพร่เท่านั้นที่สามารถแก้ไขได้"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Only verified samples can be released."
-msgstr "Only verified samples can be released."
+msgstr "สามารถปล่อยตัวอย่างที่ผ่านการตรวจสอบแล้วเท่านั้น"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__state__open
@@ -1758,27 +1758,27 @@ msgstr "Only verified samples can be released."
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_search
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_workbench_wizard_form
 msgid "Open"
-msgstr "Open"
+msgstr "เปิด"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
 msgid "Open Overdue Samples"
-msgstr "Open Overdue Samples"
+msgstr "เปิดตัวอย่างที่ค้างชำระ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
 msgid "Open QC Rejects"
-msgstr "Open QC Rejects"
+msgstr "เปิดการปฏิเสธการควบคุมคุณภาพ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
 msgid "Open Retest Lines"
-msgstr "Open Retest Lines"
+msgstr "เปิดบรรทัดทดสอบซ้ำ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__opened_date
 msgid "Opened Date"
-msgstr "Opened Date"
+msgstr "วันที่เปิด"
 
 #. module: laboratory_management
 #: model:ir.ui.menu,name:laboratory_management.menu_laboratory_operations
@@ -1788,7 +1788,7 @@ msgstr "ปฏิบัติการ"
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__operator_id
 msgid "Operator"
-msgstr "Operator"
+msgstr "ผู้ดำเนินการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument__department__other
@@ -1796,153 +1796,153 @@ msgstr "Operator"
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__other
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_worksheet__department__other
 msgid "Other"
-msgstr "Other"
+msgstr "อื่นๆ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_search
 msgid "Overdue"
-msgstr "Overdue"
+msgstr "เกินกำหนด"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__overdue_count
 msgid "Overdue Count"
-msgstr "Overdue Count"
+msgstr "การนับที่ค้างชำระ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_kpi_dashboard_wizard.py:0
 msgid "Overdue Samples"
-msgstr "Overdue Samples"
+msgstr "ตัวอย่างที่ค้างชำระ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__parent_sample_id
 msgid "Parent Sample"
-msgstr "Parent Sample"
+msgstr "ตัวอย่างผู้ปกครอง"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_qc_run__status__pass
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_qc_run_search
 msgid "Pass"
-msgstr "Pass"
+msgstr "ผ่าน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__patient_id
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
 msgid "Patient"
-msgstr "Patient"
+msgstr "คนไข้"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__state__pending
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_search
 msgid "Pending"
-msgstr "Pending"
+msgstr "รอดำเนินการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__pending_receive_count
 msgid "Pending Receive Count"
-msgstr "Pending Receive Count"
+msgstr "จำนวนการรับที่รอดำเนินการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__physician_name
 msgid "Physician Name"
-msgstr "Physician Name"
+msgstr "ชื่อแพทย์"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
 msgid "Plan CAPA"
-msgstr "Plan CAPA"
+msgstr "แผน CAPA"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__planned_date
 msgid "Planned Date"
-msgstr "Planned Date"
+msgstr "วันที่วางแผนไว้"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
 msgid "Please input accession/barcode."
-msgstr "Please input accession/barcode."
+msgstr "กรุณากรอกภาคยานุวัติ/บาร์โค้ด"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Please input result value for %s"
-msgstr "Please input result value for %s"
+msgstr "กรุณาป้อนค่าผลลัพธ์สำหรับ %s"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Please select an analysis profile first."
-msgstr "Please select an analysis profile first."
+msgstr "โปรดเลือกโปรไฟล์การวิเคราะห์ก่อน"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Please select the assignee user."
-msgstr "Please select the assignee user."
+msgstr "โปรดเลือกผู้ใช้ที่ได้รับมอบหมาย"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
 #: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
 msgid "Please upload a CSV file."
-msgstr "Please upload a CSV file."
+msgstr "กรุณาอัปโหลดไฟล์ CSV"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__access_url
 msgid "Portal Access URL"
-msgstr "Portal Access URL"
+msgstr "URL การเข้าถึงพอร์ทัล"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__preventive_action
 msgid "Preventive Action"
-msgstr "Preventive Action"
+msgstr "การดำเนินการป้องกัน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__analyst_id
 msgid "Primary Analyst"
-msgstr "Primary Analyst"
+msgstr "นักวิเคราะห์หลัก"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Print Barcode Label"
-msgstr "Print Barcode Label"
+msgstr "พิมพ์ฉลากบาร์โค้ด"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Print Report"
-msgstr "Print Report"
+msgstr "พิมพ์รายงาน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__priority
 msgid "Priority"
-msgstr "Priority"
+msgstr "ลำดับความสำคัญ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_profile_line__profile_id
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__profile_id
 msgid "Profile"
-msgstr "Profile"
+msgstr "โปรไฟล์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_profile__line_ids
 msgid "Profile Services"
-msgstr "Profile Services"
+msgstr "บริการโปรไฟล์"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__source_type__qc
 msgid "QC"
-msgstr "QC"
+msgstr "การควบคุมคุณภาพ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
 msgid "QC KPI"
-msgstr "QC KPI"
+msgstr "ตัวชี้วัดการควบคุมคุณภาพ"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_qc_material
 msgid "QC Material"
-msgstr "QC Material"
+msgstr "วัสดุการควบคุมคุณภาพ"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_qc_material
@@ -1954,12 +1954,12 @@ msgstr "วัสดุ QC"
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_qc.py:0
 msgid "QC Rejected: %s"
-msgstr "QC Rejected: %s"
+msgstr "QC ถูกปฏิเสธ: %s"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_qc_run
 msgid "QC Run"
-msgstr "QC Run"
+msgstr "การดำเนินการควบคุมคุณภาพ"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_qc_run
@@ -1971,33 +1971,33 @@ msgstr "รอบ QC"
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "QC is required for %(service)s, but no QC run exists."
-msgstr "QC is required for %(service)s, but no QC run exists."
+msgstr "จำเป็นต้องมีการควบคุมคุณภาพสำหรับ %(บริการ) แต่ไม่มีการเรียกใช้การควบคุมคุณภาพ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_qc.py:0
 msgid "QC run %(run)s was rejected by rule %(rule)s (z-score=%(z)s)."
-msgstr "QC run %(run)s was rejected by rule %(rule)s (z-score=%(z)s)."
+msgstr "การรัน QC %(รัน)s ถูกปฏิเสธโดยกฎ %(rule)s (z-score=%(z)s)"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__qc_material_id
 msgid "Qc Material"
-msgstr "Qc Material"
+msgstr "วัสดุควบคุมคุณภาพ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__qc_reject_count
 msgid "Qc Reject Count"
-msgstr "Qc Reject Count"
+msgstr "จำนวนการปฏิเสธการควบคุมคุณภาพ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__qc_reject_rate
 msgid "Qc Reject Rate"
-msgstr "Qc Reject Rate"
+msgstr "อัตราการปฏิเสธการควบคุมคุณภาพ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__qc_run_id
 msgid "Qc Run"
-msgstr "Qc Run"
+msgstr "คิวซีรัน"
 
 #. module: laboratory_management
 #: model:ir.ui.menu,name:laboratory_management.menu_laboratory_quality
@@ -2008,29 +2008,29 @@ msgstr "คุณภาพ"
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 msgid "Range"
-msgstr "Range"
+msgstr "พิสัย"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__reagent_lot_id
 msgid "Reagent Lot"
-msgstr "Reagent Lot"
+msgstr "รีเอเจนต์ล็อต"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_reagent_lot
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_reagent_lot
 msgid "Reagent Lots"
-msgstr "Reagent Lots"
+msgstr "รีเอเจนต์จำนวนมาก"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Reagent lot %(lot)s is expired and cannot be used."
-msgstr "Reagent lot %(lot)s is expired and cannot be used."
+msgstr "รีเอเจนต์ล็อต %(lot)s หมดอายุและไม่สามารถใช้ได้"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Reason for amendment (used when clicking Amend Report)"
-msgstr "Reason for amendment (used when clicking Amend Report)"
+msgstr "เหตุผลในการแก้ไข (ใช้เมื่อคลิกแก้ไขรายงาน)"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_custody__event_type__receive
@@ -2038,7 +2038,7 @@ msgstr "Reason for amendment (used when clicking Amend Report)"
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_receive_wizard_form
 msgid "Receive"
-msgstr "Receive"
+msgstr "รับ"
 
 #. module: laboratory_management
 #. odoo-python
@@ -2054,79 +2054,79 @@ msgstr "รับตัวอย่าง"
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__received
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_search
 msgid "Received"
-msgstr "Received"
+msgstr "ได้รับแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__received_date
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__received_date
 msgid "Received Date"
-msgstr "Received Date"
+msgstr "วันที่ได้รับ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 msgid "Reference"
-msgstr "Reference"
+msgstr "อ้างอิง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__ref_max
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__ref_max
 msgid "Reference Max"
-msgstr "Reference Max"
+msgstr "อ้างอิงสูงสุด"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__ref_min
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__ref_min
 msgid "Reference Min"
-msgstr "Reference Min"
+msgstr "อ้างอิงขั้นต่ำ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
 msgid "Refresh KPI"
-msgstr "Refresh KPI"
+msgstr "รีเฟรช KPI"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_custody__event_type__register
 msgid "Register"
-msgstr "Register"
+msgstr "ลงทะเบียน"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_qc_run__status__reject
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_form
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_qc_run_search
 msgid "Reject"
-msgstr "Reject"
+msgstr "ปฏิเสธ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__state__rejected
 msgid "Rejected"
-msgstr "Rejected"
+msgstr "ถูกปฏิเสธ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_kpi_dashboard_wizard.py:0
 msgid "Rejected QC Runs"
-msgstr "Rejected QC Runs"
+msgstr "การรัน QC ที่ถูกปฏิเสธ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_custody__event_type__release
 msgid "Release"
-msgstr "Release"
+msgstr "ปล่อย"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__release
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Release Report"
-msgstr "Release Report"
+msgstr "รายงานการเผยแพร่"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__report_date
 msgid "Report Date"
-msgstr "Report Date"
+msgstr "วันที่รายงาน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__report_revision
 msgid "Report Revision"
-msgstr "Report Revision"
+msgstr "การแก้ไขรายงาน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__report_template_id
@@ -2137,71 +2137,71 @@ msgstr "เทมเพลตรายงาน"
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_report_template
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_report_template
 msgid "Report Templates"
-msgstr "Report Templates"
+msgstr "เทมเพลตรายงาน"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Report amended to revision R%s"
-msgstr "Report amended to revision R%s"
+msgstr "รายงานแก้ไขเพื่อแก้ไข R%s"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Report amended without detailed note."
-msgstr "Report amended without detailed note."
+msgstr "แก้ไขรายงานโดยไม่มีหมายเหตุโดยละเอียด"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Report released"
-msgstr "Report released"
+msgstr "ออกรายงานแล้ว"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Report released to requester"
-msgstr "Report released to requester"
+msgstr "รายงานที่เผยแพร่ไปยังผู้ร้องขอ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__reported
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__reported
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_search
 msgid "Reported"
-msgstr "Reported"
+msgstr "รายงานแล้ว"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
 msgid "Reported At"
-msgstr "Reported At"
+msgstr "รายงานตัว ณ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__retest
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_form
 msgid "Request Retest"
-msgstr "Request Retest"
+msgstr "ขอทดสอบซ้ำ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__require_qc
 msgid "Require QC Pass Before Result Release"
-msgstr "Require QC Pass Before Result Release"
+msgstr "ต้องมี QC Pass ก่อนเผยแพร่ผลลัพธ์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__require_reagent_lot
 msgid "Require Reagent Lot"
-msgstr "Require Reagent Lot"
+msgstr "ต้องใช้รีเอเจนต์ล็อต"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Reset to Draft"
-msgstr "Reset to Draft"
+msgstr "รีเซ็ตเป็นฉบับร่าง"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Reset to draft"
-msgstr "Reset to draft"
+msgstr "รีเซ็ตเป็นฉบับร่าง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__activity_user_id
@@ -2210,7 +2210,7 @@ msgstr "Reset to draft"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__activity_user_id
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__activity_user_id
 msgid "Responsible User"
-msgstr "Responsible User"
+msgstr "ผู้ใช้ที่มีความรับผิดชอบ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
@@ -2218,35 +2218,35 @@ msgstr "Responsible User"
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
 msgid "Result"
-msgstr "Result"
+msgstr "ผลลัพธ์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__result_flag
 msgid "Result Flag"
-msgstr "Result Flag"
+msgstr "ธงผลลัพธ์"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
 msgid "Result Import"
-msgstr "Result Import"
+msgstr "การนำเข้าผลลัพธ์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__result_note
 msgid "Result Note"
-msgstr "Result Note"
+msgstr "หมายเหตุผลลัพธ์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__result_type
 msgid "Result Type"
-msgstr "Result Type"
+msgstr "ประเภทผลลัพธ์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__result_value
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__result_value
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__result_value
 msgid "Result Value"
-msgstr "Result Value"
+msgstr "ค่าผลลัพธ์"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_sample_to_verify
@@ -2258,90 +2258,90 @@ msgstr "ผลรอตรวจสอบ"
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Results verified"
-msgstr "Results verified"
+msgstr "ยืนยันผลลัพธ์แล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__retest
 msgid "Retest"
-msgstr "Retest"
+msgstr "ทดสอบซ้ำ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_kpi_dashboard_wizard.py:0
 msgid "Retest Analysis"
-msgstr "Retest Analysis"
+msgstr "วิเคราะห์ทดสอบซ้ำ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__retest_count
 msgid "Retest Count"
-msgstr "Retest Count"
+msgstr "นับซ้ำ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
 msgid "Retest KPI"
-msgstr "Retest KPI"
+msgstr "ทดสอบ KPI อีกครั้ง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__retest_of_id
 msgid "Retest Of"
-msgstr "Retest Of"
+msgstr "ทดสอบซ้ำของ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__retest_rate
 msgid "Retest Rate"
-msgstr "Retest Rate"
+msgstr "อัตราการทดสอบซ้ำ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Retest requested for %(service)s (new analysis line #%(line)s)."
-msgstr "Retest requested for %(service)s (new analysis line #%(line)s)."
+msgstr "ร้องขอการทดสอบซ้ำสำหรับ %(service)s (บรรทัดการวิเคราะห์ใหม่ #%(line)s)"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Retest requested for %s"
-msgstr "Retest requested for %s"
+msgstr "ร้องขอการทดสอบซ้ำสำหรับ %s"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__retest_ids
 msgid "Retests"
-msgstr "Retests"
+msgstr "ทดสอบซ้ำ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_amendment__revision
 msgid "Revision"
-msgstr "Revision"
+msgstr "การแก้ไข"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__root_cause
 msgid "Root Cause"
-msgstr "Root Cause"
+msgstr "สาเหตุที่แท้จริง"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__routine
 msgid "Routine"
-msgstr "Routine"
+msgstr "กิจวัตร"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__row_no
 msgid "Row No"
-msgstr "Row No"
+msgstr "แถวที่"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__rule_triggered
 msgid "Rule Triggered"
-msgstr "Rule Triggered"
+msgstr "กฎถูกทริกเกอร์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__run_date
 msgid "Run Date"
-msgstr "Run Date"
+msgstr "วันที่ดำเนินการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job__status__running
 msgid "Running"
-msgstr "Running"
+msgstr "วิ่ง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__message_has_sms_error
@@ -2350,12 +2350,12 @@ msgstr "Running"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__message_has_sms_error
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr "SMS Delivery error"
+msgstr "ข้อผิดพลาดในการส่ง SMS"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__stat
 msgid "STAT"
-msgstr "STAT"
+msgstr "สถิติ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__sample_id
@@ -2368,85 +2368,85 @@ msgstr "STAT"
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_nonconformance__source_type__sample
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 msgid "Sample"
-msgstr "Sample"
+msgstr "ตัวอย่าง"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
 msgid "Sample %s already received."
-msgstr "Sample %s already received."
+msgstr "ได้รับตัวอย่าง %s แล้ว"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
 msgid "Sample %s received successfully."
-msgstr "Sample %s received successfully."
+msgstr "ได้รับตัวอย่าง %s เรียบร้อยแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_sample_analysis
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_form
 msgid "Sample Analysis"
-msgstr "Sample Analysis"
+msgstr "การวิเคราะห์ตัวอย่าง"
 
 #. module: laboratory_management
 #: model:ir.actions.report,name:laboratory_management.action_report_lab_sample_label
 msgid "Sample Barcode Label"
-msgstr "Sample Barcode Label"
+msgstr "ตัวอย่างฉลากบาร์โค้ด"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__sample_type
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__sample_type
 msgid "Sample Type"
-msgstr "Sample Type"
+msgstr "ประเภทตัวอย่าง"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Sample cancelled"
-msgstr "Sample cancelled"
+msgstr "ตัวอย่างถูกยกเลิก"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
 msgid "Sample is already reported."
-msgstr "Sample is already reported."
+msgstr "มีการรายงานตัวอย่างแล้ว"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
 msgid "Sample is cancelled and cannot be received."
-msgstr "Sample is cancelled and cannot be received."
+msgstr "ตัวอย่างถูกยกเลิกและไม่สามารถรับได้"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_instrument_result_import_wizard.py:0
 #: code:addons/laboratory_management/wizard/lab_result_import_wizard.py:0
 msgid "Sample not found"
-msgstr "Sample not found"
+msgstr "ไม่พบตัวอย่าง"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_sample_receive_wizard.py:0
 msgid "Sample not found: %s"
-msgstr "Sample not found: %s"
+msgstr "ไม่พบตัวอย่าง: %s"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Sample received"
-msgstr "Sample received"
+msgstr "ได้รับตัวอย่างแล้ว"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Sample received at accessioning desk"
-msgstr "Sample received at accessioning desk"
+msgstr "ตัวอย่างที่ได้รับที่โต๊ะภาคยานุวัติ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Sample registered"
-msgstr "Sample registered"
+msgstr "ลงทะเบียนตัวอย่างแล้ว"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_sample
@@ -2457,28 +2457,28 @@ msgstr "ตัวอย่าง / เลขรับตัวอย่าง"
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_receive_wizard_form
 msgid "Scan barcode or input accession..."
-msgstr "Scan barcode or input accession..."
+msgstr "สแกนบาร์โค้ดหรือภาคยานุวัติอินพุต..."
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__access_token
 msgid "Security Token"
-msgstr "Security Token"
+msgstr "โทเค็นการรักษาความปลอดภัย"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument_result_import_wizard__delimiter__;
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_result_import_wizard__delimiter__;
 msgid "Semicolon (;)"
-msgstr "Semicolon (;)"
+msgstr "อัฒภาค (;)"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__sequence
 msgid "Sequence"
-msgstr "Sequence"
+msgstr "ลำดับ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__serum
 msgid "Serum"
-msgstr "Serum"
+msgstr "เซรั่ม"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__service_id
@@ -2489,38 +2489,38 @@ msgstr "Serum"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__service_id
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__service_id
 msgid "Service"
-msgstr "Service"
+msgstr "บริการ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "Service %(service)s requires reagent lot before marking done."
-msgstr "Service %(service)s requires reagent lot before marking done."
+msgstr "บริการ %(บริการ)s ต้องมีล็อตรีเอเจนต์ก่อนทำเครื่องหมายว่าเสร็จสิ้น"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__service_code
 msgid "Service Code"
-msgstr "Service Code"
+msgstr "รหัสบริการ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__severity
 msgid "Severity"
-msgstr "Severity"
+msgstr "ความรุนแรง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__show_flag
 msgid "Show Flag"
-msgstr "Show Flag"
+msgstr "แสดงธง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__show_notes
 msgid "Show Notes"
-msgstr "Show Notes"
+msgstr "แสดงบันทึกย่อ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__show_reference
 msgid "Show Reference"
-msgstr "Show Reference"
+msgstr "แสดงการอ้างอิง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__signoff_ids
@@ -2531,47 +2531,47 @@ msgstr "บันทึกการลงนาม"
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__signature_ref
 msgid "Signature Ref"
-msgstr "Signature Ref"
+msgstr "ลายเซ็นอ้างอิง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__signed_at
 msgid "Signed At"
-msgstr "Signed At"
+msgstr "ลงนามที่"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_signoff__signed_by_id
 msgid "Signed By"
-msgstr "Signed By"
+msgstr "ลงนามโดย"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__source_type
 msgid "Source Type"
-msgstr "Source Type"
+msgstr "ประเภทแหล่งที่มา"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_worksheet_form
 msgid "Start"
-msgstr "Start"
+msgstr "เริ่ม"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Start Analyses"
-msgstr "Start Analyses"
+msgstr "เริ่มการวิเคราะห์"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__start
 msgid "Start Analysis"
-msgstr "Start Analysis"
+msgstr "เริ่มการวิเคราะห์"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
 msgid "Start Investigation"
-msgstr "Start Investigation"
+msgstr "เริ่มการสอบสวน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__started_at
 msgid "Started At"
-msgstr "Started At"
+msgstr "เริ่มที่"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__state
@@ -2579,7 +2579,7 @@ msgstr "Started At"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__state
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__state
 msgid "State"
-msgstr "State"
+msgstr "รัฐ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__status
@@ -2588,7 +2588,7 @@ msgstr "State"
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_sample_detail
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_lab_samples
 msgid "Status"
-msgstr "Status"
+msgstr "สถานะ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,help:laboratory_management.field_lab_import_job__activity_state
@@ -2610,97 +2610,97 @@ msgstr ""
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__std_dev
 msgid "Std Dev"
-msgstr "Std Dev"
+msgstr "มาตรฐานการพัฒนา"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__stool
 msgid "Stool"
-msgstr "Stool"
+msgstr "สตูล"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job_line__status__success
 msgid "Success"
-msgstr "Success"
+msgstr "ความสำเร็จ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__success_rows
 msgid "Success Rows"
-msgstr "Success Rows"
+msgstr "แถวแห่งความสำเร็จ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__swab
 msgid "Swab"
-msgstr "Swab"
+msgstr "ไม้กวาด"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
 msgid "TAT KPI"
-msgstr "TAT KPI"
+msgstr "ททท.เคพีไอ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_instrument_result_import_wizard__delimiter__
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_result_import_wizard__delimiter__
 msgid "Tab"
-msgstr "Tab"
+msgstr "แท็บ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__target_value
 msgid "Target Value"
-msgstr "Target Value"
+msgstr "มูลค่าเป้าหมาย"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__tat_on_time_samples
 msgid "Tat On Time Samples"
-msgstr "Tat On Time Samples"
+msgstr "ตัวอย่างทททตรงเวลา"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__tat_overdue_samples
 msgid "Tat Overdue Samples"
-msgstr "Tat Overdue Samples"
+msgstr "ททท. ตัวอย่างที่ค้างชำระ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__tat_rate
 msgid "Tat Rate"
-msgstr "Tat Rate"
+msgstr "อัตราททท"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__test_code
 msgid "Test Code"
-msgstr "Test Code"
+msgstr "รหัสทดสอบ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument__mapping_ids
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_instrument_form
 msgid "Test Mapping"
-msgstr "Test Mapping"
+msgstr "ทดสอบการทำแผนที่"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__result_type__text
 msgid "Text"
-msgstr "Text"
+msgstr "ข้อความ"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_worksheet.py:0
 msgid "There are unfinished analyses in this worksheet."
-msgstr "There are unfinished analyses in this worksheet."
+msgstr "มีการวิเคราะห์ที่ยังไม่เสร็จในแผ่นงานนี้"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__timeline_ids
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Timeline"
-msgstr "Timeline"
+msgstr "ไทม์ไลน์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__title
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_report_template__title
 msgid "Title"
-msgstr "Title"
+msgstr "ชื่อเรื่อง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_custody__to_user_id
 msgid "To User"
-msgstr "To User"
+msgstr "ถึงผู้ใช้"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__to_verify
@@ -2708,45 +2708,45 @@ msgstr "To User"
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_search
 msgid "To Verify"
-msgstr "To Verify"
+msgstr "เพื่อตรวจสอบ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_workbench_wizard__to_verify_count
 msgid "To Verify Count"
-msgstr "To Verify Count"
+msgstr "เพื่อตรวจสอบการนับ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__total_analysis
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__total_analysis
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__total_analysis
 msgid "Total Analysis"
-msgstr "Total Analysis"
+msgstr "การวิเคราะห์โดยรวม"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__total_qc_runs
 msgid "Total Qc Runs"
-msgstr "Total Qc Runs"
+msgstr "รัน Qc ทั้งหมด"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_kpi_dashboard_wizard__total_reported_samples
 msgid "Total Reported Samples"
-msgstr "Total Reported Samples"
+msgstr "ตัวอย่างที่รายงานทั้งหมด"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__total_rows
 msgid "Total Rows"
-msgstr "Total Rows"
+msgstr "แถวทั้งหมด"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.portal_my_home_laboratory
 msgid "Track sample status and view released reports"
-msgstr "Track sample status and view released reports"
+msgstr "ติดตามสถานะตัวอย่างและดูรายงานที่เผยแพร่"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_custody__event_type__transfer
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_transfer_custody_wizard_form
 msgid "Transfer"
-msgstr "Transfer"
+msgstr "โอน"
 
 #. module: laboratory_management
 #. odoo-python
@@ -2759,28 +2759,28 @@ msgstr "โอนการดูแลตัวอย่าง"
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__note
 msgid "Transfer Note"
-msgstr "Transfer Note"
+msgstr "หมายเหตุการโอน"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_sample_transfer_custody_wizard
 msgid "Transfer Sample Custody Wizard"
-msgstr "Transfer Sample Custody Wizard"
+msgstr "โอนตัวช่วยสร้างการดูแลตัวอย่าง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_transfer_custody_wizard__to_user_id
 msgid "Transfer To"
-msgstr "Transfer To"
+msgstr "โอนไปที่"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_sample_transfer_custody_wizard.py:0
 msgid "Transfer target must be a different user."
-msgstr "Transfer target must be a different user."
+msgstr "เป้าหมายการโอนต้องเป็นผู้ใช้อื่น"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__turnaround_hours
 msgid "Turnaround Hours"
-msgstr "Turnaround Hours"
+msgstr "ชั่วโมงตอบสนอง"
 
 #. module: laboratory_management
 #: model:ir.model.fields,help:laboratory_management.field_lab_import_job__activity_exception_decoration
@@ -2789,69 +2789,69 @@ msgstr "Turnaround Hours"
 #: model:ir.model.fields,help:laboratory_management.field_lab_sample__activity_exception_decoration
 #: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__activity_exception_decoration
 msgid "Type of the exception activity on record."
-msgstr "Type of the exception activity on record."
+msgstr "ประเภทของกิจกรรมข้อยกเว้นในเรกคอร์ด"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__unit
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_service__unit
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_classic_document
 msgid "Unit"
-msgstr "Unit"
+msgstr "หน่วย"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__urgent
 msgid "Urgent"
-msgstr "Urgent"
+msgstr "ด่วน"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__urine
 msgid "Urine"
-msgstr "Urine"
+msgstr "ปัสสาวะ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_timeline__user_id
 msgid "User"
-msgstr "User"
+msgstr "ผู้ใช้"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_reagent_lot__vendor
 msgid "Vendor"
-msgstr "Vendor"
+msgstr "ผู้ขาย"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__state__verified
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_analysis__state__verified
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_timeline__event_type__verified
 msgid "Verified"
-msgstr "Verified"
+msgstr "ตรวจสอบแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__verified_analysis
 msgid "Verified Analysis"
-msgstr "Verified Analysis"
+msgstr "การวิเคราะห์ที่ตรวจสอบแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__verified_by_id
 msgid "Verified By"
-msgstr "Verified By"
+msgstr "ตรวจสอบโดย"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__verified_date
 msgid "Verified Date"
-msgstr "Verified Date"
+msgstr "วันที่ตรวจสอบแล้ว"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample_signoff__action_type__verify
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_analysis_form
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_sample_form
 msgid "Verify"
-msgstr "Verify"
+msgstr "ตรวจสอบ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_qc_run__status__warning
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_qc_run_search
 msgid "Warning"
-msgstr "Warning"
+msgstr "คำเตือน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job__website_message_ids
@@ -2860,7 +2860,7 @@ msgstr "Warning"
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample__website_message_ids
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__website_message_ids
 msgid "Website Messages"
-msgstr "Website Messages"
+msgstr "ข้อความเว็บไซต์"
 
 #. module: laboratory_management
 #: model:ir.model.fields,help:laboratory_management.field_lab_import_job__website_message_ids
@@ -2869,44 +2869,44 @@ msgstr "Website Messages"
 #: model:ir.model.fields,help:laboratory_management.field_lab_sample__website_message_ids
 #: model:ir.model.fields,help:laboratory_management.field_lab_worksheet__website_message_ids
 msgid "Website communication history"
-msgstr "Website communication history"
+msgstr "ประวัติการสื่อสารเว็บไซต์"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 msgid "Within reference range"
-msgstr "Within reference range"
+msgstr "อยู่ในช่วงอ้างอิง"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_workbench_wizard
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_workbench
 msgid "Workbench"
-msgstr "Workbench"
+msgstr "โต๊ะทำงาน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_sample_analysis__worksheet_id
 msgid "Worksheet"
-msgstr "Worksheet"
+msgstr "ใบงาน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_worksheet__analysis_ids
 msgid "Worksheet Analyses"
-msgstr "Worksheet Analyses"
+msgstr "การวิเคราะห์แผ่นงาน"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_worksheet
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_worksheet
 msgid "Worksheets"
-msgstr "Worksheets"
+msgstr "ใบงาน"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_run__z_score
 msgid "Z Score"
-msgstr "Z Score"
+msgstr "คะแนนซี"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_label_document
 msgid "barcode"
-msgstr "barcode"
+msgstr "บาร์โค้ด"
 
 #. module: laboratory_management
 #. odoo-python
@@ -2924,33 +2924,33 @@ msgstr "run_date"
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "sample_id"
-msgstr "sample_id"
+msgstr "ตัวอย่าง_id"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_kpi_dashboard_wizard.py:0
 msgid "sample_id.report_date"
-msgstr "sample_id.report_date"
+msgstr "ตัวอย่าง_id.report_date"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
 msgid "| <strong>Date:</strong>"
-msgstr "| <strong>Date:</strong>"
+msgstr "| <strong>วันที่:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 msgid "| <strong>Patient:</strong>"
-msgstr "| <strong>Patient:</strong>"
+msgstr "| <strong>ผู้ป่วย:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_clinical_document
 msgid "| <strong>Reported:</strong>"
-msgstr "| <strong>Reported:</strong>"
+msgstr "| <strong>รายงานแล้ว:</strong>"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
 msgid "| <strong>Rev:</strong> R"
-msgstr "| <strong>Rev:</strong> R"
+msgstr "| <strong>รายได้:</strong> อาร์"
 
 #. module: laboratory_management
 msgid "Show AI Summary in PDF"
@@ -3890,3 +3890,2091 @@ msgstr "โปรไฟล์บทบาท"
 msgid "Workstation Tasks"
 msgstr "งานเวิร์กสเตชัน"
 
+
+#. module: laboratory_management
+msgid "Batch Manual Review"
+msgstr "การทบทวนด้วยตนเองแบบเป็นชุด"
+
+#. module: laboratory_management
+msgid "Manual Review Report"
+msgstr "รายงานการทบทวนด้วยตนเอง"
+
+#. module: laboratory_management
+msgid "Bulk Storage Operation"
+msgstr "การดำเนินการจัดเก็บแบบกลุ่ม"
+
+#. module: laboratory_management
+msgid "ACK Escalation Group"
+msgstr "กลุ่มการยกระดับ ACK"
+
+#. module: laboratory_management
+msgid "AI Interpretation History"
+msgstr "ประวัติการตีความ AI"
+
+#. module: laboratory_management
+msgid "Account Move Count"
+msgstr "จำนวนการย้ายบัญชี"
+
+#. module: laboratory_management
+msgid "Account Move Payment State"
+msgstr "สถานะการชำระเงินย้ายบัญชี"
+
+#. module: laboratory_management
+msgid "Ack Code"
+msgstr "แอคโค้ด"
+
+#. module: laboratory_management
+msgid "Ack Deadline At"
+msgstr "Ack กำหนดเวลาสิ้นสุด ณ"
+
+#. module: laboratory_management
+msgid "Ack Escalated At"
+msgstr "Ack ยกระดับที่"
+
+#. module: laboratory_management
+msgid "Ack Received At"
+msgstr "อ๊าค รับที่"
+
+#. module: laboratory_management
+msgid "Ack Source Ip"
+msgstr "แอคซอร์ส Ip"
+
+#. module: laboratory_management
+msgid "Ack Timeout Minutes"
+msgstr "นาทีการหมดเวลาของ Ack"
+
+#. module: laboratory_management
+msgid "Ack Timeout State"
+msgstr "สถานะการหมดเวลาของ Ack"
+
+#. module: laboratory_management
+msgid "Acknowledged At"
+msgstr "รับทราบ ณ"
+
+#. module: laboratory_management
+msgid "Acknowledged By Name"
+msgstr "รับทราบโดยชื่อ"
+
+#. module: laboratory_management
+msgid "Acknowledged Note"
+msgstr "หมายเหตุรับทราบแล้ว"
+
+#. module: laboratory_management
+msgid "Action"
+msgstr "การดำเนินการ"
+
+#. module: laboratory_management
+msgid "Action Count"
+msgstr "จำนวนการกระทำ"
+
+#. module: laboratory_management
+msgid "Action Items"
+msgstr "รายการการกระทำ"
+
+#. module: laboratory_management
+msgid "Actual Present"
+msgstr "ปัจจุบันที่เกิดขึ้นจริง"
+
+#. module: laboratory_management
+msgid "Additional Groups"
+msgstr "กลุ่มเพิ่มเติม"
+
+#. module: laboratory_management
+msgid "Ai Interpretation Error"
+msgstr "ข้อผิดพลาดในการตีความ Ai"
+
+#. module: laboratory_management
+msgid "Ai Interpretation History Count"
+msgstr "ประวัติการตีความ Ai นับ"
+
+#. module: laboratory_management
+msgid "Ai Interpretation Lang"
+msgstr "อ้ายตีความหลาง"
+
+#. module: laboratory_management
+msgid "Ai Interpretation Model"
+msgstr "โมเดลการตีความ Ai"
+
+#. module: laboratory_management
+msgid "Ai Interpretation State"
+msgstr "รัฐการตีความ Ai"
+
+#. module: laboratory_management
+msgid "Ai Interpretation Text"
+msgstr "ข้อความการตีความ Ai"
+
+#. module: laboratory_management
+msgid "Ai Interpretation Updated At"
+msgstr "การตีความ Ai อัปเดตเมื่อ"
+
+#. module: laboratory_management
+msgid "Ai Review State"
+msgstr "ไอรีวิวรัฐ"
+
+#. module: laboratory_management
+msgid "Allowed Ip List"
+msgstr "รายการ IP ที่อนุญาต"
+
+#. module: laboratory_management
+msgid "Amount"
+msgstr "จำนวน"
+
+#. module: laboratory_management
+msgid "Amount Discount"
+msgstr "ส่วนลดจำนวน"
+
+#. module: laboratory_management
+msgid "Amount Paid"
+msgstr "จำนวนเงินที่ชำระ"
+
+#. module: laboratory_management
+msgid "Amount Residual"
+msgstr "ปริมาณคงเหลือ"
+
+#. module: laboratory_management
+msgid "Amount Total"
+msgstr "จำนวนรวม"
+
+#. module: laboratory_management
+msgid "Amount Untaxed"
+msgstr "จำนวนเงินที่ไม่ต้องเสียภาษี"
+
+#. module: laboratory_management
+msgid "Api Key"
+msgstr "คีย์ API"
+
+#. module: laboratory_management
+msgid "Applicable Services"
+msgstr "บริการที่เกี่ยวข้อง"
+
+#. module: laboratory_management
+msgid "Applied Lines"
+msgstr "เส้นประยุกต์"
+
+#. module: laboratory_management
+msgid "Applied SOP"
+msgstr "SOP ประยุกต์"
+
+#. module: laboratory_management
+msgid "Approved At"
+msgstr "อนุมัติ ณ"
+
+#. module: laboratory_management
+msgid "Approved By"
+msgstr "อนุมัติโดย"
+
+#. module: laboratory_management
+msgid "Assigned At"
+msgstr "มอบหมาย ณ"
+
+#. module: laboratory_management
+msgid "Assigned Group"
+msgstr "กลุ่มที่ได้รับมอบหมาย"
+
+#. module: laboratory_management
+msgid "Assigned User"
+msgstr "ผู้ใช้ที่ได้รับมอบหมาย"
+
+#. module: laboratory_management
+msgid "Attempt Count"
+msgstr "จำนวนความพยายาม"
+
+#. module: laboratory_management
+msgid "Attendee Count"
+msgstr "จำนวนผู้เข้าร่วม"
+
+#. module: laboratory_management
+msgid "Attendees"
+msgstr "ผู้เข้าร่วม"
+
+#. module: laboratory_management
+msgid "Audit Count"
+msgstr "จำนวนการตรวจสอบ"
+
+#. module: laboratory_management
+msgid "Audit Date"
+msgstr "วันที่ตรวจสอบ"
+
+#. module: laboratory_management
+msgid "Audit Logs"
+msgstr "บันทึกการตรวจสอบ"
+
+#. module: laboratory_management
+msgid "Audit Time"
+msgstr "เวลาตรวจสอบ"
+
+#. module: laboratory_management
+msgid "Auditees"
+msgstr "ผู้เข้ารับการตรวจ"
+
+#. module: laboratory_management
+msgid "Auditors"
+msgstr "ผู้ตรวจสอบบัญชี"
+
+#. module: laboratory_management
+msgid "Audits"
+msgstr "การตรวจสอบ"
+
+#. module: laboratory_management
+msgid "Auth Type"
+msgstr "ประเภทการรับรองความถูกต้อง"
+
+#. module: laboratory_management
+msgid "Auto Create NCR for Exception"
+msgstr "สร้าง NCR อัตโนมัติสำหรับข้อยกเว้น"
+
+#. module: laboratory_management
+msgid "Auto Generate on Report Release"
+msgstr "สร้างอัตโนมัติเมื่อมีการเผยแพร่รายงาน"
+
+#. module: laboratory_management
+msgid "Auto Mark Done Inbound Result"
+msgstr "ทำเครื่องหมายอัตโนมัติว่าเสร็จสิ้นผลลัพธ์ขาเข้า"
+
+#. module: laboratory_management
+msgid "Auto Submit Inbound Order"
+msgstr "ส่งคำสั่งซื้อขาเข้าอัตโนมัติ"
+
+#. module: laboratory_management
+msgid "Auto Verified"
+msgstr "ยืนยันอัตโนมัติ"
+
+#. module: laboratory_management
+msgid "Avg Retests Per Sample"
+msgstr "การทดสอบซ้ำเฉลี่ยต่อตัวอย่าง"
+
+#. module: laboratory_management
+msgid "Avg Review Hours"
+msgstr "ชั่วโมงการทบทวนเฉลี่ย"
+
+#. module: laboratory_management
+msgid "Batch"
+msgstr "แบทช์"
+
+#. module: laboratory_management
+msgid "Batch Line"
+msgstr "แบทช์ไลน์"
+
+#. module: laboratory_management
+msgid "Batch Reference"
+msgstr "การอ้างอิงแบทช์"
+
+#. module: laboratory_management
+msgid "Batch Samples"
+msgstr "ตัวอย่างแบทช์"
+
+#. module: laboratory_management
+msgid "Billing State"
+msgstr "รัฐการเรียกเก็บเงิน"
+
+#. module: laboratory_management
+msgid "Box"
+msgstr "กล่อง"
+
+#. module: laboratory_management
+msgid "Branch Run"
+msgstr "วิ่งสาขา"
+
+#. module: laboratory_management
+msgid "Can Administer"
+msgstr "บริหารจัดการได้"
+
+#. module: laboratory_management
+msgid "Can Approve"
+msgstr "สามารถอนุมัติได้"
+
+#. module: laboratory_management
+msgid "Can Create"
+msgstr "สามารถสร้าง"
+
+#. module: laboratory_management
+msgid "Can Edit"
+msgstr "แก้ไขได้"
+
+#. module: laboratory_management
+msgid "Can Release"
+msgstr "ปล่อยได้"
+
+#. module: laboratory_management
+msgid "Can View"
+msgstr "รับชมได้"
+
+#. module: laboratory_management
+msgid "Cancel Reason"
+msgstr "ยกเลิกเหตุผล"
+
+#. module: laboratory_management
+msgid "Capacity (Samples)"
+msgstr "ความจุ (ตัวอย่าง)"
+
+#. module: laboratory_management
+msgid "Captured At"
+msgstr "ถูกจับได้ที่"
+
+#. module: laboratory_management
+msgid "Channel"
+msgstr "ช่อง"
+
+#. module: laboratory_management
+msgid "Checklist Result"
+msgstr "ผลลัพธ์รายการตรวจสอบ"
+
+#. module: laboratory_management
+msgid "Clinical Note"
+msgstr "หมายเหตุทางคลินิก"
+
+#. module: laboratory_management
+msgid "Closure Note"
+msgstr "หมายเหตุปิด"
+
+#. module: laboratory_management
+msgid "Completed At"
+msgstr "เสร็จสิ้น ณ"
+
+#. module: laboratory_management
+msgid "Completed Line"
+msgstr "เส้นเสร็จ"
+
+#. module: laboratory_management
+msgid "Completed Manual Reviews"
+msgstr "การตรวจสอบด้วยตนเองเสร็จสมบูรณ์"
+
+#. module: laboratory_management
+msgid "Completion Rate"
+msgstr "อัตราความสำเร็จ"
+
+#. module: laboratory_management
+msgid "Completion Tokens"
+msgstr "โทเค็นการสำเร็จ"
+
+#. module: laboratory_management
+msgid "Conclusion"
+msgstr "บทสรุป"
+
+#. module: laboratory_management
+msgid "Consent"
+msgstr "ยินยอม"
+
+#. module: laboratory_management
+msgid "Container Ok"
+msgstr "คอนเทนเนอร์โอเค"
+
+#. module: laboratory_management
+msgid "Cooldown Minutes"
+msgstr "นาทีคูลดาวน์"
+
+#. module: laboratory_management
+msgid "Corrective Action Plan"
+msgstr "แผนปฏิบัติการแก้ไข"
+
+#. module: laboratory_management
+msgid "Courier Name"
+msgstr "ชื่อผู้จัดส่ง"
+
+#. module: laboratory_management
+msgid "Courier Phone"
+msgstr "โทรศัพท์จัดส่ง"
+
+#. module: laboratory_management
+msgid "Created At"
+msgstr "สร้างเมื่อ"
+
+#. module: laboratory_management
+msgid "Created By"
+msgstr "สร้างโดย"
+
+#. module: laboratory_management
+msgid "Critical Results"
+msgstr "ผลลัพธ์ที่สำคัญ"
+
+#. module: laboratory_management
+msgid "Currency"
+msgstr "สกุลเงิน"
+
+#. module: laboratory_management
+msgid "Current SOP Step"
+msgstr "ขั้นตอน SOP ปัจจุบัน"
+
+#. module: laboratory_management
+msgid "Current Sample Count"
+msgstr "จำนวนตัวอย่างปัจจุบัน"
+
+#. module: laboratory_management
+msgid "Current Step"
+msgstr "ขั้นตอนปัจจุบัน"
+
+#. module: laboratory_management
+msgid "Date of Birth"
+msgstr "วันเกิด"
+
+#. module: laboratory_management
+msgid "Dead Letter Enabled"
+msgstr "เปิดใช้งานจดหมายตายแล้ว"
+
+#. module: laboratory_management
+msgid "Dead Letter Jobs"
+msgstr "งานจดหมายมรณะ"
+
+#. module: laboratory_management
+msgid "Dead Letter Reason"
+msgstr "เหตุผลจดหมายถึงความตาย"
+
+#. module: laboratory_management
+msgid "Decision"
+msgstr "การตัดสินใจ"
+
+#. module: laboratory_management
+msgid "Decision Run Count"
+msgstr "จำนวนการดำเนินการตัดสินใจ"
+
+#. module: laboratory_management
+msgid "Default Severity"
+msgstr "ความรุนแรงเริ่มต้น"
+
+#. module: laboratory_management
+msgid "Delta Check Status"
+msgstr "สถานะการตรวจสอบเดลต้า"
+
+#. module: laboratory_management
+msgid "Delta Check Value"
+msgstr "ค่าตรวจสอบเดลต้า"
+
+#. module: laboratory_management
+msgid "Detailed Lines"
+msgstr "เส้นรายละเอียด"
+
+#. module: laboratory_management
+msgid "Direction"
+msgstr "ทิศทาง"
+
+#. module: laboratory_management
+msgid "Discrepancy Line Count"
+msgstr "จำนวนบรรทัดที่ไม่ตรงกัน"
+
+#. module: laboratory_management
+msgid "Discrepancy Type"
+msgstr "ประเภทความคลาดเคลื่อน"
+
+#. module: laboratory_management
+msgid "Dispatch"
+msgstr "จัดส่ง"
+
+#. module: laboratory_management
+msgid "Dispatch Count"
+msgstr "จำนวนการจัดส่ง"
+
+#. module: laboratory_management
+msgid "Dispatch Logs"
+msgstr "บันทึกการจัดส่ง"
+
+#. module: laboratory_management
+msgid "Dispatch Temperature (C)"
+msgstr "อุณหภูมิการส่ง (C)"
+
+#. module: laboratory_management
+msgid "Dispatch Time"
+msgstr "เวลาจัดส่ง"
+
+#. module: laboratory_management
+msgid "Dispatch Unacked"
+msgstr "จัดส่งแบบไม่มีการบรรจุ"
+
+#. module: laboratory_management
+msgid "Disposal Date"
+msgstr "วันที่จำหน่าย"
+
+#. module: laboratory_management
+msgid "Disposal Record Count"
+msgstr "จำนวนบันทึกการกำจัด"
+
+#. module: laboratory_management
+msgid "Disposed By"
+msgstr "จำหน่ายโดย"
+
+#. module: laboratory_management
+msgid "Done Action Count"
+msgstr "นับการกระทำเสร็จแล้ว"
+
+#. module: laboratory_management
+msgid "Done At"
+msgstr "เสร็จแล้วที่"
+
+#. module: laboratory_management
+msgid "Done Count"
+msgstr "นับเสร็จแล้ว"
+
+#. module: laboratory_management
+msgid "Done Date"
+msgstr "วันที่ทำเสร็จแล้ว"
+
+#. module: laboratory_management
+msgid "Done Jobs"
+msgstr "งานเสร็จแล้ว"
+
+#. module: laboratory_management
+msgid "Done Steps"
+msgstr "เสร็จสิ้นขั้นตอน"
+
+#. module: laboratory_management
+msgid "Downloaded At"
+msgstr "ดาวน์โหลดได้ที่"
+
+#. module: laboratory_management
+msgid "Dual Review Required"
+msgstr "จำเป็นต้องมีการตรวจสอบแบบคู่"
+
+#. module: laboratory_management
+msgid "Dual Review Timeline"
+msgstr "เส้นเวลาการทบทวนแบบคู่"
+
+#. module: laboratory_management
+msgid "Duration (ms)"
+msgstr "ระยะเวลา (มิลลิวินาที)"
+
+#. module: laboratory_management
+msgid "Duration Hour"
+msgstr "ระยะเวลา ชั่วโมง"
+
+#. module: laboratory_management
+msgid "Effectiveness Conclusion"
+msgstr "ประสิทธิผล"
+
+#. module: laboratory_management
+msgid "Enable AI Interpretation"
+msgstr "เปิดใช้งานการตีความ AI"
+
+#. module: laboratory_management
+msgid "End Date"
+msgstr "วันที่สิ้นสุด"
+
+#. module: laboratory_management
+msgid "Endpoint"
+msgstr "จุดสิ้นสุด"
+
+#. module: laboratory_management
+msgid "Endpoint Url"
+msgstr "URL ปลายทาง"
+
+#. module: laboratory_management
+msgid "Eqa Pass"
+msgstr "อีคาพาส"
+
+#. module: laboratory_management
+msgid "Eqa Pass Rate"
+msgstr "อัตราการส่งผ่าน Eqa"
+
+#. module: laboratory_management
+msgid "Eqa Total"
+msgstr "เอคเอ โททัล"
+
+#. module: laboratory_management
+msgid "Error Message"
+msgstr "ข้อความแสดงข้อผิดพลาด"
+
+#. module: laboratory_management
+msgid "Escalate After Attempt"
+msgstr "บานปลายหลังจากพยายาม"
+
+#. module: laboratory_management
+msgid "Escalate After Failures"
+msgstr "บานปลายหลังจากความล้มเหลว"
+
+#. module: laboratory_management
+msgid "Escalated"
+msgstr "ยกระดับแล้ว"
+
+#. module: laboratory_management
+msgid "Escalated Sample Count"
+msgstr "จำนวนตัวอย่างที่เพิ่มขึ้น"
+
+#. module: laboratory_management
+msgid "Escalation Level"
+msgstr "ระดับการยกระดับ"
+
+#. module: laboratory_management
+msgid "Escalation Log Count"
+msgstr "จำนวนบันทึกการยกระดับ"
+
+#. module: laboratory_management
+msgid "Escalation Logs"
+msgstr "บันทึกการยกระดับ"
+
+#. module: laboratory_management
+msgid "Escalation Note"
+msgstr "หมายเหตุการยกระดับ"
+
+#. module: laboratory_management
+msgid "Estimated Report Date"
+msgstr "วันที่รายงานโดยประมาณ"
+
+#. module: laboratory_management
+msgid "Estimated Turnaround Hours"
+msgstr "ชั่วโมงการดำเนินการโดยประมาณ"
+
+#. module: laboratory_management
+msgid "Event At"
+msgstr "กิจกรรมที่"
+
+#. module: laboratory_management
+msgid "Events"
+msgstr "กิจกรรม"
+
+#. module: laboratory_management
+msgid "Exception Count"
+msgstr "จำนวนข้อยกเว้น"
+
+#. module: laboratory_management
+msgid "Exception Reason"
+msgstr "เหตุผลข้อยกเว้น"
+
+#. module: laboratory_management
+msgid "Exception Routes"
+msgstr "เส้นทางข้อยกเว้น"
+
+#. module: laboratory_management
+msgid "Exception Severity"
+msgstr "ความรุนแรงของข้อยกเว้น"
+
+#. module: laboratory_management
+msgid "Exception Type"
+msgstr "ประเภทข้อยกเว้น"
+
+#. module: laboratory_management
+msgid "Execution"
+msgstr "การดำเนินการ"
+
+#. module: laboratory_management
+msgid "Execution Events"
+msgstr "เหตุการณ์การดำเนินการ"
+
+#. module: laboratory_management
+msgid "Execution Steps"
+msgstr "ขั้นตอนการดำเนินการ"
+
+#. module: laboratory_management
+msgid "Existing Patient"
+msgstr "ผู้ป่วยที่มีอยู่"
+
+#. module: laboratory_management
+msgid "Expected Present"
+msgstr "ปัจจุบันที่คาดหวัง"
+
+#. module: laboratory_management
+msgid "Expected Temp Max (C)"
+msgstr "อุณหภูมิสูงสุดที่คาดหวัง (C)"
+
+#. module: laboratory_management
+msgid "Expected Temp Min (C)"
+msgstr "อุณหภูมิต่ำสุดที่คาดหวัง (C)"
+
+#. module: laboratory_management
+msgid "External Uid"
+msgstr "Uid ภายนอก"
+
+#. module: laboratory_management
+msgid "Fail Count"
+msgstr "การนับความล้มเหลว"
+
+#. module: laboratory_management
+msgid "Failed Count"
+msgstr "การนับล้มเหลว"
+
+#. module: laboratory_management
+msgid "Failed Jobs"
+msgstr "งานที่ล้มเหลว"
+
+#. module: laboratory_management
+msgid "Failed Steps"
+msgstr "ขั้นตอนที่ล้มเหลว"
+
+#. module: laboratory_management
+msgid "Fallback Group"
+msgstr "กลุ่มทางเลือก"
+
+#. module: laboratory_management
+msgid "Fallback Recipient Email"
+msgstr "อีเมลผู้รับสำรอง"
+
+#. module: laboratory_management
+msgid "Fasting Required"
+msgstr "จำเป็นต้องถือศีลอด"
+
+#. module: laboratory_management
+msgid "Fasting Rule"
+msgstr "กฎการถือศีลอด"
+
+#. module: laboratory_management
+msgid "Findings"
+msgstr "ผลการวิจัย"
+
+#. module: laboratory_management
+msgid "From"
+msgstr "จาก"
+
+#. module: laboratory_management
+msgid "From Custodian"
+msgstr "จากผู้พิทักษ์"
+
+#. module: laboratory_management
+msgid "From Location"
+msgstr "จากที่ตั้ง"
+
+#. module: laboratory_management
+msgid "Generated At"
+msgstr "สร้างเมื่อ"
+
+#. module: laboratory_management
+msgid "Generated By"
+msgstr "สร้างโดย"
+
+#. module: laboratory_management
+msgid "Generated Samples"
+msgstr "ตัวอย่างที่สร้างขึ้น"
+
+#. module: laboratory_management
+msgid "Group"
+msgstr "กลุ่ม"
+
+#. module: laboratory_management
+msgid "Idempotency Key"
+msgstr "คีย์ Idempotency"
+
+#. module: laboratory_management
+msgid "Immediate Containment"
+msgstr "การกักกันทันที"
+
+#. module: laboratory_management
+msgid "Impact Assessment"
+msgstr "การประเมินผลกระทบ"
+
+#. module: laboratory_management
+msgid "In Transit Count"
+msgstr "ในการนับการขนส่ง"
+
+#. module: laboratory_management
+msgid "Inbound Mapping Profile"
+msgstr "โปรไฟล์การแมปขาเข้า"
+
+#. module: laboratory_management
+msgid "Inbound Url"
+msgstr "URL ขาเข้า"
+
+#. module: laboratory_management
+msgid "Include Custom Groups"
+msgstr "รวมกลุ่มที่กำหนดเอง"
+
+#. module: laboratory_management
+msgid "Include Dead Letter"
+msgstr "รวมจดหมายถึงความตาย"
+
+#. module: laboratory_management
+msgid "Include Failed"
+msgstr "รวมล้มเหลว"
+
+#. module: laboratory_management
+msgid "Institution / Client"
+msgstr "สถาบัน / ลูกค้า"
+
+#. module: laboratory_management
+msgid "Interface Job"
+msgstr "งานอินเทอร์เฟซ"
+
+#. module: laboratory_management
+msgid "Interface Job Count"
+msgstr "จำนวนงานอินเทอร์เฟซ"
+
+#. module: laboratory_management
+msgid "Interface Success"
+msgstr "ความสำเร็จของอินเทอร์เฟซ"
+
+#. module: laboratory_management
+msgid "Interface Success Rate"
+msgstr "อัตราความสำเร็จของอินเทอร์เฟซ"
+
+#. module: laboratory_management
+msgid "Interface Total"
+msgstr "รวมอินเทอร์เฟซ"
+
+#. module: laboratory_management
+msgid "Invoice"
+msgstr "ใบแจ้งหนี้"
+
+#. module: laboratory_management
+msgid "Invoice Amount Paid"
+msgstr "จำนวนเงินตามใบแจ้งหนี้ที่ชำระแล้ว"
+
+#. module: laboratory_management
+msgid "Invoice Amount Residual"
+msgstr "จำนวนเงินคงเหลือในใบแจ้งหนี้"
+
+#. module: laboratory_management
+msgid "Invoice Amount Total"
+msgstr "จำนวนเงินในใบแจ้งหนี้ทั้งหมด"
+
+#. module: laboratory_management
+msgid "Invoice Count"
+msgstr "นับใบแจ้งหนี้"
+
+#. module: laboratory_management
+msgid "Invoice Date"
+msgstr "วันที่ออกใบแจ้งหนี้"
+
+#. module: laboratory_management
+msgid "Invoice Lines"
+msgstr "บรรทัดใบแจ้งหนี้"
+
+#. module: laboratory_management
+msgid "Invoices"
+msgstr "ใบแจ้งหนี้"
+
+#. module: laboratory_management
+msgid "Ip Address"
+msgstr "ที่อยู่ไอพี"
+
+#. module: laboratory_management
+msgid "Is Active Version"
+msgstr "เป็นเวอร์ชันที่ใช้งานอยู่"
+
+#. module: laboratory_management
+msgid "Is Default"
+msgstr "เป็นค่าเริ่มต้น"
+
+#. module: laboratory_management
+msgid "Is Dual Confirmed"
+msgstr "ได้รับการยืนยันแบบคู่แล้ว"
+
+#. module: laboratory_management
+msgid "Issue Summary"
+msgstr "สรุปประเด็น"
+
+#. module: laboratory_management
+msgid "Kpi Count"
+msgstr "จำนวน Kpi"
+
+#. module: laboratory_management
+msgid "Label Ok"
+msgstr "ป้ายกำกับ ตกลง"
+
+#. module: laboratory_management
+msgid "Last Custody Event"
+msgstr "เหตุการณ์การดูแลครั้งสุดท้าย"
+
+#. module: laboratory_management
+msgid "Last Reminder At"
+msgstr "การแจ้งเตือนครั้งสุดท้ายเมื่อ"
+
+#. module: laboratory_management
+msgid "Lead Auditor"
+msgstr "หัวหน้าผู้ตรวจสอบบัญชี"
+
+#. module: laboratory_management
+msgid "Level"
+msgstr "ระดับ"
+
+#. module: laboratory_management
+msgid "Line"
+msgstr "เส้น"
+
+#. module: laboratory_management
+msgid "Lines"
+msgstr "เส้น"
+
+#. module: laboratory_management
+msgid "List Price"
+msgstr "ราคาปลีก"
+
+#. module: laboratory_management
+msgid "Load Ratio"
+msgstr "อัตราส่วนโหลด"
+
+#. module: laboratory_management
+msgid "Major Count"
+msgstr "การนับที่สำคัญ"
+
+#. module: laboratory_management
+msgid "Manual Review Reason Code"
+msgstr "รหัสเหตุผลการตรวจสอบด้วยตนเอง"
+
+#. module: laboratory_management
+msgid "Mapping Schema"
+msgstr "สคีมาการทำแผนที่"
+
+#. module: laboratory_management
+msgid "Matched"
+msgstr "ตรงกัน"
+
+#. module: laboratory_management
+msgid "Max Open Tasks"
+msgstr "งานเปิดสูงสุด"
+
+#. module: laboratory_management
+msgid "Max Retest Count"
+msgstr "จำนวนการทดสอบซ้ำสูงสุด"
+
+#. module: laboratory_management
+msgid "Max Temp (C)"
+msgstr "อุณหภูมิสูงสุด (C)"
+
+#. module: laboratory_management
+msgid "Max Total Attempts"
+msgstr "ความพยายามทั้งหมดสูงสุด"
+
+#. module: laboratory_management
+msgid "Measured Receive Temp (C)"
+msgstr "อุณหภูมิรับที่วัดได้ (C)"
+
+#. module: laboratory_management
+msgid "Medical Review Note"
+msgstr "หมายเหตุการทบทวนทางการแพทย์"
+
+#. module: laboratory_management
+msgid "Medical Review State"
+msgstr "รัฐทบทวนทางการแพทย์"
+
+#. module: laboratory_management
+msgid "Medical Reviewed At"
+msgstr "ตรวจสอบทางการแพทย์ที่"
+
+#. module: laboratory_management
+msgid "Medical Reviewer"
+msgstr "ผู้วิจารณ์ทางการแพทย์"
+
+#. module: laboratory_management
+msgid "Message Type"
+msgstr "ประเภทข้อความ"
+
+#. module: laboratory_management
+msgid "Method"
+msgstr "วิธีการ"
+
+#. module: laboratory_management
+msgid "Min Critical Count"
+msgstr "การนับวิกฤตขั้นต่ำ"
+
+#. module: laboratory_management
+msgid "Min Manual Review Count"
+msgstr "จำนวนการตรวจสอบด้วยตนเองขั้นต่ำ"
+
+#. module: laboratory_management
+msgid "Min Out Of Range Count"
+msgstr "การนับนอกช่วงขั้นต่ำ"
+
+#. module: laboratory_management
+msgid "Min Retest Count"
+msgstr "จำนวนการทดสอบซ้ำขั้นต่ำ"
+
+#. module: laboratory_management
+msgid "Min Temp (C)"
+msgstr "อุณหภูมิต่ำสุด (C)"
+
+#. module: laboratory_management
+msgid "Minor Count"
+msgstr "จำนวนผู้เยาว์"
+
+#. module: laboratory_management
+msgid "Mismatch Lines"
+msgstr "เส้นไม่ตรงกัน"
+
+#. module: laboratory_management
+msgid "Missing Count"
+msgstr "จำนวนที่หายไป"
+
+#. module: laboratory_management
+msgid "Mode"
+msgstr "โหมด"
+
+#. module: laboratory_management
+msgid "Model"
+msgstr "รุ่น"
+
+#. module: laboratory_management
+msgid "Ncr Closed"
+msgstr "Ncr ปิดแล้ว"
+
+#. module: laboratory_management
+msgid "Ncr Closure Rate"
+msgstr "อัตราการปิด Ncr"
+
+#. module: laboratory_management
+msgid "Ncr Open"
+msgstr "เอ็นซีอาร์ โอเพ่น"
+
+#. module: laboratory_management
+msgid "Ncr Total"
+msgstr "ยอดรวม Ncr"
+
+#. module: laboratory_management
+msgid "Needs Manual Review"
+msgstr "จำเป็นต้องมีการตรวจสอบด้วยตนเอง"
+
+#. module: laboratory_management
+msgid "Next Retry At"
+msgstr "ถัดไปลองอีกครั้งที่"
+
+#. module: laboratory_management
+msgid "Nonconformance"
+msgstr "ความไม่สอดคล้องกัน"
+
+#. module: laboratory_management
+msgid "Objective"
+msgstr "วัตถุประสงค์"
+
+#. module: laboratory_management
+msgid "Obs Count"
+msgstr "จำนวน Obs"
+
+#. module: laboratory_management
+msgid "Occupancy Rate"
+msgstr "อัตราการเข้าพัก"
+
+#. module: laboratory_management
+msgid "Ok Count"
+msgstr "โอเค นับ"
+
+#. module: laboratory_management
+msgid "Ok Line Count"
+msgstr "ตกลงนับบรรทัด"
+
+#. module: laboratory_management
+msgid "On Time Completed"
+msgstr "เสร็จตรงเวลา"
+
+#. module: laboratory_management
+msgid "On Time Rate"
+msgstr "อัตราตรงต่อเวลา"
+
+#. module: laboratory_management
+msgid "Open Count"
+msgstr "เปิดนับ"
+
+#. module: laboratory_management
+msgid "Open Task Count"
+msgstr "เปิดจำนวนงาน"
+
+#. module: laboratory_management
+msgid "Outbound Ack Url"
+msgstr "URL แอคขาออก"
+
+#. module: laboratory_management
+msgid "Outbound Mapping Profile"
+msgstr "โปรไฟล์การแมปขาออก"
+
+#. module: laboratory_management
+msgid "Output Language"
+msgstr "ภาษาเอาท์พุต"
+
+#. module: laboratory_management
+msgid "Output Note"
+msgstr "หมายเหตุเอาท์พุต"
+
+#. module: laboratory_management
+msgid "Overdue Line"
+msgstr "เส้นที่เกินกำหนด"
+
+#. module: laboratory_management
+msgid "Overdue Manual Reviews"
+msgstr "การตรวจสอบคู่มือที่ค้างชำระ"
+
+#. module: laboratory_management
+msgid "Overdue Rate"
+msgstr "อัตราที่ค้างชำระ"
+
+#. module: laboratory_management
+msgid "Owner"
+msgstr "เจ้าของ"
+
+#. module: laboratory_management
+msgid "Owner Group"
+msgstr "กลุ่มเจ้าของ"
+
+#. module: laboratory_management
+msgid "Package Condition"
+msgstr "สภาพแพ็คเกจ"
+
+#. module: laboratory_management
+msgid "Package Count"
+msgstr "จำนวนแพ็คเกจ"
+
+#. module: laboratory_management
+msgid "Partner"
+msgstr "พันธมิตร"
+
+#. module: laboratory_management
+msgid "Pass Count"
+msgstr "จำนวนการผ่าน"
+
+#. module: laboratory_management
+msgid "Pass Rate"
+msgstr "อัตราการผ่าน"
+
+#. module: laboratory_management
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+#. module: laboratory_management
+msgid "Patient Gender"
+msgstr "เพศของผู้ป่วย"
+
+#. module: laboratory_management
+msgid "Patient ID / Passport"
+msgstr "บัตรประจำตัวผู้ป่วย / หนังสือเดินทาง"
+
+#. module: laboratory_management
+msgid "Patient Name"
+msgstr "ชื่อผู้ป่วย"
+
+#. module: laboratory_management
+msgid "Patient Phone"
+msgstr "โทรศัพท์ผู้ป่วย"
+
+#. module: laboratory_management
+msgid "Payer Partner"
+msgstr "พันธมิตรผู้ชำระเงิน"
+
+#. module: laboratory_management
+msgid "Payload Json"
+msgstr "เพย์โหลด Json"
+
+#. module: laboratory_management
+msgid "Payload Text"
+msgstr "ข้อความเพย์โหลด"
+
+#. module: laboratory_management
+msgid "Payment Count"
+msgstr "จำนวนการชำระเงิน"
+
+#. module: laboratory_management
+msgid "Payment Date"
+msgstr "วันที่ชำระเงิน"
+
+#. module: laboratory_management
+msgid "Payment Policy"
+msgstr "นโยบายการชำระเงิน"
+
+#. module: laboratory_management
+msgid "Payment Reference"
+msgstr "การอ้างอิงการชำระเงิน"
+
+#. module: laboratory_management
+msgid "Payment State"
+msgstr "สถานะการชำระเงิน"
+
+#. module: laboratory_management
+msgid "Payments"
+msgstr "การชำระเงิน"
+
+#. module: laboratory_management
+msgid "Pending Manual Reviews"
+msgstr "รอการตรวจสอบด้วยตนเอง"
+
+#. module: laboratory_management
+msgid "Period End"
+msgstr "สิ้นสุดระยะเวลา"
+
+#. module: laboratory_management
+msgid "Period Start"
+msgstr "ระยะเวลาเริ่มต้น"
+
+#. module: laboratory_management
+msgid "Physician"
+msgstr "แพทย์"
+
+#. module: laboratory_management
+msgid "Policy"
+msgstr "นโยบาย"
+
+#. module: laboratory_management
+msgid "Policy Lines"
+msgstr "เส้นนโยบาย"
+
+#. module: laboratory_management
+msgid "Portal Last Viewed At"
+msgstr "พอร์ทัลดูล่าสุดเมื่อ"
+
+#. module: laboratory_management
+msgid "Preferred Report Template"
+msgstr "เทมเพลตรายงานที่ต้องการ"
+
+#. module: laboratory_management
+msgid "Preventive Action Plan"
+msgstr "แผนปฏิบัติการเชิงป้องกัน"
+
+#. module: laboratory_management
+msgid "Processed At"
+msgstr "ดำเนินการที่"
+
+#. module: laboratory_management
+msgid "Program"
+msgstr "โปรแกรม"
+
+#. module: laboratory_management
+msgid "Program Lines"
+msgstr "เส้นโปรแกรม"
+
+#. module: laboratory_management
+msgid "Prompt Tokens"
+msgstr "โทเค็นพร้อมท์"
+
+#. module: laboratory_management
+msgid "Protocol"
+msgstr "พิธีสาร"
+
+#. module: laboratory_management
+msgid "Provider"
+msgstr "ผู้ให้บริการ"
+
+#. module: laboratory_management
+msgid "QA Reviewer"
+msgstr "ผู้ตรวจสอบคุณภาพ"
+
+#. module: laboratory_management
+msgid "Qa Reviewer"
+msgstr "Qa ผู้วิจารณ์"
+
+#. module: laboratory_management
+msgid "Qa Signed At"
+msgstr "Qa ลงนามที่"
+
+#. module: laboratory_management
+msgid "Qa Signed By"
+msgstr "Qa ลงนามโดย"
+
+#. module: laboratory_management
+msgid "Qc Reject"
+msgstr "ปฏิเสธการควบคุมคุณภาพ"
+
+#. module: laboratory_management
+msgid "Qc Total"
+msgstr "การควบคุมคุณภาพรวม"
+
+#. module: laboratory_management
+msgid "Quantity Ok"
+msgstr "ปริมาณ ตกลง"
+
+#. module: laboratory_management
+msgid "Queued At"
+msgstr "เข้าคิวที่"
+
+#. module: laboratory_management
+msgid "Queued Count"
+msgstr "จำนวนคิว"
+
+#. module: laboratory_management
+msgid "Quote Auto Reminder Count"
+msgstr "นับจำนวนการแจ้งเตือนอัตโนมัติ"
+
+#. module: laboratory_management
+msgid "Quote Days Left"
+msgstr "อ้างวันที่เหลือ"
+
+#. module: laboratory_management
+msgid "Quote Expired"
+msgstr "ใบเสนอราคาหมดอายุแล้ว"
+
+#. module: laboratory_management
+msgid "Quote Last Sent At"
+msgstr "อ้างอิง ส่งล่าสุดเมื่อ"
+
+#. module: laboratory_management
+msgid "Quote Last Sent By"
+msgstr "ใบเสนอราคา ส่งล่าสุดโดย"
+
+#. module: laboratory_management
+msgid "Quote Note"
+msgstr "หมายเหตุอ้างอิง"
+
+#. module: laboratory_management
+msgid "Quote Reference"
+msgstr "การอ้างอิงอ้างอิง"
+
+#. module: laboratory_management
+msgid "Quote Revision Count"
+msgstr "จำนวนการแก้ไขใบเสนอราคา"
+
+#. module: laboratory_management
+msgid "Quote Valid Until"
+msgstr "ใบเสนอราคาใช้ได้จนถึง"
+
+#. module: laboratory_management
+msgid "Reason"
+msgstr "เหตุผล"
+
+#. module: laboratory_management
+msgid "Receipt Lines"
+msgstr "ใบเสร็จรับเงิน"
+
+#. module: laboratory_management
+msgid "Receive Note"
+msgstr "รับหมายเหตุ"
+
+#. module: laboratory_management
+msgid "Receive Temperature (C)"
+msgstr "รับอุณหภูมิ (C)"
+
+#. module: laboratory_management
+msgid "Received Time"
+msgstr "เวลาที่ได้รับ"
+
+#. module: laboratory_management
+msgid "Receiver"
+msgstr "ผู้รับ"
+
+#. module: laboratory_management
+msgid "Recollect After Attempt"
+msgstr "จำหลังจากพยายาม"
+
+#. module: laboratory_management
+msgid "Recollect Event Count"
+msgstr "จำจำนวนเหตุการณ์"
+
+#. module: laboratory_management
+msgid "Reject Count"
+msgstr "ปฏิเสธนับ"
+
+#. module: laboratory_management
+msgid "Reject Sigma"
+msgstr "ปฏิเสธซิกมา"
+
+#. module: laboratory_management
+msgid "Rejected At"
+msgstr "ถูกปฏิเสธเมื่อ"
+
+#. module: laboratory_management
+msgid "Rejected By"
+msgstr "ถูกปฏิเสธโดย"
+
+#. module: laboratory_management
+msgid "Rejection Reason"
+msgstr "เหตุผลในการปฏิเสธ"
+
+#. module: laboratory_management
+msgid "Reminder Count"
+msgstr "จำนวนการเตือนความจำ"
+
+#. module: laboratory_management
+msgid "Report Publication State"
+msgstr "รายงานสถานะการตีพิมพ์"
+
+#. module: laboratory_management
+msgid "Reported Samples"
+msgstr "ตัวอย่างที่รายงาน"
+
+#. module: laboratory_management
+msgid "Request"
+msgstr "คำขอ"
+
+#. module: laboratory_management
+msgid "Request No."
+msgstr "หมายเลขคำขอ"
+
+#. module: laboratory_management
+msgid "Request Time Window"
+msgstr "กรอบเวลาการร้องขอ"
+
+#. module: laboratory_management
+msgid "Request Type"
+msgstr "ประเภทคำขอ"
+
+#. module: laboratory_management
+msgid "Requested Collection Time"
+msgstr "เวลารวบรวมที่ร้องขอ"
+
+#. module: laboratory_management
+msgid "Requested Tests"
+msgstr "การทดสอบที่ร้องขอ"
+
+#. module: laboratory_management
+msgid "Requester"
+msgstr "ผู้ร้องขอ"
+
+#. module: laboratory_management
+msgid "Require Effectiveness"
+msgstr "ต้องการประสิทธิผล"
+
+#. module: laboratory_management
+msgid "Require Outbound Ack"
+msgstr "จำเป็นต้องมี Ack ขาออก"
+
+#. module: laboratory_management
+msgid "Require Qa Signoff"
+msgstr "จำเป็นต้องมีการลงนาม Qa"
+
+#. module: laboratory_management
+msgid "Required Group"
+msgstr "กลุ่มที่ต้องการ"
+
+#. module: laboratory_management
+msgid "Response Body"
+msgstr "ร่างกายตอบสนอง"
+
+#. module: laboratory_management
+msgid "Response Code"
+msgstr "รหัสตอบกลับ"
+
+#. module: laboratory_management
+msgid "Result Action"
+msgstr "การดำเนินการผลลัพธ์"
+
+#. module: laboratory_management
+msgid "Result Count"
+msgstr "จำนวนผลลัพธ์"
+
+#. module: laboratory_management
+msgid "Result State"
+msgstr "สถานะผลลัพธ์"
+
+#. module: laboratory_management
+msgid "Results"
+msgstr "ผลลัพธ์"
+
+#. module: laboratory_management
+msgid "Retention Days"
+msgstr "วันเก็บรักษา"
+
+#. module: laboratory_management
+msgid "Retest Policy"
+msgstr "นโยบายการทดสอบซ้ำ"
+
+#. module: laboratory_management
+msgid "Retest Strategy"
+msgstr "ทดสอบกลยุทธ์อีกครั้ง"
+
+#. module: laboratory_management
+msgid "Retry Backoff Factor"
+msgstr "ลองปัจจัย Backoff อีกครั้ง"
+
+#. module: laboratory_management
+msgid "Retry Delay Minutes"
+msgstr "ลองนาทีที่ล่าช้าอีกครั้ง"
+
+#. module: laboratory_management
+msgid "Retry Interval Minutes"
+msgstr "ลองช่วงเวลานาทีอีกครั้ง"
+
+#. module: laboratory_management
+msgid "Retry Limit"
+msgstr "ขีดจำกัดการลองอีกครั้ง"
+
+#. module: laboratory_management
+msgid "Retry Max Interval Minutes"
+msgstr "ลองช่วงเวลาสูงสุดใหม่อีกครั้ง"
+
+#. module: laboratory_management
+msgid "Retry Strategy"
+msgstr "ลองกลยุทธ์อีกครั้ง"
+
+#. module: laboratory_management
+msgid "Retry Window Hours"
+msgstr "ลองกรอบเวลาใหม่อีกครั้ง"
+
+#. module: laboratory_management
+msgid "Review Assignee"
+msgstr "ตรวจสอบผู้รับมอบหมาย"
+
+#. module: laboratory_management
+msgid "Review Block Reason"
+msgstr "ตรวจสอบเหตุผลของการบล็อก"
+
+#. module: laboratory_management
+msgid "Review Due Date"
+msgstr "ตรวจสอบวันที่ครบกำหนด"
+
+#. module: laboratory_management
+msgid "Review Overdue"
+msgstr "ตรวจสอบเกินกำหนด"
+
+#. module: laboratory_management
+msgid "Review Release Ready"
+msgstr "รีวิวพร้อมเผยแพร่แล้ว"
+
+#. module: laboratory_management
+msgid "Review SLA (Hours)"
+msgstr "ตรวจสอบ SLA (ชั่วโมง)"
+
+#. module: laboratory_management
+msgid "Reviewed At"
+msgstr "รีวิวเมื่อ"
+
+#. module: laboratory_management
+msgid "Reviewed By"
+msgstr "ตรวจสอบโดย"
+
+#. module: laboratory_management
+msgid "Reviewer Line"
+msgstr "สายรีวิว"
+
+#. module: laboratory_management
+msgid "Revision No"
+msgstr "ฉบับแก้ไข"
+
+#. module: laboratory_management
+msgid "Role Type"
+msgstr "ประเภทบทบาท"
+
+#. module: laboratory_management
+msgid "Route Action"
+msgstr "การดำเนินการตามเส้นทาง"
+
+#. module: laboratory_management
+msgid "Route Group"
+msgstr "กลุ่มเส้นทาง"
+
+#. module: laboratory_management
+msgid "Rule"
+msgstr "กฎ"
+
+#. module: laboratory_management
+msgid "Rule Warning Count"
+msgstr "จำนวนคำเตือนกฎ"
+
+#. module: laboratory_management
+msgid "Rules"
+msgstr "กฎเกณฑ์"
+
+#. module: laboratory_management
+msgid "Run At"
+msgstr "วิ่งที่"
+
+#. module: laboratory_management
+msgid "Run Time"
+msgstr "เวลาดำเนินการ"
+
+#. module: laboratory_management
+msgid "SLA Policy"
+msgstr "นโยบาย SLA"
+
+#. module: laboratory_management
+msgid "SOP Steps"
+msgstr "ขั้นตอน SOP"
+
+#. module: laboratory_management
+msgid "Sample Count"
+msgstr "จำนวนตัวอย่าง"
+
+#. module: laboratory_management
+msgid "Sample Date"
+msgstr "วันที่ตัวอย่าง"
+
+#. module: laboratory_management
+msgid "Scheme"
+msgstr "โครงการ"
+
+#. module: laboratory_management
+msgid "Scope"
+msgstr "ขอบเขต"
+
+#. module: laboratory_management
+msgid "Seal Code"
+msgstr "รหัสซีล"
+
+#. module: laboratory_management
+msgid "Seal Intact"
+msgstr "ซีลไม่เสียหาย"
+
+#. module: laboratory_management
+msgid "Seal Note"
+msgstr "หมายเหตุประทับตรา"
+
+#. module: laboratory_management
+msgid "Sections"
+msgstr "ส่วนต่างๆ"
+
+#. module: laboratory_management
+msgid "Segments"
+msgstr "เซ็กเมนต์"
+
+#. module: laboratory_management
+msgid "Sent At"
+msgstr "ส่งไปที่"
+
+#. module: laboratory_management
+msgid "Session"
+msgstr "เซสชัน"
+
+#. module: laboratory_management
+msgid "Signature Count"
+msgstr "ลายเซ็นนับ"
+
+#. module: laboratory_management
+msgid "Signature Hash"
+msgstr "แฮชลายเซ็น"
+
+#. module: laboratory_management
+msgid "Signer Name"
+msgstr "ชื่อผู้ลงนาม"
+
+#. module: laboratory_management
+msgid "Signoff Count"
+msgstr "การนับลายเซ็นต์"
+
+#. module: laboratory_management
+msgid "Sla Breach Notified"
+msgstr "แจ้งการละเมิด Sla แล้ว"
+
+#. module: laboratory_management
+msgid "Sla Deadline"
+msgstr "กำหนดเวลาสลา"
+
+#. module: laboratory_management
+msgid "Sla Hours"
+msgstr "ชั่วโมงสลา"
+
+#. module: laboratory_management
+msgid "Sla Remaining Hours"
+msgstr "Sla ชั่วโมงที่เหลือ"
+
+#. module: laboratory_management
+msgid "Sla State"
+msgstr "รัฐสลา"
+
+#. module: laboratory_management
+msgid "Sla Target Hours"
+msgstr "ชั่วโมงเป้าหมาย Sla"
+
+#. module: laboratory_management
+msgid "Sla Warning Hours"
+msgstr "ชั่วโมงการเตือน Sla"
+
+#. module: laboratory_management
+msgid "Slot"
+msgstr "สล็อต"
+
+#. module: laboratory_management
+msgid "Snapshot"
+msgstr "สแนปชอต"
+
+#. module: laboratory_management
+msgid "Snapshot Date"
+msgstr "วันที่สแนปชอต"
+
+#. module: laboratory_management
+msgid "Sop"
+msgstr "สบ"
+
+#. module: laboratory_management
+msgid "Sop Exception State"
+msgstr "สถานะข้อยกเว้นของสบ"
+
+#. module: laboratory_management
+msgid "Source Ip"
+msgstr "ไอพีต้นทาง"
+
+#. module: laboratory_management
+msgid "Source Model"
+msgstr "แหล่งที่มาของแบบจำลอง"
+
+#. module: laboratory_management
+msgid "Source Res"
+msgstr "ความละเอียดแหล่งที่มา"
+
+#. module: laboratory_management
+msgid "Source State"
+msgstr "สถานะต้นทาง"
+
+#. module: laboratory_management
+msgid "Start Date"
+msgstr "วันที่เริ่มต้น"
+
+#. module: laboratory_management
+msgid "Storage Box"
+msgstr "กล่องเก็บของ"
+
+#. module: laboratory_management
+msgid "Storage Disposed Date"
+msgstr "วันที่จำหน่ายที่จัดเก็บ"
+
+#. module: laboratory_management
+msgid "Storage Due Date"
+msgstr "วันครบกำหนดการจัดเก็บ"
+
+#. module: laboratory_management
+msgid "Storage Event Count"
+msgstr "จำนวนเหตุการณ์การจัดเก็บ"
+
+#. module: laboratory_management
+msgid "Storage Is Overdue"
+msgstr "การจัดเก็บเกินกำหนด"
+
+#. module: laboratory_management
+msgid "Storage Location"
+msgstr "สถานที่จัดเก็บ"
+
+#. module: laboratory_management
+msgid "Storage Note"
+msgstr "หมายเหตุการจัดเก็บ"
+
+#. module: laboratory_management
+msgid "Storage Retrieved Date"
+msgstr "วันที่เรียกคืนพื้นที่เก็บข้อมูล"
+
+#. module: laboratory_management
+msgid "Storage Slot"
+msgstr "ช่องเก็บของ"
+
+#. module: laboratory_management
+msgid "Storage State"
+msgstr "สถานะการจัดเก็บ"
+
+#. module: laboratory_management
+msgid "Storage Stored Date"
+msgstr "วันที่จัดเก็บที่จัดเก็บ"
+
+#. module: laboratory_management
+msgid "Submitted At"
+msgstr "ส่งมาที่"
+
+#. module: laboratory_management
+msgid "Submitted By"
+msgstr "ส่งโดย"
+
+#. module: laboratory_management
+msgid "Submitted Date"
+msgstr "วันที่ยื่น"
+
+#. module: laboratory_management
+msgid "Success Count"
+msgstr "นับความสำเร็จ"
+
+#. module: laboratory_management
+msgid "Success Rate"
+msgstr "อัตราความสำเร็จ"
+
+#. module: laboratory_management
+msgid "Summary"
+msgstr "สรุป"
+
+#. module: laboratory_management
+msgid "System Type"
+msgstr "ประเภทของระบบ"
+
+#. module: laboratory_management
+msgid "Target Close Date"
+msgstr "วันที่ปิดเป้าหมาย"
+
+#. module: laboratory_management
+msgid "Target Workstation"
+msgstr "เวิร์กสเตชันเป้าหมาย"
+
+#. module: laboratory_management
+msgid "Task"
+msgstr "งาน"
+
+#. module: laboratory_management
+msgid "Technical Review Note"
+msgstr "หมายเหตุการทบทวนทางเทคนิค"
+
+#. module: laboratory_management
+msgid "Technical Review State"
+msgstr "สถานะการตรวจสอบทางเทคนิค"
+
+#. module: laboratory_management
+msgid "Technical Reviewed At"
+msgstr "สอบทานทางเทคนิคแล้วที่"
+
+#. module: laboratory_management
+msgid "Technical Reviewer"
+msgstr "ผู้ตรวจสอบทางเทคนิค"
+
+#. module: laboratory_management
+msgid "Temperature Ok"
+msgstr "อุณหภูมิโอเค"
+
+#. module: laboratory_management
+msgid "Test Request"
+msgstr "คำขอทดสอบ"
+
+#. module: laboratory_management
+msgid "Threshold Profile"
+msgstr "โปรไฟล์เกณฑ์"
+
+#. module: laboratory_management
+msgid "Timeout Seconds"
+msgstr "หมดเวลาวินาที"
+
+#. module: laboratory_management
+msgid "To"
+msgstr "ถึง"
+
+#. module: laboratory_management
+msgid "To Custodian"
+msgstr "ถึงผู้พิทักษ์"
+
+#. module: laboratory_management
+msgid "To Location"
+msgstr "ไปยังที่ตั้ง"
+
+#. module: laboratory_management
+msgid "Token"
+msgstr "โทเค็น"
+
+#. module: laboratory_management
+msgid "Topic"
+msgstr "หัวข้อ"
+
+#. module: laboratory_management
+msgid "Total Checks"
+msgstr "การตรวจสอบทั้งหมด"
+
+#. module: laboratory_management
+msgid "Total Count"
+msgstr "จำนวนรวม"
+
+#. module: laboratory_management
+msgid "Total Jobs"
+msgstr "งานทั้งหมด"
+
+#. module: laboratory_management
+msgid "Total Line"
+msgstr "เส้นรวม"
+
+#. module: laboratory_management
+msgid "Total Line Count"
+msgstr "จำนวนบรรทัดทั้งหมด"
+
+#. module: laboratory_management
+msgid "Total Lines"
+msgstr "เส้นทั้งหมด"
+
+#. module: laboratory_management
+msgid "Total Retests"
+msgstr "การทดสอบซ้ำทั้งหมด"
+
+#. module: laboratory_management
+msgid "Total Samples"
+msgstr "ตัวอย่างทั้งหมด"
+
+#. module: laboratory_management
+msgid "Total Service"
+msgstr "บริการครบวงจร"
+
+#. module: laboratory_management
+msgid "Total Steps"
+msgstr "ขั้นตอนทั้งหมด"
+
+#. module: laboratory_management
+msgid "Total Tokens"
+msgstr "โทเค็นทั้งหมด"
+
+#. module: laboratory_management
+msgid "Tracking Number"
+msgstr "หมายเลขติดตาม"
+
+#. module: laboratory_management
+msgid "Trainer"
+msgstr "เทรนเนอร์"
+
+#. module: laboratory_management
+msgid "Training Count"
+msgstr "จำนวนการฝึกอบรม"
+
+#. module: laboratory_management
+msgid "Training Date"
+msgstr "วันที่อบรม"
+
+#. module: laboratory_management
+msgid "Trainings"
+msgstr "การฝึกอบรม"
+
+#. module: laboratory_management
+msgid "Triaged At"
+msgstr "ไตรรงค์ที่"
+
+#. module: laboratory_management
+msgid "Triaged By"
+msgstr "ไตรภาคโดย"
+
+#. module: laboratory_management
+msgid "Trigger"
+msgstr "ทริกเกอร์"
+
+#. module: laboratory_management
+msgid "Trigger Event"
+msgstr "ทริกเกอร์เหตุการณ์"
+
+#. module: laboratory_management
+msgid "Trigger Source"
+msgstr "แหล่งที่มาของทริกเกอร์"
+
+#. module: laboratory_management
+msgid "Triggered At"
+msgstr "ทริกเกอร์ที่"
+
+#. module: laboratory_management
+msgid "Triggered By"
+msgstr "กระตุ้นโดย"
+
+#. module: laboratory_management
+msgid "Username"
+msgstr "ชื่อผู้ใช้"
+
+#. module: laboratory_management
+msgid "Verification Plan"
+msgstr "แผนการตรวจสอบ"
+
+#. module: laboratory_management
+msgid "Verification Result"
+msgstr "ผลการตรวจสอบ"
+
+#. module: laboratory_management
+msgid "Version"
+msgstr "เวอร์ชัน"
+
+#. module: laboratory_management
+msgid "Version No"
+msgstr "หมายเลขเวอร์ชัน"
+
+#. module: laboratory_management
+msgid "Viewed At"
+msgstr "ดูได้ที่"
+
+#. module: laboratory_management
+msgid "Waived Line Count"
+msgstr "จำนวนบรรทัดที่ยกเว้น"
+
+#. module: laboratory_management
+msgid "Warning Count"
+msgstr "จำนวนคำเตือน"
+
+#. module: laboratory_management
+msgid "Warning Sigma"
+msgstr "คำเตือนซิกม่า"
+
+#. module: laboratory_management
+msgid "Window Size"
+msgstr "ขนาดหน้าต่าง"
+
+#. module: laboratory_management
+msgid "Withdraw Input Reason"
+msgstr "ถอนเหตุผลการป้อนข้อมูล"
+
+#. module: laboratory_management
+msgid "Withdraw Reason"
+msgstr "ถอนเหตุผล"
+
+#. module: laboratory_management
+msgid "Withdrawn At"
+msgstr "ถอนออกที่"
+
+#. module: laboratory_management
+msgid "Withdrawn By"
+msgstr "ถอนออกโดย"
+
+#. module: laboratory_management
+msgid "Witness"
+msgstr "พยาน"
+
+#. module: laboratory_management
+msgid "Witness Name"
+msgstr "ชื่อพยาน"
+
+#. module: laboratory_management
+msgid "Wizard Department"
+msgstr "แผนกพ่อมด"
+
+#. module: laboratory_management
+msgid "Wizard Role Type"
+msgstr "ประเภทบทบาทของตัวช่วยสร้าง"
+
+#. module: laboratory_management
+msgid "Workstation"
+msgstr "เวิร์กสเตชัน"
+
+#. module: laboratory_management
+msgid "Year"
+msgstr "ปี"
+
+#. module: laboratory_management
+msgid "Zone"
+msgstr "โซน"
+
+#. module: laboratory_management
+msgid "Zscore Mean"
+msgstr "ค่าเฉลี่ย Zscore"
+
+#. module: laboratory_management
+msgid "Submit test requests and track request lifecycle"
+msgstr "ส่งคำขอตรวจและติดตามวงจรคำขอ"
+
+#. module: laboratory_management
+msgid "My Test Requests"
+msgstr "คำขอตรวจของฉัน"
+
+#. module: laboratory_management
+msgid "New Request"
+msgstr "คำขอใหม่"
+
+#. module: laboratory_management
+msgid "No test request records found."
+msgstr "ไม่พบข้อมูลคำขอตรวจ"
+
+#. module: laboratory_management
+msgid "Create Test Request"
+msgstr "สร้างคำขอตรวจ"
+
+#. module: laboratory_management
+msgid "Please select a service."
+msgstr "โปรดเลือกบริการตรวจ"
+
+#. module: laboratory_management
+msgid "Please select a profile."
+msgstr "โปรดเลือกโปรไฟล์"
+
+#. module: laboratory_management
+msgid "Requested Test"
+msgstr "รายการตรวจที่ร้องขอ"
+
+#. module: laboratory_management
+msgid "Line Type"
+msgstr "ประเภทรายการ"
+
+#. module: laboratory_management
+msgid "Select service"
+msgstr "เลือกบริการ"
+
+#. module: laboratory_management
+msgid "Select profile"
+msgstr "เลือกโปรไฟล์"
+
+#. module: laboratory_management
+msgid "Submit request immediately"
+msgstr "ส่งคำขอทันที"
+
+#. module: laboratory_management
+msgid "Create Request"
+msgstr "สร้างคำขอ"
+
+#. module: laboratory_management
+msgid "View H5 Report"
+msgstr "ดูรายงาน H5"
+
+#. module: laboratory_management
+msgid "Download PDF"
+msgstr "ดาวน์โหลด PDF"
+
+#. module: laboratory_management
+msgid "Back to Sample"
+msgstr "กลับไปที่ตัวอย่าง"
+
+#. module: laboratory_management
+msgid "AI Interpretation"
+msgstr "การแปลผลโดย AI"
+
+#. module: laboratory_management
+msgid "This AI interpretation is for informational reference only, not a medical diagnosis."
+msgstr "การแปลผลโดย AI นี้มีไว้เพื่อการอ้างอิงข้อมูลเท่านั้น ไม่ใช่การวินิจฉัยทางการแพทย์"
+
+#. module: laboratory_management
+msgid "Invoice No."
+msgstr "เลขที่ใบแจ้งหนี้"
+
+#. module: laboratory_management
+msgid "Outstanding"
+msgstr "ยอดค้างชำระ"
+
+#. module: laboratory_management
+msgid "Deadline"
+msgstr "กำหนดเสร็จ"
+
+#. module: laboratory_management
+msgid "Newest"
+msgstr "ล่าสุด"

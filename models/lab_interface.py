@@ -2,7 +2,7 @@ import json
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-from ..hooks import sync_menu_i18n
+from ..hooks import sync_i18n_terms
 
 
 class LabInterfaceEndpoint(models.Model):
@@ -86,7 +86,7 @@ class LabInterfaceEndpoint(models.Model):
 
     @api.model
     def action_sync_menu_translations(self):
-        sync_menu_i18n(self.env)
+        sync_i18n_terms(self.env)
         return True
 
     @api.depends("code")
