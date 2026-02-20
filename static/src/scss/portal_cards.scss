@@ -1,8 +1,9 @@
 #portal_laboratory_category {
     margin-top: 0.75rem !important;
-    display: grid;
+    display: grid !important;
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    row-gap: 0.75rem !important;
+    column-gap: 0.75rem !important;
 }
 
 @media (min-width: 768px) {
@@ -12,6 +13,9 @@
 }
 
 #portal_laboratory_category .o_portal_index_card {
+    float: none !important;
+    flex: none !important;
+    max-width: none !important;
     margin-bottom: 0 !important;
     width: auto !important;
     padding: 0 !important;

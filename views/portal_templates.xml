@@ -2,7 +2,7 @@
 <odoo>
     <template id="portal_my_home_laboratory" inherit_id="portal.portal_my_home" priority="30">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <div class="o_portal_category row g-2 mt-3" id="portal_laboratory_category">
+            <div class="o_portal_category mt-3" id="portal_laboratory_category">
                 <t t-call="portal.portal_docs_entry">
                     <t t-set="icon" t-value="'/laboratory_management/static/src/img/portal_lab_reports.svg'"/>
                     <t t-set="title">Lab Reports</t>
