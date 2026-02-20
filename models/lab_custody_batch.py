@@ -340,8 +340,6 @@ class LabSampleCustodyBatch(models.Model):
 
     def _notify_exception_activity(self, line):
         self.ensure_one()
-        model_id = self.env["ir.model"]._get_id("lab.sample.custody.batch")
-        todo = self.env.ref("mail.mail_activity_data_todo")
         summary = _("Custody Exception Review")
         note = _(
             "Batch %(batch)s / Sample %(sample)s has custody exception (%(severity)s). Please assess and process NCR."
@@ -359,27 +357,13 @@ class LabSampleCustodyBatch(models.Model):
             users |= manager_group.user_ids
         if not users:
             users = self.env.user
+        entries = []
         for user in users:
-            exists = self.env["mail.activity"].search_count(
-                [
-                    ("res_model_id", "=", model_id),
-                    ("res_id", "=", self.id),
-                    ("user_id", "=", user.id),
-                    ("summary", "=", summary),
-                ]
-            )
-            if exists:
-                continue
-            self.env["mail.activity"].create(
-                {
-                    "activity_type_id": todo.id,
-                    "user_id": user.id,
-                    "res_model_id": model_id,
-                    "res_id": self.id,
-                    "summary": summary,
-                    "note": note,
-                }
-            )
+            entries.append({"res_id": self.id, "user_id": user.id, "summary": summary, "note": note})
+        self.env["lab.activity.helper.mixin"].create_unique_todo_activities(
+            model_name="lab.sample.custody.batch",
+            entries=entries,
+        )
 
 
 class LabSampleCustodyBatchSignoff(models.Model):

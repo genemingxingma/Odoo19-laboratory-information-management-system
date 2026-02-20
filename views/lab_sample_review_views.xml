@@ -90,6 +90,8 @@
                             <field name="review_required_for_release" readonly="1"/>
                             <field name="review_release_ready" readonly="1"/>
                             <field name="review_block_reason" readonly="1" invisible="not review_block_reason"/>
+                            <field name="iso_release_ready" readonly="1"/>
+                            <field name="iso_release_block_reason" readonly="1" invisible="not iso_release_block_reason"/>
                             <field name="report_publication_state" readonly="1"/>
                             <field name="report_withdrawn_by_id" readonly="1" invisible="not report_withdrawn_by_id"/>
                             <field name="report_withdrawn_at" readonly="1" invisible="not report_withdrawn_at"/>
@@ -157,6 +159,7 @@
                 <field name="technical_review_state"/>
                 <field name="medical_review_state"/>
                 <field name="review_release_ready"/>
+                <field name="iso_release_ready"/>
                 <field name="report_publication_state"/>
                 <field name="dispatch_count"/>
             </xpath>
@@ -170,8 +173,32 @@
         <field name="arch" type="xml">
             <xpath expr="//filter[@name='f_reported']" position="after">
                 <filter name="f_review_pending" string="Review Pending" domain="['|',('technical_review_state','in',('pending','rejected')),('medical_review_state','in',('pending','rejected'))]"/>
+                <filter name="f_iso_blocked" string="ISO Gate Blocked" domain="[('iso_release_ready','=',False),('state','=','verified')]"/>
                 <filter name="f_dispatch_unacked" string="Unacked Dispatch" domain="[('dispatch_ids.state','in',('sent','viewed','downloaded'))]"/>
                 <filter name="f_withdrawn" string="Withdrawn" domain="[('report_publication_state','=','withdrawn')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_res_config_settings_inherit_lab_iso_review" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.lab.iso.review</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Laboratory ISO15189" name="laboratory_management_iso15189">
+                    <block title="Laboratory ISO15189 Controls">
+                        <setting id="lab_iso15189_release_gate_enabled_setting">
+                            <field name="laboratory_iso15189_release_gate_enabled"/>
+                        </setting>
+                        <setting id="lab_iso15189_reviewer_separation_enabled_setting">
+                            <field name="laboratory_iso15189_reviewer_separation_enabled"/>
+                        </setting>
+                        <setting id="lab_iso15189_personnel_authorization_enabled_setting">
+                            <field name="laboratory_iso15189_personnel_authorization_enabled"/>
+                        </setting>
+                    </block>
+                </app>
             </xpath>
         </field>
     </record>

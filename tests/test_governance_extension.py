@@ -163,6 +163,11 @@ class TestGovernanceExtension(TransactionCase):
         wiz.action_refresh()
         self.assertGreaterEqual(wiz.task_overdue_count, 1)
         self.assertGreaterEqual(wiz.task_escalated_count, 1)
+        self.assertGreaterEqual(wiz.personnel_gap_count, 0)
+        self.assertGreaterEqual(wiz.personnel_warn_count, 0)
+        self.assertGreaterEqual(wiz.personnel_due_30_count, 0)
+        self.assertGreaterEqual(wiz.personnel_due_14_count, 0)
+        self.assertGreaterEqual(wiz.personnel_due_7_count, 0)
 
     def test_06_branch_engine_fallback_exception_template(self):
         sample = self._create_reported_sample()

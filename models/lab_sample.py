@@ -260,10 +260,10 @@ class LabSample(models.Model):
         if not overdue_samples:
             return
 
-        todo = self.env.ref("mail.mail_activity_data_todo")
-        model_id = self.env["ir.model"]._get_id("lab.sample")
         reviewer_group = self.env.ref("laboratory_management.group_lab_reviewer", raise_if_not_found=False)
         users = reviewer_group.user_ids if (reviewer_group and reviewer_group.user_ids) else self.env.user
+        helper = self.env["lab.activity.helper.mixin"]
+        entries = []
 
         for sample in overdue_samples:
             summary = "Overdue sample follow-up"
@@ -272,26 +272,15 @@ class LabSample(models.Model):
                 % (sample.name, sample.patient_id.name, sample.expected_report_date)
             )
             for user in users:
-                exists = self.env["mail.activity"].search_count(
-                    [
-                        ("res_model_id", "=", model_id),
-                        ("res_id", "=", sample.id),
-                        ("user_id", "=", user.id),
-                        ("summary", "=", summary),
-                    ]
-                )
-                if exists:
-                    continue
-                self.env["mail.activity"].create(
+                entries.append(
                     {
-                        "activity_type_id": todo.id,
-                        "user_id": user.id,
-                        "res_model_id": model_id,
                         "res_id": sample.id,
+                        "user_id": user.id,
                         "summary": summary,
                         "note": note,
                     }
                 )
+        helper.create_unique_todo_activities(model_name="lab.sample", entries=entries)
 
     def action_view_aliquots(self):
         self.ensure_one()
@@ -550,6 +539,11 @@ class LabSampleAnalysis(models.Model):
         compute="_compute_result_flag",
         store=True,
     )
+    binary_interpretation = fields.Selection(
+        [("positive", "Positive"), ("negative", "Negative")],
+        compute="_compute_result_flag",
+        store=True,
+    )
     is_out_of_range = fields.Boolean(compute="_compute_result_flag", store=True)
 
     unit = fields.Char(related="service_id.unit", store=True)
@@ -598,12 +592,21 @@ class LabSampleAnalysis(models.Model):
             return not_overdue_domain if value else overdue_domain
         return overdue_domain
 
-    @api.depends("result_value", "service_id.result_type", "ref_min", "ref_max")
+    @api.depends(
+        "result_value",
+        "service_id.result_type",
+        "service_id.auto_binary_enabled",
+        "service_id.auto_binary_cutoff",
+        "service_id.auto_binary_negative_when_gte",
+        "ref_min",
+        "ref_max",
+    )
     def _compute_result_flag(self):
         for rec in self:
             flag = "normal"
             out_of_range = False
             is_critical = False
+            binary_interpretation = False
             if rec.service_id.result_type == "numeric" and rec.result_value not in (False, ""):
                 try:
                     num = float(rec.result_value)
@@ -613,14 +616,22 @@ class LabSampleAnalysis(models.Model):
                     elif num > rec.ref_max:
                         flag = "high"
                         out_of_range = True
+                    if rec.service_id.auto_binary_enabled:
+                        cutoff = rec.service_id.auto_binary_cutoff
+                        if rec.service_id.auto_binary_negative_when_gte:
+                            binary_interpretation = "negative" if num >= cutoff else "positive"
+                        else:
+                            binary_interpretation = "positive" if num >= cutoff else "negative"
+                    if rec.critical_min not in (False, None) and num < rec.critical_min:
+                        is_critical = True
+                    if rec.critical_max not in (False, None) and num > rec.critical_max:
+                        is_critical = True
                 except (TypeError, ValueError):
                     flag = "normal"
                     out_of_range = False
-                if rec.critical_min not in (False, None) and num < rec.critical_min:
-                    is_critical = True
-                if rec.critical_max not in (False, None) and num > rec.critical_max:
-                    is_critical = True
+                    binary_interpretation = False
             rec.result_flag = flag
+            rec.binary_interpretation = binary_interpretation
             rec.is_out_of_range = out_of_range
             rec.is_critical = is_critical
 
@@ -965,10 +976,10 @@ class LabSampleAnalysis(models.Model):
         if not overdue_lines:
             return
 
-        todo = self.env.ref("mail.mail_activity_data_todo")
-        model_id = self.env["ir.model"]._get_id("lab.sample")
         reviewer_group = self.env.ref("laboratory_management.group_lab_reviewer", raise_if_not_found=False)
         users = reviewer_group.user_ids if (reviewer_group and reviewer_group.user_ids) else self.env.user
+        helper = self.env["lab.activity.helper.mixin"]
+        entries = []
 
         for line in overdue_lines:
             summary = "Manual review overdue"
@@ -983,26 +994,15 @@ class LabSampleAnalysis(models.Model):
             }
             recipients = line.review_assigned_user_id if line.review_assigned_user_id else users
             for user in recipients:
-                exists = self.env["mail.activity"].search_count(
-                    [
-                        ("res_model_id", "=", model_id),
-                        ("res_id", "=", line.sample_id.id),
-                        ("user_id", "=", user.id),
-                        ("summary", "=", summary),
-                    ]
-                )
-                if exists:
-                    continue
-                self.env["mail.activity"].create(
+                entries.append(
                     {
-                        "activity_type_id": todo.id,
-                        "user_id": user.id,
-                        "res_model_id": model_id,
                         "res_id": line.sample_id.id,
+                        "user_id": user.id,
                         "summary": summary,
                         "note": note,
                     }
                 )
+        helper.create_unique_todo_activities(model_name="lab.sample", entries=entries)
 
     @api.model
     def _cron_send_daily_manual_review_digest(self):

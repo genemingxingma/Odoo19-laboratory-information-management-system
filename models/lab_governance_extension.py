@@ -596,6 +596,11 @@ class LabGovernanceWorkbenchWizard(models.TransientModel):
     task_escalated_count = fields.Integer(readonly=True)
     permission_missing_count = fields.Integer(readonly=True)
     interface_mismatch_count = fields.Integer(readonly=True)
+    personnel_gap_count = fields.Integer(readonly=True)
+    personnel_warn_count = fields.Integer(readonly=True)
+    personnel_due_30_count = fields.Integer(readonly=True)
+    personnel_due_14_count = fields.Integer(readonly=True)
+    personnel_due_7_count = fields.Integer(readonly=True)
 
     @api.model
     def _compute_metrics_values(self, period_days):
@@ -603,6 +608,16 @@ class LabGovernanceWorkbenchWizard(models.TransientModel):
         task_obj = self.env["lab.workstation.task"]
         perm_obj = self.env["lab.permission.audit.snapshot"]
         iface_obj = self.env["lab.interface.reconciliation.report"]
+        matrix_run_obj = self.env["lab.personnel.matrix.run"]
+        matrix_line_obj = self.env["lab.personnel.matrix.run.line"]
+        auth_obj = self.env["lab.service.authorization"]
+        run_ids = matrix_run_obj.search(
+            [("create_date", ">=", fields.Datetime.to_string(dt_from))]
+        ).ids
+        today = fields.Date.today()
+        d30 = today + timedelta(days=30)
+        d14 = today + timedelta(days=14)
+        d7 = today + timedelta(days=7)
         return {
             "task_overdue_count": task_obj.search_count([
                 ("state", "=", "overdue"),
@@ -621,6 +636,36 @@ class LabGovernanceWorkbenchWizard(models.TransientModel):
                 iface_obj.search(
                     [("create_date", ">=", fields.Datetime.to_string(dt_from))]
                 ).mapped("mismatch_lines")
+            ),
+            "personnel_gap_count": matrix_line_obj.search_count(
+                [("run_id", "in", run_ids), ("status", "=", "gap")]
+            ),
+            "personnel_warn_count": matrix_line_obj.search_count(
+                [("run_id", "in", run_ids), ("status", "=", "warn")]
+            ),
+            "personnel_due_30_count": auth_obj.search_count(
+                [
+                    ("state", "=", "approved"),
+                    ("effective_to", "!=", False),
+                    ("effective_to", ">=", today),
+                    ("effective_to", "<=", d30),
+                ]
+            ),
+            "personnel_due_14_count": auth_obj.search_count(
+                [
+                    ("state", "=", "approved"),
+                    ("effective_to", "!=", False),
+                    ("effective_to", ">=", today),
+                    ("effective_to", "<=", d14),
+                ]
+            ),
+            "personnel_due_7_count": auth_obj.search_count(
+                [
+                    ("state", "=", "approved"),
+                    ("effective_to", "!=", False),
+                    ("effective_to", ">=", today),
+                    ("effective_to", "<=", d7),
+                ]
             ),
         }
 
@@ -657,6 +702,35 @@ class LabGovernanceWorkbenchWizard(models.TransientModel):
             "res_model": "lab.interface.reconciliation.report",
             "view_mode": "list,form",
             "domain": [("mismatch_lines", ">", 0)],
+        }
+
+    def action_open_personnel_gaps(self):
+        dt_from = fields.Datetime.now() - timedelta(days=self.period_days or 30)
+        run_ids = self.env["lab.personnel.matrix.run"].search(
+            [("create_date", ">=", fields.Datetime.to_string(dt_from))]
+        ).ids
+        return {
+            "name": _("Personnel Matrix Gaps"),
+            "type": "ir.actions.act_window",
+            "res_model": "lab.personnel.matrix.run.line",
+            "view_mode": "list",
+            "domain": [("run_id", "in", run_ids), ("status", "in", ("gap", "warn"))],
+        }
+
+    def action_open_personnel_risks(self):
+        today = fields.Date.today()
+        d30 = today + timedelta(days=30)
+        return {
+            "name": _("Personnel Authorization Risks"),
+            "type": "ir.actions.act_window",
+            "res_model": "lab.service.authorization",
+            "view_mode": "list,form",
+            "domain": [
+                ("state", "=", "approved"),
+                ("effective_to", "!=", False),
+                ("effective_to", ">=", today),
+                ("effective_to", "<=", d30),
+            ],
         }
 
 

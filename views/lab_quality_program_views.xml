@@ -156,6 +156,14 @@
                                     <field name="critical_results"/>
                                     <field name="ncr_open"/>
                                     <field name="dispatch_unacked"/>
+                                    <field name="release_gate_blocked"/>
+                                    <field name="metric_window_days"/>
+                                    <field name="qc_runs_total"/>
+                                    <field name="qc_runs_reject"/>
+                                    <field name="qc_reject_rate" widget="percentage"/>
+                                    <field name="eqa_total"/>
+                                    <field name="eqa_pass"/>
+                                    <field name="eqa_pass_rate" widget="percentage"/>
                                     <field name="on_time_rate" widget="percentage"/>
                                     <field name="overdue_rate" widget="percentage"/>
                                 </list>
@@ -280,11 +288,16 @@
                 <field name="program_id"/>
                 <field name="topic"/>
                 <field name="training_date"/>
+                <field name="parent_training_id"/>
                 <field name="trainer_id"/>
+                <field name="schedule_conflict"/>
+                <field name="authorization_role"/>
                 <field name="duration_hour"/>
                 <field name="state"/>
                 <field name="attendee_count"/>
                 <field name="pass_count"/>
+                <field name="authorization_generated_count"/>
+                <field name="child_training_count"/>
             </list>
         </field>
     </record>
@@ -312,6 +325,9 @@
                 <header>
                     <button name="action_schedule" type="object" string="Schedule" class="btn-primary" invisible="state != 'draft'"/>
                     <button name="action_done" type="object" string="Done" class="btn-primary" invisible="state not in ('scheduled','draft')"/>
+                    <button name="action_split_training_plan" type="object" string="Split Plan by Template" class="btn-secondary" invisible="authorization_template_id == False or child_training_count &gt; 0"/>
+                    <button name="action_auto_reschedule_conflicts" type="object" string="Auto Reschedule" class="btn-secondary" invisible="state not in ('draft','scheduled')"/>
+                    <button name="action_generate_service_authorizations" type="object" string="Generate Authorizations" class="btn-secondary" invisible="state != 'done'"/>
                     <button name="action_cancel" type="object" string="Cancel" invisible="state == 'cancel'"/>
                     <button name="action_reset" type="object" string="Reset" invisible="state == 'draft'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,scheduled,done,cancel"/>
@@ -323,12 +339,25 @@
                             <field name="program_id"/>
                             <field name="topic"/>
                             <field name="training_date"/>
+                            <field name="parent_training_id" readonly="1"/>
+                            <field name="schedule_conflict" readonly="1"/>
                         </group>
                         <group>
                             <field name="trainer_id"/>
                             <field name="duration_hour"/>
                             <field name="attendee_count" readonly="1"/>
                             <field name="pass_count" readonly="1"/>
+                            <field name="authorization_generated_count" readonly="1"/>
+                            <field name="child_training_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Authorization Mapping">
+                        <group>
+                            <field name="authorization_role"/>
+                            <field name="authorization_effective_months"/>
+                        </group>
+                        <group>
+                            <field name="authorization_service_ids" widget="many2many_tags"/>
                         </group>
                     </group>
                     <group>
@@ -343,6 +372,19 @@
                                     <field name="score"/>
                                     <field name="passed" readonly="1"/>
                                     <field name="comment"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Split Sessions" invisible="child_training_count == 0">
+                            <field name="child_training_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="topic"/>
+                                    <field name="training_date"/>
+                                    <field name="authorization_role"/>
+                                    <field name="state"/>
+                                    <field name="attendee_count"/>
+                                    <field name="pass_count"/>
                                 </list>
                             </field>
                         </page>
@@ -367,6 +409,13 @@
                 <field name="critical_results"/>
                 <field name="ncr_open"/>
                 <field name="dispatch_unacked"/>
+                <field name="release_gate_blocked"/>
+                <field name="qc_runs_total"/>
+                <field name="qc_runs_reject"/>
+                <field name="qc_reject_rate" widget="percentage"/>
+                <field name="eqa_total"/>
+                <field name="eqa_pass"/>
+                <field name="eqa_pass_rate" widget="percentage"/>
                 <field name="on_time_rate" widget="percentage"/>
                 <field name="overdue_rate" widget="percentage"/>
             </list>

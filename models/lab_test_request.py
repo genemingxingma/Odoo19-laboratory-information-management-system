@@ -464,34 +464,21 @@ class LabTestRequest(models.Model):
         return True
 
     def _create_triage_activity(self):
-        todo = self.env.ref("mail.mail_activity_data_todo", raise_if_not_found=False)
-        if not todo:
-            return
-        model_id = self.env["ir.model"]._get_id("lab.test.request")
         triage_group = self.env.ref("laboratory_management.group_lab_reception", raise_if_not_found=False)
         users = triage_group.user_ids if triage_group and triage_group.user_ids else self.env.user
+        helper = self.env["lab.activity.helper.mixin"]
+        entries = []
         for rec in self:
             for user in users:
-                existing = self.env["mail.activity"].search_count(
-                    [
-                        ("res_model_id", "=", model_id),
-                        ("res_id", "=", rec.id),
-                        ("user_id", "=", user.id),
-                        ("summary", "=", "Triage test request"),
-                    ]
-                )
-                if existing:
-                    continue
-                self.env["mail.activity"].create(
+                entries.append(
                     {
-                        "activity_type_id": todo.id,
-                        "res_model_id": model_id,
                         "res_id": rec.id,
                         "user_id": user.id,
                         "summary": "Triage test request",
                         "note": _("Please review request %(name)s and prepare quote.") % {"name": rec.name},
                     }
                 )
+        helper.create_unique_todo_activities(model_name="lab.test.request", entries=entries)
 
     def _close_triage_activity(self):
         model_id = self.env["ir.model"]._get_id("lab.test.request")
@@ -505,34 +492,21 @@ class LabTestRequest(models.Model):
         activities.action_done()
 
     def _create_sample_creation_activity(self):
-        todo = self.env.ref("mail.mail_activity_data_todo", raise_if_not_found=False)
-        if not todo:
-            return
-        model_id = self.env["ir.model"]._get_id("lab.test.request")
         reception_group = self.env.ref("laboratory_management.group_lab_reception", raise_if_not_found=False)
         users = reception_group.user_ids if reception_group and reception_group.user_ids else self.env.user
+        helper = self.env["lab.activity.helper.mixin"]
+        entries = []
         for rec in self:
             for user in users:
-                existing = self.env["mail.activity"].search_count(
-                    [
-                        ("res_model_id", "=", model_id),
-                        ("res_id", "=", rec.id),
-                        ("user_id", "=", user.id),
-                        ("summary", "=", "Create accession from request"),
-                    ]
-                )
-                if existing:
-                    continue
-                self.env["mail.activity"].create(
+                entries.append(
                     {
-                        "activity_type_id": todo.id,
-                        "res_model_id": model_id,
                         "res_id": rec.id,
                         "user_id": user.id,
                         "summary": "Create accession from request",
                         "note": _("Request %(name)s is approved. Please create sample accession.") % {"name": rec.name},
                     }
                 )
+        helper.create_unique_todo_activities(model_name="lab.test.request", entries=entries)
 
     def _close_sample_creation_activity(self):
         model_id = self.env["ir.model"]._get_id("lab.test.request")

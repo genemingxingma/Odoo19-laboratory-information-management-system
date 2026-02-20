@@ -15,6 +15,7 @@
                 <field name="worksheet_id"/>
                 <field name="result_value"/>
                 <field name="unit"/>
+                <field name="binary_interpretation"/>
                 <field name="result_flag"/>
                 <field name="auto_verified"/>
                 <field name="delta_check_status"/>
@@ -59,6 +60,7 @@
                             <field name="analyst_id"/>
                             <field name="result_value"/>
                             <field name="result_note"/>
+                            <field name="binary_interpretation" readonly="1"/>
                             <field name="auto_verified" readonly="1"/>
                             <field name="delta_previous_value" readonly="1"/>
                             <field name="delta_check_value" readonly="1"/>
@@ -84,6 +86,7 @@
                         <field name="critical_min" readonly="1"/>
                         <field name="critical_max" readonly="1"/>
                         <field name="result_flag" readonly="1"/>
+                        <field name="binary_interpretation" readonly="1"/>
                         <field name="is_out_of_range" readonly="1"/>
                         <field name="is_critical" readonly="1"/>
                     </group>

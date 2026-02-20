@@ -1,4 +1,5 @@
 from . import lab_service
+from . import lab_activity_utils
 from . import lab_review
 from . import lab_notification
 from . import lab_profile
@@ -36,3 +37,7 @@ from . import lab_worksheet
 
 from . import lab_quality_program
 from . import lab_quality_extended
+from . import lab_method_validation
+from . import lab_personnel_competency
+from . import lab_personnel_matrix
+from . import lab_training_authorization_template

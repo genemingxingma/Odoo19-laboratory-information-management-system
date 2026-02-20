@@ -87,10 +87,10 @@ class LabReagentLot(models.Model):
         if not lots:
             return
 
-        todo = self.env.ref("mail.mail_activity_data_todo")
-        model_id = self.env["ir.model"]._get_id("lab.reagent.lot")
         manager_group = self.env.ref("laboratory_management.group_lab_manager", raise_if_not_found=False)
         users = manager_group.user_ids if (manager_group and manager_group.user_ids) else self.env.user
+        helper = self.env["lab.activity.helper.mixin"]
+        entries = []
 
         for lot in lots:
             summary = "Reagent lot expiring soon"
@@ -99,23 +99,5 @@ class LabReagentLot(models.Model):
                 % (lot.lot_number, lot.name, lot.service_id.name, lot.expiry_date)
             )
             for user in users:
-                exists = self.env["mail.activity"].search_count(
-                    [
-                        ("res_model_id", "=", model_id),
-                        ("res_id", "=", lot.id),
-                        ("user_id", "=", user.id),
-                        ("summary", "=", summary),
-                    ]
-                )
-                if exists:
-                    continue
-                self.env["mail.activity"].create(
-                    {
-                        "activity_type_id": todo.id,
-                        "user_id": user.id,
-                        "res_model_id": model_id,
-                        "res_id": lot.id,
-                        "summary": summary,
-                        "note": note,
-                    }
-                )
+                entries.append({"res_id": lot.id, "user_id": user.id, "summary": summary, "note": note})
+        helper.create_unique_todo_activities(model_name="lab.reagent.lot", entries=entries)

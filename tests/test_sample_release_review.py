@@ -34,6 +34,63 @@ class TestSampleReleaseReview(TransactionCase):
                 "list_price": 48,
             }
         )
+        cls.service_qc = cls.env["lab.service"].create(
+            {
+                "name": "PCR QC Gate",
+                "code": "REL-PCR-QC",
+                "department": "immunology",
+                "sample_type": "swab",
+                "result_type": "numeric",
+                "unit": "Ct",
+                "ref_min": 0,
+                "ref_max": 45,
+                "turnaround_hours": 24,
+                "require_qc": True,
+                "list_price": 88,
+            }
+        )
+        cls.service_validation = cls.env["lab.service"].create(
+            {
+                "name": "Validation Gate Service",
+                "code": "REL-VAL-GATE",
+                "department": "chemistry",
+                "sample_type": "blood",
+                "result_type": "numeric",
+                "unit": "U/L",
+                "ref_min": 0,
+                "ref_max": 100,
+                "turnaround_hours": 24,
+                "require_method_validation": True,
+                "list_price": 66,
+            }
+        )
+        base_group = cls.env.ref("base.group_user")
+        cls.group_lab_reviewer = cls.env.ref("laboratory_management.group_lab_reviewer")
+        cls.group_lab_manager = cls.env.ref("laboratory_management.group_lab_manager")
+        cls.analyst_user = cls.env["res.users"].create(
+            {
+                "name": "Release Analyst",
+                "login": "release_analyst",
+                "email": "release_analyst@example.com",
+                "group_ids": [(6, 0, [base_group.id])],
+            }
+        )
+        cls.tech_reviewer_user = cls.env["res.users"].create(
+            {
+                "name": "Tech Reviewer",
+                "login": "release_tech_reviewer",
+                "email": "release_tech_reviewer@example.com",
+                "group_ids": [(6, 0, [cls.group_lab_reviewer.id])],
+            }
+        )
+        cls.med_reviewer_user = cls.env["res.users"].create(
+            {
+                "name": "Med Reviewer",
+                "login": "release_med_reviewer",
+                "email": "release_med_reviewer@example.com",
+                "group_ids": [(6, 0, [cls.group_lab_manager.id])],
+            }
+        )
 
     def _create_request(self):
         request = self.env["lab.test.request"].create(
@@ -202,3 +259,216 @@ class TestSampleReleaseReview(TransactionCase):
 
         with self.assertRaises(UserError):
             sample.action_release_report()
+
+    def test_11_release_blocked_by_iso_gate_when_qc_required_without_pass(self):
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_release_gate_enabled", "1")
+        sample = self.env["lab.sample"].create(
+            {
+                "patient_id": self.partner_patient.id,
+                "analysis_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "service_id": self.service_qc.id,
+                            "state": "verified",
+                            "result_value": "30.0",
+                            "analyst_id": self.env.user.id,
+                        },
+                    )
+                ],
+                "state": "verified",
+                "technical_review_state": "approved",
+                "technical_reviewer_id": self.env.user.id,
+                "technical_reviewed_at": fields.Datetime.now(),
+                "medical_review_state": "approved",
+                "medical_reviewer_id": self.env.user.id,
+                "medical_reviewed_at": fields.Datetime.now(),
+            }
+        )
+        with self.assertRaises(UserError):
+            sample.action_release_report()
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_release_gate_enabled", "0")
+
+    def test_12_iso_reviewer_separation_blocks_same_user_dual_approval(self):
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_reviewer_separation_enabled", "1")
+        sample = self._prepare_verified_sample()
+        sample.write(
+            {
+                "technical_review_state": "pending",
+                "technical_reviewer_id": False,
+                "medical_review_state": "pending",
+                "medical_reviewer_id": False,
+            }
+        )
+        sample.action_approve_technical_review()
+        with self.assertRaises(UserError):
+            sample.action_approve_medical_review()
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_reviewer_separation_enabled", "0")
+
+    def test_13_release_blocked_when_required_method_validation_missing(self):
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_release_gate_enabled", "1")
+        sample = self.env["lab.sample"].create(
+            {
+                "patient_id": self.partner_patient.id,
+                "analysis_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "service_id": self.service_validation.id,
+                            "state": "verified",
+                            "result_value": "50.0",
+                            "analyst_id": self.env.user.id,
+                        },
+                    )
+                ],
+                "state": "verified",
+                "technical_review_state": "approved",
+                "technical_reviewer_id": self.env.user.id,
+                "technical_reviewed_at": fields.Datetime.now(),
+                "medical_review_state": "approved",
+                "medical_reviewer_id": self.env.user.id,
+                "medical_reviewed_at": fields.Datetime.now(),
+            }
+        )
+        with self.assertRaises(UserError):
+            sample.action_release_report()
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_release_gate_enabled", "0")
+
+    def test_14_release_allows_when_required_method_validation_is_approved(self):
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_release_gate_enabled", "1")
+        self.env["lab.method.validation"].create(
+            {
+                "service_id": self.service_validation.id,
+                "method_version": "v1",
+                "validation_type": "verification",
+                "overall_pass": True,
+                "state": "approved",
+                "effective_from": fields.Date.today(),
+            }
+        )
+        sample = self.env["lab.sample"].create(
+            {
+                "patient_id": self.partner_patient.id,
+                "analysis_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "service_id": self.service_validation.id,
+                            "state": "verified",
+                            "result_value": "48.0",
+                            "analyst_id": self.env.user.id,
+                        },
+                    )
+                ],
+                "state": "verified",
+                "technical_review_state": "approved",
+                "technical_reviewer_id": self.env.user.id,
+                "technical_reviewed_at": fields.Datetime.now(),
+                "medical_review_state": "approved",
+                "medical_reviewer_id": self.env.user.id,
+                "medical_reviewed_at": fields.Datetime.now(),
+            }
+        )
+        sample.action_release_report()
+        self.assertEqual(sample.state, "reported")
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_release_gate_enabled", "0")
+
+    def test_15_release_blocked_when_personnel_service_authorization_missing(self):
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_release_gate_enabled", "1")
+        self.env["ir.config_parameter"].sudo().set_param(
+            "laboratory_management.iso15189_personnel_authorization_enabled", "1"
+        )
+        sample = self.env["lab.sample"].create(
+            {
+                "patient_id": self.partner_patient.id,
+                "analysis_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "service_id": self.service.id,
+                            "state": "verified",
+                            "result_value": "9.5",
+                            "analyst_id": self.analyst_user.id,
+                        },
+                    )
+                ],
+                "state": "verified",
+                "technical_review_state": "approved",
+                "technical_reviewer_id": self.tech_reviewer_user.id,
+                "technical_reviewed_at": fields.Datetime.now(),
+                "medical_review_state": "approved",
+                "medical_reviewer_id": self.med_reviewer_user.id,
+                "medical_reviewed_at": fields.Datetime.now(),
+            }
+        )
+        with self.assertRaises(UserError):
+            sample.action_release_report()
+        self.env["ir.config_parameter"].sudo().set_param(
+            "laboratory_management.iso15189_personnel_authorization_enabled", "0"
+        )
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_release_gate_enabled", "0")
+
+    def test_16_release_allows_when_personnel_service_authorization_exists(self):
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_release_gate_enabled", "1")
+        self.env["ir.config_parameter"].sudo().set_param(
+            "laboratory_management.iso15189_personnel_authorization_enabled", "1"
+        )
+        sample = self.env["lab.sample"].create(
+            {
+                "patient_id": self.partner_patient.id,
+                "analysis_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "service_id": self.service.id,
+                            "state": "verified",
+                            "result_value": "9.5",
+                            "analyst_id": self.analyst_user.id,
+                        },
+                    )
+                ],
+                "state": "verified",
+                "technical_review_state": "approved",
+                "technical_reviewer_id": self.tech_reviewer_user.id,
+                "technical_reviewed_at": fields.Datetime.now(),
+                "medical_review_state": "approved",
+                "medical_reviewer_id": self.med_reviewer_user.id,
+                "medical_reviewed_at": fields.Datetime.now(),
+            }
+        )
+        auth_obj = self.env["lab.service.authorization"]
+        auth_obj.create(
+            {
+                "user_id": self.analyst_user.id,
+                "role": "analyst",
+                "service_id": self.service.id,
+                "state": "approved",
+            }
+        )
+        auth_obj.create(
+            {
+                "user_id": self.tech_reviewer_user.id,
+                "role": "technical_reviewer",
+                "service_id": self.service.id,
+                "state": "approved",
+            }
+        )
+        auth_obj.create(
+            {
+                "user_id": self.med_reviewer_user.id,
+                "role": "medical_reviewer",
+                "service_id": self.service.id,
+                "state": "approved",
+            }
+        )
+        sample.action_release_report()
+        self.assertEqual(sample.state, "reported")
+        self.env["ir.config_parameter"].sudo().set_param(
+            "laboratory_management.iso15189_personnel_authorization_enabled", "0"
+        )
+        self.env["ir.config_parameter"].sudo().set_param("laboratory_management.iso15189_release_gate_enabled", "0")

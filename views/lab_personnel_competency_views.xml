@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_service_authorization_list" model="ir.ui.view">
+        <field name="name">lab.service.authorization.list</field>
+        <field name="model">lab.service.authorization</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="role"/>
+                <field name="service_id"/>
+                <field name="department"/>
+                <field name="state"/>
+                <field name="effective_from"/>
+                <field name="effective_to"/>
+                <field name="next_assessment_date"/>
+                <field name="is_currently_authorized"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_service_authorization_form" model="ir.ui.view">
+        <field name="name">lab.service.authorization.form</field>
+        <field name="model">lab.service.authorization</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary" invisible="state not in ('draft','suspended')"/>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary" groups="laboratory_management.group_lab_quality_manager,laboratory_management.group_lab_manager" invisible="state not in ('draft','pending','expired','suspended')"/>
+                    <button name="action_suspend" type="object" string="Suspend" groups="laboratory_management.group_lab_quality_manager,laboratory_management.group_lab_manager" invisible="state != 'approved'"/>
+                    <button name="action_mark_expired" type="object" string="Mark Expired" groups="laboratory_management.group_lab_quality_manager,laboratory_management.group_lab_manager" invisible="state != 'approved'"/>
+                    <button name="action_revoke" type="object" string="Revoke" groups="laboratory_management.group_lab_quality_manager,laboratory_management.group_lab_manager" invisible="state in ('revoked','draft')"/>
+                    <button name="action_reset_draft" type="object" string="Reset Draft" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,approved,suspended,expired,revoked"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="user_id"/>
+                            <field name="role"/>
+                            <field name="service_id"/>
+                            <field name="department" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="effective_from"/>
+                            <field name="effective_to"/>
+                            <field name="assessment_date"/>
+                            <field name="review_interval_months"/>
+                            <field name="next_assessment_date" readonly="1"/>
+                            <field name="assessment_score"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="is_currently_authorized" readonly="1"/>
+                            <field name="is_due_soon" readonly="1"/>
+                            <field name="approved_by_id" readonly="1"/>
+                            <field name="approved_date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="revoked_by_id" readonly="1"/>
+                            <field name="revoked_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="assessment_note"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_service_authorization_search" model="ir.ui.view">
+        <field name="name">lab.service.authorization.search</field>
+        <field name="model">lab.service.authorization</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="role"/>
+                <field name="service_id"/>
+                <field name="department"/>
+                <field name="state"/>
+                <filter name="f_approved" string="Approved" domain="[('state','=','approved')]"/>
+                <filter name="f_due_soon" string="Due in 30 Days" domain="[('is_due_soon','=',True)]"/>
+                <filter name="f_expired" string="Expired" domain="[('state','=','expired')]"/>
+                <separator string="Group By"/>
+                <filter name="g_user" string="User" context="{'group_by':'user_id'}"/>
+                <filter name="g_role" string="Role" context="{'group_by':'role'}"/>
+                <filter name="g_service" string="Service" context="{'group_by':'service_id'}"/>
+                <filter name="g_state" string="State" context="{'group_by':'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_service_authorization" model="ir.actions.act_window">
+        <field name="name">Personnel Authorizations</field>
+        <field name="res_model">lab.service.authorization</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_service_authorization_search"/>
+        <field name="context">{'search_default_f_approved': 1}</field>
+    </record>
+
+    <menuitem
+        id="menu_lab_service_authorization"
+        name="Personnel Authorizations"
+        parent="menu_laboratory_config"
+        action="action_lab_service_authorization"
+        sequence="48"
+        groups="laboratory_management.group_lab_reviewer"
+    />
+</odoo>

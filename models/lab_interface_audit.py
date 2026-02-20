@@ -16,6 +16,7 @@ class LabInterfaceAuditLog(models.Model):
             ("process", "Process"),
             ("requeue", "Requeue"),
             ("ack", "Ack"),
+            ("ack_timeout", "Ack Timeout"),
             ("error", "Error"),
         ],
         required=True,

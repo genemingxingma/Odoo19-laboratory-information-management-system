@@ -787,7 +787,8 @@ class LabInterfaceJob(models.Model):
         )
         if not jobs:
             return True
-        todo = self.env.ref("mail.mail_activity_data_todo")
+        helper = self.env["lab.activity.helper.mixin"]
+        activity_entries = []
         for rec in jobs:
             rec.write(
                 {
@@ -804,12 +805,10 @@ class LabInterfaceJob(models.Model):
             )
             users = escalation_group.user_ids if escalation_group and escalation_group.user_ids else self.env.user
             for user in users:
-                self.env["mail.activity"].create(
+                activity_entries.append(
                     {
-                        "activity_type_id": todo.id,
-                        "user_id": user.id,
-                        "res_model_id": self.env["ir.model"]._get_id("lab.interface.job"),
                         "res_id": rec.id,
+                        "user_id": user.id,
                         "summary": _("Interface ACK timeout"),
                         "note": _(
                             "Job %(job)s for endpoint %(endpoint)s did not receive ACK before deadline."
@@ -828,6 +827,7 @@ class LabInterfaceJob(models.Model):
                 result={"deadline": fields.Datetime.to_string(rec.ack_deadline_at)},
                 state=rec.state,
             )
+        helper.create_unique_todo_activities(model_name="lab.interface.job", entries=activity_entries)
         return True
 
 

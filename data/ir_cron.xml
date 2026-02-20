@@ -111,6 +111,26 @@
         <field name="active" eval="True"/>
     </record>
 
+    <record id="ir_cron_lab_quality_training_upcoming_notify" model="ir.cron">
+        <field name="name">Lab: Notify Upcoming Trainings</field>
+        <field name="model_id" ref="model_lab_quality_program_reminder_mixin"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_notify_upcoming_trainings()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_quality_training_conflict_reschedule" model="ir.cron">
+        <field name="name">Lab: Auto Reschedule Training Conflicts</field>
+        <field name="model_id" ref="model_lab_quality_program_reminder_mixin"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_reschedule_training_conflicts()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
     <record id="ir_cron_lab_test_request_quote_expiry_followup" model="ir.cron">
         <field name="name">Lab: Test Request Quote Expiry Follow-up</field>
         <field name="model_id" ref="model_lab_test_request"/>
@@ -167,6 +187,56 @@
         <field name="state">code</field>
         <field name="code">model._cron_escalate_overdue_sop_exceptions()</field>
         <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_method_validation_review_due" model="ir.cron">
+        <field name="name">Lab: Method Validation Review Due Reminder</field>
+        <field name="model_id" ref="model_lab_method_validation"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_notify_validation_review_due()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_method_validation_expire" model="ir.cron">
+        <field name="name">Lab: Expire Overdue Method Validations</field>
+        <field name="model_id" ref="model_lab_method_validation"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_expire_overdue_validations()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_personnel_authorization_expire" model="ir.cron">
+        <field name="name">Lab: Expire Overdue Personnel Authorizations</field>
+        <field name="model_id" ref="model_lab_service_authorization"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_expire_authorizations()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_personnel_authorization_due" model="ir.cron">
+        <field name="name">Lab: Notify Personnel Authorization Reassessment Due</field>
+        <field name="model_id" ref="model_lab_service_authorization"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_notify_authorization_due()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_personnel_matrix_capture" model="ir.cron">
+        <field name="name">Lab: Capture Personnel Competency Matrix</field>
+        <field name="model_id" ref="model_lab_personnel_matrix_run"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_capture_personnel_matrix()</field>
+        <field name="interval_number">24</field>
         <field name="interval_type">hours</field>
         <field name="active" eval="True"/>
     </record>

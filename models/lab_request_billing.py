@@ -177,37 +177,24 @@ class LabRequestInvoice(models.Model):
                 ("due_date", "<", today),
             ]
         )
+        helper = self.env["lab.activity.helper.mixin"]
+        entries = []
         for rec in overdue:
             rec.message_post(
                 body=_("Invoice is overdue. Due date: %(date)s") % {"date": rec.due_date},
                 subtype_xmlid="mail.mt_note",
             )
 
-            todo = self.env.ref("mail.mail_activity_data_todo", raise_if_not_found=False)
-            model_id = self.env["ir.model"]._get_id("lab.request.invoice")
-            if not todo:
-                continue
             owner = rec.request_id.triaged_by_id or rec.request_id.create_uid or self.env.user
-            exists = self.env["mail.activity"].search_count(
-                [
-                    ("res_model_id", "=", model_id),
-                    ("res_id", "=", rec.id),
-                    ("summary", "=", "Overdue invoice follow-up"),
-                    ("user_id", "=", owner.id),
-                ]
-            )
-            if exists:
-                continue
-            self.env["mail.activity"].create(
+            entries.append(
                 {
-                    "activity_type_id": todo.id,
-                    "res_model_id": model_id,
                     "res_id": rec.id,
-                    "summary": "Overdue invoice follow-up",
                     "user_id": owner.id,
+                    "summary": "Overdue invoice follow-up",
                     "note": _("Invoice %(name)s is overdue. Please follow up payment.") % {"name": rec.name},
                 }
             )
+        helper.create_unique_todo_activities(model_name="lab.request.invoice", entries=entries)
 
     @api.model
     def create_from_test_request(self, request):

@@ -1,4 +1,5 @@
-from odoo import fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class LabService(models.Model):
@@ -46,6 +47,25 @@ class LabService(models.Model):
     auto_verify_enabled = fields.Boolean(string="Enable Auto-Verification", default=False)
     auto_verify_allow_out_of_range = fields.Boolean(string="Allow Out-of-Range for Auto-Verification", default=False)
     auto_verify_require_qc_pass = fields.Boolean(string="Require QC Pass for Auto-Verification", default=True)
+    require_method_validation = fields.Boolean(
+        string="Require Approved Method Validation for Release",
+        default=False,
+    )
+    auto_binary_enabled = fields.Boolean(
+        string="Enable Binary Interpretation",
+        default=False,
+        help="Automatically interpret numeric result as Positive/Negative by threshold.",
+    )
+    auto_binary_cutoff = fields.Float(
+        string="Binary Interpretation Cutoff",
+        default=33.0,
+        help="Threshold value for binary interpretation rule.",
+    )
+    auto_binary_negative_when_gte = fields.Boolean(
+        string="Negative When Result >= Cutoff",
+        default=True,
+        help="If enabled: result >= cutoff is Negative, otherwise Positive.",
+    )
     delta_check_enabled = fields.Boolean(string="Enable Delta Check", default=False)
     delta_check_method = fields.Selection(
         [("absolute", "Absolute Difference"), ("percent", "Percent Change")],
@@ -61,3 +81,9 @@ class LabService(models.Model):
     list_price = fields.Float(string="List Price", default=0.0)
     active = fields.Boolean(default=True)
     note = fields.Text()
+
+    @api.constrains("auto_binary_cutoff")
+    def _check_auto_binary_cutoff(self):
+        for rec in self:
+            if rec.auto_binary_cutoff < 0:
+                raise ValidationError(_("Binary interpretation cutoff must be non-negative."))

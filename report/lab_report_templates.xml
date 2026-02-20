@@ -31,7 +31,9 @@
                             <td><span t-esc="line.result_value or '-'"/></td>
                             <td><span t-esc="line.unit or '-'"/></td>
                             <td t-if="doc.report_template_id.show_reference"><span t-esc="line.ref_min"/> - <span t-esc="line.ref_max"/></td>
-                            <td t-if="doc.report_template_id.show_flag"><span t-esc="dict(line._fields['result_flag'].selection).get(line.result_flag)"/></td>
+                            <td t-if="doc.report_template_id.show_flag">
+                                <span t-esc="dict(line._fields['binary_interpretation'].selection).get(line.binary_interpretation) if line.binary_interpretation else dict(line._fields['result_flag'].selection).get(line.result_flag)"/>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -83,9 +85,12 @@
                             <td><span t-esc="line.result_value or '-'"/> <span t-esc="line.unit or ''"/></td>
                             <td t-if="doc.report_template_id.show_reference"><span t-esc="line.ref_min"/> - <span t-esc="line.ref_max"/></td>
                             <td>
-                                <t t-if="line.result_flag == 'high'">Above reference range</t>
-                                <t t-if="line.result_flag == 'low'">Below reference range</t>
-                                <t t-if="line.result_flag == 'normal'">Within reference range</t>
+                                <t t-if="line.binary_interpretation">
+                                    <span t-esc="dict(line._fields['binary_interpretation'].selection).get(line.binary_interpretation)"/>
+                                </t>
+                                <t t-if="not line.binary_interpretation and line.result_flag == 'high'">Above reference range</t>
+                                <t t-if="not line.binary_interpretation and line.result_flag == 'low'">Below reference range</t>
+                                <t t-if="not line.binary_interpretation and line.result_flag == 'normal'">Within reference range</t>
                             </td>
                         </tr>
                     </tbody>
@@ -133,7 +138,9 @@
                         <tr t-foreach="doc.analysis_ids" t-as="line">
                             <td><span t-field="line.service_id"/></td>
                             <td><span t-esc="line.result_value or '-'"/> <span t-esc="line.unit or ''"/></td>
-                            <td t-if="doc.report_template_id.show_flag"><span t-esc="dict(line._fields['result_flag'].selection).get(line.result_flag)"/></td>
+                            <td t-if="doc.report_template_id.show_flag">
+                                <span t-esc="dict(line._fields['binary_interpretation'].selection).get(line.binary_interpretation) if line.binary_interpretation else dict(line._fields['result_flag'].selection).get(line.result_flag)"/>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

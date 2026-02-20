@@ -129,7 +129,7 @@
                         <td><t t-esc="line.service_id.name"/></td>
                         <td><t t-esc="line.result_value or '-'"/> <t t-esc="line.unit or ''"/></td>
                         <td><t t-esc="line.ref_min"/> - <t t-esc="line.ref_max"/></td>
-                        <td><t t-esc="dict(line._fields['result_flag'].selection).get(line.result_flag)"/></td>
+                        <td><t t-esc="dict(line._fields['binary_interpretation'].selection).get(line.binary_interpretation) if line.binary_interpretation else dict(line._fields['result_flag'].selection).get(line.result_flag)"/></td>
                         <td><t t-esc="dict(line._fields['state'].selection).get(line.state)"/></td>
                     </tr>
                 </tbody>
@@ -205,7 +205,7 @@
                         <td><t t-esc="line.result_value or '-'"/></td>
                         <td><t t-esc="line.unit or '-'"/></td>
                         <td><t t-esc="line.ref_min"/> - <t t-esc="line.ref_max"/></td>
-                        <td><t t-esc="dict(line._fields['result_flag'].selection).get(line.result_flag)"/></td>
+                        <td><t t-esc="dict(line._fields['binary_interpretation'].selection).get(line.binary_interpretation) if line.binary_interpretation else dict(line._fields['result_flag'].selection).get(line.result_flag)"/></td>
                         <td><t t-esc="dict(line._fields['state'].selection).get(line.state)"/></td>
                     </tr>
                 </tbody>

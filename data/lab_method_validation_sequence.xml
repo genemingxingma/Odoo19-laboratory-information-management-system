@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_lab_method_validation" model="ir.sequence">
+        <field name="name">Lab Method Validation</field>
+        <field name="code">lab.method.validation</field>
+        <field name="prefix">LMV%(y)s</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

@@ -159,31 +159,13 @@ class LabSample(models.Model):
         summary = "AI Interpretation Review"
         reviewer_group = self.env.ref("laboratory_management.group_lab_reviewer", raise_if_not_found=False)
         users = reviewer_group.user_ids if reviewer_group else self.env.user
-        todo_type = self.env.ref("mail.mail_activity_data_todo")
-        model_id = self.env["ir.model"]._get_id("lab.sample")
+        helper = self.env["lab.activity.helper.mixin"]
+        entries = []
         for rec in self:
             note = _("Review and approve/reject AI interpretation for sample %s.") % rec.name
             for user in users:
-                exists = self.env["mail.activity"].search_count(
-                    [
-                        ("res_model_id", "=", model_id),
-                        ("res_id", "=", rec.id),
-                        ("user_id", "=", user.id),
-                        ("summary", "=", summary),
-                    ]
-                )
-                if exists:
-                    continue
-                self.env["mail.activity"].create(
-                    {
-                        "activity_type_id": todo_type.id,
-                        "user_id": user.id,
-                        "res_model_id": model_id,
-                        "res_id": rec.id,
-                        "summary": summary,
-                        "note": note,
-                    }
-                )
+                entries.append({"res_id": rec.id, "user_id": user.id, "summary": summary, "note": note})
+        helper.create_unique_todo_activities(model_name="lab.sample", entries=entries)
 
     def _close_ai_review_activity(self):
         summary = "AI Interpretation Review"

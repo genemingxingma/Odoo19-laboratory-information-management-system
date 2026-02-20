@@ -202,8 +202,6 @@ class LabCustodyInvestigation(models.Model):
 
     def _notify_breach(self):
         self.ensure_one()
-        todo = self.env.ref("mail.mail_activity_data_todo")
-        model_id = self.env["ir.model"]._get_id("lab.custody.investigation")
         summary = _("Custody SLA breach")
         message = _(
             "Investigation %(name)s breached SLA. Severity=%(severity)s, deadline=%(deadline)s"
@@ -218,27 +216,13 @@ class LabCustodyInvestigation(models.Model):
             users |= manager_group.user_ids
         if not users:
             users = self.env.user
+        entries = []
         for user in users:
-            exists = self.env["mail.activity"].search_count(
-                [
-                    ("res_model_id", "=", model_id),
-                    ("res_id", "=", self.id),
-                    ("user_id", "=", user.id),
-                    ("summary", "=", summary),
-                ]
-            )
-            if exists:
-                continue
-            self.env["mail.activity"].create(
-                {
-                    "activity_type_id": todo.id,
-                    "res_model_id": model_id,
-                    "res_id": self.id,
-                    "user_id": user.id,
-                    "summary": summary,
-                    "note": message,
-                }
-            )
+            entries.append({"res_id": self.id, "user_id": user.id, "summary": summary, "note": message})
+        self.env["lab.activity.helper.mixin"].create_unique_todo_activities(
+            model_name="lab.custody.investigation",
+            entries=entries,
+        )
 
     def _make_escalation(self, level, message):
         self.ensure_one()

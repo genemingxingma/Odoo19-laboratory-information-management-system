@@ -9,3 +9,6 @@ from . import test_operational_workflow
 from . import test_governance_extension
 from . import test_governance_plus
 from . import test_workstation_governance
+from . import test_binary_interpretation_rule
+from . import test_personnel_competency
+from . import test_training_authorization_template

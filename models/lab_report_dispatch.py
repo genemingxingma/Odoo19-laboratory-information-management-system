@@ -77,17 +77,21 @@ class LabReportDispatch(models.Model):
         return records
 
     def _log_event(self, event_type, message, extra=None):
+        now = fields.Datetime.now()
+        vals_list = []
         for rec in self:
-            self.env["lab.report.dispatch.log"].sudo().create(
+            vals_list.append(
                 {
                     "dispatch_id": rec.id,
                     "event_type": event_type,
                     "message": message,
                     "user_id": self.env.user.id,
-                    "event_time": fields.Datetime.now(),
+                    "event_time": now,
                     "extra": extra or False,
                 }
             )
+        if vals_list:
+            self.env["lab.report.dispatch.log"].sudo().create(vals_list)
 
     def action_mark_sent(self):
         now = fields.Datetime.now()
@@ -109,14 +113,13 @@ class LabReportDispatch(models.Model):
         for rec in self:
             if rec.state in ("acknowledged", "cancel"):
                 continue
-            if rec.state == "draft":
-                rec.write({"state": "sent", "sent_at": now})
-            rec.write(
-                {
-                    "state": "viewed",
-                    "viewed_at": now,
-                }
-            )
+            vals = {
+                "state": "viewed",
+                "viewed_at": now,
+            }
+            if rec.state == "draft" and not rec.sent_at:
+                vals["sent_at"] = now
+            rec.write(vals)
             rec._log_event("viewed", _("Report viewed by recipient."))
         return True
 
@@ -125,15 +128,12 @@ class LabReportDispatch(models.Model):
         for rec in self:
             if rec.state in ("acknowledged", "cancel"):
                 continue
-            if rec.state == "draft":
-                rec.write({"state": "sent", "sent_at": now})
-            target_state = "downloaded" if rec.state in ("sent", "viewed", "downloaded") else rec.state
-            rec.write(
-                {
-                    "state": target_state,
-                    "downloaded_at": now,
-                }
-            )
+            vals = {"downloaded_at": now}
+            if rec.state in ("draft", "sent", "viewed", "downloaded"):
+                vals["state"] = "downloaded"
+            if rec.state == "draft" and not rec.sent_at:
+                vals["sent_at"] = now
+            rec.write(vals)
             rec._log_event("downloaded", _("Report downloaded by recipient."))
         return True
 

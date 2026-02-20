@@ -6,8 +6,38 @@ from odoo.http import request
 class LaboratoryPortal(CustomerPortal):
     PROFESSIONAL_PURCHASE_LINE_KEYS = ("1", "2", "3")
 
+    def _cache_get_or_set(self, key, factory):
+        cache = getattr(request, "_lab_portal_cache", None)
+        if cache is None:
+            cache = {}
+            setattr(request, "_lab_portal_cache", cache)
+        if key not in cache:
+            cache[key] = factory()
+        return cache[key]
+
+    def _current_commercial_partner(self):
+        return self._cache_get_or_set(
+            "commercial_partner",
+            lambda: request.env.user.partner_id.commercial_partner_id,
+        )
+
+    def _sample_ids_for_current_user(self):
+        return self._cache_get_or_set(
+            "sample_ids",
+            lambda: request.env["lab.sample"].sudo().search(self._sample_domain_for_current_user()).ids,
+        )
+
+    def _portal_list_records(self, *, model_name, domain, sortings, sortby, url, page, step=20):
+        sort_key = sortby if sortby in sortings else next(iter(sortings.keys()))
+        sort_order = sortings[sort_key]["order"]
+        model = request.env[model_name].sudo()
+        total = model.search_count(domain)
+        pager = portal_pager(url=url, total=total, page=page, step=step, url_args={"sortby": sort_key})
+        records = model.search(domain, order=sort_order, limit=step, offset=pager["offset"])
+        return records, pager, sort_key
+
     def _sample_domain_for_current_user(self):
-        partner = request.env.user.partner_id.commercial_partner_id
+        partner = self._current_commercial_partner()
         return [
             "|",
             ("patient_id", "child_of", partner.id),
@@ -15,19 +45,19 @@ class LaboratoryPortal(CustomerPortal):
         ]
 
     def _batch_domain_for_current_user(self):
-        sample_ids = request.env["lab.sample"].sudo().search(self._sample_domain_for_current_user()).ids
+        sample_ids = self._sample_ids_for_current_user()
         if not sample_ids:
             return [("id", "=", 0)]
         return [("line_ids.sample_id", "in", sample_ids)]
 
     def _investigation_domain_for_current_user(self):
-        sample_ids = request.env["lab.sample"].sudo().search(self._sample_domain_for_current_user()).ids
+        sample_ids = self._sample_ids_for_current_user()
         if not sample_ids:
             return [("id", "=", 0)]
         return ["|", ("sample_id", "in", sample_ids), ("batch_id.line_ids.sample_id", "in", sample_ids)]
 
     def _request_domain_for_current_user(self):
-        partner = request.env.user.partner_id.commercial_partner_id
+        partner = self._current_commercial_partner()
         return [
             "|",
             ("requester_partner_id", "child_of", partner.id),
@@ -35,7 +65,7 @@ class LaboratoryPortal(CustomerPortal):
         ]
 
     def _request_invoice_domain_for_current_user(self):
-        partner = request.env.user.partner_id.commercial_partner_id
+        partner = self._current_commercial_partner()
         return [
             "|",
             ("request_id.requester_partner_id", "child_of", partner.id),
@@ -162,56 +192,24 @@ class LaboratoryPortal(CustomerPortal):
         return values
 
     def _get_authorized_sample(self, sample_id):
-        sample = request.env["lab.sample"].sudo().browse(sample_id)
-        if not sample.exists():
-            return None
-        partner = request.env.user.partner_id.commercial_partner_id
-        allowed = sample.patient_id.commercial_partner_id == partner or sample.client_id.commercial_partner_id == partner
-        return sample if allowed else None
+        sample_domain = [("id", "=", sample_id)] + self._sample_domain_for_current_user()
+        return request.env["lab.sample"].sudo().search(sample_domain, limit=1) or None
 
     def _get_authorized_batch(self, batch_id):
-        batch = request.env["lab.sample.custody.batch"].sudo().browse(batch_id)
-        if not batch.exists():
-            return None
-        sample_ids = request.env["lab.sample"].sudo().search(self._sample_domain_for_current_user()).ids
-        if not sample_ids:
-            return None
-        allowed = bool(batch.line_ids.filtered(lambda x: x.sample_id.id in sample_ids))
-        return batch if allowed else None
+        domain = [("id", "=", batch_id)] + self._batch_domain_for_current_user()
+        return request.env["lab.sample.custody.batch"].sudo().search(domain, limit=1) or None
 
     def _get_authorized_investigation(self, investigation_id):
-        investigation = request.env["lab.custody.investigation"].sudo().browse(investigation_id)
-        if not investigation.exists():
-            return None
-        sample_ids = request.env["lab.sample"].sudo().search(self._sample_domain_for_current_user()).ids
-        if not sample_ids:
-            return None
-        allowed = investigation.sample_id.id in sample_ids or bool(
-            investigation.batch_id.line_ids.filtered(lambda x: x.sample_id.id in sample_ids)
-        )
-        return investigation if allowed else None
+        domain = [("id", "=", investigation_id)] + self._investigation_domain_for_current_user()
+        return request.env["lab.custody.investigation"].sudo().search(domain, limit=1) or None
 
     def _get_authorized_request(self, request_id):
-        test_request = request.env["lab.test.request"].sudo().browse(request_id)
-        if not test_request.exists():
-            return None
-        partner = request.env.user.partner_id.commercial_partner_id
-        allowed = (
-            test_request.requester_partner_id.commercial_partner_id == partner
-            or test_request.client_partner_id.commercial_partner_id == partner
-        )
-        return test_request if allowed else None
+        domain = [("id", "=", request_id)] + self._request_domain_for_current_user()
+        return request.env["lab.test.request"].sudo().search(domain, limit=1) or None
 
     def _get_authorized_request_invoice(self, invoice_id):
-        invoice = request.env["lab.request.invoice"].sudo().browse(invoice_id)
-        if not invoice.exists():
-            return None
-        partner = request.env.user.partner_id.commercial_partner_id
-        allowed = (
-            invoice.request_id.requester_partner_id.commercial_partner_id == partner
-            or invoice.request_id.client_partner_id.commercial_partner_id == partner
-        )
-        return invoice if allowed else None
+        domain = [("id", "=", invoice_id)] + self._request_invoice_domain_for_current_user()
+        return request.env["lab.request.invoice"].sudo().search(domain, limit=1) or None
 
     @http.route(["/my/lab/samples", "/my/lab/samples/page/<int:page>"], type="http", auth="user", website=True)
     def portal_my_samples(self, page=1, sortby="date", **kwargs):
@@ -222,12 +220,14 @@ class LaboratoryPortal(CustomerPortal):
             "state": {"label": _("Status"), "order": "state asc, id desc"},
             "report": {"label": _("Report Date"), "order": "report_date desc, id desc"},
         }
-        sort_order = sortings.get(sortby, sortings["date"])["order"]
-
-        sample_obj = request.env["lab.sample"].sudo()
-        total = sample_obj.search_count(domain)
-        pager = portal_pager(url="/my/lab/samples", total=total, page=page, step=20, url_args={"sortby": sortby})
-        samples = sample_obj.search(domain, order=sort_order, limit=20, offset=pager["offset"])
+        samples, pager, sortby = self._portal_list_records(
+            model_name="lab.sample",
+            domain=domain,
+            sortings=sortings,
+            sortby=sortby,
+            url="/my/lab/samples",
+            page=page,
+        )
 
         values = self._prepare_portal_layout_values()
         values.update(
@@ -263,7 +263,7 @@ class LaboratoryPortal(CustomerPortal):
             return request.redirect("/my/lab/samples")
         if sample.report_publication_state == "withdrawn":
             return request.redirect("/my/lab/samples/%s?withdrawn=1" % sample.id)
-        partner = request.env.user.partner_id.commercial_partner_id
+        partner = self._current_commercial_partner()
         dispatch = request.env["lab.report.dispatch"].sudo().portal_find_dispatch_for_partner(sample, partner)
         if dispatch:
             dispatch.action_mark_viewed()
@@ -277,7 +277,7 @@ class LaboratoryPortal(CustomerPortal):
         sample = self._get_authorized_sample(sample_id)
         if not sample or sample.state not in ("verified", "reported") or sample.report_publication_state == "withdrawn":
             return request.redirect("/my/lab/samples/%s/report/h5" % sample_id)
-        partner = request.env.user.partner_id.commercial_partner_id
+        partner = self._current_commercial_partner()
         dispatch = request.env["lab.report.dispatch"].sudo().portal_find_dispatch_for_partner(sample, partner)
         if dispatch:
             dispatch.action_mark_downloaded()
@@ -326,7 +326,7 @@ class LaboratoryPortal(CustomerPortal):
             return request.redirect("/my/lab/samples")
         if sample.report_publication_state == "withdrawn":
             return request.redirect("/my/lab/samples/%s?withdrawn=1" % sample.id)
-        partner = request.env.user.partner_id.commercial_partner_id
+        partner = self._current_commercial_partner()
         dispatch = request.env["lab.report.dispatch"].sudo().portal_find_dispatch_for_partner(sample, partner)
         if dispatch:
             signer = (ack_name or "").strip() or partner.name
@@ -349,12 +349,14 @@ class LaboratoryPortal(CustomerPortal):
             "state": {"label": _("State"), "order": "state asc, id desc"},
             "amount": {"label": _("Amount"), "order": "amount_total desc, id desc"},
         }
-        sort_order = sortings.get(sortby, sortings["date"])["order"]
-
-        req_obj = request.env["lab.test.request"].sudo()
-        total = req_obj.search_count(domain)
-        pager = portal_pager(url="/my/lab/requests", total=total, page=page, step=20, url_args={"sortby": sortby})
-        records = req_obj.search(domain, order=sort_order, limit=20, offset=pager["offset"])
+        records, pager, sortby = self._portal_list_records(
+            model_name="lab.test.request",
+            domain=domain,
+            sortings=sortings,
+            sortby=sortby,
+            url="/my/lab/requests",
+            page=page,
+        )
 
         values = self._prepare_portal_layout_values()
         values.update(
@@ -384,7 +386,7 @@ class LaboratoryPortal(CustomerPortal):
 
     @http.route("/my/lab/requests/new", type="http", auth="user", website=True, methods=["POST"])
     def portal_test_request_create(self, **post):
-        partner = request.env.user.partner_id.commercial_partner_id
+        partner = self._current_commercial_partner()
         line_type = (post.get("line_type") or "service").strip()
         request_type = (post.get("request_type") or "individual").strip()
         service_id = int(post.get("service_id") or 0)
@@ -456,12 +458,14 @@ class LaboratoryPortal(CustomerPortal):
             "state": {"label": _("State"), "order": "state asc, id desc"},
             "residual": {"label": _("Outstanding"), "order": "amount_residual desc, id desc"},
         }
-        sort_order = sortings.get(sortby, sortings["date"])["order"]
-
-        inv_obj = request.env["lab.request.invoice"].sudo()
-        total = inv_obj.search_count(domain)
-        pager = portal_pager(url="/my/lab/invoices", total=total, page=page, step=20, url_args={"sortby": sortby})
-        records = inv_obj.search(domain, order=sort_order, limit=20, offset=pager["offset"])
+        records, pager, sortby = self._portal_list_records(
+            model_name="lab.request.invoice",
+            domain=domain,
+            sortings=sortings,
+            sortby=sortby,
+            url="/my/lab/invoices",
+            page=page,
+        )
 
         values = self._prepare_portal_layout_values()
         values.update(
@@ -500,7 +504,7 @@ class LaboratoryPortal(CustomerPortal):
             amount = 0.0
         if amount <= 0:
             return request.redirect("/my/lab/invoices/%s?pay_error=amount" % invoice_id)
-        payer = request.env.user.partner_id.commercial_partner_id
+        payer = self._current_commercial_partner()
 
         request.env["lab.request.payment"].sudo().create(
             {
@@ -521,7 +525,7 @@ class LaboratoryPortal(CustomerPortal):
 
     @http.route("/my/lab/professional/purchase", type="http", auth="user", website=True, methods=["GET"])
     def portal_professional_purchase_form(self, **kwargs):
-        partner = request.env.user.partner_id.commercial_partner_id
+        partner = self._current_commercial_partner()
         if not self._is_professional_partner(partner):
             return request.redirect("/my?error=professional_only")
         values = self._prepare_portal_layout_values()
@@ -536,7 +540,7 @@ class LaboratoryPortal(CustomerPortal):
 
     @http.route("/my/lab/professional/purchase", type="http", auth="user", website=True, methods=["POST"])
     def portal_professional_purchase_submit(self, **post):
-        partner = request.env.user.partner_id.commercial_partner_id
+        partner = self._current_commercial_partner()
         if not self._is_professional_partner(partner):
             return request.redirect("/my?error=professional_only")
 
@@ -600,12 +604,14 @@ class LaboratoryPortal(CustomerPortal):
             "state": {"label": _("State"), "order": "state asc, id desc"},
             "dispatch": {"label": _("Dispatch"), "order": "dispatch_time desc, id desc"},
         }
-        sort_order = sortings.get(sortby, sortings["date"])["order"]
-
-        batch_obj = request.env["lab.sample.custody.batch"].sudo()
-        total = batch_obj.search_count(domain)
-        pager = portal_pager(url="/my/lab/custody/batches", total=total, page=page, step=20, url_args={"sortby": sortby})
-        records = batch_obj.search(domain, order=sort_order, limit=20, offset=pager["offset"])
+        records, pager, sortby = self._portal_list_records(
+            model_name="lab.sample.custody.batch",
+            domain=domain,
+            sortings=sortings,
+            sortby=sortby,
+            url="/my/lab/custody/batches",
+            page=page,
+        )
 
         values = self._prepare_portal_layout_values()
         values.update(
@@ -661,14 +667,14 @@ class LaboratoryPortal(CustomerPortal):
             "severity": {"label": _("Severity"), "order": "severity desc, id desc"},
             "deadline": {"label": _("Deadline"), "order": "target_close_date asc, id desc"},
         }
-        sort_order = sortings.get(sortby, sortings["date"])["order"]
-
-        inv_obj = request.env["lab.custody.investigation"].sudo()
-        total = inv_obj.search_count(domain)
-        pager = portal_pager(
-            url="/my/lab/custody/investigations", total=total, page=page, step=20, url_args={"sortby": sortby}
+        records, pager, sortby = self._portal_list_records(
+            model_name="lab.custody.investigation",
+            domain=domain,
+            sortings=sortings,
+            sortby=sortby,
+            url="/my/lab/custody/investigations",
+            page=page,
         )
-        records = inv_obj.search(domain, order=sort_order, limit=20, offset=pager["offset"])
 
         values = self._prepare_portal_layout_values()
         values.update(

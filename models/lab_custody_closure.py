@@ -320,25 +320,12 @@ class LabCustodyReceiveSession(models.Model):
     def _create_approval_activity(self):
         self.ensure_one()
         reviewer_group = self.env.ref("laboratory_management.group_lab_reviewer", raise_if_not_found=False)
-        todo = self.env.ref("mail.mail_activity_data_todo")
         users = reviewer_group.user_ids if reviewer_group and reviewer_group.user_ids else self.env.user
-        model_id = self.env["ir.model"]._get_id("lab.custody.receive.session")
         summary = _("Approve custody receive session")
+        entries = []
         for user in users:
-            exists = self.env["mail.activity"].search_count(
-                [
-                    ("res_model_id", "=", model_id),
-                    ("res_id", "=", self.id),
-                    ("user_id", "=", user.id),
-                    ("summary", "=", summary),
-                ]
-            )
-            if exists:
-                continue
-            self.env["mail.activity"].create(
+            entries.append(
                 {
-                    "activity_type_id": todo.id,
-                    "res_model_id": model_id,
                     "res_id": self.id,
                     "user_id": user.id,
                     "summary": summary,
@@ -346,6 +333,10 @@ class LabCustodyReceiveSession(models.Model):
                     % {"name": self.name, "batch": self.batch_id.name},
                 }
             )
+        self.env["lab.activity.helper.mixin"].create_unique_todo_activities(
+            model_name="lab.custody.receive.session",
+            entries=entries,
+        )
 
     def action_reject(self):
         for rec in self:
@@ -697,24 +688,12 @@ class LabCustodyInvestigation(models.Model):
         )
         if not overdue:
             return
-        todo = self.env.ref("mail.mail_activity_data_todo")
-        model_id = self.env["ir.model"]._get_id("lab.custody.investigation")
+        helper = self.env["lab.activity.helper.mixin"]
+        entries = []
         for inv in overdue:
             for user in (inv.owner_id | inv.qa_reviewer_id | self.env.user):
-                exists = self.env["mail.activity"].search_count(
-                    [
-                        ("res_model_id", "=", model_id),
-                        ("res_id", "=", inv.id),
-                        ("user_id", "=", user.id),
-                        ("summary", "=", "Overdue custody investigation"),
-                    ]
-                )
-                if exists:
-                    continue
-                self.env["mail.activity"].create(
+                entries.append(
                     {
-                        "activity_type_id": todo.id,
-                        "res_model_id": model_id,
                         "res_id": inv.id,
                         "user_id": user.id,
                         "summary": "Overdue custody investigation",
@@ -722,6 +701,10 @@ class LabCustodyInvestigation(models.Model):
                         % {"name": inv.name, "date": inv.target_close_date},
                     }
                 )
+        helper.create_unique_todo_activities(
+            model_name="lab.custody.investigation",
+            entries=entries,
+        )
 
 
 class LabCustodyInvestigationAction(models.Model):

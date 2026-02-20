@@ -140,6 +140,7 @@
                                     <field name="analyst_id"/>
                                     <field name="worksheet_id" readonly="1"/>
                                     <field name="result_value"/>
+                                    <field name="binary_interpretation" readonly="1"/>
                                     <field name="unit" readonly="1"/>
                                     <field name="ref_min" readonly="1"/>
                                     <field name="ref_max" readonly="1"/>

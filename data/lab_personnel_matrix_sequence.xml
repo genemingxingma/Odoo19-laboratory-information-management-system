@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_lab_personnel_matrix_run" model="ir.sequence">
+        <field name="name">Lab Personnel Matrix Run</field>
+        <field name="code">lab.personnel.matrix.run</field>
+        <field name="prefix">LMAT%(y)s%(month)s-</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

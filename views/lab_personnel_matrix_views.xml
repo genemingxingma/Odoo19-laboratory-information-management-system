@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_personnel_matrix_run_list" model="ir.ui.view">
+        <field name="name">lab.personnel.matrix.run.list</field>
+        <field name="model">lab.personnel.matrix.run</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="gap_lines &gt; 0" decoration-warning="warn_lines &gt; 0 and gap_lines == 0">
+                <field name="name"/>
+                <field name="run_date"/>
+                <field name="run_by_id"/>
+                <field name="period_days"/>
+                <field name="department"/>
+                <field name="total_lines"/>
+                <field name="authorized_lines"/>
+                <field name="warn_lines"/>
+                <field name="gap_lines"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_personnel_matrix_run_search" model="ir.ui.view">
+        <field name="name">lab.personnel.matrix.run.search</field>
+        <field name="model">lab.personnel.matrix.run</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="run_by_id"/>
+                <field name="department"/>
+                <field name="service_ids"/>
+                <filter name="f_has_gap" string="Has Gaps" domain="[('gap_lines','&gt;',0)]"/>
+                <filter name="f_has_warn" string="Has Warnings" domain="[('warn_lines','&gt;',0)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_personnel_matrix_run_form" model="ir.ui.view">
+        <field name="name">lab.personnel.matrix.run.form</field>
+        <field name="model">lab.personnel.matrix.run</field>
+        <field name="arch" type="xml">
+            <form string="Personnel Competency Matrix">
+                <header>
+                    <button name="action_generate_lines" type="object" string="Generate Matrix" class="btn-primary"/>
+                    <button name="action_view_gaps" type="object" string="View Gaps"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="run_date"/>
+                            <field name="run_by_id" readonly="1"/>
+                            <field name="period_days"/>
+                        </group>
+                        <group>
+                            <field name="department"/>
+                            <field name="service_ids" widget="many2many_tags"/>
+                            <field name="include_analyst"/>
+                            <field name="include_technical_reviewer"/>
+                            <field name="include_medical_reviewer"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="total_lines" readonly="1"/>
+                            <field name="authorized_lines" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="warn_lines" readonly="1"/>
+                            <field name="gap_lines" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Matrix Lines">
+                            <field name="line_ids">
+                                <list decoration-danger="status == 'gap'" decoration-warning="status == 'warn'" decoration-success="status == 'ok'">
+                                    <field name="user_id"/>
+                                    <field name="service_id"/>
+                                    <field name="role"/>
+                                    <field name="activity_count"/>
+                                    <field name="authorization_id"/>
+                                    <field name="authorization_state"/>
+                                    <field name="authorization_effective_to"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_personnel_matrix_run_line_search" model="ir.ui.view">
+        <field name="name">lab.personnel.matrix.run.line.search</field>
+        <field name="model">lab.personnel.matrix.run.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="run_id"/>
+                <field name="user_id"/>
+                <field name="service_id"/>
+                <field name="role"/>
+                <field name="status"/>
+                <filter name="f_status_gap" string="Gap" domain="[('status','=','gap')]"/>
+                <filter name="f_status_warn" string="Warning" domain="[('status','=','warn')]"/>
+                <filter name="f_status_ok" string="Authorized" domain="[('status','=','ok')]"/>
+                <separator string="Group By"/>
+                <filter name="g_run" string="Run" context="{'group_by': 'run_id'}"/>
+                <filter name="g_user" string="User" context="{'group_by': 'user_id'}"/>
+                <filter name="g_service" string="Service" context="{'group_by': 'service_id'}"/>
+                <filter name="g_role" string="Role" context="{'group_by': 'role'}"/>
+                <filter name="g_status" string="Status" context="{'group_by': 'status'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_personnel_matrix_run" model="ir.actions.act_window">
+        <field name="name">Personnel Competency Matrix</field>
+        <field name="res_model">lab.personnel.matrix.run</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_personnel_matrix_run_search"/>
+    </record>
+
+    <record id="action_lab_personnel_matrix_run_line" model="ir.actions.act_window">
+        <field name="name">Personnel Matrix Lines</field>
+        <field name="res_model">lab.personnel.matrix.run.line</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_lab_personnel_matrix_run_line_search"/>
+    </record>
+
+    <menuitem id="menu_lab_personnel_matrix_run" name="Personnel Matrix" parent="menu_lab_quality_governance" action="action_lab_personnel_matrix_run" sequence="48" groups="laboratory_management.group_lab_reviewer"/>
+    <menuitem id="menu_lab_personnel_matrix_run_line" name="Personnel Matrix Lines" parent="menu_lab_quality_governance" action="action_lab_personnel_matrix_run_line" sequence="49" groups="laboratory_management.group_lab_reviewer"/>
+</odoo>

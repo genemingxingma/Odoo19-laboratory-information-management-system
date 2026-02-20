@@ -234,16 +234,23 @@
                             <button name="action_refresh" type="object" string="Refresh" class="btn-primary"/>
                             <button name="action_open_overdue_tasks" type="object" string="Overdue Tasks"/>
                             <button name="action_open_interface_mismatch" type="object" string="Interface Mismatch"/>
+                            <button name="action_open_personnel_gaps" type="object" string="Personnel Gaps"/>
+                            <button name="action_open_personnel_risks" type="object" string="Authorization Risks"/>
                         </group>
                     </group>
                     <group>
                         <group>
                             <field name="task_overdue_count" readonly="1"/>
                             <field name="task_escalated_count" readonly="1"/>
+                            <field name="personnel_gap_count" readonly="1"/>
+                            <field name="personnel_due_30_count" readonly="1"/>
                         </group>
                         <group>
                             <field name="permission_missing_count" readonly="1"/>
                             <field name="interface_mismatch_count" readonly="1"/>
+                            <field name="personnel_warn_count" readonly="1"/>
+                            <field name="personnel_due_14_count" readonly="1"/>
+                            <field name="personnel_due_7_count" readonly="1"/>
                         </group>
                     </group>
                 </sheet>

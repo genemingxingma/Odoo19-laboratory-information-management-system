@@ -76,6 +76,15 @@ class LabSample(models.Model):
         compute="_compute_review_release_ready",
         string="Review Block Reason",
     )
+    iso_release_ready = fields.Boolean(
+        compute="_compute_iso_release_gate",
+        string="ISO15189 Release Ready",
+        store=True,
+    )
+    iso_release_block_reason = fields.Text(
+        compute="_compute_iso_release_gate",
+        string="ISO15189 Block Reason",
+    )
     review_log_ids = fields.One2many(
         "lab.sample.review.log",
         "sample_id",
@@ -144,6 +153,187 @@ class LabSample(models.Model):
 
             rec.review_release_ready = rec.state == "verified"
             rec.review_block_reason = False if rec.review_release_ready else _("Sample is not in verified state.")
+
+    @api.depends(
+        "state",
+        "analysis_ids.state",
+        "analysis_ids.analyst_id",
+        "analysis_ids.reagent_lot_id",
+        "analysis_ids.reagent_lot_id.expiry_date",
+        "analysis_ids.service_id",
+        "analysis_ids.service_id.require_qc",
+        "analysis_ids.service_id.require_reagent_lot",
+        "analysis_ids.needs_manual_review",
+    )
+    def _compute_iso_release_gate(self):
+        for rec in self:
+            blockers = rec._get_iso15189_release_blockers()
+            rec.iso_release_ready = not blockers
+            rec.iso_release_block_reason = "\n".join("- %s" % item for item in blockers) if blockers else False
+
+    @api.model
+    def _iso_release_gate_enabled(self):
+        value = (self.env["ir.config_parameter"].sudo().get_param("laboratory_management.iso15189_release_gate_enabled") or "0").strip()
+        return value not in ("0", "false", "False")
+
+    @api.model
+    def _iso_reviewer_separation_enabled(self):
+        value = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("laboratory_management.iso15189_reviewer_separation_enabled")
+            or "0"
+        ).strip()
+        return value not in ("0", "false", "False")
+
+    @api.model
+    def _iso_personnel_authorization_enabled(self):
+        value = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("laboratory_management.iso15189_personnel_authorization_enabled")
+            or "0"
+        ).strip()
+        return value not in ("0", "false", "False")
+
+    def _find_missing_service_authorizations(self, user, services, role):
+        self.ensure_one()
+        if not user or not services:
+            return services
+        auths = self.env["lab.service.authorization"].search(
+            [
+                ("user_id", "=", user.id),
+                ("service_id", "in", services.ids),
+                ("role", "=", role),
+                ("is_currently_authorized", "=", True),
+            ]
+        )
+        authorized_service_ids = set(auths.mapped("service_id").ids)
+        return services.filtered(lambda s: s.id not in authorized_service_ids)
+
+    def _get_iso15189_release_blockers(self):
+        self.ensure_one()
+        if not self._iso_release_gate_enabled():
+            return []
+        blockers = []
+        analyses = self.analysis_ids.filtered(lambda x: x.state != "rejected")
+        if not analyses:
+            blockers.append(_("No active analyses found for release."))
+            return blockers
+
+        if self.state != "verified":
+            blockers.append(_("Sample is not in verified state."))
+
+        if analyses.filtered(lambda x: x.state != "verified"):
+            blockers.append(_("All active analyses must be verified before release."))
+
+        if analyses.filtered(lambda x: not x.analyst_id):
+            blockers.append(_("Analyst assignment is required for all analyses."))
+
+        if self._iso_personnel_authorization_enabled():
+            for analysis in analyses.filtered(lambda x: x.analyst_id):
+                authorized = self.env["lab.service.authorization"].search_count(
+                    [
+                        ("user_id", "=", analysis.analyst_id.id),
+                        ("service_id", "=", analysis.service_id.id),
+                        ("role", "=", "analyst"),
+                        ("is_currently_authorized", "=", True),
+                    ]
+                )
+                if not authorized:
+                    blockers.append(
+                        _("No active analyst authorization for %(user)s on service %(service)s.")
+                        % {"user": analysis.analyst_id.name, "service": analysis.service_id.name}
+                    )
+
+        missing_reagent = analyses.filtered(
+            lambda x: x.service_id.require_reagent_lot and not x.reagent_lot_id
+        )
+        if missing_reagent:
+            blockers.append(_("Required reagent lot is missing for one or more analyses."))
+
+        expired_reagent = analyses.filtered(
+            lambda x: x.reagent_lot_id and x.reagent_lot_id.is_expired
+        )
+        if expired_reagent:
+            blockers.append(_("Expired reagent lot detected in analysis records."))
+
+        # Check QC readiness by unique service to avoid repeated queries on same assay.
+        qc_required_services = analyses.filtered(lambda x: x.service_id.require_qc).mapped("service_id")
+        for service in qc_required_services:
+            qc = self.env["lab.qc.run"].search(
+                [("service_id", "=", service.id)],
+                order="run_date desc, id desc",
+                limit=1,
+            )
+            if not qc:
+                blockers.append(
+                    _("QC required but no QC run found for service %(service)s.")
+                    % {"service": service.name}
+                )
+                continue
+            if qc.status != "pass":
+                blockers.append(
+                    _("Latest QC for service %(service)s is not pass (status: %(status)s).")
+                    % {"service": service.name, "status": qc.status}
+                )
+
+        pending_manual = analyses.filtered(lambda x: x.needs_manual_review)
+        if pending_manual:
+            blockers.append(_("Manual review is still required for one or more analyses."))
+
+        if self._iso_personnel_authorization_enabled():
+            services = analyses.mapped("service_id")
+            if self.technical_review_state == "approved" and self.technical_reviewer_id:
+                missing = self._find_missing_service_authorizations(
+                    user=self.technical_reviewer_id,
+                    services=services,
+                    role="technical_reviewer",
+                )
+                for service in missing:
+                    blockers.append(
+                        _(
+                            "No active technical reviewer authorization for %(user)s on service %(service)s."
+                        )
+                        % {"user": self.technical_reviewer_id.name, "service": service.name}
+                    )
+            if self.medical_review_state == "approved" and self.medical_reviewer_id:
+                missing = self._find_missing_service_authorizations(
+                    user=self.medical_reviewer_id,
+                    services=services,
+                    role="medical_reviewer",
+                )
+                for service in missing:
+                    blockers.append(
+                        _("No active medical reviewer authorization for %(user)s on service %(service)s.")
+                        % {"user": self.medical_reviewer_id.name, "service": service.name}
+                    )
+
+        required_validation_services = analyses.mapped("service_id").filtered(lambda s: s.require_method_validation)
+        if required_validation_services:
+            active_validations = self.env["lab.method.validation"].search(
+                [
+                    ("service_id", "in", required_validation_services.ids),
+                    ("is_active_for_release", "=", True),
+                ]
+            )
+            validated_service_ids = set(active_validations.mapped("service_id").ids)
+            missing = required_validation_services.filtered(lambda s: s.id not in validated_service_ids)
+            for service in missing:
+                blockers.append(
+                    _("No active approved method validation found for service %(service)s.")
+                    % {"service": service.name}
+                )
+
+        open_ncr = self.env["lab.nonconformance"].search_count(
+            [
+                ("sample_id", "=", self.id),
+                ("state", "not in", ("closed", "cancel")),
+            ]
+        )
+        if open_ncr:
+            blockers.append(_("Open nonconformance records exist for this sample."))
+        return blockers
 
     def _create_review_log(self, stage, action, note=None):
         self.ensure_one()
@@ -247,6 +437,15 @@ class LabSample(models.Model):
         for rec in self:
             if rec.state not in ("verified", "reported"):
                 raise UserError(_("Technical review can only be approved for verified/reported samples."))
+            if (
+                rec._iso_reviewer_separation_enabled()
+                and rec.medical_review_state == "approved"
+                and rec.medical_reviewer_id
+                and rec.medical_reviewer_id.id == self.env.user.id
+            ):
+                raise UserError(
+                    _("ISO15189 reviewer separation rule: technical and medical reviewers must be different users.")
+                )
             rec.write(
                 {
                     "technical_review_state": "approved",
@@ -294,6 +493,15 @@ class LabSample(models.Model):
         for rec in self:
             if rec.state not in ("verified", "reported"):
                 raise UserError(_("Medical review can only be approved for verified/reported samples."))
+            if (
+                rec._iso_reviewer_separation_enabled()
+                and rec.technical_review_state == "approved"
+                and rec.technical_reviewer_id
+                and rec.technical_reviewer_id.id == self.env.user.id
+            ):
+                raise UserError(
+                    _("ISO15189 reviewer separation rule: technical and medical reviewers must be different users.")
+                )
             rec.write(
                 {
                     "medical_review_state": "approved",
@@ -374,6 +582,12 @@ class LabSample(models.Model):
         for rec in self:
             if rec.review_required_for_release and not rec.review_release_ready:
                 raise UserError(rec.review_block_reason or _("Dual review is not complete."))
+            blockers = rec._get_iso15189_release_blockers()
+            if blockers:
+                raise UserError(
+                    _("ISO15189 release gate blocked:\n- %s")
+                    % ("\n- ".join(blockers))
+                )
         result = super().action_release_report()
         self.write(
             {
@@ -440,3 +654,20 @@ class LabSample(models.Model):
             if rec.state == "reported" and rec.report_publication_state == "withdrawn":
                 raise UserError(_("Withdrawn report cannot be printed for external release."))
         return super().action_print_report()
+
+
+class ResConfigSettings(models.TransientModel):
+    _inherit = "res.config.settings"
+
+    laboratory_iso15189_release_gate_enabled = fields.Boolean(
+        string="Enable ISO15189 Release Gate",
+        config_parameter="laboratory_management.iso15189_release_gate_enabled",
+    )
+    laboratory_iso15189_reviewer_separation_enabled = fields.Boolean(
+        string="Enforce Technical/Medical Reviewer Separation",
+        config_parameter="laboratory_management.iso15189_reviewer_separation_enabled",
+    )
+    laboratory_iso15189_personnel_authorization_enabled = fields.Boolean(
+        string="Enforce Personnel Service Authorization Before Release",
+        config_parameter="laboratory_management.iso15189_personnel_authorization_enabled",
+    )

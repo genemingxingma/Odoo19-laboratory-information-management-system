@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_training_authorization_template_list" model="ir.ui.view">
+        <field name="name">lab.training.authorization.template.list</field>
+        <field name="model">lab.training.authorization.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_training_authorization_template_form" model="ir.ui.view">
+        <field name="name">lab.training.authorization.template.form</field>
+        <field name="model">lab.training.authorization.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="role"/>
+                                    <field name="service_ids" widget="many2many_tags"/>
+                                    <field name="effective_months"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_training_authorization_template_search" model="ir.ui.view">
+        <field name="name">lab.training.authorization.template.search</field>
+        <field name="model">lab.training.authorization.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="active"/>
+                <filter name="f_active" string="Active" domain="[('active','=',True)]"/>
+                <filter name="f_inactive" string="Inactive" domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_training_authorization_template" model="ir.actions.act_window">
+        <field name="name">Training Authorization Templates</field>
+        <field name="res_model">lab.training.authorization.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_training_authorization_template_search"/>
+    </record>
+
+    <record id="view_lab_quality_training_form_template_inherit" model="ir.ui.view">
+        <field name="name">lab.quality.training.form.template.inherit</field>
+        <field name="model">lab.quality.training</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_quality_training_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_apply_authorization_template" type="object" string="Apply Authorization Template" class="btn-secondary"/>
+            </xpath>
+            <xpath expr="//field[@name='authorization_role']" position="before">
+                <field name="authorization_template_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_lab_training_authorization_template" name="Training Auth Templates" parent="menu_lab_config_operations" action="action_lab_training_authorization_template" sequence="19" groups="laboratory_management.group_lab_manager"/>
+</odoo>

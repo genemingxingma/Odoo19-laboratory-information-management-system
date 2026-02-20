@@ -5978,3 +5978,276 @@ msgstr "กำหนดเสร็จ"
 #. module: laboratory_management
 msgid "Newest"
 msgstr "ล่าสุด"
+
+#. module: laboratory_management
+msgid "Enable Binary Interpretation"
+msgstr "เปิดใช้การแปลผลแบบไบนารี"
+
+#. module: laboratory_management
+msgid "Automatically interpret numeric result as Positive/Negative by threshold."
+msgstr "แปลผลค่าตัวเลขเป็น Positive/Negative อัตโนมัติตามค่าเกณฑ์"
+
+#. module: laboratory_management
+msgid "Binary Interpretation Cutoff"
+msgstr "ค่าเกณฑ์การแปลผลแบบไบนารี"
+
+#. module: laboratory_management
+msgid "Threshold value for binary interpretation rule."
+msgstr "ค่าเกณฑ์สำหรับกฎการแปลผลแบบไบนารี"
+
+#. module: laboratory_management
+msgid "Negative When Result >= Cutoff"
+msgstr "เป็น Negative เมื่อผล >= ค่าเกณฑ์"
+
+#. module: laboratory_management
+msgid "If enabled: result >= cutoff is Negative, otherwise Positive."
+msgstr "เมื่อเปิดใช้: ผล >= ค่าเกณฑ์เป็น Negative มิฉะนั้นเป็น Positive"
+
+#. module: laboratory_management
+msgid "Binary interpretation cutoff must be non-negative."
+msgstr "ค่าเกณฑ์การแปลผลแบบไบนารีต้องไม่ติดลบ"
+
+#. module: laboratory_management
+msgid "Binary Interpretation"
+msgstr "การแปลผลแบบไบนารี"
+
+#. module: laboratory_management
+msgid "Positive"
+msgstr "ผลบวก"
+
+#. module: laboratory_management
+msgid "Negative"
+msgstr "ผลลบ"
+
+#. module: laboratory_management
+msgid "ISO15189 Release Ready"
+msgstr "พร้อมปล่อยผลตาม ISO15189"
+
+#. module: laboratory_management
+msgid "ISO15189 Block Reason"
+msgstr "เหตุผลที่ถูกบล็อกตาม ISO15189"
+
+#. module: laboratory_management
+msgid "ISO Gate Blocked"
+msgstr "ถูกบล็อกโดยเกต ISO"
+
+#. module: laboratory_management
+msgid "ISO15189 release gate blocked:\n- %s"
+msgstr "เกตปล่อยผล ISO15189 ถูกบล็อก:\n- %s"
+
+#. module: laboratory_management
+msgid "No active analyses found for release."
+msgstr "ไม่พบรายการตรวจที่ใช้งานอยู่สำหรับปล่อยผล"
+
+#. module: laboratory_management
+msgid "All active analyses must be verified before release."
+msgstr "ทุกรายการตรวจที่ใช้งานอยู่ต้องได้รับการยืนยันก่อนปล่อยผล"
+
+#. module: laboratory_management
+msgid "Analyst assignment is required for all analyses."
+msgstr "ทุกรายการตรวจต้องกำหนดผู้วิเคราะห์"
+
+#. module: laboratory_management
+msgid "Required reagent lot is missing for one or more analyses."
+msgstr "มีอย่างน้อยหนึ่งรายการตรวจที่ไม่มี lot น้ำยาที่บังคับ"
+
+#. module: laboratory_management
+msgid "Expired reagent lot detected in analysis records."
+msgstr "พบบันทึกการตรวจที่ใช้น้ำยา lot หมดอายุ"
+
+#. module: laboratory_management
+msgid "Manual review is still required for one or more analyses."
+msgstr "ยังมีอย่างน้อยหนึ่งรายการตรวจที่ต้องทบทวนด้วยมือ"
+
+#. module: laboratory_management
+msgid "Open nonconformance records exist for this sample."
+msgstr "ตัวอย่างนี้ยังมีบันทึกความไม่สอดคล้องที่ยังไม่ปิด"
+
+#. module: laboratory_management
+msgid "QC Reject Rate"
+msgstr "อัตรา QC ไม่ผ่าน"
+
+#. module: laboratory_management
+msgid "EQA Pass Rate"
+msgstr "อัตราผ่าน EQA"
+
+#. module: laboratory_management
+msgid "Release Gate Blocked"
+msgstr "จำนวนที่ถูกบล็อกโดยเกตปล่อยผล"
+
+#. module: laboratory_management
+msgid "ISO15189 reviewer separation rule: technical and medical reviewers must be different users."
+msgstr "กฎแยกหน้าที่ผู้ทบทวนตาม ISO15189: ผู้ทบทวนทางเทคนิคและทางการแพทย์ต้องเป็นคนละคน"
+
+#. module: laboratory_management
+msgid "Require Approved Method Validation for Release"
+msgstr "ต้องมีการรับรองวิธีทดสอบที่อนุมัติก่อนปล่อยผล"
+
+#. module: laboratory_management
+msgid "No active approved method validation found for service %(service)s."
+msgstr "ไม่พบการรับรองวิธีทดสอบที่อนุมัติและยังมีผลสำหรับบริการ %(service)s"
+
+#. module: laboratory_management
+msgid "Method validation review due"
+msgstr "ถึงกำหนดทบทวนการรับรองวิธีทดสอบ"
+
+#. module: laboratory_management
+msgid "Validation %(name)s for %(service)s review is due on %(date)s."
+msgstr "การทบทวนการรับรอง %(name)s ของ %(service)s ครบกำหนดวันที่ %(date)s"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_service_authorization
+msgid "Personnel Authorizations"
+msgstr "การมอบสิทธิบุคลากร"
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_service_authorization
+msgid "Personnel Authorizations"
+msgstr "การมอบสิทธิบุคลากร"
+
+#. module: laboratory_management
+msgid "No active analyst authorization for %(user)s on service %(service)s."
+msgstr "ผู้ใช้ %(user)s ไม่มีสิทธิผู้วิเคราะห์ที่มีผลสำหรับบริการ %(service)s"
+
+#. module: laboratory_management
+msgid "No active technical reviewer authorization for %(user)s on service %(service)s."
+msgstr "ผู้ใช้ %(user)s ไม่มีสิทธิผู้ทบทวนเทคนิคที่มีผลสำหรับบริการ %(service)s"
+
+#. module: laboratory_management
+msgid "No active medical reviewer authorization for %(user)s on service %(service)s."
+msgstr "ผู้ใช้ %(user)s ไม่มีสิทธิผู้ทบทวนทางการแพทย์ที่มีผลสำหรับบริการ %(service)s"
+
+#. module: laboratory_management
+msgid "Enable ISO15189 Release Gate"
+msgstr "เปิดใช้ด่านควบคุมการปล่อยรายงาน ISO15189"
+
+#. module: laboratory_management
+msgid "Enforce Technical/Medical Reviewer Separation"
+msgstr "บังคับแยกผู้ทบทวนเทคนิคและการแพทย์"
+
+#. module: laboratory_management
+msgid "Enforce Personnel Service Authorization Before Release"
+msgstr "บังคับตรวจสิทธิบุคลากรตามบริการก่อนปล่อยรายงาน"
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_personnel_matrix_run
+msgid "Personnel Competency Matrix"
+msgstr "เมทริกซ์สมรรถนะบุคลากร"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_personnel_matrix_run
+msgid "Personnel Matrix"
+msgstr "เมทริกซ์บุคลากร"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_personnel_matrix_run_line
+msgid "Personnel Matrix Lines"
+msgstr "รายการเมทริกซ์บุคลากร"
+
+#. module: laboratory_management
+msgid "Generate Matrix"
+msgstr "สร้างเมทริกซ์"
+
+#. module: laboratory_management
+msgid "View Gaps"
+msgstr "ดูช่องว่าง"
+
+#. module: laboratory_management
+msgid "Generate Authorizations"
+msgstr "สร้างสิทธิอนุมัติ"
+
+#. module: laboratory_management
+msgid "Authorization Mapping"
+msgstr "การแมปสิทธิอนุมัติ"
+
+#. module: laboratory_management
+msgid "Authorization Services"
+msgstr "บริการที่ให้สิทธิ"
+
+#. module: laboratory_management
+msgid "Authorization Role"
+msgstr "บทบาทการให้สิทธิ"
+
+#. module: laboratory_management
+msgid "Generated Authorizations"
+msgstr "สิทธิที่สร้างแล้ว"
+
+#. module: laboratory_management
+msgid "Service Filter"
+msgstr "ตัวกรองบริการ"
+
+#. module: laboratory_management
+msgid "Has Gaps"
+msgstr "มีช่องว่าง"
+
+#. module: laboratory_management
+msgid "Has Warnings"
+msgstr "มีคำเตือน"
+
+#. module: laboratory_management
+msgid "Authorization Gap"
+msgstr "ช่องว่างสิทธิอนุมัติ"
+
+#. module: laboratory_management
+msgid "Expiring Soon"
+msgstr "ใกล้หมดอายุ"
+
+#. module: laboratory_management
+msgid "Authorized"
+msgstr "ได้รับสิทธิแล้ว"
+
+#. module: laboratory_management
+msgid "Training Authorization Templates"
+msgstr "เทมเพลตสิทธิการฝึกอบรม"
+
+#. module: laboratory_management
+msgid "Training Auth Templates"
+msgstr "เทมเพลตสิทธิการฝึกอบรม"
+
+#. module: laboratory_management
+msgid "Apply Authorization Template"
+msgstr "ใช้เทมเพลตสิทธิ"
+
+#. module: laboratory_management
+msgid "Personnel Gaps"
+msgstr "ช่องว่างบุคลากร"
+
+#. module: laboratory_management
+msgid "Personnel Matrix Gaps"
+msgstr "ช่องว่างในเมทริกซ์บุคลากร"
+
+#. module: laboratory_management
+msgid "Authorization settings loaded from template %(template)s (line role: %(role)s)."
+msgstr "โหลดการตั้งค่าสิทธิจากเทมเพลต %(template)s แล้ว (บทบาทบรรทัด: %(role)s)"
+
+#. module: laboratory_management
+msgid "Split Plan by Template"
+msgstr "แยกแผนตามเทมเพลต"
+
+#. module: laboratory_management
+msgid "Split Sessions"
+msgstr "รอบการแยก"
+
+#. module: laboratory_management
+msgid "Upcoming training in 3 days"
+msgstr "การฝึกอบรมจะเริ่มภายใน 3 วัน"
+
+#. module: laboratory_management
+msgid "Authorization Risks"
+msgstr "ความเสี่ยงด้านสิทธิ"
+
+#. module: laboratory_management
+msgid "Split training plan generated: %(count)s child session(s)."
+msgstr "สร้างแผนฝึกอบรมที่แยกแล้ว: %(count)s รอบย่อย"
+
+#. module: laboratory_management
+msgid "Auto Reschedule"
+msgstr "ปรับตารางอัตโนมัติ"
+
+#. module: laboratory_management
+msgid "Auto rescheduled training from %(old)s to %(new)s due to trainer conflict."
+msgstr "ปรับวันฝึกอบรมอัตโนมัติจาก %(old)s เป็น %(new)s เนื่องจากตารางวิทยากรซ้ำ"
+
+#. module: laboratory_management
+msgid "Lab: Auto Reschedule Training Conflicts"
+msgstr "แล็บ: ปรับความขัดแย้งตารางฝึกอบรมอัตโนมัติ"

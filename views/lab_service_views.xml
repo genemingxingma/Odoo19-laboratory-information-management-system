@@ -40,10 +40,14 @@
                             <field name="critical_min" invisible="result_type != 'numeric'"/>
                             <field name="critical_max" invisible="result_type != 'numeric'"/>
                             <field name="require_qc"/>
+                            <field name="require_method_validation"/>
                             <field name="require_reagent_lot"/>
                             <field name="auto_verify_enabled"/>
                             <field name="auto_verify_allow_out_of_range" invisible="not auto_verify_enabled"/>
                             <field name="auto_verify_require_qc_pass" invisible="not auto_verify_enabled or not require_qc"/>
+                            <field name="auto_binary_enabled" invisible="result_type != 'numeric'"/>
+                            <field name="auto_binary_cutoff" invisible="result_type != 'numeric' or not auto_binary_enabled"/>
+                            <field name="auto_binary_negative_when_gte" invisible="result_type != 'numeric' or not auto_binary_enabled"/>
                             <field name="delta_check_enabled"/>
                             <field name="delta_check_method" invisible="not delta_check_enabled or result_type != 'numeric'"/>
                             <field name="delta_check_threshold" invisible="not delta_check_enabled or result_type != 'numeric'"/>

@@ -5978,3 +5978,276 @@ msgstr "截止时间"
 #. module: laboratory_management
 msgid "Newest"
 msgstr "最新"
+
+#. module: laboratory_management
+msgid "Enable Binary Interpretation"
+msgstr "启用二分类判读"
+
+#. module: laboratory_management
+msgid "Automatically interpret numeric result as Positive/Negative by threshold."
+msgstr "按阈值自动将数值结果判读为阳性/阴性。"
+
+#. module: laboratory_management
+msgid "Binary Interpretation Cutoff"
+msgstr "二分类判读阈值"
+
+#. module: laboratory_management
+msgid "Threshold value for binary interpretation rule."
+msgstr "二分类判读规则的阈值。"
+
+#. module: laboratory_management
+msgid "Negative When Result >= Cutoff"
+msgstr "结果 >= 阈值时判为阴性"
+
+#. module: laboratory_management
+msgid "If enabled: result >= cutoff is Negative, otherwise Positive."
+msgstr "启用后：结果 >= 阈值判为阴性，否则判为阳性。"
+
+#. module: laboratory_management
+msgid "Binary interpretation cutoff must be non-negative."
+msgstr "二分类判读阈值必须为非负数。"
+
+#. module: laboratory_management
+msgid "Binary Interpretation"
+msgstr "二分类判读"
+
+#. module: laboratory_management
+msgid "Positive"
+msgstr "阳性"
+
+#. module: laboratory_management
+msgid "Negative"
+msgstr "阴性"
+
+#. module: laboratory_management
+msgid "ISO15189 Release Ready"
+msgstr "ISO15189 放行就绪"
+
+#. module: laboratory_management
+msgid "ISO15189 Block Reason"
+msgstr "ISO15189 阻断原因"
+
+#. module: laboratory_management
+msgid "ISO Gate Blocked"
+msgstr "ISO门禁阻断"
+
+#. module: laboratory_management
+msgid "ISO15189 release gate blocked:\n- %s"
+msgstr "ISO15189 放行门禁阻断:\n- %s"
+
+#. module: laboratory_management
+msgid "No active analyses found for release."
+msgstr "未找到可用于放行的有效检验项目。"
+
+#. module: laboratory_management
+msgid "All active analyses must be verified before release."
+msgstr "所有有效检验项目必须先完成审核通过后才能放行。"
+
+#. module: laboratory_management
+msgid "Analyst assignment is required for all analyses."
+msgstr "所有检验项目都必须分配检验人员。"
+
+#. module: laboratory_management
+msgid "Required reagent lot is missing for one or more analyses."
+msgstr "一个或多个检验项目缺少必需的试剂批号。"
+
+#. module: laboratory_management
+msgid "Expired reagent lot detected in analysis records."
+msgstr "检验记录中存在已过期的试剂批号。"
+
+#. module: laboratory_management
+msgid "Manual review is still required for one or more analyses."
+msgstr "一个或多个检验项目仍需人工复核。"
+
+#. module: laboratory_management
+msgid "Open nonconformance records exist for this sample."
+msgstr "该样本存在未关闭的不符合项记录。"
+
+#. module: laboratory_management
+msgid "QC Reject Rate"
+msgstr "QC拒收率"
+
+#. module: laboratory_management
+msgid "EQA Pass Rate"
+msgstr "EQA通过率"
+
+#. module: laboratory_management
+msgid "Release Gate Blocked"
+msgstr "放行门禁阻断数"
+
+#. module: laboratory_management
+msgid "ISO15189 reviewer separation rule: technical and medical reviewers must be different users."
+msgstr "ISO15189审核职责分离规则：技术审核与医学审核必须由不同人员完成。"
+
+#. module: laboratory_management
+msgid "Require Approved Method Validation for Release"
+msgstr "放行前需要已批准的方法学验证"
+
+#. module: laboratory_management
+msgid "No active approved method validation found for service %(service)s."
+msgstr "服务%(service)s未找到有效且已批准的方法学验证记录。"
+
+#. module: laboratory_management
+msgid "Method validation review due"
+msgstr "方法学验证复审到期"
+
+#. module: laboratory_management
+msgid "Validation %(name)s for %(service)s review is due on %(date)s."
+msgstr "%(service)s的验证%(name)s将于%(date)s到期复审。"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_service_authorization
+msgid "Personnel Authorizations"
+msgstr "人员资质授权"
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_service_authorization
+msgid "Personnel Authorizations"
+msgstr "人员资质授权"
+
+#. module: laboratory_management
+msgid "No active analyst authorization for %(user)s on service %(service)s."
+msgstr "用户%(user)s在服务%(service)s上没有有效的分析员授权。"
+
+#. module: laboratory_management
+msgid "No active technical reviewer authorization for %(user)s on service %(service)s."
+msgstr "用户%(user)s在服务%(service)s上没有有效的技术审核授权。"
+
+#. module: laboratory_management
+msgid "No active medical reviewer authorization for %(user)s on service %(service)s."
+msgstr "用户%(user)s在服务%(service)s上没有有效的医学审核授权。"
+
+#. module: laboratory_management
+msgid "Enable ISO15189 Release Gate"
+msgstr "启用ISO15189发布闸门"
+
+#. module: laboratory_management
+msgid "Enforce Technical/Medical Reviewer Separation"
+msgstr "强制技术/医学审核人分离"
+
+#. module: laboratory_management
+msgid "Enforce Personnel Service Authorization Before Release"
+msgstr "发布前强制人员服务授权校验"
+
+#. module: laboratory_management
+#: model:ir.actions.act_window,name:laboratory_management.action_lab_personnel_matrix_run
+msgid "Personnel Competency Matrix"
+msgstr "人员能力矩阵"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_personnel_matrix_run
+msgid "Personnel Matrix"
+msgstr "人员矩阵"
+
+#. module: laboratory_management
+#: model:ir.ui.menu,name:laboratory_management.menu_lab_personnel_matrix_run_line
+msgid "Personnel Matrix Lines"
+msgstr "人员矩阵明细"
+
+#. module: laboratory_management
+msgid "Generate Matrix"
+msgstr "生成矩阵"
+
+#. module: laboratory_management
+msgid "View Gaps"
+msgstr "查看缺口"
+
+#. module: laboratory_management
+msgid "Generate Authorizations"
+msgstr "生成授权"
+
+#. module: laboratory_management
+msgid "Authorization Mapping"
+msgstr "授权映射"
+
+#. module: laboratory_management
+msgid "Authorization Services"
+msgstr "授权服务"
+
+#. module: laboratory_management
+msgid "Authorization Role"
+msgstr "授权角色"
+
+#. module: laboratory_management
+msgid "Generated Authorizations"
+msgstr "已生成授权"
+
+#. module: laboratory_management
+msgid "Service Filter"
+msgstr "服务筛选"
+
+#. module: laboratory_management
+msgid "Has Gaps"
+msgstr "存在缺口"
+
+#. module: laboratory_management
+msgid "Has Warnings"
+msgstr "存在预警"
+
+#. module: laboratory_management
+msgid "Authorization Gap"
+msgstr "授权缺口"
+
+#. module: laboratory_management
+msgid "Expiring Soon"
+msgstr "即将到期"
+
+#. module: laboratory_management
+msgid "Authorized"
+msgstr "已授权"
+
+#. module: laboratory_management
+msgid "Training Authorization Templates"
+msgstr "培训授权模板"
+
+#. module: laboratory_management
+msgid "Training Auth Templates"
+msgstr "培训授权模板"
+
+#. module: laboratory_management
+msgid "Apply Authorization Template"
+msgstr "应用授权模板"
+
+#. module: laboratory_management
+msgid "Personnel Gaps"
+msgstr "人员授权缺口"
+
+#. module: laboratory_management
+msgid "Personnel Matrix Gaps"
+msgstr "人员矩阵缺口"
+
+#. module: laboratory_management
+msgid "Authorization settings loaded from template %(template)s (line role: %(role)s)."
+msgstr "已从模板%(template)s加载授权设置（行角色：%(role)s）。"
+
+#. module: laboratory_management
+msgid "Split Plan by Template"
+msgstr "按模板拆分计划"
+
+#. module: laboratory_management
+msgid "Split Sessions"
+msgstr "拆分场次"
+
+#. module: laboratory_management
+msgid "Upcoming training in 3 days"
+msgstr "培训将在3天内开始"
+
+#. module: laboratory_management
+msgid "Authorization Risks"
+msgstr "授权风险"
+
+#. module: laboratory_management
+msgid "Split training plan generated: %(count)s child session(s)."
+msgstr "已生成拆分培训计划：%(count)s个子场次。"
+
+#. module: laboratory_management
+msgid "Auto Reschedule"
+msgstr "自动调期"
+
+#. module: laboratory_management
+msgid "Auto rescheduled training from %(old)s to %(new)s due to trainer conflict."
+msgstr "因讲师排期冲突，培训已从%(old)s自动调整到%(new)s。"
+
+#. module: laboratory_management
+msgid "Lab: Auto Reschedule Training Conflicts"
+msgstr "实验室：自动调整培训排期冲突"

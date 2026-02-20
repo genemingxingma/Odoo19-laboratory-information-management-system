@@ -319,10 +319,10 @@ class LabSample(models.Model):
         if not overdue_samples:
             return
 
-        todo = self.env.ref("mail.mail_activity_data_todo")
-        model_id = self.env["ir.model"]._get_id("lab.sample")
         manager_group = self.env.ref("laboratory_management.group_lab_manager", raise_if_not_found=False)
         users = manager_group.user_ids if (manager_group and manager_group.user_ids) else self.env.user
+        helper = self.env["lab.activity.helper.mixin"]
+        entries = []
 
         for sample in overdue_samples:
             summary = "Storage retention overdue"
@@ -331,26 +331,15 @@ class LabSample(models.Model):
                 % (sample.name, sample.storage_due_date, sample.storage_state)
             )
             for user in users:
-                exists = self.env["mail.activity"].search_count(
-                    [
-                        ("res_model_id", "=", model_id),
-                        ("res_id", "=", sample.id),
-                        ("user_id", "=", user.id),
-                        ("summary", "=", summary),
-                    ]
-                )
-                if exists:
-                    continue
-                self.env["mail.activity"].create(
+                entries.append(
                     {
-                        "activity_type_id": todo.id,
-                        "user_id": user.id,
-                        "res_model_id": model_id,
                         "res_id": sample.id,
+                        "user_id": user.id,
                         "summary": summary,
                         "note": note,
                     }
                 )
+        helper.create_unique_todo_activities(model_name="lab.sample", entries=entries)
 
 
 class LabSampleStorageEvent(models.Model):
