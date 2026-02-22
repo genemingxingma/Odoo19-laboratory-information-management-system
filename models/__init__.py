@@ -24,6 +24,7 @@ from . import lab_interface_mapping
 from . import lab_protocol_adapter
 from . import lab_interface_audit
 from . import lab_interface
+from . import lab_external_api
 from . import lab_operational_clone
 from . import lab_operational_workflow
 from . import lab_governance_extension

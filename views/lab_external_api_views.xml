@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_interface_endpoint_form_external_api_inherit" model="ir.ui.view">
+        <field name="name">lab.interface.endpoint.form.external.api.inherit</field>
+        <field name="model">lab.interface.endpoint</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_interface_endpoint_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@string='Credentials']" position="after">
+                <group string="External Institution API">
+                    <group>
+                        <field name="external_api_enabled"/>
+                        <field name="external_partner_id" invisible="not external_api_enabled"/>
+                        <field name="external_company_id" invisible="not external_api_enabled"/>
+                        <field name="external_auto_submit_request" invisible="not external_api_enabled"/>
+                    </group>
+                    <group>
+                        <field name="external_allow_request_push" invisible="not external_api_enabled"/>
+                        <field name="external_allow_result_query" invisible="not external_api_enabled"/>
+                        <field name="external_allow_report_download" invisible="not external_api_enabled"/>
+                    </group>
+                    <label string="Endpoints (REST):"/>
+                    <div>
+                        <p><code>/lab/api/v1/&lt;endpoint_code&gt;/requests</code> (POST JSON)</p>
+                        <p><code>/lab/api/v1/&lt;endpoint_code&gt;/requests/&lt;request_no&gt;</code> (GET)</p>
+                        <p><code>/lab/api/v1/&lt;endpoint_code&gt;/samples/&lt;accession&gt;/results</code> (GET)</p>
+                        <p><code>/lab/api/v1/&lt;endpoint_code&gt;/samples/&lt;accession&gt;/report/pdf</code> (GET)</p>
+                    </div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

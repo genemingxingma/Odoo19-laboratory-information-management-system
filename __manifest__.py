@@ -96,6 +96,7 @@ Features:
         "views/lab_instrument_views.xml",
         "views/lab_interface_mapping_views.xml",
         "views/lab_interface_views.xml",
+        "views/lab_external_api_views.xml",
         "views/lab_interface_audit_views.xml",
         "views/lab_operational_clone_views.xml",
         "views/lab_operational_workflow_views.xml",
