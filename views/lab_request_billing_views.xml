@@ -49,6 +49,7 @@
                 <header>
                     <button name="action_issue" type="object" string="Issue" class="btn-primary" invisible="state != 'draft'"/>
                     <button name="action_register_payment" type="object" string="Register Payment" class="btn-primary" invisible="state not in ('issued','partially_paid')"/>
+                    <button name="action_register_refund" type="object" string="Register Refund" invisible="state not in ('issued','partially_paid','paid')"/>
                     <button name="action_mark_paid" type="object" string="Mark Paid" invisible="state not in ('issued','partially_paid')"/>
                     <button name="action_mark_void" type="object" string="Void" invisible="state in ('paid','void')"/>
                     <button name="action_reset_draft" type="object" string="Reset Draft" invisible="state == 'draft'"/>
@@ -58,6 +59,9 @@
                     <div class="oe_button_box" name="button_box">
                         <button class="oe_stat_button" name="action_view_payments" type="object" icon="fa-money">
                             <field name="payment_count" widget="statinfo" string="Payments"/>
+                        </button>
+                        <button class="oe_stat_button" name="action_view_refunds" type="object" icon="fa-undo">
+                            <field name="refund_count" widget="statinfo" string="Refunds"/>
                         </button>
                     </div>
                     <group>
@@ -72,6 +76,8 @@
                             <field name="due_date"/>
                             <field name="payment_state" readonly="1"/>
                             <field name="portal_last_viewed_at" readonly="1"/>
+                            <field name="has_billing_anomaly" readonly="1"/>
+                            <field name="billing_anomaly_note" readonly="1" invisible="not has_billing_anomaly"/>
                         </group>
                     </group>
                     <group>
@@ -107,6 +113,20 @@
                                 </list>
                             </field>
                         </page>
+                        <page string="Refunds">
+                            <field name="refund_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="refund_date"/>
+                                    <field name="partner_id"/>
+                                    <field name="reason_type"/>
+                                    <field name="amount"/>
+                                    <field name="state"/>
+                                    <field name="approved_by_id"/>
+                                    <field name="posted_by_id"/>
+                                </list>
+                            </field>
+                        </page>
                     </notebook>
                     <group>
                         <group>
@@ -116,6 +136,7 @@
                         <group>
                             <field name="amount_total" readonly="1"/>
                             <field name="amount_paid" readonly="1"/>
+                            <field name="amount_refunded" readonly="1"/>
                             <field name="amount_residual" readonly="1"/>
                         </group>
                     </group>
@@ -250,6 +271,166 @@
         </field>
     </record>
 
+    <record id="view_lab_request_refund_list" model="ir.ui.view">
+        <field name="name">lab.request.refund.list</field>
+        <field name="model">lab.request.refund</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="invoice_id"/>
+                <field name="request_id"/>
+                <field name="partner_id"/>
+                <field name="refund_date"/>
+                <field name="reason_type"/>
+                <field name="amount"/>
+                <field name="state"/>
+                <field name="approved_by_id"/>
+                <field name="posted_by_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_request_refund_search" model="ir.ui.view">
+        <field name="name">lab.request.refund.search</field>
+        <field name="model">lab.request.refund</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="invoice_id"/>
+                <field name="request_id"/>
+                <field name="partner_id"/>
+                <field name="state"/>
+                <filter name="f_draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="f_posted" string="Posted" domain="[('state','=','posted')]"/>
+                <filter name="f_rejected" string="Rejected" domain="[('state','=','rejected')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_request_refund_form" model="ir.ui.view">
+        <field name="name">lab.request.refund.form</field>
+        <field name="model">lab.request.refund</field>
+        <field name="arch" type="xml">
+            <form string="Request Refund">
+                <header>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_post" type="object" string="Post" class="btn-primary" invisible="state not in ('draft','approved')"/>
+                    <button name="action_reject" type="object" string="Reject" invisible="state in ('posted','cancelled','rejected')"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('posted','cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,posted,rejected,cancelled"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="invoice_id"/>
+                            <field name="request_id" readonly="1"/>
+                            <field name="partner_id"/>
+                            <field name="amount"/>
+                        </group>
+                        <group>
+                            <field name="refund_date"/>
+                            <field name="reason_type"/>
+                            <field name="approved_by_id" readonly="1"/>
+                            <field name="approved_at" readonly="1"/>
+                            <field name="posted_by_id" readonly="1"/>
+                            <field name="posted_at" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason_detail"/>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_billing_reconciliation_list" model="ir.ui.view">
+        <field name="name">lab.billing.reconciliation.list</field>
+        <field name="model">lab.billing.reconciliation</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="anomaly_count &gt; 0" decoration-success="state == 'published' and anomaly_count == 0">
+                <field name="name"/>
+                <field name="period_start"/>
+                <field name="period_end"/>
+                <field name="invoice_count"/>
+                <field name="payment_count"/>
+                <field name="refund_count"/>
+                <field name="anomaly_count"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_billing_reconciliation_form" model="ir.ui.view">
+        <field name="name">lab.billing.reconciliation.form</field>
+        <field name="model">lab.billing.reconciliation</field>
+        <field name="arch" type="xml">
+            <form string="Billing Reconciliation">
+                <header>
+                    <button name="action_generate" type="object" string="Generate" class="btn-primary"/>
+                    <button name="action_publish" type="object" string="Publish" invisible="state != 'generated'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,published"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                        </group>
+                        <group>
+                            <field name="generated_at" readonly="1"/>
+                            <field name="generated_by_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="invoice_count" readonly="1"/>
+                            <field name="payment_count" readonly="1"/>
+                            <field name="refund_count" readonly="1"/>
+                            <field name="anomaly_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Anomalies">
+                            <field name="line_ids" readonly="1">
+                                <list decoration-danger="severity == 'high'" decoration-warning="severity == 'medium'">
+                                    <field name="anomaly_type"/>
+                                    <field name="severity"/>
+                                    <field name="request_id"/>
+                                    <field name="invoice_id"/>
+                                    <field name="payment_id"/>
+                                    <field name="refund_id"/>
+                                    <field name="amount_impact"/>
+                                    <field name="detail"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group>
+                        <field name="conclusion"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_billing_reconciliation_search" model="ir.ui.view">
+        <field name="name">lab.billing.reconciliation.search</field>
+        <field name="model">lab.billing.reconciliation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="state"/>
+                <filter name="f_with_anomaly" string="With Anomaly" domain="[('anomaly_count','&gt;',0)]"/>
+            </search>
+        </field>
+    </record>
+
     <record id="view_res_config_settings_inherit_lab_billing" model="ir.ui.view">
         <field name="name">res.config.settings.view.form.inherit.lab.billing</field>
         <field name="model">res.config.settings</field>
@@ -284,6 +465,20 @@
         <field name="search_view_id" ref="view_lab_request_payment_search"/>
     </record>
 
+    <record id="action_lab_request_refund" model="ir.actions.act_window">
+        <field name="name">Request Refunds</field>
+        <field name="res_model">lab.request.refund</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_request_refund_search"/>
+    </record>
+
+    <record id="action_lab_billing_reconciliation" model="ir.actions.act_window">
+        <field name="name">Billing Reconciliation</field>
+        <field name="res_model">lab.billing.reconciliation</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_billing_reconciliation_search"/>
+    </record>
+
     <record id="action_lab_request_invoice_overdue" model="ir.actions.act_window">
         <field name="name">Overdue Request Invoices</field>
         <field name="res_model">lab.request.invoice</field>
@@ -294,4 +489,6 @@
     <menuitem id="menu_lab_request_invoice" name="Request Invoices" parent="menu_laboratory_operations" action="action_lab_request_invoice" sequence="12"/>
     <menuitem id="menu_lab_request_invoice_overdue" name="Overdue Invoices" parent="menu_laboratory_operations" action="action_lab_request_invoice_overdue" sequence="13" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
     <menuitem id="menu_lab_request_payment" name="Request Payments" parent="menu_laboratory_operations" action="action_lab_request_payment" sequence="14" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_request_refund" name="Request Refunds" parent="menu_laboratory_operations" action="action_lab_request_refund" sequence="15" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_billing_reconciliation" name="Billing Reconciliation" parent="menu_laboratory_operations" action="action_lab_billing_reconciliation" sequence="16" groups="laboratory_management.group_lab_manager"/>
 </odoo>

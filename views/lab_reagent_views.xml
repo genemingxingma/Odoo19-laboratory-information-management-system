@@ -1,17 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="view_lab_assay_kit_list" model="ir.ui.view">
+        <field name="name">lab.assay.kit.list</field>
+        <field name="model">lab.assay.kit</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="method"/>
+                <field name="vendor"/>
+                <field name="manufacturer"/>
+                <field name="default_reactions_per_kit"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_assay_kit_form" model="ir.ui.view">
+        <field name="name">lab.assay.kit.form</field>
+        <field name="model">lab.assay.kit</field>
+        <field name="arch" type="xml">
+            <form string="Assay Kit">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="method"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="vendor"/>
+                            <field name="manufacturer"/>
+                            <field name="default_reactions_per_kit"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="covered_service_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     <record id="view_lab_reagent_lot_list" model="ir.ui.view">
         <field name="name">lab.reagent.lot.list</field>
         <field name="model">lab.reagent.lot</field>
         <field name="arch" type="xml">
             <list decoration-danger="is_expired">
                 <field name="name"/>
+                <field name="reagent_scope"/>
                 <field name="service_id"/>
+                <field name="assay_kit_id"/>
                 <field name="lot_number"/>
                 <field name="vendor"/>
                 <field name="received_date"/>
                 <field name="opened_date"/>
                 <field name="expiry_date"/>
+                <field name="reactions_total"/>
+                <field name="reactions_used"/>
+                <field name="reactions_remaining"/>
                 <field name="days_to_expiry"/>
                 <field name="is_expiring_soon"/>
                 <field name="is_expired"/>
@@ -26,10 +77,14 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
+                <field name="reagent_scope"/>
                 <field name="service_id"/>
+                <field name="assay_kit_id"/>
                 <field name="lot_number"/>
                 <filter name="f_expired" string="Expired" domain="[('is_expired', '=', True)]"/>
                 <filter name="f_expiring_soon" string="Expiring 7 Days" domain="[('is_expiring_soon', '=', True)]"/>
+                <filter name="f_single" string="Single-Service Lots" domain="[('reagent_scope', '=', 'single')]"/>
+                <filter name="f_panel" string="Panel Lots" domain="[('reagent_scope', '=', 'panel')]"/>
             </search>
         </field>
     </record>
@@ -43,7 +98,10 @@
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="service_id"/>
+                            <field name="reagent_scope"/>
+                            <field name="service_id" invisible="reagent_scope != 'single'" required="reagent_scope == 'single'"/>
+                            <field name="assay_kit_id" invisible="reagent_scope != 'panel'" required="reagent_scope == 'panel'"/>
+                            <field name="covered_service_ids" widget="many2many_tags" readonly="1"/>
                             <field name="lot_number"/>
                             <field name="vendor"/>
                         </group>
@@ -51,16 +109,68 @@
                             <field name="received_date"/>
                             <field name="opened_date"/>
                             <field name="expiry_date"/>
+                            <field name="reactions_total"/>
+                            <field name="reactions_used" readonly="1"/>
+                            <field name="reactions_remaining" readonly="1"/>
                             <field name="is_expired" readonly="1"/>
                             <field name="active"/>
                         </group>
                     </group>
+                    <notebook>
+                        <page string="Usage">
+                            <field name="usage_line_ids" readonly="1">
+                                <list>
+                                    <field name="usage_time"/>
+                                    <field name="sample_id"/>
+                                    <field name="analysis_id"/>
+                                    <field name="quantity"/>
+                                    <field name="state"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                     <group>
                         <field name="note"/>
                     </group>
                 </sheet>
             </form>
         </field>
+    </record>
+
+    <record id="view_lab_reagent_usage_list" model="ir.ui.view">
+        <field name="name">lab.reagent.usage.list</field>
+        <field name="model">lab.reagent.usage</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="usage_time"/>
+                <field name="reagent_lot_id"/>
+                <field name="sample_id"/>
+                <field name="analysis_id"/>
+                <field name="quantity"/>
+                <field name="state"/>
+                <field name="note"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_reagent_usage_search" model="ir.ui.view">
+        <field name="name">lab.reagent.usage.search</field>
+        <field name="model">lab.reagent.usage</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="reagent_lot_id"/>
+                <field name="sample_id"/>
+                <field name="analysis_id"/>
+                <field name="state"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_assay_kit" model="ir.actions.act_window">
+        <field name="name">Assay Kits</field>
+        <field name="res_model">lab.assay.kit</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <record id="action_lab_reagent_lot" model="ir.actions.act_window">
@@ -70,5 +180,14 @@
         <field name="search_view_id" ref="view_lab_reagent_lot_search"/>
     </record>
 
+    <record id="action_lab_reagent_usage" model="ir.actions.act_window">
+        <field name="name">Reagent Usage</field>
+        <field name="res_model">lab.reagent.usage</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_lab_reagent_usage_search"/>
+    </record>
+
+    <menuitem id="menu_lab_assay_kit" name="Assay Kits" parent="menu_laboratory_config" action="action_lab_assay_kit" sequence="39"/>
     <menuitem id="menu_lab_reagent_lot" name="Reagent Lots" parent="menu_laboratory_config" action="action_lab_reagent_lot" sequence="40"/>
+    <menuitem id="menu_lab_reagent_usage" name="Reagent Usage" parent="menu_laboratory_config" action="action_lab_reagent_usage" sequence="41"/>
 </odoo>

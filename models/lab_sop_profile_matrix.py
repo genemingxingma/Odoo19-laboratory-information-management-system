@@ -10,7 +10,7 @@ DEPARTMENTS = [
 ]
 
 SAMPLE_TYPES = [
-    ("blood", "Blood"),
+    ("blood", "Whole Blood"),
     ("urine", "Urine"),
     ("stool", "Stool"),
     ("swab", "Swab"),

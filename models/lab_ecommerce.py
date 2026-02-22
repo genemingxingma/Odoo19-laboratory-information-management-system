@@ -15,11 +15,26 @@ class ProductTemplateLabEcommerce(models.Model):
     lab_service_id = fields.Many2one("lab.service", string="Mapped Lab Service")
     lab_profile_id = fields.Many2one("lab.profile", string="Mapped Lab Profile")
     lab_default_priority = fields.Selection(
-        [("routine", "Routine"), ("urgent", "Urgent"), ("stat", "STAT")],
-        default="routine",
+        selection=lambda self: self.env["lab.master.data.mixin"]._selection_priority(),
+        default=lambda self: self.env["lab.master.data.mixin"]._default_priority_code(),
         string="Default Lab Priority",
     )
     lab_turnaround_note = fields.Char(string="Turnaround Note")
+    lab_package_enabled = fields.Boolean(
+        string="Enable Package Mapping",
+        help="If enabled, one ecommerce product can expand into multiple request lines (services/profiles).",
+    )
+    lab_package_line_ids = fields.One2many(
+        "lab.ecommerce.package.line",
+        "product_tmpl_id",
+        string="Package Mapping Lines",
+    )
+    lab_package_price_strategy = fields.Selection(
+        [("proportional", "Proportional to Catalog Price"), ("equal", "Equal Split"), ("zero", "Zero Amount")],
+        default="proportional",
+        string="Package Pricing Strategy",
+        help="How sales line amount is distributed to generated request lines for package products.",
+    )
 
     @api.onchange("lab_service_id")
     def _onchange_lab_service_id(self):
@@ -32,8 +47,38 @@ class ProductTemplateLabEcommerce(models.Model):
         for rec in self:
             if not rec.is_lab_test_product:
                 continue
-            if not rec.lab_service_id and not rec.lab_profile_id:
+            if rec.lab_package_enabled and not rec.lab_package_line_ids:
+                raise ValidationError(_("Package mapping is enabled but no package lines are configured."))
+            if not rec.lab_package_enabled and not rec.lab_service_id and not rec.lab_profile_id:
                 raise ValidationError(_("Medical test product must map to at least one lab service or profile."))
+
+
+class LabEcommercePackageLine(models.Model):
+    _name = "lab.ecommerce.package.line"
+    _description = "Lab Ecommerce Package Line"
+    _order = "sequence, id"
+
+    product_tmpl_id = fields.Many2one("product.template", required=True, ondelete="cascade")
+    sequence = fields.Integer(default=10)
+    line_type = fields.Selection([("service", "Service"), ("profile", "Profile")], default="service", required=True)
+    service_id = fields.Many2one("lab.service", string="Service")
+    profile_id = fields.Many2one("lab.profile", string="Profile")
+    quantity = fields.Integer(default=1, required=True)
+    price_weight = fields.Float(
+        default=1.0,
+        help="Optional custom weight for proportional price allocation. If set <= 0, catalog value is used.",
+    )
+    note = fields.Char()
+
+    @api.constrains("line_type", "service_id", "profile_id", "quantity")
+    def _check_line(self):
+        for rec in self:
+            if rec.quantity <= 0:
+                raise ValidationError(_("Package line quantity must be greater than 0."))
+            if rec.line_type == "service" and not rec.service_id:
+                raise ValidationError(_("Service package line requires a service."))
+            if rec.line_type == "profile" and not rec.profile_id:
+                raise ValidationError(_("Profile package line requires a profile."))
 
 
 class ProductProductLabEcommerce(models.Model):
@@ -116,27 +161,89 @@ class SaleOrderLabEcommerce(models.Model):
         return value in ("1", "true", "True")
 
     @api.model
-    def _prepare_lab_request_line_values(self, so_line):
+    def _estimate_package_component_catalog_value(self, package_line):
+        if package_line.price_weight and package_line.price_weight > 0:
+            return package_line.price_weight
+        if package_line.line_type == "service" and package_line.service_id:
+            return package_line.service_id.list_price or 0.0
+        if package_line.line_type == "profile" and package_line.profile_id:
+            return sum(package_line.profile_id.line_ids.mapped("service_id.list_price"))
+        return 0.0
+
+    @api.model
+    def _prepare_lab_request_line_payloads(self, so_line):
         note = _("From SO %(order)s line %(line)s") % {"order": so_line.order_id.name, "line": so_line.sequence}
+        template = so_line.product_template_id
+        if template.lab_package_enabled and template.lab_package_line_ids:
+            payloads = []
+            package_lines = template.lab_package_line_ids.sorted("sequence")
+            per_order_unit_price = so_line.price_unit or 0.0
+            strategy = template.lab_package_price_strategy or "proportional"
+            base_values = []
+            for pkg in package_lines:
+                unit_qty = max(pkg.quantity, 1)
+                if strategy == "zero":
+                    base = 0.0
+                elif strategy == "equal":
+                    base = 1.0
+                else:
+                    base = max(self._estimate_package_component_catalog_value(pkg), 0.0)
+                base_values.append(base * unit_qty)
+            total_base = sum(base_values) or float(len(package_lines) or 1)
+
+            for index, pkg in enumerate(package_lines):
+                qty = int(max(so_line.product_uom_qty, 1) * max(pkg.quantity, 1))
+                per_unit_allocated_total = 0.0
+                if strategy != "zero":
+                    per_unit_allocated_total = per_order_unit_price * ((base_values[index] or 0.0) / total_base)
+                alloc_unit_price = per_unit_allocated_total / max(pkg.quantity, 1)
+                if pkg.line_type == "service" and pkg.service_id:
+                    payloads.append(
+                        {
+                            "line_type": "service",
+                            "service_id": pkg.service_id.id,
+                            "quantity": qty,
+                            "unit_price": alloc_unit_price,
+                            "discount_percent": so_line.discount,
+                            "note": pkg.note or note,
+                        }
+                    )
+                elif pkg.line_type == "profile" and pkg.profile_id:
+                    payloads.append(
+                        {
+                            "line_type": "profile",
+                            "profile_id": pkg.profile_id.id,
+                            "quantity": qty,
+                            "unit_price": alloc_unit_price,
+                            "discount_percent": so_line.discount,
+                            "note": pkg.note or note,
+                        }
+                    )
+            return payloads
+
         if so_line.lab_service_id:
-            return {
-                "line_type": "service",
-                "service_id": so_line.lab_service_id.id,
-                "quantity": int(so_line.product_uom_qty),
-                "unit_price": so_line.price_unit,
-                "discount_percent": so_line.discount,
-                "note": note,
-            }
+            return [
+                {
+                    "line_type": "service",
+                    "service_id": so_line.lab_service_id.id,
+                    "quantity": int(so_line.product_uom_qty),
+                    "unit_price": so_line.price_unit,
+                    "discount_percent": so_line.discount,
+                    "note": note,
+                }
+            ]
         if so_line.lab_profile_id:
-            return {
-                "line_type": "profile",
-                "profile_id": so_line.lab_profile_id.id,
-                "quantity": int(so_line.product_uom_qty),
-                "unit_price": so_line.price_unit,
-                "discount_percent": so_line.discount,
-                "note": note,
-            }
-        return {}
+            return [
+                {
+                    "line_type": "profile",
+                    "profile_id": so_line.lab_profile_id.id,
+                    "quantity": int(so_line.product_uom_qty),
+                    "unit_price": so_line.price_unit,
+                    "discount_percent": so_line.discount,
+                    "note": note,
+                }
+            ]
+        return []
 
     def _prepare_lab_request_values(self, lab_lines):
         self.ensure_one()
@@ -155,8 +262,8 @@ class SaleOrderLabEcommerce(models.Model):
 
         line_vals = []
         for so_line in lab_lines:
-            payload = self._prepare_lab_request_line_values(so_line)
-            if payload:
+            payloads = self._prepare_lab_request_line_payloads(so_line)
+            for payload in payloads:
                 line_vals.append((0, 0, payload))
 
         if not line_vals:

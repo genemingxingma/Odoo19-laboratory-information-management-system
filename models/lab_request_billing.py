@@ -40,14 +40,19 @@ class LabRequestInvoice(models.Model):
 
     line_ids = fields.One2many("lab.request.invoice.line", "invoice_id", string="Invoice Lines")
     payment_ids = fields.One2many("lab.request.payment", "invoice_id", string="Payments", readonly=True)
+    refund_ids = fields.One2many("lab.request.refund", "invoice_id", string="Refunds", readonly=True)
 
     amount_untaxed = fields.Monetary(compute="_compute_amounts", currency_field="currency_id", store=True)
     amount_discount = fields.Monetary(compute="_compute_amounts", currency_field="currency_id", store=True)
     amount_total = fields.Monetary(compute="_compute_amounts", currency_field="currency_id", store=True)
     amount_paid = fields.Monetary(compute="_compute_amounts", currency_field="currency_id", store=True)
+    amount_refunded = fields.Monetary(compute="_compute_amounts", currency_field="currency_id", store=True)
     amount_residual = fields.Monetary(compute="_compute_amounts", currency_field="currency_id", store=True)
+    has_billing_anomaly = fields.Boolean(compute="_compute_amounts", store=True)
+    billing_anomaly_note = fields.Char(compute="_compute_amounts", store=True)
 
     payment_count = fields.Integer(compute="_compute_payment_count")
+    refund_count = fields.Integer(compute="_compute_refund_count")
     portal_last_viewed_at = fields.Datetime(readonly=True)
 
     @api.depends("payment_ids")
@@ -55,11 +60,18 @@ class LabRequestInvoice(models.Model):
         for rec in self:
             rec.payment_count = len(rec.payment_ids)
 
+    @api.depends("refund_ids")
+    def _compute_refund_count(self):
+        for rec in self:
+            rec.refund_count = len(rec.refund_ids)
+
     @api.depends(
         "line_ids.subtotal",
         "line_ids.discount_amount",
         "payment_ids.amount",
         "payment_ids.state",
+        "refund_ids.amount",
+        "refund_ids.state",
         "state",
     )
     def _compute_amounts(self):
@@ -68,13 +80,27 @@ class LabRequestInvoice(models.Model):
             discount = sum(rec.line_ids.mapped("discount_amount"))
             total = sum(rec.line_ids.mapped("subtotal"))
             paid = sum(rec.payment_ids.filtered(lambda p: p.state == "confirmed").mapped("amount"))
-            residual = max(total - paid, 0.0)
+            refunded = sum(rec.refund_ids.filtered(lambda r: r.state == "posted").mapped("amount"))
+            net_paid = max(paid - refunded, 0.0)
+            residual = max(total - net_paid, 0.0)
 
             rec.amount_untaxed = gross
             rec.amount_discount = discount
             rec.amount_total = total
-            rec.amount_paid = paid
+            rec.amount_paid = net_paid
+            rec.amount_refunded = refunded
             rec.amount_residual = residual
+            rec.has_billing_anomaly = False
+            rec.billing_anomaly_note = False
+            if refunded > paid + 0.00001:
+                rec.has_billing_anomaly = True
+                rec.billing_anomaly_note = _("Refund exceeds confirmed payment.")
+            elif rec.state in ("paid",) and residual > 0.00001:
+                rec.has_billing_anomaly = True
+                rec.billing_anomaly_note = _("Invoice marked paid but residual still exists.")
+            elif rec.state in ("issued", "partially_paid") and residual <= 0 and total > 0:
+                rec.has_billing_anomaly = True
+                rec.billing_anomaly_note = _("Residual is zero but invoice state is not paid.")
 
             if rec.state == "void":
                 rec.payment_state = "unpaid"
@@ -149,6 +175,37 @@ class LabRequestInvoice(models.Model):
             "context": {"default_invoice_id": self.id},
         }
 
+    def action_view_refunds(self):
+        self.ensure_one()
+        return {
+            "name": _("Refunds"),
+            "type": "ir.actions.act_window",
+            "res_model": "lab.request.refund",
+            "view_mode": "list,form",
+            "domain": [("invoice_id", "=", self.id)],
+            "context": {"default_invoice_id": self.id, "default_request_id": self.request_id.id},
+        }
+
+    def action_register_refund(self):
+        self.ensure_one()
+        if self.state not in ("issued", "partially_paid", "paid"):
+            raise UserError(_("Refund can only be registered for issued/paid invoices."))
+        if self.amount_paid <= 0:
+            raise UserError(_("No net paid amount available for refund."))
+        return {
+            "name": _("Register Refund"),
+            "type": "ir.actions.act_window",
+            "res_model": "lab.request.refund",
+            "view_mode": "form",
+            "target": "current",
+            "context": {
+                "default_invoice_id": self.id,
+                "default_request_id": self.request_id.id,
+                "default_partner_id": self.partner_id.id,
+                "default_amount": self.amount_paid,
+            },
+        }
+
     def action_register_payment(self):
         self.ensure_one()
         if self.state not in ("issued", "partially_paid"):
@@ -204,6 +261,7 @@ class LabRequestInvoice(models.Model):
         partner = request.client_partner_id or request.requester_partner_id
         vals = {
             "request_id": request.id,
+            "company_id": request.company_id.id,
             "partner_id": partner.id,
             "currency_id": request.currency_id.id,
             "invoice_date": fields.Date.today(),
@@ -389,6 +447,246 @@ class LabRequestPayment(models.Model):
             if rec.state == "confirmed":
                 raise UserError(_("Confirmed payment cannot be cancelled. Reject it with reason instead."))
             rec.state = "cancelled"
+
+
+class LabRequestRefund(models.Model):
+    _name = "lab.request.refund"
+    _description = "Lab Request Refund"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _order = "id desc"
+
+    name = fields.Char(default="New", readonly=True, copy=False)
+    invoice_id = fields.Many2one("lab.request.invoice", required=True, ondelete="cascade", tracking=True, index=True)
+    request_id = fields.Many2one(related="invoice_id.request_id", store=True, readonly=True)
+    partner_id = fields.Many2one("res.partner", required=True, tracking=True)
+    amount = fields.Monetary(required=True, currency_field="currency_id", tracking=True)
+    currency_id = fields.Many2one(related="invoice_id.currency_id", store=True, readonly=True)
+    refund_date = fields.Date(default=fields.Date.today, required=True)
+    reason_type = fields.Selection(
+        [
+            ("service_issue", "Service Issue"),
+            ("duplicate_payment", "Duplicate Payment"),
+            ("customer_cancel", "Customer Cancel"),
+            ("pricing_error", "Pricing Error"),
+            ("other", "Other"),
+        ],
+        default="other",
+        required=True,
+    )
+    reason_detail = fields.Text()
+    state = fields.Selection(
+        [("draft", "Draft"), ("approved", "Approved"), ("posted", "Posted"), ("rejected", "Rejected"), ("cancelled", "Cancelled")],
+        default="draft",
+        tracking=True,
+    )
+    approved_by_id = fields.Many2one("res.users", readonly=True)
+    approved_at = fields.Datetime(readonly=True)
+    posted_by_id = fields.Many2one("res.users", readonly=True)
+    posted_at = fields.Datetime(readonly=True)
+    note = fields.Text()
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        seq_model = self.env["ir.sequence"]
+        for vals in vals_list:
+            if vals.get("name", "New") == "New":
+                vals["name"] = seq_model.next_by_code("lab.request.refund") or "New"
+        return super().create(vals_list)
+
+    @api.constrains("amount")
+    def _check_amount(self):
+        for rec in self:
+            if rec.amount <= 0:
+                raise ValidationError(_("Refund amount must be greater than 0."))
+
+    @api.constrains("invoice_id", "amount", "state")
+    def _check_not_over_refund(self):
+        for rec in self:
+            if rec.state in ("rejected", "cancelled"):
+                continue
+            invoice = rec.invoice_id
+            paid = sum(invoice.payment_ids.filtered(lambda p: p.state == "confirmed").mapped("amount"))
+            posted_other = sum(
+                invoice.refund_ids.filtered(lambda r: r.id != rec.id and r.state == "posted").mapped("amount")
+            )
+            if posted_other + rec.amount > paid + 0.00001:
+                raise ValidationError(_("Refund exceeds confirmed payment amount."))
+
+    def action_approve(self):
+        for rec in self:
+            if rec.state != "draft":
+                continue
+            rec.write({"state": "approved", "approved_by_id": self.env.user.id, "approved_at": fields.Datetime.now()})
+
+    def action_post(self):
+        for rec in self:
+            if rec.state not in ("approved", "draft"):
+                continue
+            rec.write({"state": "posted", "posted_by_id": self.env.user.id, "posted_at": fields.Datetime.now()})
+            invoice = rec.invoice_id
+            if invoice.amount_residual <= 0.00001 and invoice.amount_total > 0:
+                invoice.state = "paid"
+            elif invoice.amount_paid > 0:
+                invoice.state = "partially_paid"
+            else:
+                invoice.state = "issued"
+            invoice.message_post(
+                body=_("Refund %(refund)s posted for %(amount).2f.") % {"refund": rec.name, "amount": rec.amount},
+                subtype_xmlid="mail.mt_note",
+            )
+
+    def action_reject(self):
+        for rec in self:
+            if rec.state in ("posted", "cancelled"):
+                continue
+            rec.state = "rejected"
+
+    def action_cancel(self):
+        for rec in self:
+            if rec.state == "posted":
+                raise UserError(_("Posted refund cannot be cancelled."))
+            rec.state = "cancelled"
+
+
+class LabBillingReconciliation(models.Model):
+    _name = "lab.billing.reconciliation"
+    _description = "Lab Billing Reconciliation"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _order = "period_end desc, id desc"
+
+    name = fields.Char(default="New", readonly=True, copy=False)
+    period_start = fields.Date(required=True, default=lambda self: fields.Date.today().replace(day=1))
+    period_end = fields.Date(required=True, default=fields.Date.today)
+    generated_at = fields.Datetime(readonly=True)
+    generated_by_id = fields.Many2one("res.users", readonly=True)
+    state = fields.Selection([("draft", "Draft"), ("generated", "Generated"), ("published", "Published")], default="draft")
+
+    invoice_count = fields.Integer(readonly=True)
+    payment_count = fields.Integer(readonly=True)
+    refund_count = fields.Integer(readonly=True)
+    anomaly_count = fields.Integer(readonly=True)
+    line_ids = fields.One2many("lab.billing.reconciliation.line", "report_id", string="Anomalies")
+    conclusion = fields.Text()
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("name", "New") == "New":
+                vals["name"] = "BRC/%s" % fields.Datetime.now().strftime("%Y%m%d%H%M%S")
+        return super().create(vals_list)
+
+    def action_generate(self):
+        invoice_obj = self.env["lab.request.invoice"]
+        payment_obj = self.env["lab.request.payment"]
+        refund_obj = self.env["lab.request.refund"]
+        for rec in self:
+            if rec.period_end < rec.period_start:
+                raise UserError(_("Period end must be after period start."))
+            start_dt = fields.Datetime.to_string(rec.period_start)
+            end_dt = fields.Datetime.to_string(fields.Date.add(rec.period_end, days=1))
+
+            invoice_domain = [("create_date", ">=", start_dt), ("create_date", "<", end_dt)]
+            payment_domain = [("create_date", ">=", start_dt), ("create_date", "<", end_dt)]
+            refund_domain = [("create_date", ">=", start_dt), ("create_date", "<", end_dt)]
+
+            invoices = invoice_obj.search(invoice_domain)
+            payments = payment_obj.search(payment_domain)
+            refunds = refund_obj.search(refund_domain)
+
+            anomalies = []
+            for inv in invoices:
+                if inv.has_billing_anomaly:
+                    anomalies.append(
+                        {
+                            "anomaly_type": "invoice_state",
+                            "severity": "high",
+                            "invoice_id": inv.id,
+                            "request_id": inv.request_id.id,
+                            "detail": inv.billing_anomaly_note or _("Invoice mismatch detected."),
+                            "amount_impact": inv.amount_residual,
+                        }
+                    )
+
+            stale_pending = payments.filtered(
+                lambda p: p.state == "pending" and p.payment_date and p.payment_date <= fields.Date.add(fields.Date.today(), days=-2)
+            )
+            for p in stale_pending:
+                anomalies.append(
+                    {
+                        "anomaly_type": "stale_pending_payment",
+                        "severity": "medium",
+                        "invoice_id": p.invoice_id.id,
+                        "request_id": p.request_id.id,
+                        "payment_id": p.id,
+                        "detail": _("Payment pending review for more than 48 hours."),
+                        "amount_impact": p.amount,
+                    }
+                )
+
+            for r in refunds.filtered(lambda x: x.state == "posted"):
+                confirmed_payment = sum(r.invoice_id.payment_ids.filtered(lambda p: p.state == "confirmed").mapped("amount"))
+                posted_refund = sum(r.invoice_id.refund_ids.filtered(lambda f: f.state == "posted").mapped("amount"))
+                if posted_refund > confirmed_payment + 0.00001:
+                    anomalies.append(
+                        {
+                            "anomaly_type": "over_refund",
+                            "severity": "high",
+                            "invoice_id": r.invoice_id.id,
+                            "request_id": r.request_id.id,
+                            "refund_id": r.id,
+                            "detail": _("Refund total exceeds confirmed payment."),
+                            "amount_impact": posted_refund - confirmed_payment,
+                        }
+                    )
+
+            rec.write(
+                {
+                    "generated_at": fields.Datetime.now(),
+                    "generated_by_id": self.env.user.id,
+                    "invoice_count": len(invoices),
+                    "payment_count": len(payments),
+                    "refund_count": len(refunds),
+                    "anomaly_count": len(anomalies),
+                    "line_ids": [(5, 0, 0)] + [(0, 0, vals) for vals in anomalies],
+                    "state": "generated",
+                }
+            )
+        return True
+
+    def action_publish(self):
+        self.write({"state": "published"})
+        return True
+
+    @api.model
+    def _cron_generate_weekly_reconciliation(self):
+        today = fields.Date.today()
+        start = fields.Date.add(today, days=-7)
+        report = self.create({"period_start": start, "period_end": today})
+        report.action_generate()
+
+
+class LabBillingReconciliationLine(models.Model):
+    _name = "lab.billing.reconciliation.line"
+    _description = "Lab Billing Reconciliation Line"
+    _order = "severity desc, id desc"
+
+    report_id = fields.Many2one("lab.billing.reconciliation", required=True, ondelete="cascade", index=True)
+    anomaly_type = fields.Selection(
+        [
+            ("invoice_state", "Invoice State Mismatch"),
+            ("stale_pending_payment", "Stale Pending Payment"),
+            ("over_refund", "Over Refund"),
+        ],
+        required=True,
+    )
+    severity = fields.Selection([("low", "Low"), ("medium", "Medium"), ("high", "High")], required=True)
+    request_id = fields.Many2one("lab.test.request")
+    invoice_id = fields.Many2one("lab.request.invoice")
+    payment_id = fields.Many2one("lab.request.payment")
+    refund_id = fields.Many2one("lab.request.refund")
+    detail = fields.Char(required=True)
+    amount_impact = fields.Monetary(currency_field="currency_id")
+    currency_id = fields.Many2one("res.currency", default=lambda self: self.env.company.currency_id)
 
 
 class LabTestRequestBillingMixin(models.Model):

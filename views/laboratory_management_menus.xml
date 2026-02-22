@@ -11,5 +11,8 @@
     <menuitem id="menu_laboratory_operations" name="Operations" parent="menu_laboratory_root" sequence="10"/>
     <menuitem id="menu_laboratory_quality" name="Quality" parent="menu_laboratory_root" sequence="20" groups="laboratory_management.group_lab_reviewer"/>
     <menuitem id="menu_laboratory_config" name="Configuration" parent="menu_laboratory_root" sequence="90" groups="laboratory_management.group_lab_manager"/>
+    <!-- Backward-compatible anchors for legacy parent references loaded in earlier XML files -->
+    <menuitem id="menu_lab_quality_governance" name="Governance" parent="menu_laboratory_quality" sequence="85" groups="laboratory_management.group_lab_reviewer"/>
+    <menuitem id="menu_lab_config_operations" name="Operations Setup" parent="menu_laboratory_config" sequence="85" groups="laboratory_management.group_lab_manager"/>
 
 </odoo>

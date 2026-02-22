@@ -1,0 +1,3027 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="access_lab_service_user" model="ir.model.access">
+        <field name="name">lab.service.user</field>
+        <field name="model_id" search="[('model','=','lab.service')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_service_manager" model="ir.model.access">
+        <field name="name">lab.service.manager</field>
+        <field name="model_id" search="[('model','=','lab.service')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_department_type_user" model="ir.model.access">
+        <field name="name">lab.department.type.user</field>
+        <field name="model_id" search="[('model','=','lab.department.type')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_department_type_manager" model="ir.model.access">
+        <field name="name">lab.department.type.manager</field>
+        <field name="model_id" search="[('model','=','lab.department.type')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_type_user" model="ir.model.access">
+        <field name="name">lab.sample.type.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.type')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_type_manager" model="ir.model.access">
+        <field name="name">lab.sample.type.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.type')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_priority_type_user" model="ir.model.access">
+        <field name="name">lab.priority.type.user</field>
+        <field name="model_id" search="[('model','=','lab.priority.type')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_priority_type_manager" model="ir.model.access">
+        <field name="name">lab.priority.type.manager</field>
+        <field name="model_id" search="[('model','=','lab.priority.type')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_request_type_user" model="ir.model.access">
+        <field name="name">lab.request.type.user</field>
+        <field name="model_id" search="[('model','=','lab.request.type')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_request_type_manager" model="ir.model.access">
+        <field name="name">lab.request.type.manager</field>
+        <field name="model_id" search="[('model','=','lab.request.type')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_physician_department_user" model="ir.model.access">
+        <field name="name">lab.physician.department.user</field>
+        <field name="model_id" search="[('model','=','lab.physician.department')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_physician_department_manager" model="ir.model.access">
+        <field name="name">lab.physician.department.manager</field>
+        <field name="model_id" search="[('model','=','lab.physician.department')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_storage_location_user" model="ir.model.access">
+        <field name="name">lab.storage.location.user</field>
+        <field name="model_id" search="[('model','=','lab.storage.location')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_storage_location_manager" model="ir.model.access">
+        <field name="name">lab.storage.location.manager</field>
+        <field name="model_id" search="[('model','=','lab.storage.location')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_storage_event_user" model="ir.model.access">
+        <field name="name">lab.sample.storage.event.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.storage.event')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_storage_event_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.storage.event.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.storage.event')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_storage_event_manager" model="ir.model.access">
+        <field name="name">lab.sample.storage.event.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.storage.event')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_disposal_record_user" model="ir.model.access">
+        <field name="name">lab.sample.disposal.record.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.disposal.record')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_disposal_record_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.disposal.record.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.disposal.record')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_disposal_record_manager" model="ir.model.access">
+        <field name="name">lab.sample.disposal.record.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.disposal.record')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_manual_review_digest_config_user" model="ir.model.access">
+        <field name="name">lab.manual.review.digest.config.user</field>
+        <field name="model_id" search="[('model','=','lab.manual.review.digest.config')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_manual_review_digest_config_manager" model="ir.model.access">
+        <field name="name">lab.manual.review.digest.config.manager</field>
+        <field name="model_id" search="[('model','=','lab.manual.review.digest.config')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_review_reason_template_user" model="ir.model.access">
+        <field name="name">lab.review.reason.template.user</field>
+        <field name="model_id" search="[('model','=','lab.review.reason.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_review_reason_template_manager" model="ir.model.access">
+        <field name="name">lab.review.reason.template.manager</field>
+        <field name="model_id" search="[('model','=','lab.review.reason.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_profile_user" model="ir.model.access">
+        <field name="name">lab.profile.user</field>
+        <field name="model_id" search="[('model','=','lab.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_profile_line_user" model="ir.model.access">
+        <field name="name">lab.profile.line.user</field>
+        <field name="model_id" search="[('model','=','lab.profile.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_profile_manager" model="ir.model.access">
+        <field name="name">lab.profile.manager</field>
+        <field name="model_id" search="[('model','=','lab.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_profile_line_manager" model="ir.model.access">
+        <field name="name">lab.profile.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.profile.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_report_template_user" model="ir.model.access">
+        <field name="name">lab.report.template.user</field>
+        <field name="model_id" search="[('model','=','lab.report.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_report_template_manager" model="ir.model.access">
+        <field name="name">lab.report.template.manager</field>
+        <field name="model_id" search="[('model','=','lab.report.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_nonconformance_user" model="ir.model.access">
+        <field name="name">lab.nonconformance.user</field>
+        <field name="model_id" search="[('model','=','lab.nonconformance')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_nonconformance_reviewer" model="ir.model.access">
+        <field name="name">lab.nonconformance.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.nonconformance')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_nonconformance_manager" model="ir.model.access">
+        <field name="name">lab.nonconformance.manager</field>
+        <field name="model_id" search="[('model','=','lab.nonconformance')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_qc_material_user" model="ir.model.access">
+        <field name="name">lab.qc.material.user</field>
+        <field name="model_id" search="[('model','=','lab.qc.material')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_qc_material_manager" model="ir.model.access">
+        <field name="name">lab.qc.material.manager</field>
+        <field name="model_id" search="[('model','=','lab.qc.material')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_qc_run_user" model="ir.model.access">
+        <field name="name">lab.qc.run.user</field>
+        <field name="model_id" search="[('model','=','lab.qc.run')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_qc_run_reviewer" model="ir.model.access">
+        <field name="name">lab.qc.run.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.qc.run')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_reagent_lot_user" model="ir.model.access">
+        <field name="name">lab.reagent.lot.user</field>
+        <field name="model_id" search="[('model','=','lab.reagent.lot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_reagent_lot_manager" model="ir.model.access">
+        <field name="name">lab.reagent.lot.manager</field>
+        <field name="model_id" search="[('model','=','lab.reagent.lot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_instrument_user" model="ir.model.access">
+        <field name="name">lab.instrument.user</field>
+        <field name="model_id" search="[('model','=','lab.instrument')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_instrument_manager" model="ir.model.access">
+        <field name="name">lab.instrument.manager</field>
+        <field name="model_id" search="[('model','=','lab.instrument')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_instrument_map_user" model="ir.model.access">
+        <field name="name">lab.instrument.map.user</field>
+        <field name="model_id" search="[('model','=','lab.instrument.test.map')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_instrument_map_manager" model="ir.model.access">
+        <field name="name">lab.instrument.map.manager</field>
+        <field name="model_id" search="[('model','=','lab.instrument.test.map')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_import_job_user" model="ir.model.access">
+        <field name="name">lab.import.job.user</field>
+        <field name="model_id" search="[('model','=','lab.import.job')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_import_job_manager" model="ir.model.access">
+        <field name="name">lab.import.job.manager</field>
+        <field name="model_id" search="[('model','=','lab.import.job')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_import_job_line_user" model="ir.model.access">
+        <field name="name">lab.import.job.line.user</field>
+        <field name="model_id" search="[('model','=','lab.import.job.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_import_job_line_manager" model="ir.model.access">
+        <field name="name">lab.import.job.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.import.job.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_user" model="ir.model.access">
+        <field name="name">lab.sample.user</field>
+        <field name="model_id" search="[('model','=','lab.sample')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_analysis_user" model="ir.model.access">
+        <field name="name">lab.sample.analysis.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.analysis')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_analysis_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.analysis.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.analysis')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_amendment_user" model="ir.model.access">
+        <field name="name">lab.sample.amendment.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.amendment')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_amendment_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.amendment.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.amendment')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_amendment_manager" model="ir.model.access">
+        <field name="name">lab.sample.amendment.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.amendment')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_timeline_user" model="ir.model.access">
+        <field name="name">lab.sample.timeline.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.timeline')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_timeline_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.timeline.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.timeline')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_timeline_manager" model="ir.model.access">
+        <field name="name">lab.sample.timeline.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.timeline')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_signoff_user" model="ir.model.access">
+        <field name="name">lab.sample.signoff.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.signoff')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_signoff_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.signoff.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.signoff')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_signoff_manager" model="ir.model.access">
+        <field name="name">lab.sample.signoff.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.signoff')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_user" model="ir.model.access">
+        <field name="name">lab.sample.custody.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.custody.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_manager" model="ir.model.access">
+        <field name="name">lab.sample.custody.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_worksheet_user" model="ir.model.access">
+        <field name="name">lab.worksheet.user</field>
+        <field name="model_id" search="[('model','=','lab.worksheet')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_worksheet_manager" model="ir.model.access">
+        <field name="name">lab.worksheet.manager</field>
+        <field name="model_id" search="[('model','=','lab.worksheet')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_portal" model="ir.model.access">
+        <field name="name">lab.sample.portal</field>
+        <field name="model_id" search="[('model','=','lab.sample')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_analysis_portal" model="ir.model.access">
+        <field name="name">lab.sample.analysis.portal</field>
+        <field name="model_id" search="[('model','=','lab.sample.analysis')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_result_import_wizard_user" model="ir.model.access">
+        <field name="name">lab.result.import.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.result.import.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_instrument_result_import_wizard_user" model="ir.model.access">
+        <field name="name">lab.instrument.result.import.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.instrument.result.import.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_receive_wizard_user" model="ir.model.access">
+        <field name="name">lab.sample.receive.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.receive.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_transfer_custody_wizard_user" model="ir.model.access">
+        <field name="name">lab.sample.transfer.custody.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.transfer.custody.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_analysis_bulk_review_wizard_user" model="ir.model.access">
+        <field name="name">lab.analysis.bulk.review.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.analysis.bulk.review.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_manual_review_report_wizard_user" model="ir.model.access">
+        <field name="name">lab.manual.review.report.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.manual.review.report.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_manual_review_report_line_user" model="ir.model.access">
+        <field name="name">lab.manual.review.report.line.user</field>
+        <field name="model_id" search="[('model','=','lab.manual.review.report.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_manual_review_reviewer_line_user" model="ir.model.access">
+        <field name="name">lab.manual.review.reviewer.line.user</field>
+        <field name="model_id" search="[('model','=','lab.manual.review.reviewer.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_storage_bulk_operation_wizard_user" model="ir.model.access">
+        <field name="name">lab.storage.bulk.operation.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.storage.bulk.operation.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_custody_batch_user" model="ir.model.access">
+        <field name="name">lab.sample.custody.batch.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody.batch')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_custody_batch_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.custody.batch.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody.batch')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_custody_batch_manager" model="ir.model.access">
+        <field name="name">lab.sample.custody.batch.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody.batch')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_custody_batch_line_user" model="ir.model.access">
+        <field name="name">lab.sample.custody.batch.line.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody.batch.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_custody_batch_line_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.custody.batch.line.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody.batch.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_custody_batch_line_manager" model="ir.model.access">
+        <field name="name">lab.sample.custody.batch.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody.batch.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_custody_batch_signoff_user" model="ir.model.access">
+        <field name="name">lab.sample.custody.batch.signoff.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody.batch.signoff')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_custody_batch_signoff_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.custody.batch.signoff.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody.batch.signoff')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_custody_batch_signoff_manager" model="ir.model.access">
+        <field name="name">lab.sample.custody.batch.signoff.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.custody.batch.signoff')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_receive_session_user" model="ir.model.access">
+        <field name="name">lab.custody.receive.session.user</field>
+        <field name="model_id" search="[('model','=','lab.custody.receive.session')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_receive_session_reviewer" model="ir.model.access">
+        <field name="name">lab.custody.receive.session.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.custody.receive.session')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_receive_session_manager" model="ir.model.access">
+        <field name="name">lab.custody.receive.session.manager</field>
+        <field name="model_id" search="[('model','=','lab.custody.receive.session')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_receive_session_line_user" model="ir.model.access">
+        <field name="name">lab.custody.receive.session.line.user</field>
+        <field name="model_id" search="[('model','=','lab.custody.receive.session.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_receive_session_line_reviewer" model="ir.model.access">
+        <field name="name">lab.custody.receive.session.line.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.custody.receive.session.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_receive_session_line_manager" model="ir.model.access">
+        <field name="name">lab.custody.receive.session.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.custody.receive.session.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_investigation_user" model="ir.model.access">
+        <field name="name">lab.custody.investigation.user</field>
+        <field name="model_id" search="[('model','=','lab.custody.investigation')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_investigation_reviewer" model="ir.model.access">
+        <field name="name">lab.custody.investigation.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.custody.investigation')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_investigation_manager" model="ir.model.access">
+        <field name="name">lab.custody.investigation.manager</field>
+        <field name="model_id" search="[('model','=','lab.custody.investigation')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_investigation_action_user" model="ir.model.access">
+        <field name="name">lab.custody.investigation.action.user</field>
+        <field name="model_id" search="[('model','=','lab.custody.investigation.action')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_investigation_action_reviewer" model="ir.model.access">
+        <field name="name">lab.custody.investigation.action.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.custody.investigation.action')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_investigation_action_manager" model="ir.model.access">
+        <field name="name">lab.custody.investigation.action.manager</field>
+        <field name="model_id" search="[('model','=','lab.custody.investigation.action')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_receive_wizard_user" model="ir.model.access">
+        <field name="name">lab.custody.receive.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.custody.receive.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_sla_policy_user" model="ir.model.access">
+        <field name="name">lab.custody.sla.policy.user</field>
+        <field name="model_id" search="[('model','=','lab.custody.sla.policy')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_sla_policy_manager" model="ir.model.access">
+        <field name="name">lab.custody.sla.policy.manager</field>
+        <field name="model_id" search="[('model','=','lab.custody.sla.policy')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_sla_policy_line_user" model="ir.model.access">
+        <field name="name">lab.custody.sla.policy.line.user</field>
+        <field name="model_id" search="[('model','=','lab.custody.sla.policy.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_sla_policy_line_manager" model="ir.model.access">
+        <field name="name">lab.custody.sla.policy.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.custody.sla.policy.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_escalation_log_user" model="ir.model.access">
+        <field name="name">lab.custody.escalation.log.user</field>
+        <field name="model_id" search="[('model','=','lab.custody.escalation.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_escalation_log_reviewer" model="ir.model.access">
+        <field name="name">lab.custody.escalation.log.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.custody.escalation.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_escalation_log_manager" model="ir.model.access">
+        <field name="name">lab.custody.escalation.log.manager</field>
+        <field name="model_id" search="[('model','=','lab.custody.escalation.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_investigation_bulk_update_wizard_user" model="ir.model.access">
+        <field name="name">lab.custody.investigation.bulk.update.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.custody.investigation.bulk.update.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_exception_template_user" model="ir.model.access">
+        <field name="name">lab.custody.exception.template.user</field>
+        <field name="model_id" search="[('model','=','lab.custody.exception.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_custody_exception_template_manager" model="ir.model.access">
+        <field name="name">lab.custody.exception.template.manager</field>
+        <field name="model_id" search="[('model','=','lab.custody.exception.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_custody_batch_add_samples_wizard_user" model="ir.model.access">
+        <field name="name">lab.custody.batch.add.samples.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.custody.batch.add.samples.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_workbench_wizard_user" model="ir.model.access">
+        <field name="name">lab.workbench.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.workbench.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_kpi_dashboard_wizard_user" model="ir.model.access">
+        <field name="name">lab.kpi.dashboard.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.kpi.dashboard.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_ai_interpretation_user" model="ir.model.access">
+        <field name="name">lab.sample.ai.interpretation.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.ai.interpretation')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_ai_interpretation_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.ai.interpretation.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.ai.interpretation')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_ai_interpretation_manager" model="ir.model.access">
+        <field name="name">lab.sample.ai.interpretation.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.ai.interpretation')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_ai_interpretation_portal" model="ir.model.access">
+        <field name="name">lab.sample.ai.interpretation.portal</field>
+        <field name="model_id" search="[('model','=','lab.sample.ai.interpretation')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_ai_review_log_user" model="ir.model.access">
+        <field name="name">lab.sample.ai.review.log.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.ai.review.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_ai_review_log_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.ai.review.log.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.ai.review.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_ai_review_log_manager" model="ir.model.access">
+        <field name="name">lab.sample.ai.review.log.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.ai.review.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_ai_review_log_portal" model="ir.model.access">
+        <field name="name">lab.sample.ai.review.log.portal</field>
+        <field name="model_id" search="[('model','=','lab.sample.ai.review.log')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_review_log_user" model="ir.model.access">
+        <field name="name">lab.sample.review.log.user</field>
+        <field name="model_id" search="[('model','=','lab.sample.review.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_review_log_reviewer" model="ir.model.access">
+        <field name="name">lab.sample.review.log.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sample.review.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sample_review_log_manager" model="ir.model.access">
+        <field name="name">lab.sample.review.log.manager</field>
+        <field name="model_id" search="[('model','=','lab.sample.review.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sample_review_log_portal" model="ir.model.access">
+        <field name="name">lab.sample.review.log.portal</field>
+        <field name="model_id" search="[('model','=','lab.sample.review.log')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_report_dispatch_user" model="ir.model.access">
+        <field name="name">lab.report.dispatch.user</field>
+        <field name="model_id" search="[('model','=','lab.report.dispatch')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_report_dispatch_reviewer" model="ir.model.access">
+        <field name="name">lab.report.dispatch.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.report.dispatch')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_report_dispatch_manager" model="ir.model.access">
+        <field name="name">lab.report.dispatch.manager</field>
+        <field name="model_id" search="[('model','=','lab.report.dispatch')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_report_dispatch_portal" model="ir.model.access">
+        <field name="name">lab.report.dispatch.portal</field>
+        <field name="model_id" search="[('model','=','lab.report.dispatch')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_report_dispatch_log_user" model="ir.model.access">
+        <field name="name">lab.report.dispatch.log.user</field>
+        <field name="model_id" search="[('model','=','lab.report.dispatch.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_report_dispatch_log_reviewer" model="ir.model.access">
+        <field name="name">lab.report.dispatch.log.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.report.dispatch.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_report_dispatch_log_manager" model="ir.model.access">
+        <field name="name">lab.report.dispatch.log.manager</field>
+        <field name="model_id" search="[('model','=','lab.report.dispatch.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_report_dispatch_log_portal" model="ir.model.access">
+        <field name="name">lab.report.dispatch.log.portal</field>
+        <field name="model_id" search="[('model','=','lab.report.dispatch.log')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_report_ack_signature_user" model="ir.model.access">
+        <field name="name">lab.report.ack.signature.user</field>
+        <field name="model_id" search="[('model','=','lab.report.ack.signature')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_report_ack_signature_reviewer" model="ir.model.access">
+        <field name="name">lab.report.ack.signature.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.report.ack.signature')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_report_ack_signature_manager" model="ir.model.access">
+        <field name="name">lab.report.ack.signature.manager</field>
+        <field name="model_id" search="[('model','=','lab.report.ack.signature')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_report_ack_signature_portal" model="ir.model.access">
+        <field name="name">lab.report.ack.signature.portal</field>
+        <field name="model_id" search="[('model','=','lab.report.ack.signature')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_program_user" model="ir.model.access">
+        <field name="name">lab.quality.program.user</field>
+        <field name="model_id" search="[('model','=','lab.quality.program')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_program_reviewer" model="ir.model.access">
+        <field name="name">lab.quality.program.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.quality.program')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_program_manager" model="ir.model.access">
+        <field name="name">lab.quality.program.manager</field>
+        <field name="model_id" search="[('model','=','lab.quality.program')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_quality_program_line_user" model="ir.model.access">
+        <field name="name">lab.quality.program.line.user</field>
+        <field name="model_id" search="[('model','=','lab.quality.program.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_program_line_reviewer" model="ir.model.access">
+        <field name="name">lab.quality.program.line.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.quality.program.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_program_line_manager" model="ir.model.access">
+        <field name="name">lab.quality.program.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.quality.program.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_quality_audit_user" model="ir.model.access">
+        <field name="name">lab.quality.audit.user</field>
+        <field name="model_id" search="[('model','=','lab.quality.audit')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_audit_reviewer" model="ir.model.access">
+        <field name="name">lab.quality.audit.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.quality.audit')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_audit_manager" model="ir.model.access">
+        <field name="name">lab.quality.audit.manager</field>
+        <field name="model_id" search="[('model','=','lab.quality.audit')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_quality_audit_finding_user" model="ir.model.access">
+        <field name="name">lab.quality.audit.finding.user</field>
+        <field name="model_id" search="[('model','=','lab.quality.audit.finding')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_audit_finding_reviewer" model="ir.model.access">
+        <field name="name">lab.quality.audit.finding.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.quality.audit.finding')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_audit_finding_manager" model="ir.model.access">
+        <field name="name">lab.quality.audit.finding.manager</field>
+        <field name="model_id" search="[('model','=','lab.quality.audit.finding')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_quality_training_user" model="ir.model.access">
+        <field name="name">lab.quality.training.user</field>
+        <field name="model_id" search="[('model','=','lab.quality.training')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_training_reviewer" model="ir.model.access">
+        <field name="name">lab.quality.training.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.quality.training')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_training_manager" model="ir.model.access">
+        <field name="name">lab.quality.training.manager</field>
+        <field name="model_id" search="[('model','=','lab.quality.training')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_quality_training_attendee_user" model="ir.model.access">
+        <field name="name">lab.quality.training.attendee.user</field>
+        <field name="model_id" search="[('model','=','lab.quality.training.attendee')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_training_attendee_reviewer" model="ir.model.access">
+        <field name="name">lab.quality.training.attendee.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.quality.training.attendee')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_training_attendee_manager" model="ir.model.access">
+        <field name="name">lab.quality.training.attendee.manager</field>
+        <field name="model_id" search="[('model','=','lab.quality.training.attendee')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_quality_kpi_snapshot_user" model="ir.model.access">
+        <field name="name">lab.quality.kpi.snapshot.user</field>
+        <field name="model_id" search="[('model','=','lab.quality.kpi.snapshot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_kpi_snapshot_reviewer" model="ir.model.access">
+        <field name="name">lab.quality.kpi.snapshot.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.quality.kpi.snapshot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_quality_kpi_snapshot_manager" model="ir.model.access">
+        <field name="name">lab.quality.kpi.snapshot.manager</field>
+        <field name="model_id" search="[('model','=','lab.quality.kpi.snapshot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_method_validation_user" model="ir.model.access">
+        <field name="name">lab.method.validation.user</field>
+        <field name="model_id" search="[('model','=','lab.method.validation')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_method_validation_reviewer" model="ir.model.access">
+        <field name="name">lab.method.validation.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.method.validation')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_method_validation_manager" model="ir.model.access">
+        <field name="name">lab.method.validation.manager</field>
+        <field name="model_id" search="[('model','=','lab.method.validation')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_test_request_user" model="ir.model.access">
+        <field name="name">lab.test.request.user</field>
+        <field name="model_id" search="[('model','=','lab.test.request')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_test_request_reviewer" model="ir.model.access">
+        <field name="name">lab.test.request.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.test.request')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_test_request_manager" model="ir.model.access">
+        <field name="name">lab.test.request.manager</field>
+        <field name="model_id" search="[('model','=','lab.test.request')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_test_request_portal" model="ir.model.access">
+        <field name="name">lab.test.request.portal</field>
+        <field name="model_id" search="[('model','=','lab.test.request')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_test_request_line_user" model="ir.model.access">
+        <field name="name">lab.test.request.line.user</field>
+        <field name="model_id" search="[('model','=','lab.test.request.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_test_request_line_reviewer" model="ir.model.access">
+        <field name="name">lab.test.request.line.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.test.request.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_test_request_line_manager" model="ir.model.access">
+        <field name="name">lab.test.request.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.test.request.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_test_request_line_portal" model="ir.model.access">
+        <field name="name">lab.test.request.line.portal</field>
+        <field name="model_id" search="[('model','=','lab.test.request.line')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_test_request_timeline_user" model="ir.model.access">
+        <field name="name">lab.test.request.timeline.user</field>
+        <field name="model_id" search="[('model','=','lab.test.request.timeline')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_test_request_timeline_reviewer" model="ir.model.access">
+        <field name="name">lab.test.request.timeline.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.test.request.timeline')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_test_request_timeline_manager" model="ir.model.access">
+        <field name="name">lab.test.request.timeline.manager</field>
+        <field name="model_id" search="[('model','=','lab.test.request.timeline')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_test_request_timeline_portal" model="ir.model.access">
+        <field name="name">lab.test.request.timeline.portal</field>
+        <field name="model_id" search="[('model','=','lab.test.request.timeline')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_test_request_quote_revision_user" model="ir.model.access">
+        <field name="name">lab.test.request.quote.revision.user</field>
+        <field name="model_id" search="[('model','=','lab.test.request.quote.revision')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_test_request_quote_revision_reviewer" model="ir.model.access">
+        <field name="name">lab.test.request.quote.revision.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.test.request.quote.revision')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_test_request_quote_revision_manager" model="ir.model.access">
+        <field name="name">lab.test.request.quote.revision.manager</field>
+        <field name="model_id" search="[('model','=','lab.test.request.quote.revision')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_test_request_quote_revision_portal" model="ir.model.access">
+        <field name="name">lab.test.request.quote.revision.portal</field>
+        <field name="model_id" search="[('model','=','lab.test.request.quote.revision')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_request_invoice_user" model="ir.model.access">
+        <field name="name">lab.request.invoice.user</field>
+        <field name="model_id" search="[('model','=','lab.request.invoice')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_request_invoice_reviewer" model="ir.model.access">
+        <field name="name">lab.request.invoice.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.request.invoice')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_request_invoice_manager" model="ir.model.access">
+        <field name="name">lab.request.invoice.manager</field>
+        <field name="model_id" search="[('model','=','lab.request.invoice')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_request_invoice_portal" model="ir.model.access">
+        <field name="name">lab.request.invoice.portal</field>
+        <field name="model_id" search="[('model','=','lab.request.invoice')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_request_invoice_line_user" model="ir.model.access">
+        <field name="name">lab.request.invoice.line.user</field>
+        <field name="model_id" search="[('model','=','lab.request.invoice.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_request_invoice_line_reviewer" model="ir.model.access">
+        <field name="name">lab.request.invoice.line.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.request.invoice.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_request_invoice_line_manager" model="ir.model.access">
+        <field name="name">lab.request.invoice.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.request.invoice.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_request_invoice_line_portal" model="ir.model.access">
+        <field name="name">lab.request.invoice.line.portal</field>
+        <field name="model_id" search="[('model','=','lab.request.invoice.line')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_request_payment_user" model="ir.model.access">
+        <field name="name">lab.request.payment.user</field>
+        <field name="model_id" search="[('model','=','lab.request.payment')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_request_payment_reviewer" model="ir.model.access">
+        <field name="name">lab.request.payment.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.request.payment')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_request_payment_manager" model="ir.model.access">
+        <field name="name">lab.request.payment.manager</field>
+        <field name="model_id" search="[('model','=','lab.request.payment')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_request_payment_portal" model="ir.model.access">
+        <field name="name">lab.request.payment.portal</field>
+        <field name="model_id" search="[('model','=','lab.request.payment')]"/>
+        <field name="group_id" ref="base.group_portal"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_retest_policy_user" model="ir.model.access">
+        <field name="name">lab.retest.policy.user</field>
+        <field name="model_id" search="[('model','=','lab.retest.policy')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_retest_policy_manager" model="ir.model.access">
+        <field name="name">lab.retest.policy.manager</field>
+        <field name="model_id" search="[('model','=','lab.retest.policy')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_department_sop_user" model="ir.model.access">
+        <field name="name">lab.department.sop.user</field>
+        <field name="model_id" search="[('model','=','lab.department.sop')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_department_sop_manager" model="ir.model.access">
+        <field name="name">lab.department.sop.manager</field>
+        <field name="model_id" search="[('model','=','lab.department.sop')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_department_sop_step_user" model="ir.model.access">
+        <field name="name">lab.department.sop.step.user</field>
+        <field name="model_id" search="[('model','=','lab.department.sop.step')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_department_sop_step_manager" model="ir.model.access">
+        <field name="name">lab.department.sop.step.manager</field>
+        <field name="model_id" search="[('model','=','lab.department.sop.step')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_exception_route_user" model="ir.model.access">
+        <field name="name">lab.sop.exception.route.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.exception.route')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_exception_route_manager" model="ir.model.access">
+        <field name="name">lab.sop.exception.route.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.exception.route')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_permission_matrix_user" model="ir.model.access">
+        <field name="name">lab.permission.matrix.user</field>
+        <field name="model_id" search="[('model','=','lab.permission.matrix')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_permission_matrix_manager" model="ir.model.access">
+        <field name="name">lab.permission.matrix.manager</field>
+        <field name="model_id" search="[('model','=','lab.permission.matrix')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interface_endpoint_user" model="ir.model.access">
+        <field name="name">lab.interface.endpoint.user</field>
+        <field name="model_id" search="[('model','=','lab.interface.endpoint')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interface_endpoint_manager" model="ir.model.access">
+        <field name="name">lab.interface.endpoint.manager</field>
+        <field name="model_id" search="[('model','=','lab.interface.endpoint')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interface_job_user" model="ir.model.access">
+        <field name="name">lab.interface.job.user</field>
+        <field name="model_id" search="[('model','=','lab.interface.job')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interface_job_manager" model="ir.model.access">
+        <field name="name">lab.interface.job.manager</field>
+        <field name="model_id" search="[('model','=','lab.interface.job')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interface_mapping_profile_user" model="ir.model.access">
+        <field name="name">lab.interface.mapping.profile.user</field>
+        <field name="model_id" search="[('model','=','lab.interface.mapping.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interface_mapping_profile_manager" model="ir.model.access">
+        <field name="name">lab.interface.mapping.profile.manager</field>
+        <field name="model_id" search="[('model','=','lab.interface.mapping.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interface_mapping_line_user" model="ir.model.access">
+        <field name="name">lab.interface.mapping.line.user</field>
+        <field name="model_id" search="[('model','=','lab.interface.mapping.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interface_mapping_line_manager" model="ir.model.access">
+        <field name="name">lab.interface.mapping.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.interface.mapping.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interface_audit_log_user" model="ir.model.access">
+        <field name="name">lab.interface.audit.log.user</field>
+        <field name="model_id" search="[('model','=','lab.interface.audit.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interface_audit_log_manager" model="ir.model.access">
+        <field name="name">lab.interface.audit.log.manager</field>
+        <field name="model_id" search="[('model','=','lab.interface.audit.log')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_eqa_scheme_user" model="ir.model.access">
+        <field name="name">lab.eqa.scheme.user</field>
+        <field name="model_id" search="[('model','=','lab.eqa.scheme')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_eqa_scheme_manager" model="ir.model.access">
+        <field name="name">lab.eqa.scheme.manager</field>
+        <field name="model_id" search="[('model','=','lab.eqa.scheme')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_eqa_round_user" model="ir.model.access">
+        <field name="name">lab.eqa.round.user</field>
+        <field name="model_id" search="[('model','=','lab.eqa.round')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_eqa_round_manager" model="ir.model.access">
+        <field name="name">lab.eqa.round.manager</field>
+        <field name="model_id" search="[('model','=','lab.eqa.round')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_eqa_result_user" model="ir.model.access">
+        <field name="name">lab.eqa.result.user</field>
+        <field name="model_id" search="[('model','=','lab.eqa.result')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_eqa_result_manager" model="ir.model.access">
+        <field name="name">lab.eqa.result.manager</field>
+        <field name="model_id" search="[('model','=','lab.eqa.result')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_compliance_snapshot_user" model="ir.model.access">
+        <field name="name">lab.compliance.snapshot.user</field>
+        <field name="model_id" search="[('model','=','lab.compliance.snapshot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_compliance_snapshot_manager" model="ir.model.access">
+        <field name="name">lab.compliance.snapshot.manager</field>
+        <field name="model_id" search="[('model','=','lab.compliance.snapshot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_compliance_snapshot_line_user" model="ir.model.access">
+        <field name="name">lab.compliance.snapshot.line.user</field>
+        <field name="model_id" search="[('model','=','lab.compliance.snapshot.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_compliance_snapshot_line_manager" model="ir.model.access">
+        <field name="name">lab.compliance.snapshot.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.compliance.snapshot.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_department_queue_rule_user" model="ir.model.access">
+        <field name="name">lab.department.queue.rule.user</field>
+        <field name="model_id" search="[('model','=','lab.department.queue.rule')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_department_queue_rule_manager" model="ir.model.access">
+        <field name="name">lab.department.queue.rule.manager</field>
+        <field name="model_id" search="[('model','=','lab.department.queue.rule')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_department_workbench_wizard_user" model="ir.model.access">
+        <field name="name">lab.department.workbench.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.department.workbench.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_department_workbench_rule_run_user" model="ir.model.access">
+        <field name="name">lab.department.workbench.rule.run.user</field>
+        <field name="model_id" search="[('model','=','lab.department.workbench.rule.run')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_department_workbench_rule_run_manager" model="ir.model.access">
+        <field name="name">lab.department.workbench.rule.run.manager</field>
+        <field name="model_id" search="[('model','=','lab.department.workbench.rule.run')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_hl7_template_user" model="ir.model.access">
+        <field name="name">lab.hl7.template.user</field>
+        <field name="model_id" search="[('model','=','lab.hl7.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_hl7_template_manager" model="ir.model.access">
+        <field name="name">lab.hl7.template.manager</field>
+        <field name="model_id" search="[('model','=','lab.hl7.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_hl7_template_segment_user" model="ir.model.access">
+        <field name="name">lab.hl7.template.segment.user</field>
+        <field name="model_id" search="[('model','=','lab.hl7.template.segment')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_hl7_template_segment_manager" model="ir.model.access">
+        <field name="name">lab.hl7.template.segment.manager</field>
+        <field name="model_id" search="[('model','=','lab.hl7.template.segment')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_qc_trend_profile_user" model="ir.model.access">
+        <field name="name">lab.qc.trend.profile.user</field>
+        <field name="model_id" search="[('model','=','lab.qc.trend.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_qc_trend_profile_manager" model="ir.model.access">
+        <field name="name">lab.qc.trend.profile.manager</field>
+        <field name="model_id" search="[('model','=','lab.qc.trend.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_qc_trend_snapshot_user" model="ir.model.access">
+        <field name="name">lab.qc.trend.snapshot.user</field>
+        <field name="model_id" search="[('model','=','lab.qc.trend.snapshot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_qc_trend_snapshot_manager" model="ir.model.access">
+        <field name="name">lab.qc.trend.snapshot.manager</field>
+        <field name="model_id" search="[('model','=','lab.qc.trend.snapshot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_qc_trend_snapshot_line_user" model="ir.model.access">
+        <field name="name">lab.qc.trend.snapshot.line.user</field>
+        <field name="model_id" search="[('model','=','lab.qc.trend.snapshot.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_qc_trend_snapshot_line_manager" model="ir.model.access">
+        <field name="name">lab.qc.trend.snapshot.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.qc.trend.snapshot.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_compliance_audit_report_user" model="ir.model.access">
+        <field name="name">lab.compliance.audit.report.user</field>
+        <field name="model_id" search="[('model','=','lab.compliance.audit.report')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_compliance_audit_report_manager" model="ir.model.access">
+        <field name="name">lab.compliance.audit.report.manager</field>
+        <field name="model_id" search="[('model','=','lab.compliance.audit.report')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_compliance_audit_report_line_user" model="ir.model.access">
+        <field name="name">lab.compliance.audit.report.line.user</field>
+        <field name="model_id" search="[('model','=','lab.compliance.audit.report.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_compliance_audit_report_line_manager" model="ir.model.access">
+        <field name="name">lab.compliance.audit.report.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.compliance.audit.report.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interface_analytics_report_user" model="ir.model.access">
+        <field name="name">lab.interface.analytics.report.user</field>
+        <field name="model_id" search="[('model','=','lab.interface.analytics.report')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interface_analytics_report_manager" model="ir.model.access">
+        <field name="name">lab.interface.analytics.report.manager</field>
+        <field name="model_id" search="[('model','=','lab.interface.analytics.report')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_retest_strategy_user" model="ir.model.access">
+        <field name="name">lab.sop.retest.strategy.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.retest.strategy')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_retest_strategy_manager" model="ir.model.access">
+        <field name="name">lab.sop.retest.strategy.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.retest.strategy')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_retest_strategy_line_user" model="ir.model.access">
+        <field name="name">lab.sop.retest.strategy.line.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.retest.strategy.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_retest_strategy_line_manager" model="ir.model.access">
+        <field name="name">lab.sop.retest.strategy.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.retest.strategy.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_execution_user" model="ir.model.access">
+        <field name="name">lab.sop.execution.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.execution')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_execution_reviewer" model="ir.model.access">
+        <field name="name">lab.sop.execution.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.sop.execution')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_execution_manager" model="ir.model.access">
+        <field name="name">lab.sop.execution.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.execution')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_execution_step_user" model="ir.model.access">
+        <field name="name">lab.sop.execution.step.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.execution.step')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_execution_step_manager" model="ir.model.access">
+        <field name="name">lab.sop.execution.step.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.execution.step')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_execution_event_user" model="ir.model.access">
+        <field name="name">lab.sop.execution.event.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.execution.event')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_execution_event_manager" model="ir.model.access">
+        <field name="name">lab.sop.execution.event.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.execution.event')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_execution_dashboard_wizard_user" model="ir.model.access">
+        <field name="name">lab.sop.execution.dashboard.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.execution.dashboard.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_task_sla_policy_user" model="ir.model.access">
+        <field name="name">lab.task.sla.policy.user</field>
+        <field name="model_id" search="[('model','=','lab.task.sla.policy')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_task_sla_policy_manager" model="ir.model.access">
+        <field name="name">lab.task.sla.policy.manager</field>
+        <field name="model_id" search="[('model','=','lab.task.sla.policy')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_workstation_task_user" model="ir.model.access">
+        <field name="name">lab.workstation.task.user</field>
+        <field name="model_id" search="[('model','=','lab.workstation.task')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_workstation_task_reviewer" model="ir.model.access">
+        <field name="name">lab.workstation.task.reviewer</field>
+        <field name="model_id" search="[('model','=','lab.workstation.task')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_workstation_task_manager" model="ir.model.access">
+        <field name="name">lab.workstation.task.manager</field>
+        <field name="model_id" search="[('model','=','lab.workstation.task')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_workstation_task_event_user" model="ir.model.access">
+        <field name="name">lab.workstation.task.event.user</field>
+        <field name="model_id" search="[('model','=','lab.workstation.task.event')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_workstation_task_event_manager" model="ir.model.access">
+        <field name="name">lab.workstation.task.event.manager</field>
+        <field name="model_id" search="[('model','=','lab.workstation.task.event')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_branch_rule_user" model="ir.model.access">
+        <field name="name">lab.sop.branch.rule.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.branch.rule')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_branch_rule_manager" model="ir.model.access">
+        <field name="name">lab.sop.branch.rule.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.branch.rule')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_branch_run_user" model="ir.model.access">
+        <field name="name">lab.sop.branch.run.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.branch.run')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_branch_run_manager" model="ir.model.access">
+        <field name="name">lab.sop.branch.run.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.branch.run')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interface_replay_batch_user" model="ir.model.access">
+        <field name="name">lab.interface.replay.batch.user</field>
+        <field name="model_id" search="[('model','=','lab.interface.replay.batch')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interface_replay_batch_manager" model="ir.model.access">
+        <field name="name">lab.interface.replay.batch.manager</field>
+        <field name="model_id" search="[('model','=','lab.interface.replay.batch')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interface_replay_batch_line_user" model="ir.model.access">
+        <field name="name">lab.interface.replay.batch.line.user</field>
+        <field name="model_id" search="[('model','=','lab.interface.replay.batch.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interface_replay_batch_line_manager" model="ir.model.access">
+        <field name="name">lab.interface.replay.batch.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.interface.replay.batch.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_task_board_wizard_user" model="ir.model.access">
+        <field name="name">lab.task.board.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.task.board.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_department_exception_template_user" model="ir.model.access">
+        <field name="name">lab.department.exception.template.user</field>
+        <field name="model_id" search="[('model','=','lab.department.exception.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_department_exception_template_manager" model="ir.model.access">
+        <field name="name">lab.department.exception.template.manager</field>
+        <field name="model_id" search="[('model','=','lab.department.exception.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_permission_audit_snapshot_user" model="ir.model.access">
+        <field name="name">lab.permission.audit.snapshot.user</field>
+        <field name="model_id" search="[('model','=','lab.permission.audit.snapshot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_permission_audit_snapshot_manager" model="ir.model.access">
+        <field name="name">lab.permission.audit.snapshot.manager</field>
+        <field name="model_id" search="[('model','=','lab.permission.audit.snapshot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_permission_audit_snapshot_line_user" model="ir.model.access">
+        <field name="name">lab.permission.audit.snapshot.line.user</field>
+        <field name="model_id" search="[('model','=','lab.permission.audit.snapshot.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_permission_audit_snapshot_line_manager" model="ir.model.access">
+        <field name="name">lab.permission.audit.snapshot.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.permission.audit.snapshot.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_permission_audit_wizard_user" model="ir.model.access">
+        <field name="name">lab.permission.audit.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.permission.audit.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interface_reconciliation_report_user" model="ir.model.access">
+        <field name="name">lab.interface.reconciliation.report.user</field>
+        <field name="model_id" search="[('model','=','lab.interface.reconciliation.report')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interface_reconciliation_report_manager" model="ir.model.access">
+        <field name="name">lab.interface.reconciliation.report.manager</field>
+        <field name="model_id" search="[('model','=','lab.interface.reconciliation.report')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interface_reconciliation_report_line_user" model="ir.model.access">
+        <field name="name">lab.interface.reconciliation.report.line.user</field>
+        <field name="model_id" search="[('model','=','lab.interface.reconciliation.report.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interface_reconciliation_report_line_manager" model="ir.model.access">
+        <field name="name">lab.interface.reconciliation.report.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.interface.reconciliation.report.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_interface_admin"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_governance_workbench_wizard_user" model="ir.model.access">
+        <field name="name">lab.governance.workbench.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.governance.workbench.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_permission_audit_repair_user" model="ir.model.access">
+        <field name="name">lab.permission.audit.repair.user</field>
+        <field name="model_id" search="[('model','=','lab.permission.audit.repair')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_permission_audit_repair_manager" model="ir.model.access">
+        <field name="name">lab.permission.audit.repair.manager</field>
+        <field name="model_id" search="[('model','=','lab.permission.audit.repair')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_permission_audit_repair_line_user" model="ir.model.access">
+        <field name="name">lab.permission.audit.repair.line.user</field>
+        <field name="model_id" search="[('model','=','lab.permission.audit.repair.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_permission_audit_repair_line_manager" model="ir.model.access">
+        <field name="name">lab.permission.audit.repair.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.permission.audit.repair.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interface_reconciliation_export_wizard_user" model="ir.model.access">
+        <field name="name">lab.interface.reconciliation.export.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.interface.reconciliation.export.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_workstation_role_profile_user" model="ir.model.access">
+        <field name="name">lab.workstation.role.profile.user</field>
+        <field name="model_id" search="[('model','=','lab.workstation.role.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_workstation_role_profile_manager" model="ir.model.access">
+        <field name="name">lab.workstation.role.profile.manager</field>
+        <field name="model_id" search="[('model','=','lab.workstation.role.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_workstation_assignment_rule_user" model="ir.model.access">
+        <field name="name">lab.workstation.assignment.rule.user</field>
+        <field name="model_id" search="[('model','=','lab.workstation.assignment.rule')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_workstation_assignment_rule_manager" model="ir.model.access">
+        <field name="name">lab.workstation.assignment.rule.manager</field>
+        <field name="model_id" search="[('model','=','lab.workstation.assignment.rule')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_workstation_my_workbench_wizard_user" model="ir.model.access">
+        <field name="name">lab.workstation.my.workbench.wizard.user</field>
+        <field name="model_id" search="[('model','=','lab.workstation.my.workbench.wizard')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_workflow_profile_user" model="ir.model.access">
+        <field name="name">lab.sop.workflow.profile.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.workflow.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_workflow_profile_manager" model="ir.model.access">
+        <field name="name">lab.sop.workflow.profile.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.workflow.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_decision_threshold_profile_user" model="ir.model.access">
+        <field name="name">lab.sop.decision.threshold.profile.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.decision.threshold.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_decision_threshold_profile_manager" model="ir.model.access">
+        <field name="name">lab.sop.decision.threshold.profile.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.decision.threshold.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_exception_decision_user" model="ir.model.access">
+        <field name="name">lab.sop.exception.decision.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.exception.decision')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_exception_decision_manager" model="ir.model.access">
+        <field name="name">lab.sop.exception.decision.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.exception.decision')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_sop_exception_decision_run_user" model="ir.model.access">
+        <field name="name">lab.sop.exception.decision.run.user</field>
+        <field name="model_id" search="[('model','=','lab.sop.exception.decision.run')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_sop_exception_decision_run_manager" model="ir.model.access">
+        <field name="name">lab.sop.exception.decision.run.manager</field>
+        <field name="model_id" search="[('model','=','lab.sop.exception.decision.run')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_department_sop_version_user" model="ir.model.access">
+        <field name="name">lab.department.sop.version.user</field>
+        <field name="model_id" search="[('model','=','lab.department.sop.version')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_department_sop_version_manager" model="ir.model.access">
+        <field name="name">lab.department.sop.version.manager</field>
+        <field name="model_id" search="[('model','=','lab.department.sop.version')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_retest_analytics_report_user" model="ir.model.access">
+        <field name="name">lab.retest.analytics.report.user</field>
+        <field name="model_id" search="[('model','=','lab.retest.analytics.report')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_retest_analytics_report_manager" model="ir.model.access">
+        <field name="name">lab.retest.analytics.report.manager</field>
+        <field name="model_id" search="[('model','=','lab.retest.analytics.report')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_retest_analytics_report_line_user" model="ir.model.access">
+        <field name="name">lab.retest.analytics.report.line.user</field>
+        <field name="model_id" search="[('model','=','lab.retest.analytics.report.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_retest_analytics_report_line_manager" model="ir.model.access">
+        <field name="name">lab.retest.analytics.report.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.retest.analytics.report.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_service_authorization_user" model="ir.model.access">
+        <field name="name">lab.service.authorization.user</field>
+        <field name="model_id" search="[('model','=','lab.service.authorization')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_service_authorization_manager" model="ir.model.access">
+        <field name="name">lab.service.authorization.manager</field>
+        <field name="model_id" search="[('model','=','lab.service.authorization')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_personnel_matrix_run_user" model="ir.model.access">
+        <field name="name">lab.personnel.matrix.run.user</field>
+        <field name="model_id" search="[('model','=','lab.personnel.matrix.run')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_personnel_matrix_run_manager" model="ir.model.access">
+        <field name="name">lab.personnel.matrix.run.manager</field>
+        <field name="model_id" search="[('model','=','lab.personnel.matrix.run')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_personnel_matrix_run_line_user" model="ir.model.access">
+        <field name="name">lab.personnel.matrix.run.line.user</field>
+        <field name="model_id" search="[('model','=','lab.personnel.matrix.run.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_personnel_matrix_run_line_manager" model="ir.model.access">
+        <field name="name">lab.personnel.matrix.run.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.personnel.matrix.run.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_training_authorization_template_user" model="ir.model.access">
+        <field name="name">lab.training.authorization.template.user</field>
+        <field name="model_id" search="[('model','=','lab.training.authorization.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_training_authorization_template_manager" model="ir.model.access">
+        <field name="name">lab.training.authorization.template.manager</field>
+        <field name="model_id" search="[('model','=','lab.training.authorization.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_training_authorization_template_line_user" model="ir.model.access">
+        <field name="name">lab.training.authorization.template.line.user</field>
+        <field name="model_id" search="[('model','=','lab.training.authorization.template.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_training_authorization_template_line_manager" model="ir.model.access">
+        <field name="name">lab.training.authorization.template.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.training.authorization.template.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interpretation_profile_user" model="ir.model.access">
+        <field name="name">lab.interpretation.profile.user</field>
+        <field name="model_id" search="[('model','=','lab.interpretation.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interpretation_profile_manager" model="ir.model.access">
+        <field name="name">lab.interpretation.profile.manager</field>
+        <field name="model_id" search="[('model','=','lab.interpretation.profile')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_interpretation_profile_line_user" model="ir.model.access">
+        <field name="name">lab.interpretation.profile.line.user</field>
+        <field name="model_id" search="[('model','=','lab.interpretation.profile.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_interpretation_profile_line_manager" model="ir.model.access">
+        <field name="name">lab.interpretation.profile.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.interpretation.profile.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_qc_rule_library_user" model="ir.model.access">
+        <field name="name">lab.qc.rule.library.user</field>
+        <field name="model_id" search="[('model','=','lab.qc.rule.library')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_qc_rule_library_manager" model="ir.model.access">
+        <field name="name">lab.qc.rule.library.manager</field>
+        <field name="model_id" search="[('model','=','lab.qc.rule.library')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_qc_daily_snapshot_user" model="ir.model.access">
+        <field name="name">lab.qc.daily.snapshot.user</field>
+        <field name="model_id" search="[('model','=','lab.qc.daily.snapshot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_qc_daily_snapshot_manager" model="ir.model.access">
+        <field name="name">lab.qc.daily.snapshot.manager</field>
+        <field name="model_id" search="[('model','=','lab.qc.daily.snapshot')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_eqa_closure_report_user" model="ir.model.access">
+        <field name="name">lab.eqa.closure.report.user</field>
+        <field name="model_id" search="[('model','=','lab.eqa.closure.report')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_eqa_closure_report_manager" model="ir.model.access">
+        <field name="name">lab.eqa.closure.report.manager</field>
+        <field name="model_id" search="[('model','=','lab.eqa.closure.report')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_eqa_closure_report_line_user" model="ir.model.access">
+        <field name="name">lab.eqa.closure.report.line.user</field>
+        <field name="model_id" search="[('model','=','lab.eqa.closure.report.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_eqa_closure_report_line_manager" model="ir.model.access">
+        <field name="name">lab.eqa.closure.report.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.eqa.closure.report.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_ecommerce_package_line_user" model="ir.model.access">
+        <field name="name">lab.ecommerce.package.line.user</field>
+        <field name="model_id" search="[('model','=','lab.ecommerce.package.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_ecommerce_package_line_manager" model="ir.model.access">
+        <field name="name">lab.ecommerce.package.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.ecommerce.package.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_request_refund_user" model="ir.model.access">
+        <field name="name">lab.request.refund.user</field>
+        <field name="model_id" search="[('model','=','lab.request.refund')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reception"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_request_refund_manager" model="ir.model.access">
+        <field name="name">lab.request.refund.manager</field>
+        <field name="model_id" search="[('model','=','lab.request.refund')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_billing_reconciliation_user" model="ir.model.access">
+        <field name="name">lab.billing.reconciliation.user</field>
+        <field name="model_id" search="[('model','=','lab.billing.reconciliation')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_billing_reconciliation_manager" model="ir.model.access">
+        <field name="name">lab.billing.reconciliation.manager</field>
+        <field name="model_id" search="[('model','=','lab.billing.reconciliation')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_billing_reconciliation_line_user" model="ir.model.access">
+        <field name="name">lab.billing.reconciliation.line.user</field>
+        <field name="model_id" search="[('model','=','lab.billing.reconciliation.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_billing_reconciliation_line_manager" model="ir.model.access">
+        <field name="name">lab.billing.reconciliation.line.manager</field>
+        <field name="model_id" search="[('model','=','lab.billing.reconciliation.line')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_assay_kit_user" model="ir.model.access">
+        <field name="name">lab.assay.kit.user</field>
+        <field name="model_id" search="[('model','=','lab.assay.kit')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_assay_kit_manager" model="ir.model.access">
+        <field name="name">lab.assay.kit.manager</field>
+        <field name="model_id" search="[('model','=','lab.assay.kit')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_reagent_usage_user" model="ir.model.access">
+        <field name="name">lab.reagent.usage.user</field>
+        <field name="model_id" search="[('model','=','lab.reagent.usage')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_reagent_usage_manager" model="ir.model.access">
+        <field name="name">lab.reagent.usage.manager</field>
+        <field name="model_id" search="[('model','=','lab.reagent.usage')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+</odoo>

@@ -33,6 +33,7 @@
                             <field name="target_value"/>
                             <field name="std_dev"/>
                             <field name="active"/>
+                            <field name="rule_ids" widget="many2many_tags"/>
                         </group>
                     </group>
                     <group>
@@ -84,6 +85,8 @@
                             <field name="operator_id"/>
                             <field name="result_value"/>
                             <field name="z_score" readonly="1"/>
+                            <field name="westgard_rules" readonly="1"/>
+                            <field name="westgard_rule_count" readonly="1"/>
                             <field name="rule_triggered" readonly="1"/>
                             <field name="status" readonly="1"/>
                         </group>
@@ -120,6 +123,109 @@
         <field name="search_view_id" ref="view_lab_qc_run_search"/>
     </record>
 
+    <record id="view_lab_qc_rule_library_list" model="ir.ui.view">
+        <field name="name">lab.qc.rule.library.list</field>
+        <field name="model">lab.qc.rule.library</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="severity"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_qc_rule_library_form" model="ir.ui.view">
+        <field name="name">lab.qc.rule.library.form</field>
+        <field name="model">lab.qc.rule.library</field>
+        <field name="arch" type="xml">
+            <form string="QC Rule Library">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="severity"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_qc_rule_library" model="ir.actions.act_window">
+        <field name="name">QC Rule Library</field>
+        <field name="res_model">lab.qc.rule.library</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_qc_daily_snapshot_list" model="ir.ui.view">
+        <field name="name">lab.qc.daily.snapshot.list</field>
+        <field name="model">lab.qc.daily.snapshot</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="snapshot_date"/>
+                <field name="qc_material_id"/>
+                <field name="service_id"/>
+                <field name="run_count"/>
+                <field name="warning_count"/>
+                <field name="reject_count"/>
+                <field name="warning_rate" widget="percentage"/>
+                <field name="reject_rate" widget="percentage"/>
+                <field name="mean_z"/>
+                <field name="max_abs_z"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_qc_daily_snapshot_form" model="ir.ui.view">
+        <field name="name">lab.qc.daily.snapshot.form</field>
+        <field name="model">lab.qc.daily.snapshot</field>
+        <field name="arch" type="xml">
+            <form string="QC Daily Snapshot">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="snapshot_date"/>
+                            <field name="qc_material_id"/>
+                            <field name="service_id"/>
+                        </group>
+                        <group>
+                            <field name="run_count" readonly="1"/>
+                            <field name="pass_count" readonly="1"/>
+                            <field name="warning_count" readonly="1"/>
+                            <field name="reject_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="warning_rate" widget="percentage" readonly="1"/>
+                            <field name="reject_rate" widget="percentage" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="mean_z" readonly="1"/>
+                            <field name="max_abs_z" readonly="1"/>
+                            <field name="sigma_mean" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_qc_daily_snapshot" model="ir.actions.act_window">
+        <field name="name">QC Daily Snapshots</field>
+        <field name="res_model">lab.qc.daily.snapshot</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
     <menuitem id="menu_lab_qc_material" name="QC Materials" parent="menu_laboratory_quality" action="action_lab_qc_material" sequence="20"/>
     <menuitem id="menu_lab_qc_run" name="QC Runs" parent="menu_laboratory_quality" action="action_lab_qc_run" sequence="30"/>
+    <menuitem id="menu_lab_qc_rule_library" name="QC Rule Library" parent="menu_laboratory_quality" action="action_lab_qc_rule_library" sequence="31"/>
+    <menuitem id="menu_lab_qc_daily_snapshot" name="QC Daily Snapshots" parent="menu_laboratory_quality" action="action_lab_qc_daily_snapshot" sequence="32"/>
 </odoo>

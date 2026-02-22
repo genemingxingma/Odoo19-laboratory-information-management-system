@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_department_type_chemistry" model="lab.department.type">
+        <field name="name">Clinical Chemistry</field>
+        <field name="code">chemistry</field>
+        <field name="sequence">10</field>
+        <field name="is_default">1</field>
+    </record>
+    <record id="lab_department_type_general" model="lab.department.type">
+        <field name="name">General</field>
+        <field name="code">general</field>
+        <field name="sequence">15</field>
+    </record>
+    <record id="lab_department_type_hematology" model="lab.department.type">
+        <field name="name">Hematology</field>
+        <field name="code">hematology</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="lab_department_type_microbiology" model="lab.department.type">
+        <field name="name">Microbiology</field>
+        <field name="code">microbiology</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="lab_department_type_immunology" model="lab.department.type">
+        <field name="name">Immunology</field>
+        <field name="code">immunology</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="lab_department_type_other" model="lab.department.type">
+        <field name="name">Other</field>
+        <field name="code">other</field>
+        <field name="sequence">99</field>
+    </record>
+
+    <record id="lab_sample_type_blood" model="lab.sample.type">
+        <field name="name">Whole Blood</field>
+        <field name="code">blood</field>
+        <field name="sequence">10</field>
+        <field name="is_default">1</field>
+    </record>
+    <record id="lab_sample_type_urine" model="lab.sample.type">
+        <field name="name">Urine</field>
+        <field name="code">urine</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="lab_sample_type_stool" model="lab.sample.type">
+        <field name="name">Stool</field>
+        <field name="code">stool</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="lab_sample_type_swab" model="lab.sample.type">
+        <field name="name">Swab</field>
+        <field name="code">swab</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="lab_sample_type_serum" model="lab.sample.type">
+        <field name="name">Serum</field>
+        <field name="code">serum</field>
+        <field name="sequence">50</field>
+    </record>
+    <record id="lab_sample_type_other" model="lab.sample.type">
+        <field name="name">Other</field>
+        <field name="code">other</field>
+        <field name="sequence">99</field>
+    </record>
+
+    <record id="lab_priority_type_routine" model="lab.priority.type">
+        <field name="name">Routine</field>
+        <field name="code">routine</field>
+        <field name="sequence">10</field>
+        <field name="is_default">1</field>
+    </record>
+    <record id="lab_priority_type_urgent" model="lab.priority.type">
+        <field name="name">Urgent</field>
+        <field name="code">urgent</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="lab_priority_type_stat" model="lab.priority.type">
+        <field name="name">STAT</field>
+        <field name="code">stat</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="lab_request_type_individual" model="lab.request.type">
+        <field name="name">Individual</field>
+        <field name="code">individual</field>
+        <field name="sequence">10</field>
+        <field name="is_default">1</field>
+    </record>
+    <record id="lab_request_type_institution" model="lab.request.type">
+        <field name="name">Institution</field>
+        <field name="code">institution</field>
+        <field name="sequence">20</field>
+    </record>
+</odoo>

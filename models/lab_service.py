@@ -5,33 +5,13 @@ from odoo.exceptions import ValidationError
 class LabService(models.Model):
     _name = "lab.service"
     _description = "Laboratory Analysis Service"
+    _inherit = ["lab.master.data.mixin"]
     _order = "name"
 
     name = fields.Char(required=True)
     code = fields.Char(required=True)
-    department = fields.Selection(
-        [
-            ("chemistry", "Clinical Chemistry"),
-            ("hematology", "Hematology"),
-            ("microbiology", "Microbiology"),
-            ("immunology", "Immunology"),
-            ("other", "Other"),
-        ],
-        default="chemistry",
-        required=True,
-    )
-    sample_type = fields.Selection(
-        [
-            ("blood", "Blood"),
-            ("urine", "Urine"),
-            ("stool", "Stool"),
-            ("swab", "Swab"),
-            ("serum", "Serum"),
-            ("other", "Other"),
-        ],
-        default="blood",
-        required=True,
-    )
+    department = fields.Selection(selection="_selection_department", default=lambda self: self._default_department_code(), required=True)
+    sample_type = fields.Selection(selection="_selection_sample_type", default=lambda self: self._default_sample_type_code(), required=True)
     result_type = fields.Selection(
         [("numeric", "Numeric"), ("text", "Text")],
         default="numeric",

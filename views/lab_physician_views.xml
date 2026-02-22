@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_physician_department_list" model="ir.ui.view">
+        <field name="name">lab.physician.department.list</field>
+        <field name="model">lab.physician.department</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="company_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_physician_department_form" model="ir.ui.view">
+        <field name="name">lab.physician.department.form</field>
+        <field name="model">lab.physician.department</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="company_id"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_res_partner_lab_physician_list" model="ir.ui.view">
+        <field name="name">res.partner.lab.physician.list</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="lab_physician_department_id"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="lab_physician_company_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_res_partner_lab_physician_form" model="ir.ui.view">
+        <field name="name">res.partner.lab.physician.form</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <form string="Lab Physician">
+                <sheet>
+                    <group>
+                        <field name="name" required="1"/>
+                        <field name="is_lab_physician"/>
+                        <field name="lab_physician_department_id"/>
+                        <field name="lab_physician_company_id"/>
+                        <field name="parent_id" options="{'no_create_edit': True}"/>
+                        <field name="function"/>
+                        <field name="phone"/>
+                        <field name="email"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_physician_department" model="ir.actions.act_window">
+        <field name="name">Physician Departments</field>
+        <field name="res_model">lab.physician.department</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_physician_contact" model="ir.actions.act_window">
+        <field name="name">Physicians</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_lab_physician','=',True), '|', ('lab_physician_company_id','=',False), ('lab_physician_company_id','in', company_ids)]</field>
+        <field name="context">{'default_is_lab_physician': True}</field>
+    </record>
+
+    <menuitem id="menu_lab_physician_department"
+              name="Physician Departments"
+              parent="menu_lab_master_data_root"
+              action="action_lab_physician_department"
+              sequence="45"/>
+    <menuitem id="menu_lab_physician_contact"
+              name="Physicians"
+              parent="menu_lab_master_data_root"
+              action="action_lab_physician_contact"
+              sequence="46"/>
+
+    <!-- Shortcut menus to avoid deep navigation under Master Data -->
+    <menuitem id="menu_lab_physician_department_shortcut"
+              name="Physician Departments"
+              parent="menu_lab_config_org"
+              action="action_lab_physician_department"
+              sequence="55"/>
+    <menuitem id="menu_lab_physician_contact_shortcut"
+              name="Physicians"
+              parent="menu_lab_config_org"
+              action="action_lab_physician_contact"
+              sequence="56"/>
+</odoo>

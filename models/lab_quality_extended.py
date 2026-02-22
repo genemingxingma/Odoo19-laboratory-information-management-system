@@ -110,6 +110,155 @@ class LabEqaResult(models.Model):
             rec.status = "pass" if abs(z) <= (rec.tolerance or 2.0) else "fail"
 
 
+class LabEqaClosureReport(models.Model):
+    _name = "lab.eqa.closure.report"
+    _description = "EQA Closure Report"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _order = "period_end desc, id desc"
+
+    name = fields.Char(default="New", readonly=True, copy=False)
+    period_start = fields.Date(required=True, default=lambda self: fields.Date.today().replace(day=1))
+    period_end = fields.Date(required=True, default=fields.Date.today)
+    generated_at = fields.Datetime(readonly=True)
+    generated_by_id = fields.Many2one("res.users", readonly=True)
+    state = fields.Selection([("draft", "Draft"), ("generated", "Generated"), ("published", "Published")], default="draft")
+
+    round_total = fields.Integer(readonly=True)
+    round_closed = fields.Integer(readonly=True)
+    round_submitted = fields.Integer(readonly=True)
+    closure_rate = fields.Float(readonly=True)
+    on_time_submission_rate = fields.Float(readonly=True)
+    result_total = fields.Integer(readonly=True)
+    result_fail = fields.Integer(readonly=True)
+    pass_rate = fields.Float(readonly=True)
+    line_ids = fields.One2many("lab.eqa.closure.report.line", "report_id", string="Scheme Breakdown")
+    conclusion = fields.Text()
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("name", "New") == "New":
+                vals["name"] = "EQA/%s" % fields.Datetime.now().strftime("%Y%m%d%H%M%S")
+        return super().create(vals_list)
+
+    def action_generate(self):
+        round_obj = self.env["lab.eqa.round"]
+        result_obj = self.env["lab.eqa.result"]
+        for rec in self:
+            if rec.period_end < rec.period_start:
+                raise UserError(_("Period end must be after period start."))
+            start_dt = fields.Datetime.to_string(rec.period_start)
+            end_dt = fields.Datetime.to_string(fields.Date.add(rec.period_end, days=1))
+            round_domain = [("sample_date", ">=", rec.period_start), ("sample_date", "<=", rec.period_end)]
+            rounds = round_obj.search(round_domain)
+            total = len(rounds)
+            closed = len(rounds.filtered(lambda r: r.state == "closed"))
+            submitted = len(rounds.filtered(lambda r: r.state in ("submitted", "evaluated", "closed")))
+            on_time = len(
+                rounds.filtered(
+                    lambda r: r.submitted_date
+                    and r.due_date
+                    and r.submitted_date <= r.due_date
+                )
+            )
+            result_total = result_obj.search_count([("create_date", ">=", start_dt), ("create_date", "<", end_dt)])
+            fail_total = result_obj.search_count(
+                [("create_date", ">=", start_dt), ("create_date", "<", end_dt), ("status", "=", "fail")]
+            )
+
+            rec.write(
+                {
+                    "generated_at": fields.Datetime.now(),
+                    "generated_by_id": self.env.user.id,
+                    "round_total": total,
+                    "round_closed": closed,
+                    "round_submitted": submitted,
+                    "closure_rate": (100.0 * closed / total) if total else 0.0,
+                    "on_time_submission_rate": (100.0 * on_time / total) if total else 0.0,
+                    "result_total": result_total,
+                    "result_fail": fail_total,
+                    "pass_rate": (100.0 * (result_total - fail_total) / result_total) if result_total else 0.0,
+                    "line_ids": [(5, 0, 0)],
+                    "state": "generated",
+                }
+            )
+
+            by_scheme = {}
+            for r in rounds:
+                key = r.scheme_id.id
+                by_scheme.setdefault(
+                    key,
+                    {
+                        "scheme_id": r.scheme_id.id,
+                        "round_total": 0,
+                        "round_closed": 0,
+                        "on_time_submission_count": 0,
+                        "result_total": 0,
+                        "result_fail": 0,
+                    },
+                )
+                row = by_scheme[key]
+                row["round_total"] += 1
+                if r.state == "closed":
+                    row["round_closed"] += 1
+                if r.submitted_date and r.due_date and r.submitted_date <= r.due_date:
+                    row["on_time_submission_count"] += 1
+                results = r.result_ids
+                row["result_total"] += len(results)
+                row["result_fail"] += len(results.filtered(lambda x: x.status == "fail"))
+
+            rec.write(
+                {
+                    "line_ids": [
+                        (
+                            0,
+                            0,
+                            {
+                                **vals,
+                                "closure_rate": (100.0 * vals["round_closed"] / vals["round_total"])
+                                if vals["round_total"]
+                                else 0.0,
+                                "pass_rate": (
+                                    100.0 * (vals["result_total"] - vals["result_fail"]) / vals["result_total"]
+                                )
+                                if vals["result_total"]
+                                else 0.0,
+                            },
+                        )
+                        for vals in by_scheme.values()
+                    ]
+                }
+            )
+        return True
+
+    def action_publish(self):
+        self.write({"state": "published"})
+        return True
+
+    @api.model
+    def _cron_generate_periodic_closure(self):
+        today = fields.Date.today()
+        start = fields.Date.add(today, days=-7)
+        rec = self.create({"period_start": start, "period_end": today})
+        rec.action_generate()
+
+
+class LabEqaClosureReportLine(models.Model):
+    _name = "lab.eqa.closure.report.line"
+    _description = "EQA Closure Report Line"
+    _order = "id"
+
+    report_id = fields.Many2one("lab.eqa.closure.report", required=True, ondelete="cascade", index=True)
+    scheme_id = fields.Many2one("lab.eqa.scheme", required=True)
+    round_total = fields.Integer(default=0)
+    round_closed = fields.Integer(default=0)
+    on_time_submission_count = fields.Integer(default=0)
+    closure_rate = fields.Float(default=0.0)
+    result_total = fields.Integer(default=0)
+    result_fail = fields.Integer(default=0)
+    pass_rate = fields.Float(default=0.0)
+
+
 class LabComplianceSnapshot(models.Model):
     _name = "lab.compliance.snapshot"
     _description = "Compliance Snapshot"

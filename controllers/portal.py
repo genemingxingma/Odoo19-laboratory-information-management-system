@@ -1,3 +1,5 @@
+import json
+
 from odoo import _, fields, http
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager
 from odoo.http import request
@@ -38,7 +40,9 @@ class LaboratoryPortal(CustomerPortal):
 
     def _sample_domain_for_current_user(self):
         partner = self._current_commercial_partner()
+        companies = request.env.companies.ids
         return [
+            ("company_id", "in", companies),
             "|",
             ("patient_id", "child_of", partner.id),
             ("client_id", "child_of", partner.id),
@@ -58,7 +62,9 @@ class LaboratoryPortal(CustomerPortal):
 
     def _request_domain_for_current_user(self):
         partner = self._current_commercial_partner()
+        companies = request.env.companies.ids
         return [
+            ("company_id", "in", companies),
             "|",
             ("requester_partner_id", "child_of", partner.id),
             ("client_partner_id", "child_of", partner.id),
@@ -66,7 +72,9 @@ class LaboratoryPortal(CustomerPortal):
 
     def _request_invoice_domain_for_current_user(self):
         partner = self._current_commercial_partner()
+        companies = request.env.companies.ids
         return [
+            ("company_id", "in", companies),
             "|",
             ("request_id.requester_partner_id", "child_of", partner.id),
             ("request_id.client_partner_id", "child_of", partner.id),
@@ -111,6 +119,15 @@ class LaboratoryPortal(CustomerPortal):
             if product_id:
                 line_payloads.append({"product_id": product_id, "quantity": qty})
         return line_payloads
+
+    def _normalize_id_list(self, raw):
+        if isinstance(raw, (list, tuple)):
+            values = raw
+        elif isinstance(raw, str):
+            values = [v.strip() for v in raw.split(",") if v.strip()]
+        else:
+            values = []
+        return [int(v) for v in values if str(v).isdigit()]
 
     def _professional_history_templates(self, partner, limit=8):
         order_obj = request.env["sale.order"].sudo()
@@ -282,9 +299,12 @@ class LaboratoryPortal(CustomerPortal):
         if dispatch:
             dispatch.action_mark_downloaded()
 
-        action_xmlid = sample.get_report_action_xmlid()
-        action = request.env.ref(action_xmlid).sudo()
-        pdf_content, _content_type = action._render_qweb_pdf(sample.ids)
+        attachment = sample.sudo()._generate_report_pdf_attachment(force=False, suppress_error=True)
+        pdf_content = attachment.raw or b""
+        if not pdf_content:
+            action_xmlid = sample.get_report_action_xmlid()
+            action = request.env.ref(action_xmlid).sudo()
+            pdf_content, _content_type = action._render_qweb_pdf(action.report_name, res_ids=sample.ids)
         filename = f"{sample.name}.pdf"
         headers = [
             ("Content-Type", "application/pdf"),
@@ -373,29 +393,229 @@ class LaboratoryPortal(CustomerPortal):
 
     @http.route("/my/lab/requests/new", type="http", auth="user", website=True, methods=["GET"])
     def portal_test_request_new_form(self, **kwargs):
+        mixin = request.env["lab.master.data.mixin"].sudo()
+        partner = self._current_commercial_partner()
+        portal_request_type = "institution" if self._is_professional_partner(partner) else "individual"
+        request_type_map = dict(mixin._selection_request_type())
+        physician_domain = [
+            ("is_company", "=", False),
+            ("is_lab_physician", "=", True),
+            ("lab_physician_company_id", "in", request.env.companies.ids),
+            ("parent_id", "child_of", partner.id),
+            ("type", "in", ("contact", "other")),
+        ]
+        physicians = request.env["res.partner"].sudo().search(physician_domain, order="name asc")
+        physician_departments = (
+            request.env["lab.physician.department"]
+            .sudo()
+            .search(
+                [
+                    ("id", "in", physicians.mapped("lab_physician_department_id").ids),
+                    ("company_id", "in", request.env.companies.ids),
+                    ("active", "=", True),
+                ],
+                order="sequence asc, name asc",
+            )
+        )
         values = self._prepare_portal_layout_values()
         values.update(
             {
                 "page_name": "lab_test_requests",
                 "services": request.env["lab.service"].sudo().search([("active", "=", True)], order="name asc"),
                 "profiles": request.env["lab.profile"].sudo().search([("active", "=", True)], order="name asc"),
+                "physicians": physicians,
+                "physician_departments": physician_departments,
                 "templates": request.env["lab.report.template"].sudo().search([], order="name asc"),
+                "portal_request_type": portal_request_type,
+                "portal_request_type_label": request_type_map.get(portal_request_type, portal_request_type),
+                "priority_options": mixin._selection_priority(),
+                "sample_type_options": mixin._selection_sample_type(),
             }
         )
         return request.render("laboratory_management.portal_my_lab_test_request_new", values)
 
+    @http.route("/my/lab/patient/lookup", type="http", auth="user", website=True, methods=["GET"])
+    def portal_patient_lookup(self, **kwargs):
+        identifier = (kwargs.get("identifier") or "").strip()
+        payload = {"found": False}
+        if not identifier:
+            return request.make_response(
+                json.dumps(payload),
+                headers=[("Content-Type", "application/json")],
+            )
+
+        partner = self._current_commercial_partner()
+        req = (
+            request.env["lab.test.request"]
+            .sudo()
+            .search(
+                [
+                    ("patient_identifier", "=", identifier),
+                    ("company_id", "in", request.env.companies.ids),
+                    "|",
+                    ("requester_partner_id", "child_of", partner.id),
+                    ("client_partner_id", "child_of", partner.id),
+                ],
+                order="id desc",
+                limit=1,
+            )
+        )
+        if req:
+            name = req.patient_name or (req.patient_id.name if req.patient_id else "") or ""
+            phone = req.patient_phone or (req.patient_id.phone if req.patient_id else "") or ""
+            payload = {
+                "found": True,
+                "patient_name": name,
+                "patient_phone": phone,
+                "patient_identifier": req.patient_identifier or identifier,
+            }
+        return request.make_response(
+            json.dumps(payload),
+            headers=[("Content-Type", "application/json")],
+        )
+
     @http.route("/my/lab/requests/new", type="http", auth="user", website=True, methods=["POST"])
     def portal_test_request_create(self, **post):
         partner = self._current_commercial_partner()
+        mixin = request.env["lab.master.data.mixin"].sudo()
         line_type = (post.get("line_type") or "service").strip()
-        request_type = (post.get("request_type") or "individual").strip()
-        service_id = int(post.get("service_id") or 0)
-        profile_id = int(post.get("profile_id") or 0)
-        qty = max(int(post.get("quantity") or 1), 1)
-        if line_type == "service" and not service_id:
-            return request.redirect("/my/lab/requests/new?error=service")
-        if line_type == "profile" and not profile_id:
-            return request.redirect("/my/lab/requests/new?error=profile")
+        request_type = "institution" if self._is_professional_partner(partner) else "individual"
+        priority = (post.get("priority") or mixin._default_priority_code()).strip()
+        sample_type = (post.get("sample_type") or mixin._default_sample_type_code()).strip()
+        valid_priorities = {code for code, _label in mixin._selection_priority()}
+        valid_sample_types = {code for code, _label in mixin._selection_sample_type()}
+        if priority not in valid_priorities:
+            priority = mixin._default_priority_code()
+        if sample_type not in valid_sample_types:
+            sample_type = mixin._default_sample_type_code()
+
+        form = request.httprequest.form
+        service_ids = [int(x) for x in form.getlist("service_ids") if str(x).strip().isdigit()]
+        profile_ids = [int(x) for x in form.getlist("profile_ids") if str(x).strip().isdigit()]
+        # Backward-compatible fallback for old single-select post.
+        if not service_ids and str(post.get("service_id") or "").isdigit():
+            service_ids = [int(post.get("service_id"))]
+        if not profile_ids and str(post.get("profile_id") or "").isdigit():
+            profile_ids = [int(post.get("profile_id"))]
+
+        specimen_payload_json = (post.get("specimen_payload_json") or "").strip()
+        has_specimen_payload = bool(specimen_payload_json)
+
+        if not has_specimen_payload and line_type == "service" and not service_ids:
+            return request.redirect("/my/lab/requests/new?error=services")
+        if not has_specimen_payload and line_type == "profile" and not profile_ids:
+            return request.redirect("/my/lab/requests/new?error=profiles")
+
+        line_note = (post.get("line_note") or "").strip()
+        line_ids = []
+        if has_specimen_payload:
+            try:
+                specimen_rows = json.loads(specimen_payload_json)
+            except Exception:
+                specimen_rows = []
+            for row in specimen_rows:
+                if not isinstance(row, dict):
+                    continue
+                specimen_ref = (row.get("specimen_ref") or "").strip() or "SP1"
+                specimen_barcode = (row.get("specimen_barcode") or "").strip() or False
+                specimen_type = (row.get("specimen_sample_type") or sample_type).strip()
+                if specimen_type not in valid_sample_types:
+                    specimen_type = sample_type
+                row_type = (row.get("line_type") or "service").strip()
+                row_note = (row.get("line_note") or line_note).strip()
+                row_service_ids = self._normalize_id_list(row.get("service_ids"))
+                row_profile_ids = self._normalize_id_list(row.get("profile_ids"))
+                if row_type == "profile":
+                    for profile_id in row_profile_ids:
+                        line_ids.append(
+                            (
+                                0,
+                                0,
+                                {
+                                    "line_type": "profile",
+                                    "profile_id": profile_id,
+                                    "quantity": 1,
+                                    "note": row_note,
+                                    "specimen_ref": specimen_ref,
+                                    "specimen_barcode": specimen_barcode,
+                                    "specimen_sample_type": specimen_type,
+                                },
+                            )
+                        )
+                else:
+                    for service_id in row_service_ids:
+                        line_ids.append(
+                            (
+                                0,
+                                0,
+                                {
+                                    "line_type": "service",
+                                    "service_id": service_id,
+                                    "quantity": 1,
+                                    "note": row_note,
+                                    "specimen_ref": specimen_ref,
+                                    "specimen_barcode": specimen_barcode,
+                                    "specimen_sample_type": specimen_type,
+                                },
+                            )
+                        )
+            if not line_ids:
+                return request.redirect("/my/lab/requests/new?error=combination")
+
+        if not has_specimen_payload:
+            if line_type == "service":
+                for service_id in service_ids:
+                    line_ids.append(
+                        (
+                            0,
+                            0,
+                            {
+                                "line_type": "service",
+                                "service_id": service_id,
+                                "quantity": 1,
+                                "note": line_note,
+                                "specimen_ref": "SP1",
+                                "specimen_sample_type": sample_type,
+                            },
+                        )
+                    )
+            else:
+                for profile_id in profile_ids:
+                    line_ids.append(
+                        (
+                            0,
+                            0,
+                            {
+                                "line_type": "profile",
+                                "profile_id": profile_id,
+                                "quantity": 1,
+                                "note": line_note,
+                                "specimen_ref": "SP1",
+                                "specimen_sample_type": sample_type,
+                            },
+                        )
+                    )
+
+        physician_partner = request.env["res.partner"].browse()
+        physician_department_id = int(post.get("physician_department_id") or 0)
+        physician_partner_id = int(post.get("physician_partner_id") or 0)
+        if physician_partner_id:
+            physician_search_domain = [
+                ("id", "=", physician_partner_id),
+                ("is_company", "=", False),
+                ("is_lab_physician", "=", True),
+                ("lab_physician_company_id", "in", request.env.companies.ids),
+                ("parent_id", "child_of", partner.id),
+            ]
+            if physician_department_id:
+                physician_search_domain.append(("lab_physician_department_id", "=", physician_department_id))
+            physician_partner = (
+                request.env["res.partner"]
+                .sudo()
+                .search(physician_search_domain, limit=1)
+            )
+            if not physician_partner:
+                return request.redirect("/my/lab/requests/new?error=physician_department")
 
         values = {
             "requester_partner_id": partner.id,
@@ -404,25 +624,15 @@ class LaboratoryPortal(CustomerPortal):
             "patient_name": (post.get("patient_name") or "").strip(),
             "patient_identifier": (post.get("patient_identifier") or "").strip(),
             "patient_phone": (post.get("patient_phone") or "").strip(),
-            "physician_name": (post.get("physician_name") or "").strip(),
+            "physician_partner_id": physician_partner.id or False,
+            "physician_name": physician_partner.name or "",
             "clinical_note": (post.get("clinical_note") or "").strip(),
-            "priority": (post.get("priority") or "routine").strip(),
-            "sample_type": (post.get("sample_type") or "blood").strip(),
-            "fasting_required": post.get("fasting_required") in ("on", "true", "1"),
+            "priority": priority,
+            "sample_type": sample_type,
+            "fasting_required": False,
+            "company_id": request.env.company.id,
             "preferred_template_id": int(post.get("preferred_template_id") or 0) or False,
-            "line_ids": [
-                (
-                    0,
-                    0,
-                    {
-                        "line_type": line_type,
-                        "service_id": service_id or False,
-                        "profile_id": profile_id or False,
-                        "quantity": qty,
-                        "note": (post.get("line_note") or "").strip(),
-                    },
-                )
-            ],
+            "line_ids": line_ids,
         }
         test_request = request.env["lab.test.request"].sudo().create(values)
         if post.get("submit_now") in ("on", "true", "1"):
@@ -643,7 +853,7 @@ class LaboratoryPortal(CustomerPortal):
             return request.redirect("/my/lab/custody/batches")
 
         action = request.env.ref("laboratory_management.action_report_lab_custody_manifest").sudo()
-        pdf_content, _content_type = action._render_qweb_pdf(batch.ids)
+        pdf_content, _content_type = action._render_qweb_pdf(action.report_name, res_ids=batch.ids)
         filename = f"Custody-Manifest-{batch.name}.pdf"
         headers = [
             ("Content-Type", "application/pdf"),
@@ -711,7 +921,7 @@ class LaboratoryPortal(CustomerPortal):
             return request.redirect("/my/lab/custody/investigations")
 
         action = request.env.ref("laboratory_management.action_report_lab_custody_investigation").sudo()
-        pdf_content, _content_type = action._render_qweb_pdf(record.ids)
+        pdf_content, _content_type = action._render_qweb_pdf(action.report_name, res_ids=record.ids)
         filename = f"Investigation-{record.name}.pdf"
         headers = [
             ("Content-Type", "application/pdf"),

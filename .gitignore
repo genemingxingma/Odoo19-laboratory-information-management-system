@@ -1,4 +1,8 @@
+.DS_Store
 __pycache__/
 *.pyc
-.DS_Store
-*.swp
+.remote_server.env
+*.log
+*.pid
+*.tar.gz
+

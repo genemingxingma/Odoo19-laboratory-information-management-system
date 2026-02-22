@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_department_type_list" model="ir.ui.view">
+        <field name="name">lab.department.type.list</field>
+        <field name="model">lab.department.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_default"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_type_list" model="ir.ui.view">
+        <field name="name">lab.sample.type.list</field>
+        <field name="model">lab.sample.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_default"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_priority_type_list" model="ir.ui.view">
+        <field name="name">lab.priority.type.list</field>
+        <field name="model">lab.priority.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_default"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_request_type_list" model="ir.ui.view">
+        <field name="name">lab.request.type.list</field>
+        <field name="model">lab.request.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_default"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_lab_department_type" model="ir.actions.act_window">
+        <field name="name">Departments</field>
+        <field name="res_model">lab.department.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_sample_type" model="ir.actions.act_window">
+        <field name="name">Sample Types</field>
+        <field name="res_model">lab.sample.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_priority_type" model="ir.actions.act_window">
+        <field name="name">Priorities</field>
+        <field name="res_model">lab.priority.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_request_type" model="ir.actions.act_window">
+        <field name="name">Request Types</field>
+        <field name="res_model">lab.request.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lab_master_data_root" name="Master Data" parent="menu_laboratory_config" sequence="5"/>
+    <menuitem id="menu_lab_department_type" name="Departments" parent="menu_lab_master_data_root" action="action_lab_department_type" sequence="10"/>
+    <menuitem id="menu_lab_sample_type" name="Sample Types" parent="menu_lab_master_data_root" action="action_lab_sample_type" sequence="20"/>
+    <menuitem id="menu_lab_priority_type" name="Priorities" parent="menu_lab_master_data_root" action="action_lab_priority_type" sequence="30"/>
+    <menuitem id="menu_lab_request_type" name="Request Types" parent="menu_lab_master_data_root" action="action_lab_request_type" sequence="40"/>
+</odoo>

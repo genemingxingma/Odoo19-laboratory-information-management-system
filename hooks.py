@@ -3,6 +3,47 @@ from pathlib import Path
 from odoo import SUPERUSER_ID, api
 
 
+def _ensure_partner_extension_columns(cr):
+    cr.execute(
+        """
+        DO $$
+        BEGIN
+            IF NOT EXISTS (
+                SELECT 1
+                  FROM information_schema.columns
+                 WHERE table_name = 'res_partner'
+                   AND column_name = 'is_lab_physician'
+            ) THEN
+                ALTER TABLE res_partner ADD COLUMN is_lab_physician boolean;
+            END IF;
+
+            IF NOT EXISTS (
+                SELECT 1
+                  FROM information_schema.columns
+                 WHERE table_name = 'res_partner'
+                   AND column_name = 'lab_physician_department_id'
+            ) THEN
+                ALTER TABLE res_partner ADD COLUMN lab_physician_department_id integer;
+            END IF;
+
+            IF NOT EXISTS (
+                SELECT 1
+                  FROM information_schema.columns
+                 WHERE table_name = 'res_partner'
+                   AND column_name = 'lab_physician_company_id'
+            ) THEN
+                ALTER TABLE res_partner ADD COLUMN lab_physician_company_id integer;
+            END IF;
+        END
+        $$;
+        """
+    )
+    cr.execute("UPDATE res_partner SET is_lab_physician = false WHERE is_lab_physician IS NULL")
+    cr.execute(
+        "CREATE INDEX IF NOT EXISTS res_partner_is_lab_physician_idx ON res_partner (is_lab_physician)"
+    )
+
+
 def _parse_po(msg_file):
     terms = {}
     lines = Path(msg_file).read_text(encoding="utf-8").splitlines()
@@ -97,6 +138,14 @@ def sync_i18n_terms(env):
     sync_field_i18n(env)
 
 
-def post_init_hook(cr, registry):
-    env = api.Environment(cr, SUPERUSER_ID, {})
+def post_init_hook(env_or_cr, registry=None):
+    if registry is None and hasattr(env_or_cr, "cr"):
+        env = env_or_cr
+    else:
+        env = api.Environment(env_or_cr, SUPERUSER_ID, {})
+    _ensure_partner_extension_columns(env.cr)
     sync_i18n_terms(env)
+
+
+def pre_init_hook(cr):
+    _ensure_partner_extension_columns(cr)

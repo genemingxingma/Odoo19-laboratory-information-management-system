@@ -420,7 +420,7 @@ msgstr "ต่ำกว่าช่วงอ้างอิง"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__blood
 msgid "Blood"
-msgstr "เลือด"
+msgstr "เลือดเต็มส่วน"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
@@ -2321,7 +2321,7 @@ msgstr "สาเหตุที่แท้จริง"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__routine
 msgid "Routine"
-msgstr "กิจวัตร"
+msgstr "ปกติ"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__row_no
@@ -2355,7 +2355,7 @@ msgstr "ข้อผิดพลาดในการส่ง SMS"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__stat
 msgid "STAT"
-msgstr "สถิติ"
+msgstr "ด่วนพิเศษ (STAT)"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__sample_id
@@ -2478,7 +2478,7 @@ msgstr "ลำดับ"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__serum
 msgid "Serum"
-msgstr "เซรั่ม"
+msgstr "ซีรัม"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_instrument_test_map__service_id
@@ -2615,7 +2615,7 @@ msgstr "มาตรฐานการพัฒนา"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__stool
 msgid "Stool"
-msgstr "สตูล"
+msgstr "อุจจาระ"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job_line__status__success
@@ -2630,7 +2630,7 @@ msgstr "แถวแห่งความสำเร็จ"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__swab
 msgid "Swab"
-msgstr "ไม้กวาด"
+msgstr "ตัวอย่างสวอบ"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
@@ -2801,7 +2801,7 @@ msgstr "หน่วย"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__urgent
 msgid "Urgent"
-msgstr "ด่วน"
+msgstr "เร่งด่วน"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__urine
@@ -6251,3 +6251,19 @@ msgstr "ปรับวันฝึกอบรมอัตโนมัติจ
 #. module: laboratory_management
 msgid "Lab: Auto Reschedule Training Conflicts"
 msgstr "แล็บ: ปรับความขัดแย้งตารางฝึกอบรมอัตโนมัติ"
+
+#. module: laboratory_management
+msgid "Whole Blood"
+msgstr "เลือดเต็มส่วน"
+
+#. module: laboratory_management
+msgid "General"
+msgstr "ทั่วไป"
+
+#. module: laboratory_management
+msgid "Individual"
+msgstr "บุคคล"
+
+#. module: laboratory_management
+msgid "Institution"
+msgstr "หน่วยงาน"

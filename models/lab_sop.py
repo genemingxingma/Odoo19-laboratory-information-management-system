@@ -75,7 +75,7 @@ class LabDepartmentSop(models.Model):
     )
     sample_type = fields.Selection(
         [
-            ("blood", "Blood"),
+            ("blood", "Whole Blood"),
             ("urine", "Urine"),
             ("stool", "Stool"),
             ("swab", "Swab"),

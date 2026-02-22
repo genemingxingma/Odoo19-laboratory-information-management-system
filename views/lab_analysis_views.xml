@@ -11,6 +11,8 @@
                 <field name="is_retest"/>
                 <field name="retest_of_id"/>
                 <field name="reagent_lot_id"/>
+                <field name="reagent_scope"/>
+                <field name="assay_kit_id"/>
                 <field name="analyst_id"/>
                 <field name="worksheet_id"/>
                 <field name="result_value"/>
@@ -53,7 +55,12 @@
                             <field name="retest_of_id" readonly="1"/>
                             <field name="department" readonly="1"/>
                             <field name="sample_type" readonly="1"/>
-                            <field name="reagent_lot_id" domain="[('service_id', '=', service_id)]"/>
+                            <field
+                                name="reagent_lot_id"
+                                domain="['|', ('service_id', '=', service_id), ('assay_kit_id.covered_service_ids', 'in', service_id)]"
+                            />
+                            <field name="reagent_scope" readonly="1"/>
+                            <field name="assay_kit_id" readonly="1"/>
                         </group>
                         <group>
                             <field name="worksheet_id"/>

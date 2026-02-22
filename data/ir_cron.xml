@@ -80,6 +80,16 @@
         <field name="active" eval="True"/>
     </record>
 
+    <record id="ir_cron_lab_ai_interpretation_queue" model="ir.cron">
+        <field name="name">Lab: Process AI Interpretation Queue</field>
+        <field name="model_id" ref="model_lab_sample"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_process_ai_interpretation_queue()</field>
+        <field name="interval_number">10</field>
+        <field name="interval_type">minutes</field>
+        <field name="active" eval="True"/>
+    </record>
+
     <record id="ir_cron_lab_report_dispatch_ack_reminder" model="ir.cron">
         <field name="name">Lab: Report Dispatch Acknowledgement Reminder</field>
         <field name="model_id" ref="model_lab_report_dispatch"/>
@@ -96,6 +106,16 @@
         <field name="model_id" ref="model_lab_quality_kpi_snapshot"/>
         <field name="state">code</field>
         <field name="code">model._cron_capture_kpi()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_qc_daily_snapshot_capture" model="ir.cron">
+        <field name="name">Lab: Capture QC Daily Snapshots</field>
+        <field name="model_id" ref="model_lab_qc_daily_snapshot"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_capture_recent_trends()</field>
         <field name="interval_number">24</field>
         <field name="interval_type">hours</field>
         <field name="active" eval="True"/>
@@ -179,6 +199,26 @@
         <field name="interval_number">24</field>
         <field name="interval_type">hours</field>
         <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_lab_eqa_closure_report_weekly" model="ir.cron">
+        <field name="name">Lab: Generate EQA Closure Report</field>
+        <field name="model_id" ref="model_lab_eqa_closure_report"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate_periodic_closure()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ir_cron_lab_billing_reconciliation_weekly" model="ir.cron">
+        <field name="name">Lab: Generate Billing Reconciliation</field>
+        <field name="model_id" ref="model_lab_billing_reconciliation"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_generate_weekly_reconciliation()</field>
+        <field name="interval_number">24</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="False"/>
     </record>
 
     <record id="ir_cron_lab_sop_exception_sla_escalate" model="ir.cron">

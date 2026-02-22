@@ -5,7 +5,7 @@ from odoo.exceptions import UserError, ValidationError
 class LabTestRequest(models.Model):
     _name = "lab.test.request"
     _description = "Laboratory Test Request"
-    _inherit = ["mail.thread", "mail.activity.mixin", "portal.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin", "portal.mixin", "lab.master.data.mixin"]
     _order = "id desc"
 
     name = fields.Char(string="Request No.", default="New", readonly=True, copy=False, tracking=True)
@@ -15,17 +15,13 @@ class LabTestRequest(models.Model):
         default=lambda self: self.env.user.partner_id,
         required=True,
         tracking=True,
+        index=True,
     )
-    request_type = fields.Selection(
-        [("individual", "Individual"), ("institution", "Institution")],
-        default="individual",
-        required=True,
-        tracking=True,
-    )
-    client_partner_id = fields.Many2one("res.partner", string="Institution / Client", tracking=True)
-    patient_id = fields.Many2one("res.partner", string="Existing Patient", tracking=True)
+    request_type = fields.Selection(selection="_selection_request_type", default=lambda self: self._default_request_type_code(), required=True, tracking=True, index=True)
+    client_partner_id = fields.Many2one("res.partner", string="Institution / Client", tracking=True, index=True)
+    patient_id = fields.Many2one("res.partner", string="Existing Patient", tracking=True, index=True)
     patient_name = fields.Char(string="Patient Name", tracking=True)
-    patient_identifier = fields.Char(string="Patient ID / Passport")
+    patient_identifier = fields.Char(string="Patient ID / Passport", index=True)
     patient_birthdate = fields.Date(string="Date of Birth")
     patient_gender = fields.Selection(
         [("male", "Male"), ("female", "Female"), ("other", "Other"), ("unknown", "Unknown")],
@@ -33,6 +29,7 @@ class LabTestRequest(models.Model):
     )
     patient_phone = fields.Char(string="Patient Phone")
 
+    physician_partner_id = fields.Many2one("res.partner", string="Physician Contact", tracking=True)
     physician_name = fields.Char(string="Physician")
     requested_collection_date = fields.Datetime(
         string="Requested Collection Time",
@@ -40,24 +37,8 @@ class LabTestRequest(models.Model):
         tracking=True,
     )
     preferred_template_id = fields.Many2one("lab.report.template", string="Preferred Report Template")
-    priority = fields.Selection(
-        [("routine", "Routine"), ("urgent", "Urgent"), ("stat", "STAT")],
-        default="routine",
-        required=True,
-        tracking=True,
-    )
-    sample_type = fields.Selection(
-        [
-            ("blood", "Blood"),
-            ("urine", "Urine"),
-            ("stool", "Stool"),
-            ("swab", "Swab"),
-            ("serum", "Serum"),
-            ("other", "Other"),
-        ],
-        default="blood",
-        required=True,
-    )
+    priority = fields.Selection(selection="_selection_priority", default=lambda self: self._default_priority_code(), required=True, tracking=True)
+    sample_type = fields.Selection(selection="_selection_sample_type", default=lambda self: self._default_sample_type_code(), required=True)
     fasting_required = fields.Boolean(default=False)
     clinical_note = fields.Text(string="Clinical Note")
 
@@ -75,6 +56,7 @@ class LabTestRequest(models.Model):
         ],
         default="draft",
         tracking=True,
+        index=True,
     )
 
     line_ids = fields.One2many("lab.test.request.line", "request_id", string="Requested Tests")
@@ -104,15 +86,15 @@ class LabTestRequest(models.Model):
     quote_last_sent_by_id = fields.Many2one("res.users", readonly=True)
     quote_auto_reminder_count = fields.Integer(default=0, readonly=True)
 
-    submitted_at = fields.Datetime(readonly=True)
+    submitted_at = fields.Datetime(readonly=True, index=True)
     submitted_by_id = fields.Many2one("res.users", readonly=True)
     triaged_at = fields.Datetime(readonly=True)
     triaged_by_id = fields.Many2one("res.users", readonly=True)
-    approved_at = fields.Datetime(readonly=True)
+    approved_at = fields.Datetime(readonly=True, index=True)
     approved_by_id = fields.Many2one("res.users", readonly=True)
     rejected_at = fields.Datetime(readonly=True)
     rejected_by_id = fields.Many2one("res.users", readonly=True)
-    completed_at = fields.Datetime(readonly=True)
+    completed_at = fields.Datetime(readonly=True, index=True)
 
     rejection_reason = fields.Text()
     cancel_reason = fields.Text()
@@ -124,6 +106,32 @@ class LabTestRequest(models.Model):
     def _compute_sample_count(self):
         for rec in self:
             rec.sample_count = len(rec.sample_ids)
+
+    def init(self):
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_lab_test_request_company_state_created
+            ON lab_test_request (company_id, state, create_date DESC)
+            """
+        )
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_lab_test_request_requester_state
+            ON lab_test_request (requester_partner_id, state)
+            """
+        )
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_lab_test_request_client_state
+            ON lab_test_request (client_partner_id, state)
+            """
+        )
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_lab_test_request_patient_identifier_company
+            ON lab_test_request (patient_identifier, company_id)
+            """
+        )
 
     @api.depends("quote_revision_ids")
     def _compute_quote_revision_count(self):
@@ -220,6 +228,12 @@ class LabTestRequest(models.Model):
         for rec in self:
             if not rec.line_ids:
                 raise UserError(_("Please add at least one test item."))
+
+    @api.onchange("physician_partner_id")
+    def _onchange_physician_partner_id(self):
+        for rec in self:
+            if rec.physician_partner_id:
+                rec.physician_name = rec.physician_partner_id.name
 
     def action_submit(self):
         self._ensure_lines()
@@ -430,35 +444,56 @@ class LabTestRequest(models.Model):
 
             patient = rec._prepare_patient_partner()
             payloads = rec._expanded_service_payloads()
+            grouped_payloads = {}
+            for p in payloads:
+                specimen_ref = (p.get("specimen_ref") or "SP1").strip() or "SP1"
+                specimen_sample_type = p.get("specimen_sample_type") or rec.sample_type
+                specimen_barcode = (p.get("specimen_barcode") or "").strip()
+                key = (specimen_ref, specimen_sample_type, specimen_barcode)
+                grouped_payloads.setdefault(key, [])
+                grouped_payloads[key].append(p)
 
-            sample_vals = {
-                "patient_id": patient.id,
-                "client_id": rec.client_partner_id.id or rec.requester_partner_id.commercial_partner_id.id,
-                "physician_name": rec.physician_name,
-                "priority": rec.priority,
-                "collection_date": rec.requested_collection_date,
-                "report_template_id": rec.preferred_template_id.id,
-                "note": rec.clinical_note,
-                "request_id": rec.id,
-                "analysis_ids": [
-                    (
-                        0,
-                        0,
-                        {
-                            "service_id": p["service_id"],
-                            "state": "pending",
-                            "result_note": p.get("result_note"),
-                        },
-                    )
-                    for p in payloads
-                ],
-            }
-            sample = sample_model.create(sample_vals)
+            created_samples = self.env["lab.sample"]
+            for (specimen_ref, specimen_sample_type, specimen_barcode), specimen_payloads in grouped_payloads.items():
+                note = rec.clinical_note or ""
+                if specimen_ref:
+                    note = ("%s\n[%s]" % (note, specimen_ref)).strip()
+                sample_vals = {
+                    "patient_id": patient.id,
+                    "client_id": rec.client_partner_id.id or rec.requester_partner_id.commercial_partner_id.id,
+                    "physician_name": rec.physician_name,
+                    "company_id": rec.company_id.id,
+                    "priority": rec.priority,
+                    "collection_date": rec.requested_collection_date,
+                    "report_template_id": rec.preferred_template_id.id,
+                    "accession_barcode": specimen_barcode or False,
+                    "note": note,
+                    "request_id": rec.id,
+                    "analysis_ids": [
+                        (
+                            0,
+                            0,
+                            {
+                                "service_id": p["service_id"],
+                                "state": "pending",
+                                "result_note": p.get("result_note"),
+                            },
+                        )
+                        for p in specimen_payloads
+                    ],
+                }
+                created_samples |= sample_model.create(sample_vals)
+
             rec.write({"state": "in_progress"})
-            rec._log_timeline("sample_created", _("Sample %(sample)s created") % {"sample": sample.name})
+            rec._log_timeline(
+                "sample_created",
+                _("Created %(count)s sample(s): %(samples)s")
+                % {"count": len(created_samples), "samples": ", ".join(created_samples.mapped("name"))},
+            )
             rec._close_sample_creation_activity()
             rec.message_post(
-                body=_("Generated sample <b>%(sample)s</b> from request.") % {"sample": sample.name},
+                body=_("Generated sample(s) <b>%(samples)s</b> from request.")
+                % {"samples": ", ".join(created_samples.mapped("name"))},
                 subtype_xmlid="mail.mt_note",
             )
         return True
@@ -574,6 +609,7 @@ class LabTestRequest(models.Model):
 class LabTestRequestLine(models.Model):
     _name = "lab.test.request.line"
     _description = "Laboratory Test Request Line"
+    _inherit = ["lab.master.data.mixin"]
     _order = "sequence, id"
 
     request_id = fields.Many2one("lab.test.request", required=True, ondelete="cascade")
@@ -582,6 +618,14 @@ class LabTestRequestLine(models.Model):
     line_type = fields.Selection(
         [("service", "Service"), ("profile", "Profile")],
         default="service",
+        required=True,
+    )
+    specimen_ref = fields.Char(string="Specimen Ref", default="SP1", required=True)
+    specimen_barcode = fields.Char(string="Container Code")
+    specimen_sample_type = fields.Selection(
+        selection="_selection_sample_type",
+        string="Specimen Type",
+        default=lambda self: self._default_sample_type_code(),
         required=True,
     )
     service_id = fields.Many2one("lab.service", string="Service")
@@ -644,11 +688,15 @@ class LabTestRequestLine(models.Model):
                 prices = rec.profile_id.line_ids.mapped("service_id.list_price")
                 rec.unit_price = sum(prices)
 
-    @api.constrains("line_type", "service_id", "profile_id", "quantity")
+    @api.constrains("line_type", "service_id", "profile_id", "quantity", "specimen_ref", "specimen_sample_type")
     def _check_line(self):
         for rec in self:
             if rec.quantity <= 0:
                 raise ValidationError(_("Quantity must be greater than 0."))
+            if not (rec.specimen_ref or "").strip():
+                raise ValidationError(_("Specimen Ref is required."))
+            if not rec.specimen_sample_type:
+                raise ValidationError(_("Specimen Type is required."))
             if rec.line_type == "service" and not rec.service_id:
                 raise ValidationError(_("Service line must select Service."))
             if rec.line_type == "profile" and not rec.profile_id:
@@ -662,6 +710,9 @@ class LabTestRequestLine(models.Model):
                 payloads.append(
                     {
                         "service_id": self.service_id.id,
+                        "specimen_ref": self.specimen_ref,
+                        "specimen_barcode": self.specimen_barcode,
+                        "specimen_sample_type": self.specimen_sample_type,
                         "result_note": self.note
                         or (
                             _("Requested via test request line #%s") % self.id
@@ -679,6 +730,9 @@ class LabTestRequestLine(models.Model):
                 payloads.append(
                     {
                         "service_id": service.id,
+                        "specimen_ref": self.specimen_ref,
+                        "specimen_barcode": self.specimen_barcode,
+                        "specimen_sample_type": self.specimen_sample_type,
                         "result_note": self.note
                         or (
                             _("Requested via profile %(profile)s line %(line)s")

@@ -101,6 +101,7 @@
                             <field name="patient_birthdate"/>
                             <field name="patient_gender"/>
                             <field name="patient_phone"/>
+                            <field name="physician_partner_id"/>
                             <field name="physician_name"/>
                             <field name="preferred_template_id"/>
                         </group>
@@ -135,6 +136,9 @@
                             <field name="line_ids">
                                 <list editable="bottom">
                                     <field name="sequence" widget="handle"/>
+                                    <field name="specimen_ref"/>
+                                    <field name="specimen_sample_type"/>
+                                    <field name="specimen_barcode"/>
                                     <field name="line_type"/>
                                     <field name="service_id" invisible="line_type != 'service'"/>
                                     <field name="profile_id" invisible="line_type != 'profile'"/>

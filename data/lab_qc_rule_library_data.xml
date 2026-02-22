@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_qc_rule_13s" model="lab.qc.rule.library">
+        <field name="name">Westgard 13s</field>
+        <field name="code">13s</field>
+        <field name="severity">reject</field>
+        <field name="description">Reject run when one control exceeds 3 SD from target.</field>
+    </record>
+    <record id="lab_qc_rule_12s" model="lab.qc.rule.library">
+        <field name="name">Westgard 12s</field>
+        <field name="code">12s</field>
+        <field name="severity">warning</field>
+        <field name="description">Warning when one control exceeds 2 SD from target.</field>
+    </record>
+    <record id="lab_qc_rule_22s" model="lab.qc.rule.library">
+        <field name="name">Westgard 22s</field>
+        <field name="code">22s</field>
+        <field name="severity">reject</field>
+        <field name="description">Reject when two consecutive controls exceed 2 SD on same side.</field>
+    </record>
+    <record id="lab_qc_rule_r4s" model="lab.qc.rule.library">
+        <field name="name">Westgard R4s</field>
+        <field name="code">R4s</field>
+        <field name="severity">reject</field>
+        <field name="description">Reject when range between consecutive controls exceeds 4 SD.</field>
+    </record>
+    <record id="lab_qc_rule_41s" model="lab.qc.rule.library">
+        <field name="name">Westgard 41s</field>
+        <field name="code">41s</field>
+        <field name="severity">warning</field>
+        <field name="description">Warning when four consecutive controls exceed 1 SD on same side.</field>
+    </record>
+    <record id="lab_qc_rule_10x" model="lab.qc.rule.library">
+        <field name="name">Westgard 10x</field>
+        <field name="code">10x</field>
+        <field name="severity">warning</field>
+        <field name="description">Warning when ten consecutive controls are on one side of mean.</field>
+    </record>
+</odoo>

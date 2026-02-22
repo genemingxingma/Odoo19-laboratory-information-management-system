@@ -17,7 +17,22 @@
                         </group>
                         <group>
                             <field name="lab_turnaround_note" invisible="not is_lab_test_product"/>
+                            <field name="lab_package_enabled" invisible="not is_lab_test_product"/>
+                            <field name="lab_package_price_strategy" invisible="not is_lab_test_product or not lab_package_enabled"/>
                         </group>
+                    </group>
+                    <group invisible="not is_lab_test_product or not lab_package_enabled">
+                        <field name="lab_package_line_ids">
+                            <list editable="bottom">
+                                <field name="sequence"/>
+                                <field name="line_type"/>
+                                <field name="service_id" invisible="line_type != 'service'"/>
+                                <field name="profile_id" invisible="line_type != 'profile'"/>
+                                <field name="quantity"/>
+                                <field name="price_weight"/>
+                                <field name="note"/>
+                            </list>
+                        </field>
                     </group>
                 </page>
             </xpath>

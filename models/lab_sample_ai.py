@@ -31,6 +31,7 @@ class LabSampleAIInterpretation(models.Model):
         [
             ("manual", "Manual"),
             ("release", "Auto on Release"),
+            ("queue", "Queued Worker"),
             ("portal", "Portal"),
             ("cron", "Scheduled Retry"),
         ],
@@ -49,6 +50,20 @@ class LabSampleAIInterpretation(models.Model):
     response_text = fields.Text()
     error_text = fields.Text()
     generated_at = fields.Datetime(default=fields.Datetime.now, required=True, index=True)
+
+    def init(self):
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_lab_sample_ai_history_sample_generated
+            ON lab_sample_ai_interpretation (sample_id, generated_at DESC)
+            """
+        )
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_lab_sample_ai_history_state_generated
+            ON lab_sample_ai_interpretation (state, generated_at DESC)
+            """
+        )
 
 
 class LabSampleAIReviewLog(models.Model):
@@ -70,6 +85,14 @@ class LabSampleAIReviewLog(models.Model):
     note = fields.Text()
     reviewed_at = fields.Datetime(default=fields.Datetime.now, required=True, index=True)
 
+    def init(self):
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_lab_sample_ai_review_sample_reviewed
+            ON lab_sample_ai_review_log (sample_id, reviewed_at DESC)
+            """
+        )
+
 
 class LabSample(models.Model):
     _inherit = "lab.sample"
@@ -77,6 +100,7 @@ class LabSample(models.Model):
     ai_interpretation_state = fields.Selection(
         [
             ("none", "Not Generated"),
+            ("queued", "Queued"),
             ("running", "Running"),
             ("done", "Done"),
             ("error", "Error"),
@@ -122,6 +146,21 @@ class LabSample(models.Model):
         readonly=True,
     )
     ai_interpretation_history_count = fields.Integer(compute="_compute_ai_interpretation_history_count")
+
+    def _selection_label(self, field_name, value):
+        """Return selection label safely for static/callable/method-name selections."""
+        if not value:
+            return ""
+        field = self._fields.get(field_name)
+        if not field:
+            return value
+        selection = field.selection
+        if isinstance(selection, str):
+            selection = getattr(self, selection)()
+        elif callable(selection):
+            selection = selection(self.env)
+        mapping = dict(selection or [])
+        return mapping.get(value, value)
 
     def _compute_ai_interpretation_history_count(self):
         for rec in self:
@@ -192,9 +231,23 @@ class LabSample(models.Model):
         self.ensure_one()
         analysis_lines = []
         abnormal_lines = []
+
+        def _line_label(line, field_name, value):
+            if not value:
+                return ""
+            field = line._fields.get(field_name)
+            if not field:
+                return value
+            selection = field.selection
+            if isinstance(selection, str):
+                selection = getattr(line, selection)()
+            elif callable(selection):
+                selection = selection(line.env)
+            return dict(selection or []).get(value, value)
+
         for line in self.analysis_ids:
-            flag = dict(line._fields["result_flag"].selection).get(line.result_flag) if line.result_flag else "N/A"
-            state = dict(line._fields["state"].selection).get(line.state) if line.state else "N/A"
+            flag = _line_label(line, "result_flag", line.result_flag) if line.result_flag else "N/A"
+            state = _line_label(line, "state", line.state) if line.state else "N/A"
             item = "- {service}: result={result} {unit}; range={rmin}-{rmax}; flag={flag}; status={state}".format(
                 service=line.service_id.name,
                 result=line.result_value or "N/A",
@@ -236,8 +289,8 @@ class LabSample(models.Model):
             client_name=self.client_id.name or "",
             physician_name=self.physician_name or "",
             report_template=self.report_template_id.name or "",
-            state=dict(self._fields["state"].selection).get(self.state) if self.state else "",
-            priority=dict(self._fields["priority"].selection).get(self.priority) if self.priority else "",
+            state=self._selection_label("state", self.state) if self.state else "",
+            priority=self._selection_label("priority", self.priority) if self.priority else "",
             collection_date=self.collection_date or "",
             verified_date=self.verified_date or "",
             report_date=self.report_date or "",
@@ -255,8 +308,8 @@ class LabSample(models.Model):
                 "client_name": self.client_id.name or "",
                 "physician_name": self.physician_name or "",
                 "report_template": self.report_template_id.name or "",
-                "priority": dict(self._fields["priority"].selection).get(self.priority) if self.priority else "",
-                "state": dict(self._fields["state"].selection).get(self.state) if self.state else "",
+                "priority": self._selection_label("priority", self.priority) if self.priority else "",
+                "state": self._selection_label("state", self.state) if self.state else "",
                 "collection_date": self.collection_date or "",
                 "report_date": self.report_date or "",
                 "verified_date": self.verified_date or "",
@@ -334,6 +387,97 @@ class LabSample(models.Model):
             }
         )
 
+    def _get_ai_provider_and_model(self):
+        self.ensure_one()
+        config = self.env["ir.config_parameter"].sudo()
+        provider = (config.get_param("laboratory_management.ai_provider") or "openai").strip()
+        if provider == "openai_compatible":
+            model_name = (config.get_param("laboratory_management.openai_compatible_model") or "").strip()
+            if not model_name:
+                model_name = (config.get_param("laboratory_management.openai_model") or "gpt-4.1-mini").strip()
+        elif provider == "ollama":
+            model_name = (config.get_param("laboratory_management.ollama_model") or "llama3.1:8b").strip()
+        else:
+            provider = "openai"
+            model_name = (config.get_param("laboratory_management.openai_model") or "gpt-4.1-mini").strip()
+        return provider, model_name
+
+    def _call_ai_provider(self, *, prompt, system_prompt, temperature):
+        self.ensure_one()
+        config = self.env["ir.config_parameter"].sudo()
+        provider, model_name = self._get_ai_provider_and_model()
+        timeout_seconds = int((config.get_param("laboratory_management.ai_timeout_seconds") or "120").strip())
+
+        if provider == "ollama":
+            base_url = (config.get_param("laboratory_management.ollama_base_url") or "http://127.0.0.1:11434/api/chat").strip()
+            body = {
+                "model": model_name,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt},
+                ],
+                "stream": False,
+                "options": {
+                    "temperature": temperature,
+                },
+            }
+            response = requests.post(base_url, json=body, timeout=timeout_seconds)
+            if response.status_code >= 400:
+                raise UserError(_("Ollama API request failed: %s") % response.text[:500])
+            result = response.json() if response.content else {}
+            message = result.get("message", {}) if isinstance(result, dict) else {}
+            content = message.get("content") or result.get("response")
+            if not content:
+                raise UserError(_("Ollama API returned empty interpretation."))
+            usage = {
+                "prompt_tokens": result.get("prompt_eval_count") or 0,
+                "completion_tokens": result.get("eval_count") or 0,
+                "total_tokens": (result.get("prompt_eval_count") or 0) + (result.get("eval_count") or 0),
+            }
+            return content, result.get("model") or model_name, usage
+
+        if provider == "openai_compatible":
+            api_key = (config.get_param("laboratory_management.openai_compatible_api_key") or "").strip()
+            base_url = (
+                config.get_param("laboratory_management.openai_compatible_base_url")
+                or "http://127.0.0.1:8000/v1/chat/completions"
+            ).strip()
+        else:
+            api_key = (config.get_param("laboratory_management.openai_api_key") or "").strip()
+            base_url = (
+                config.get_param("laboratory_management.openai_base_url") or "https://api.openai.com/v1/chat/completions"
+            ).strip()
+            if not api_key:
+                raise UserError(
+                    _(
+                        "OpenAI API key is not configured. Set system parameter: "
+                        "laboratory_management.openai_api_key"
+                    )
+                )
+
+        headers = {"Content-Type": "application/json"}
+        if api_key:
+            headers["Authorization"] = "Bearer %s" % api_key
+        body = {
+            "model": model_name,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": temperature,
+        }
+
+        response = requests.post(base_url, headers=headers, json=body, timeout=timeout_seconds)
+        if response.status_code >= 400:
+            raise UserError(_("AI API request failed: %s") % response.text[:500])
+
+        result = response.json() if response.content else {}
+        content = result.get("choices", [{}])[0].get("message", {}).get("content") if isinstance(result, dict) else False
+        if not content:
+            raise UserError(_("AI API returned empty interpretation."))
+        usage = result.get("usage", {}) if isinstance(result, dict) else {}
+        return content, model_name, usage
+
     def _generate_ai_interpretation_internal(self):
         self.ensure_one()
         if self.state not in ("verified", "reported"):
@@ -347,21 +491,6 @@ class LabSample(models.Model):
         if trigger_source == "portal" and self.ai_review_state == "approved":
             raise UserError(_("AI interpretation is locked after approval and cannot be refreshed from portal."))
         started = time.monotonic()
-
-        config = self.env["ir.config_parameter"].sudo()
-        api_key = (config.get_param("laboratory_management.openai_api_key") or "").strip()
-        model_name = (config.get_param("laboratory_management.openai_model") or "gpt-4.1-mini").strip()
-        base_url = (
-            config.get_param("laboratory_management.openai_base_url") or "https://api.openai.com/v1/chat/completions"
-        ).strip()
-
-        if not api_key:
-            raise UserError(
-                _(
-                    "OpenAI API key is not configured. Set system parameter: "
-                    "laboratory_management.openai_api_key"
-                )
-            )
 
         prompt, output_lang = self._build_ai_prompt()
         system_prompt = (
@@ -378,29 +507,11 @@ class LabSample(models.Model):
             }
         )
 
-        headers = {
-            "Authorization": "Bearer %s" % api_key,
-            "Content-Type": "application/json",
-        }
-        body = {
-            "model": model_name,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt},
-            ],
-            "temperature": temperature,
-        }
-
-        response = requests.post(base_url, headers=headers, json=body, timeout=120)
-        if response.status_code >= 400:
-            raise UserError(_("OpenAI API request failed: %s") % response.text[:500])
-
-        result = response.json()
-        content = result.get("choices", [{}])[0].get("message", {}).get("content") if isinstance(result, dict) else False
-        if not content:
-            raise UserError(_("OpenAI API returned empty interpretation."))
-
-        usage = result.get("usage", {}) if isinstance(result, dict) else {}
+        content, model_name, usage = self._call_ai_provider(
+            prompt=prompt,
+            system_prompt=system_prompt,
+            temperature=temperature,
+        )
         prompt_tokens = usage.get("prompt_tokens") or 0
         completion_tokens = usage.get("completion_tokens") or 0
         total_tokens = usage.get("total_tokens") or 0
@@ -476,10 +587,7 @@ class LabSample(models.Model):
                 rec._create_ai_history(
                     state="error",
                     trigger_source=trigger_source,
-                    model_name=(
-                        self.env["ir.config_parameter"].sudo().get_param("laboratory_management.openai_model")
-                        or "gpt-4.1-mini"
-                    ),
+                    model_name=rec._get_ai_provider_and_model()[1],
                     output_language=output_lang,
                     duration_ms=duration_ms,
                     system_prompt=system_prompt,
@@ -488,6 +596,22 @@ class LabSample(models.Model):
                 )
                 if not silent:
                     raise
+        return True
+
+    def action_queue_ai_interpretation(self, force=False, trigger_source="release"):
+        now = fields.Datetime.now()
+        for rec in self:
+            if rec.state not in ("verified", "reported"):
+                continue
+            if rec.ai_interpretation_state == "done" and rec.ai_interpretation_text and not force:
+                continue
+            rec.write(
+                {
+                    "ai_interpretation_state": "queued",
+                    "ai_interpretation_error": False,
+                    "ai_interpretation_updated_at": now,
+                }
+            )
         return True
 
     def action_clear_ai_interpretation(self):
@@ -543,16 +667,41 @@ class LabSample(models.Model):
 
     def action_release_report(self):
         result = super().action_release_report()
+        config = self.env["ir.config_parameter"].sudo()
+        async_on_release = (config.get_param("laboratory_management.ai_async_on_release", "1") or "1").strip()
+        use_async = async_on_release not in ("0", "false", "False")
         for rec in self:
             template = rec.report_template_id
             if not template or not template.ai_interpretation_enabled or not template.ai_auto_generate_on_release:
                 continue
+            if use_async:
+                rec.action_queue_ai_interpretation(force=True, trigger_source="release")
+            else:
+                rec.with_context(
+                    ai_silent=True,
+                    force_ai_regenerate=True,
+                    ai_trigger_source="release",
+                ).action_generate_ai_interpretation()
+        return result
+
+    @api.model
+    def _cron_process_ai_interpretation_queue(self):
+        config = self.env["ir.config_parameter"].sudo()
+        limit = int((config.get_param("laboratory_management.ai_queue_batch_size") or "50").strip())
+        queued = self.search(
+            [
+                ("state", "in", ("verified", "reported")),
+                ("ai_interpretation_state", "=", "queued"),
+            ],
+            limit=limit,
+            order="ai_interpretation_updated_at asc, id asc",
+        )
+        for rec in queued:
             rec.with_context(
                 ai_silent=True,
                 force_ai_regenerate=True,
-                ai_trigger_source="release",
+                ai_trigger_source="queue",
             ).action_generate_ai_interpretation()
-        return result
 
     @api.model
     def _cron_retry_ai_interpretation_errors(self):
@@ -597,3 +746,86 @@ class LabSample(models.Model):
                 }
             )
         return json.dumps(data, ensure_ascii=False, indent=2)
+
+
+class ResConfigSettingsAI(models.TransientModel):
+    _inherit = "res.config.settings"
+
+    lab_ai_provider = fields.Selection(
+        [
+            ("openai", "OpenAI"),
+            ("openai_compatible", "OpenAI-Compatible"),
+            ("ollama", "Ollama"),
+        ],
+        string="AI Provider",
+        config_parameter="laboratory_management.ai_provider",
+        default="openai",
+    )
+    lab_openai_api_key = fields.Char(
+        string="OpenAI API Key",
+        config_parameter="laboratory_management.openai_api_key",
+    )
+    lab_openai_model = fields.Char(
+        string="OpenAI Model",
+        config_parameter="laboratory_management.openai_model",
+        default="gpt-4.1-mini",
+    )
+    lab_openai_base_url = fields.Char(
+        string="OpenAI Base URL",
+        config_parameter="laboratory_management.openai_base_url",
+        default="https://api.openai.com/v1/chat/completions",
+    )
+    lab_openai_compatible_api_key = fields.Char(
+        string="OpenAI-Compatible API Key",
+        config_parameter="laboratory_management.openai_compatible_api_key",
+    )
+    lab_openai_compatible_model = fields.Char(
+        string="OpenAI-Compatible Model",
+        config_parameter="laboratory_management.openai_compatible_model",
+        default="gpt-4.1-mini",
+    )
+    lab_openai_compatible_base_url = fields.Char(
+        string="OpenAI-Compatible Base URL",
+        config_parameter="laboratory_management.openai_compatible_base_url",
+        default="http://127.0.0.1:8000/v1/chat/completions",
+    )
+    lab_ollama_model = fields.Char(
+        string="Ollama Model",
+        config_parameter="laboratory_management.ollama_model",
+        default="llama3.1:8b",
+    )
+    lab_ollama_base_url = fields.Char(
+        string="Ollama Base URL",
+        config_parameter="laboratory_management.ollama_base_url",
+        default="http://127.0.0.1:11434/api/chat",
+    )
+    lab_ai_timeout_seconds = fields.Integer(
+        string="AI Request Timeout (seconds)",
+        config_parameter="laboratory_management.ai_timeout_seconds",
+        default=120,
+    )
+    lab_ai_retry_enabled = fields.Boolean(
+        string="Retry Failed AI Interpretation Jobs",
+        config_parameter="laboratory_management.ai_retry_enabled",
+        default=True,
+    )
+    lab_ai_retry_limit = fields.Integer(
+        string="Retry Batch Size",
+        config_parameter="laboratory_management.ai_retry_limit",
+        default=20,
+    )
+    lab_ai_async_on_release = fields.Boolean(
+        string="Generate AI Asynchronously on Report Release",
+        config_parameter="laboratory_management.ai_async_on_release",
+        default=True,
+    )
+    lab_ai_queue_batch_size = fields.Integer(
+        string="AI Queue Batch Size",
+        config_parameter="laboratory_management.ai_queue_batch_size",
+        default=50,
+    )
+    lab_report_pdf_cache_on_release = fields.Boolean(
+        string="Cache Report PDF on Release",
+        config_parameter="laboratory_management.report_pdf_cache_on_release",
+        default=True,
+    )

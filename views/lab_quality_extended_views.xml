@@ -211,7 +211,107 @@
         <field name="view_mode">list,form</field>
     </record>
 
+    <record id="view_lab_eqa_closure_report_list" model="ir.ui.view">
+        <field name="name">lab.eqa.closure.report.list</field>
+        <field name="model">lab.eqa.closure.report</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'published'" decoration-warning="state == 'generated'">
+                <field name="name"/>
+                <field name="period_start"/>
+                <field name="period_end"/>
+                <field name="round_total"/>
+                <field name="round_closed"/>
+                <field name="closure_rate" widget="percentage"/>
+                <field name="on_time_submission_rate" widget="percentage"/>
+                <field name="pass_rate" widget="percentage"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_eqa_closure_report_form" model="ir.ui.view">
+        <field name="name">lab.eqa.closure.report.form</field>
+        <field name="model">lab.eqa.closure.report</field>
+        <field name="arch" type="xml">
+            <form string="EQA Closure Report">
+                <header>
+                    <button name="action_generate" type="object" string="Generate" class="btn-primary"/>
+                    <button name="action_publish" type="object" string="Publish" invisible="state != 'generated'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,published"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                        </group>
+                        <group>
+                            <field name="generated_at" readonly="1"/>
+                            <field name="generated_by_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Summary">
+                        <group>
+                            <field name="round_total" readonly="1"/>
+                            <field name="round_submitted" readonly="1"/>
+                            <field name="round_closed" readonly="1"/>
+                            <field name="closure_rate" widget="percentage" readonly="1"/>
+                            <field name="on_time_submission_rate" widget="percentage" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="result_total" readonly="1"/>
+                            <field name="result_fail" readonly="1"/>
+                            <field name="pass_rate" widget="percentage" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Scheme Breakdown">
+                            <field name="line_ids" readonly="1">
+                                <list>
+                                    <field name="scheme_id"/>
+                                    <field name="round_total"/>
+                                    <field name="round_closed"/>
+                                    <field name="on_time_submission_count"/>
+                                    <field name="closure_rate" widget="percentage"/>
+                                    <field name="result_total"/>
+                                    <field name="result_fail"/>
+                                    <field name="pass_rate" widget="percentage"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group>
+                        <field name="conclusion"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_eqa_closure_report_search" model="ir.ui.view">
+        <field name="name">lab.eqa.closure.report.search</field>
+        <field name="model">lab.eqa.closure.report</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="state"/>
+                <filter name="f_generated" string="Generated" domain="[('state','=','generated')]"/>
+                <filter name="f_published" string="Published" domain="[('state','=','published')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_eqa_closure_report" model="ir.actions.act_window">
+        <field name="name">EQA Closure Reports</field>
+        <field name="res_model">lab.eqa.closure.report</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_eqa_closure_report_search"/>
+    </record>
+
     <menuitem id="menu_lab_eqa_scheme" name="EQA Schemes" parent="menu_laboratory_quality" action="action_lab_eqa_scheme" sequence="34"/>
     <menuitem id="menu_lab_eqa_round" name="EQA Rounds" parent="menu_laboratory_quality" action="action_lab_eqa_round" sequence="35"/>
-    <menuitem id="menu_lab_compliance_snapshot" name="Compliance Reports" parent="menu_laboratory_quality" action="action_lab_compliance_snapshot" sequence="36"/>
+    <menuitem id="menu_lab_eqa_closure_report" name="EQA Closure Reports" parent="menu_laboratory_quality" action="action_lab_eqa_closure_report" sequence="36"/>
+    <menuitem id="menu_lab_compliance_snapshot" name="Compliance Reports" parent="menu_laboratory_quality" action="action_lab_compliance_snapshot" sequence="37"/>
 </odoo>

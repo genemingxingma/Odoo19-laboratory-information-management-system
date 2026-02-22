@@ -66,6 +66,14 @@
         <field name="view_mode">list,form</field>
     </record>
 
+    <record id="action_lab_ai_settings" model="ir.actions.act_window">
+        <field name="name">AI Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'module': 'laboratory_management'}</field>
+    </record>
+
     <menuitem
         id="menu_lab_sample_ai_interpretation"
         name="AI Interpretations"
@@ -74,4 +82,72 @@
         sequence="50"
         groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"
     />
+
+    <menuitem
+        id="menu_lab_ai_settings"
+        name="AI Settings"
+        parent="menu_laboratory_config"
+        action="action_lab_ai_settings"
+        sequence="15"
+        groups="laboratory_management.group_lab_manager"
+    />
+
+    <record id="view_res_config_settings_inherit_lab_ai" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.lab.ai</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Laboratory" name="laboratory_management_ai">
+                    <block title="AI Interpretation">
+                        <setting id="lab_ai_provider_setting" help="Select provider used for laboratory AI interpretation generation.">
+                            <field name="lab_ai_provider"/>
+                        </setting>
+                        <setting id="lab_openai_api_key_setting" help="OpenAI API key used by laboratory AI interpretation generation." invisible="lab_ai_provider != 'openai'">
+                            <field name="lab_openai_api_key" password="True" placeholder="sk-..."/>
+                        </setting>
+                        <setting id="lab_openai_model_setting" help="OpenAI chat model for report interpretation." invisible="lab_ai_provider != 'openai'">
+                            <field name="lab_openai_model" placeholder="gpt-4.1-mini"/>
+                        </setting>
+                        <setting id="lab_openai_base_url_setting" help="OpenAI Chat Completions endpoint URL." invisible="lab_ai_provider != 'openai'">
+                            <field name="lab_openai_base_url" placeholder="https://api.openai.com/v1/chat/completions"/>
+                        </setting>
+                        <setting id="lab_openai_compatible_api_key_setting" help="API key for OpenAI-compatible gateway (optional if gateway does not require auth)." invisible="lab_ai_provider != 'openai_compatible'">
+                            <field name="lab_openai_compatible_api_key" password="True" placeholder="Optional"/>
+                        </setting>
+                        <setting id="lab_openai_compatible_model_setting" help="Model name for OpenAI-compatible endpoint." invisible="lab_ai_provider != 'openai_compatible'">
+                            <field name="lab_openai_compatible_model" placeholder="gpt-4.1-mini"/>
+                        </setting>
+                        <setting id="lab_openai_compatible_base_url_setting" help="OpenAI-compatible Chat Completions endpoint URL." invisible="lab_ai_provider != 'openai_compatible'">
+                            <field name="lab_openai_compatible_base_url" placeholder="http://127.0.0.1:8000/v1/chat/completions"/>
+                        </setting>
+                        <setting id="lab_ollama_model_setting" help="Local Ollama model name, for example: llama3.1:8b." invisible="lab_ai_provider != 'ollama'">
+                            <field name="lab_ollama_model" placeholder="llama3.1:8b"/>
+                        </setting>
+                        <setting id="lab_ollama_base_url_setting" help="Ollama chat endpoint URL." invisible="lab_ai_provider != 'ollama'">
+                            <field name="lab_ollama_base_url" placeholder="http://127.0.0.1:11434/api/chat"/>
+                        </setting>
+                        <setting id="lab_ai_timeout_seconds_setting" help="Maximum waiting time for one AI request.">
+                            <field name="lab_ai_timeout_seconds"/>
+                        </setting>
+                        <setting id="lab_ai_retry_enabled_setting" help="Automatically retry failed AI interpretation jobs by scheduled task.">
+                            <field name="lab_ai_retry_enabled"/>
+                        </setting>
+                        <setting id="lab_ai_retry_limit_setting" help="Maximum failed samples retried per scheduled run.">
+                            <field name="lab_ai_retry_limit"/>
+                        </setting>
+                        <setting id="lab_ai_async_on_release_setting" help="Queue AI generation during report release to reduce transaction latency.">
+                            <field name="lab_ai_async_on_release"/>
+                        </setting>
+                        <setting id="lab_ai_queue_batch_size_setting" help="Maximum queued AI items processed per scheduled run.">
+                            <field name="lab_ai_queue_batch_size"/>
+                        </setting>
+                        <setting id="lab_report_pdf_cache_on_release_setting" help="Generate and cache PDF once at release so portal download can reuse attachment.">
+                            <field name="lab_report_pdf_cache_on_release"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
 </odoo>

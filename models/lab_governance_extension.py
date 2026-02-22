@@ -45,7 +45,7 @@ class LabDepartmentExceptionTemplate(models.Model):
     department = fields.Selection(DEPARTMENTS, required=True)
     sample_type = fields.Selection(
         [
-            ("blood", "Blood"),
+            ("blood", "Whole Blood"),
             ("urine", "Urine"),
             ("stool", "Stool"),
             ("swab", "Swab"),

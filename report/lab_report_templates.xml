@@ -1,51 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <template id="report_lab_pdf_styles">
+        <style type="text/css">
+            .lab-report {
+                font-size: 12px;
+                color: #1f2937;
+            }
+            .lab-title {
+                margin: 0 0 12px 0;
+                font-size: 22px;
+                font-weight: 700;
+                color: #0f3c73;
+                letter-spacing: 0.2px;
+            }
+            .lab-subtitle {
+                margin: -8px 0 12px 0;
+                font-size: 11px;
+                color: #64748b;
+            }
+            .lab-label {
+                color: #6b7280;
+                width: 18%;
+                white-space: nowrap;
+            }
+            .lab-value {
+                font-weight: 600;
+                color: #111827;
+            }
+            .lab-chip {
+                display: inline-block;
+                padding: 2px 8px;
+                border: 1px solid #dbeafe;
+                background: #eff6ff;
+                color: #1d4ed8;
+                border-radius: 999px;
+                font-size: 10px;
+            }
+            .lab-section {
+                margin-top: 12px;
+                border: 1px solid #d7dde5;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            .lab-section-title {
+                background: #f8fafc;
+                color: #0f172a;
+                font-weight: 700;
+                font-size: 12px;
+                padding: 8px 10px;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            .lab-section-body {
+                padding: 8px 10px;
+            }
+            .lab-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 11.5px;
+            }
+            .lab-table th {
+                background: #f8fafc;
+                color: #334155;
+                font-weight: 700;
+                border-bottom: 1px solid #dbe1ea;
+                padding: 7px 8px;
+                text-align: left;
+            }
+            .lab-table td {
+                border-bottom: 1px solid #eef2f7;
+                border-right: 1px solid #eef2f7;
+                padding: 7px 8px;
+                vertical-align: top;
+            }
+            .lab-table td:last-child {
+                border-right: none;
+            }
+            .lab-table tr:last-child td {
+                border-bottom: none;
+            }
+            .lab-info-key {
+                width: 16%;
+                color: #6b7280;
+                background: #fbfdff;
+                font-weight: 600;
+            }
+            .lab-info-value {
+                width: 34%;
+                font-weight: 600;
+            }
+            .lab-mono {
+                font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+                font-size: 11px;
+            }
+            .lab-ai-box {
+                white-space: pre-wrap;
+                background: #f9fbff;
+                border: 1px dashed #c7d2fe;
+                border-radius: 6px;
+                padding: 8px;
+                margin-top: 6px;
+            }
+            .lab-footnote {
+                margin-top: 10px;
+                font-size: 10px;
+                color: #6b7280;
+            }
+        </style>
+    </template>
+
     <template id="report_lab_sample_classic_document">
         <t t-call="web.external_layout">
-            <div class="page">
-                <h2><t t-esc="doc.report_template_id.title or 'Laboratory Report'"/></h2>
-                <p><strong>Accession:</strong> <span t-field="doc.name"/></p>
-                <p><strong>Patient:</strong> <span t-field="doc.patient_id"/></p>
-                <p><strong>Client:</strong> <span t-field="doc.client_id"/></p>
-                <p><strong>Physician:</strong> <span t-esc="doc.physician_name or '-'"/></p>
-                <p><strong>Collection Date:</strong> <span t-field="doc.collection_date"/></p>
-                <p><strong>Report Date:</strong> <span t-field="doc.report_date"/></p>
-                <p><strong>Revision:</strong> R<span t-esc="doc.report_revision"/> <t t-if="doc.is_amended">(Amended)</t></p>
-                <p><strong>Verified By:</strong> <span t-field="doc.verified_by_id"/> (<span t-field="doc.verified_date"/>)</p>
-                <p><strong>Technical Review:</strong> <span t-esc="dict(doc._fields['technical_review_state'].selection).get(doc.technical_review_state)"/> - <span t-esc="doc.technical_reviewer_id.name or '-'"/></p>
-                <p><strong>Medical Review:</strong> <span t-esc="dict(doc._fields['medical_review_state'].selection).get(doc.medical_review_state)"/> - <span t-esc="doc.medical_reviewer_id.name or '-'"/></p>
+            <div class="page lab-report">
+                <t t-call="laboratory_management.report_lab_pdf_styles"/>
+                <h2 class="lab-title"><t t-esc="doc.report_template_id.title or 'Laboratory Report'"/></h2>
+                <div class="lab-subtitle">Generated by Laboratory Management on Odoo</div>
 
-                <table class="table table-sm table-bordered mt16">
-                    <thead>
-                        <tr>
-                            <th>Analysis</th>
-                            <th>Result</th>
-                            <th>Unit</th>
-                            <th t-if="doc.report_template_id.show_reference">Reference</th>
-                            <th t-if="doc.report_template_id.show_flag">Flag</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr t-foreach="doc.analysis_ids" t-as="line">
-                            <td><span t-field="line.service_id"/></td>
-                            <td><span t-esc="line.result_value or '-'"/></td>
-                            <td><span t-esc="line.unit or '-'"/></td>
-                            <td t-if="doc.report_template_id.show_reference"><span t-esc="line.ref_min"/> - <span t-esc="line.ref_max"/></td>
-                            <td t-if="doc.report_template_id.show_flag">
-                                <span t-esc="dict(line._fields['binary_interpretation'].selection).get(line.binary_interpretation) if line.binary_interpretation else dict(line._fields['result_flag'].selection).get(line.result_flag)"/>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p t-if="doc.report_template_id.show_notes" class="mt16"><strong>Notes:</strong> <span t-field="doc.note"/></p>
+                <div class="lab-section">
+                    <div class="lab-section-title">Basic Information</div>
+                    <div class="lab-section-body" style="padding:0;">
+                        <table class="lab-table">
+                            <tbody>
+                                <tr>
+                                    <td class="lab-info-key">Accession</td>
+                                    <td class="lab-info-value"><span t-field="doc.name"/></td>
+                                    <td class="lab-info-key">Patient</td>
+                                    <td class="lab-info-value"><span t-field="doc.patient_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lab-info-key">Client</td>
+                                    <td><span t-field="doc.client_id"/></td>
+                                    <td class="lab-info-key">Physician</td>
+                                    <td><span t-esc="doc.physician_name or '-'"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lab-info-key">Collection Date</td>
+                                    <td><span t-field="doc.collection_date"/></td>
+                                    <td class="lab-info-key">Report Date</td>
+                                    <td><span t-field="doc.report_date"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lab-info-key">Revision</td>
+                                    <td>
+                                        <span class="lab-chip">R<t t-esc="doc.report_revision"/></span>
+                                        <t t-if="doc.is_amended">
+                                            <span class="lab-chip" style="margin-left:6px; background:#fff7ed; border-color:#fed7aa; color:#9a3412;">Amended</span>
+                                        </t>
+                                    </td>
+                                    <td class="lab-info-key">Verified By</td>
+                                    <td><span t-field="doc.verified_by_id"/> (<span t-field="doc.verified_date"/>)</td>
+                                </tr>
+                                <tr>
+                                    <td class="lab-info-key">Technical Review</td>
+                                    <td><span t-esc="dict(doc._fields['technical_review_state'].selection).get(doc.technical_review_state)"/> - <span t-esc="doc.technical_reviewer_id.name or '-'"/></td>
+                                    <td class="lab-info-key">Medical Review</td>
+                                    <td><span t-esc="dict(doc._fields['medical_review_state'].selection).get(doc.medical_review_state)"/> - <span t-esc="doc.medical_reviewer_id.name or '-'"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="lab-section">
+                    <div class="lab-section-title">Analysis Results</div>
+                    <div class="lab-section-body" style="padding:0;">
+                        <table class="lab-table">
+                            <thead>
+                                <tr>
+                                    <th>Analysis</th>
+                                    <th>Result</th>
+                                    <th>Unit</th>
+                                    <th t-if="doc.report_template_id.show_reference">Reference</th>
+                                    <th t-if="doc.report_template_id.show_flag">Flag</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.analysis_ids.filtered(lambda l: l.service_id.code != 'HPV_GENO_INTERP')" t-as="line">
+                                    <td><span t-field="line.service_id"/></td>
+                                    <td><span t-esc="line.result_value or '-'"/></td>
+                                    <td><span t-esc="line.unit or '-'"/></td>
+                                    <td t-if="doc.report_template_id.show_reference"><span t-esc="line.ref_min"/> - <span t-esc="line.ref_max"/></td>
+                                    <td t-if="doc.report_template_id.show_flag">
+                                        <span t-esc="dict(line._fields['binary_interpretation'].selection).get(line.binary_interpretation) if line.binary_interpretation else dict(line._fields['result_flag'].selection).get(line.result_flag)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div t-if="doc.panel_interpretation_has_data" class="lab-section">
+                    <div class="lab-section-title">Panel Interpretation</div>
+                    <div class="lab-section-body">
+                        <p style="margin-bottom: 4px;"><strong>Summary:</strong> <span t-esc="doc.panel_interpretation_summary or '-'"/></p>
+                        <p style="margin-bottom: 0;"><strong>Detected Items:</strong> <span t-esc="doc.panel_detected_items or '-'"/></p>
+                    </div>
+                </div>
+
+                <div t-if="doc.report_template_id.show_notes and doc.note" class="lab-section">
+                    <div class="lab-section-title">Notes</div>
+                    <div class="lab-section-body"><span t-field="doc.note"/></div>
+                </div>
                 <div
                     t-if="doc.report_template_id.show_ai_summary_in_pdf and doc.ai_review_state == 'approved' and doc.ai_interpretation_text"
-                    class="mt16"
+                    class="lab-section"
                 >
-                    <strong>AI Interpretation Summary:</strong>
-                    <div style="white-space: pre-wrap; margin-top: 6px;">
+                    <div class="lab-section-title">AI Interpretation Summary</div>
+                    <div class="lab-section-body">
+                        <div class="lab-ai-box">
                         <t t-esc="doc.ai_interpretation_text"/>
+                        </div>
                     </div>
+                </div>
+                <div class="lab-footnote">
+                    This report is for clinical reference and must be interpreted by licensed professionals together with patient context.
                 </div>
             </div>
         </t>
@@ -61,16 +228,35 @@
 
     <template id="report_lab_sample_clinical_document">
         <t t-call="web.external_layout">
-            <div class="page">
-                <h2 style="margin-bottom: 6px;"><t t-esc="doc.report_template_id.title or 'Clinical Summary Report'"/></h2>
-                <p><strong>Accession:</strong> <span t-field="doc.name"/> | <strong>Patient:</strong> <span t-field="doc.patient_id"/></p>
-                <p><strong>Priority:</strong> <span t-esc="dict(doc._fields['priority'].selection).get(doc.priority)"/> | <strong>Reported:</strong> <span t-field="doc.report_date"/></p>
-                <p><strong>Revision:</strong> R<span t-esc="doc.report_revision"/> <t t-if="doc.is_amended">(Amended)</t></p>
-                <p><strong>Verified By:</strong> <span t-field="doc.verified_by_id"/> (<span t-field="doc.verified_date"/>)</p>
-                <p><strong>Technical Review:</strong> <span t-esc="dict(doc._fields['technical_review_state'].selection).get(doc.technical_review_state)"/> - <span t-esc="doc.technical_reviewer_id.name or '-'"/></p>
-                <p><strong>Medical Review:</strong> <span t-esc="dict(doc._fields['medical_review_state'].selection).get(doc.medical_review_state)"/> - <span t-esc="doc.medical_reviewer_id.name or '-'"/></p>
+            <div class="page lab-report">
+                <t t-call="laboratory_management.report_lab_pdf_styles"/>
+                <h2 class="lab-title"><t t-esc="doc.report_template_id.title or 'Clinical Summary Report'"/></h2>
+                <div class="lab-section">
+                    <div class="lab-section-title">Basic Information</div>
+                    <div class="lab-section-body" style="padding:0;">
+                        <table class="lab-table">
+                            <tbody>
+                                <tr>
+                                    <td class="lab-info-key">Accession</td>
+                                    <td class="lab-info-value"><span t-field="doc.name"/></td>
+                                    <td class="lab-info-key">Patient</td>
+                                    <td class="lab-info-value"><span t-field="doc.patient_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lab-info-key">Priority</td>
+                                    <td><span class="lab-chip"><span t-esc="dict(doc._fields['priority'].selection).get(doc.priority)"/></span></td>
+                                    <td class="lab-info-key">Reported</td>
+                                    <td><span t-field="doc.report_date"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                <table class="table table-sm table-bordered mt16">
+                <div class="lab-section">
+                    <div class="lab-section-title">Clinical Result Summary</div>
+                    <div class="lab-section-body" style="padding:0;">
+                <table class="lab-table">
                     <thead>
                         <tr>
                             <th>Analysis</th>
@@ -80,7 +266,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr t-foreach="doc.analysis_ids" t-as="line">
+                        <tr t-foreach="doc.analysis_ids.filtered(lambda l: l.service_id.code != 'HPV_GENO_INTERP')" t-as="line">
                             <td><span t-field="line.service_id"/></td>
                             <td><span t-esc="line.result_value or '-'"/> <span t-esc="line.unit or ''"/></td>
                             <td t-if="doc.report_template_id.show_reference"><span t-esc="line.ref_min"/> - <span t-esc="line.ref_max"/></td>
@@ -95,15 +281,21 @@
                         </tr>
                     </tbody>
                 </table>
+                    </div>
+                </div>
+                <div t-if="doc.panel_interpretation_has_data" class="mt12">
+                    <p style="margin-bottom: 4px;"><strong>Panel Interpretation:</strong> <span t-esc="doc.panel_interpretation_summary or '-'"/></p>
+                    <p style="margin-bottom: 0;"><strong>Detected Items:</strong> <span t-esc="doc.panel_detected_items or '-'"/></p>
+                </div>
 
                 <p t-if="doc.report_template_id.show_notes" class="mt16"><strong>Clinical Notes:</strong> <span t-field="doc.note"/></p>
                 <div
                     t-if="doc.report_template_id.show_ai_summary_in_pdf and doc.ai_review_state == 'approved' and doc.ai_interpretation_text"
-                    class="mt16"
+                    class="lab-section"
                 >
-                    <strong>AI Interpretation Summary:</strong>
-                    <div style="white-space: pre-wrap; margin-top: 6px;">
-                        <t t-esc="doc.ai_interpretation_text"/>
+                    <div class="lab-section-title">AI Interpretation Summary</div>
+                    <div class="lab-section-body">
+                        <div class="lab-ai-box"><t t-esc="doc.ai_interpretation_text"/></div>
                     </div>
                 </div>
             </div>
@@ -120,13 +312,34 @@
 
     <template id="report_lab_sample_compact_document">
         <t t-call="web.external_layout">
-            <div class="page">
-                <h3><t t-esc="doc.report_template_id.title or 'Compact Laboratory Report'"/> - <span t-field="doc.name"/></h3>
-                <p><strong>Patient:</strong> <span t-field="doc.patient_id"/> | <strong>Date:</strong> <span t-field="doc.report_date"/> | <strong>Rev:</strong> R<span t-esc="doc.report_revision"/></p>
-                <p><strong>Verified By:</strong> <span t-field="doc.verified_by_id"/></p>
-                <p><strong>Technical Review:</strong> <span t-esc="dict(doc._fields['technical_review_state'].selection).get(doc.technical_review_state)"/></p>
-                <p><strong>Medical Review:</strong> <span t-esc="dict(doc._fields['medical_review_state'].selection).get(doc.medical_review_state)"/></p>
-                <table class="table table-sm table-bordered">
+            <div class="page lab-report">
+                <t t-call="laboratory_management.report_lab_pdf_styles"/>
+                <h3 class="lab-title" style="font-size: 18px;"><t t-esc="doc.report_template_id.title or 'Compact Laboratory Report'"/> - <span t-field="doc.name"/></h3>
+                <div class="lab-section">
+                    <div class="lab-section-title">Basic Information</div>
+                    <div class="lab-section-body" style="padding:0;">
+                        <table class="lab-table">
+                            <tbody>
+                                <tr>
+                                    <td class="lab-info-key">Patient</td>
+                                    <td class="lab-info-value"><span t-field="doc.patient_id"/></td>
+                                    <td class="lab-info-key">Date</td>
+                                    <td class="lab-info-value"><span t-field="doc.report_date"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lab-info-key">Revision</td>
+                                    <td><span class="lab-chip">R<t t-esc="doc.report_revision"/></span></td>
+                                    <td class="lab-info-key">Verified By</td>
+                                    <td><span t-field="doc.verified_by_id"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="lab-section">
+                    <div class="lab-section-title">Compact Results</div>
+                    <div class="lab-section-body" style="padding:0;">
+                <table class="lab-table">
                     <thead>
                         <tr>
                             <th>Analysis</th>
@@ -135,7 +348,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr t-foreach="doc.analysis_ids" t-as="line">
+                        <tr t-foreach="doc.analysis_ids.filtered(lambda l: l.service_id.code != 'HPV_GENO_INTERP')" t-as="line">
                             <td><span t-field="line.service_id"/></td>
                             <td><span t-esc="line.result_value or '-'"/> <span t-esc="line.unit or ''"/></td>
                             <td t-if="doc.report_template_id.show_flag">
@@ -144,14 +357,20 @@
                         </tr>
                     </tbody>
                 </table>
+                    </div>
+                </div>
+                <div t-if="doc.panel_interpretation_has_data" class="mt12">
+                    <p style="margin-bottom: 4px;"><strong>Panel Interpretation:</strong> <span t-esc="doc.panel_interpretation_summary or '-'"/></p>
+                    <p style="margin-bottom: 0;"><strong>Detected Items:</strong> <span t-esc="doc.panel_detected_items or '-'"/></p>
+                </div>
                 <p t-if="doc.report_template_id.show_notes"><strong>Notes:</strong> <span t-field="doc.note"/></p>
                 <div
                     t-if="doc.report_template_id.show_ai_summary_in_pdf and doc.ai_review_state == 'approved' and doc.ai_interpretation_text"
-                    class="mt16"
+                    class="lab-section"
                 >
-                    <strong>AI Interpretation Summary:</strong>
-                    <div style="white-space: pre-wrap; margin-top: 6px;">
-                        <t t-esc="doc.ai_interpretation_text"/>
+                    <div class="lab-section-title">AI Interpretation Summary</div>
+                    <div class="lab-section-body">
+                        <div class="lab-ai-box"><t t-esc="doc.ai_interpretation_text"/></div>
                     </div>
                 </div>
             </div>

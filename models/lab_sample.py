@@ -1,3 +1,4 @@
+import base64
 from datetime import datetime, time, timedelta
 from uuid import uuid4
 
@@ -8,14 +9,14 @@ from odoo.exceptions import UserError, ValidationError
 class LabSample(models.Model):
     _name = "lab.sample"
     _description = "Laboratory Sample (Accession)"
-    _inherit = ["mail.thread", "mail.activity.mixin", "portal.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin", "portal.mixin", "lab.master.data.mixin"]
     _order = "id desc"
 
     name = fields.Char(string="Accession No.", default="New", readonly=True, copy=False, tracking=True)
-    accession_barcode = fields.Char(string="Accession Barcode", copy=False, tracking=True)
-    patient_id = fields.Many2one("res.partner", required=True, tracking=True)
-    client_id = fields.Many2one("res.partner", string="Client/Institution", tracking=True)
-    request_id = fields.Many2one("lab.test.request", string="Test Request", copy=False, readonly=True, tracking=True)
+    accession_barcode = fields.Char(string="Accession Barcode", copy=False, tracking=True, index=True)
+    patient_id = fields.Many2one("res.partner", required=True, tracking=True, index=True)
+    client_id = fields.Many2one("res.partner", string="Client/Institution", tracking=True, index=True)
+    request_id = fields.Many2one("lab.test.request", string="Test Request", copy=False, readonly=True, tracking=True, index=True)
     parent_sample_id = fields.Many2one("lab.sample", string="Parent Sample", copy=False, readonly=True)
     aliquot_ids = fields.One2many("lab.sample", "parent_sample_id", string="Aliquots", readonly=True)
     aliquot_count = fields.Integer(compute="_compute_aliquot_count")
@@ -30,7 +31,7 @@ class LabSample(models.Model):
     custody_location = fields.Char(string="Current Location")
     collection_date = fields.Datetime(default=fields.Datetime.now)
     received_date = fields.Datetime(readonly=True)
-    report_date = fields.Datetime(readonly=True)
+    report_date = fields.Datetime(readonly=True, index=True)
     expected_report_date = fields.Datetime(
         string="Expected Report Date",
         compute="_compute_expected_report_date",
@@ -41,12 +42,7 @@ class LabSample(models.Model):
     report_revision = fields.Integer(default=1, readonly=True, tracking=True)
     is_amended = fields.Boolean(default=False, readonly=True, tracking=True)
     amendment_note = fields.Text(string="Amendment Note")
-    priority = fields.Selection(
-        [("routine", "Routine"), ("urgent", "Urgent"), ("stat", "STAT")],
-        default="routine",
-        required=True,
-        tracking=True,
-    )
+    priority = fields.Selection(selection="_selection_priority", default=lambda self: self._default_priority_code(), required=True, tracking=True)
     note = fields.Text()
     state = fields.Selection(
         [
@@ -60,7 +56,10 @@ class LabSample(models.Model):
         ],
         default="draft",
         tracking=True,
+        index=True,
     )
+    report_pdf_attachment_id = fields.Many2one("ir.attachment", string="Cached Report PDF", readonly=True, copy=False)
+    report_pdf_cached_at = fields.Datetime(string="Report PDF Cached At", readonly=True, copy=False)
 
     analysis_ids = fields.One2many("lab.sample.analysis", "sample_id", string="Analyses")
     amendment_ids = fields.One2many("lab.sample.amendment", "sample_id", string="Amendments", readonly=True)
@@ -72,6 +71,36 @@ class LabSample(models.Model):
     done_analysis = fields.Integer(compute="_compute_analysis_stats", store=True)
     verified_analysis = fields.Integer(compute="_compute_analysis_stats", store=True)
     is_overdue = fields.Boolean(compute="_compute_is_overdue", search="_search_is_overdue", store=False)
+    interpretation_profile_id = fields.Many2one(
+        "lab.interpretation.profile",
+        compute="_compute_panel_interpretation",
+        string="Interpretation Profile",
+    )
+    panel_interpretation_has_data = fields.Boolean(
+        compute="_compute_panel_interpretation",
+        string="Has Panel Interpretation",
+    )
+    panel_detected_items = fields.Char(
+        compute="_compute_panel_interpretation",
+        string="Detected Items",
+    )
+    panel_interpretation_summary = fields.Char(
+        compute="_compute_panel_interpretation",
+        string="Panel Interpretation Summary",
+    )
+    # Backward-compatibility aliases for existing HPV template fields.
+    hpv_panel_has_data = fields.Boolean(
+        compute="_compute_panel_interpretation",
+        string="Has HPV Panel Data",
+    )
+    hpv_panel_detected_types = fields.Char(
+        compute="_compute_panel_interpretation",
+        string="HPV Detected Types",
+    )
+    hpv_panel_interpretation = fields.Char(
+        compute="_compute_panel_interpretation",
+        string="HPV Panel Interpretation",
+    )
 
     @api.depends("analysis_ids.state")
     def _compute_analysis_stats(self):
@@ -131,6 +160,106 @@ class LabSample(models.Model):
             return not_overdue_domain if value else overdue_domain
         return overdue_domain
 
+    @api.depends(
+        "analysis_ids.service_id.code",
+        "analysis_ids.service_id.name",
+        "analysis_ids.service_id.auto_binary_cutoff",
+        "analysis_ids.service_id.auto_binary_negative_when_gte",
+        "analysis_ids.binary_interpretation",
+        "analysis_ids.result_value",
+        "analysis_ids.state",
+    )
+    def _compute_panel_interpretation(self):
+        profiles = self.env["lab.interpretation.profile"].sudo().search([("active", "=", True)], order="sequence asc, id asc")
+        for rec in self:
+            rec.interpretation_profile_id = False
+            rec.panel_interpretation_has_data = False
+            rec.panel_detected_items = False
+            rec.panel_interpretation_summary = False
+            rec.hpv_panel_has_data = False
+            rec.hpv_panel_detected_types = False
+            rec.hpv_panel_interpretation = False
+
+            analyses = rec.analysis_ids.filtered(lambda x: x.state in ("done", "verified"))
+            if not analyses:
+                continue
+
+            sample_service_ids = set(analyses.mapped("service_id").ids)
+            selected = False
+            selected_score = -1
+            for profile in profiles:
+                score = profile.score_for_service_ids(sample_service_ids)
+                if score > selected_score:
+                    selected = profile
+                    selected_score = score
+
+            if not selected or selected_score < 0:
+                continue
+
+            detected = []
+            evaluated_count = 0
+            active_rules = selected.line_ids.filtered("active")
+            for rule in active_rules:
+                line = analyses.filtered(lambda x: x.service_id.id == rule.service_id.id)[:1]
+                if not line:
+                    continue
+                result_value = (line.result_value or "").strip()
+                if result_value == "":
+                    continue
+                passed = False
+                if rule.evaluation_mode == "binary_positive":
+                    passed = line.binary_interpretation == "positive"
+                    evaluated_count += 1
+                elif rule.evaluation_mode == "binary_negative":
+                    passed = line.binary_interpretation == "negative"
+                    evaluated_count += 1
+                elif rule.evaluation_mode in ("numeric_lt", "numeric_lte", "numeric_gt", "numeric_gte"):
+                    try:
+                        num = float(result_value)
+                    except (TypeError, ValueError):
+                        continue
+                    if rule.evaluation_mode == "numeric_lt":
+                        passed = num < rule.threshold_float
+                    elif rule.evaluation_mode == "numeric_lte":
+                        passed = num <= rule.threshold_float
+                    elif rule.evaluation_mode == "numeric_gt":
+                        passed = num > rule.threshold_float
+                    else:
+                        passed = num >= rule.threshold_float
+                    evaluated_count += 1
+                elif rule.evaluation_mode == "text_equals":
+                    passed = result_value.lower() == (rule.threshold_text or "").strip().lower()
+                    evaluated_count += 1
+                elif rule.evaluation_mode == "text_contains":
+                    passed = (rule.threshold_text or "").strip().lower() in result_value.lower()
+                    evaluated_count += 1
+
+                if passed and rule.include_in_detected:
+                    detected.append((rule.label or rule.service_id.name or "").strip())
+
+            if not evaluated_count:
+                continue
+
+            required = selected.minimum_required_count or len(active_rules)
+            summary = selected.inconclusive_summary_text
+            detected_text = ", ".join([x for x in detected if x]) if detected else "-"
+            if detected:
+                summary = (selected.positive_summary_template or "Positive").replace("{detected}", detected_text)
+            elif evaluated_count >= required:
+                summary = selected.negative_summary_text
+
+            rec.interpretation_profile_id = selected.id
+            rec.panel_interpretation_has_data = True
+            rec.panel_detected_items = detected_text
+            rec.panel_interpretation_summary = summary
+
+            # Populate legacy HPV fields only when profile clearly represents HPV.
+            profile_code = (selected.code or "").upper()
+            if profile_code.startswith("HPV"):
+                rec.hpv_panel_has_data = rec.panel_interpretation_has_data
+                rec.hpv_panel_detected_types = rec.panel_detected_items
+                rec.hpv_panel_interpretation = rec.panel_interpretation_summary
+
     @api.model_create_multi
     def create(self, vals_list):
         seq_model = self.env["ir.sequence"]
@@ -148,6 +277,32 @@ class LabSample(models.Model):
             if rec.profile_id and not rec.analysis_ids:
                 rec.action_add_profile_services()
         return records
+
+    def init(self):
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_lab_sample_company_state_created
+            ON lab_sample (company_id, state, create_date DESC)
+            """
+        )
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_lab_sample_request_state
+            ON lab_sample (request_id, state)
+            """
+        )
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_lab_sample_patient_company
+            ON lab_sample (patient_id, company_id)
+            """
+        )
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_lab_sample_accession_barcode
+            ON lab_sample (accession_barcode)
+            """
+        )
 
     def action_add_profile_services(self):
         for rec in self:
@@ -212,10 +367,23 @@ class LabSample(models.Model):
         for rec in self:
             if rec.state != "verified":
                 raise UserError(_("Only verified samples can be released."))
-            rec.write({"state": "reported", "report_date": fields.Datetime.now()})
+            rec.write(
+                {
+                    "state": "reported",
+                    "report_date": fields.Datetime.now(),
+                    "report_pdf_attachment_id": False,
+                    "report_pdf_cached_at": False,
+                }
+            )
             rec._log_timeline("reported", _("Report released"))
             rec._create_custody_event("release", False, rec.custody_location, _("Report released to requester"))
             rec._create_signoff("release", _("Report released"))
+            cache_on_release = (
+                self.env["ir.config_parameter"].sudo().get_param("laboratory_management.report_pdf_cache_on_release", "1")
+                == "1"
+            )
+            if cache_on_release:
+                rec._generate_report_pdf_attachment(force=True, suppress_error=True)
 
     def action_print_report(self):
         self.ensure_one()
@@ -377,10 +545,52 @@ class LabSample(models.Model):
                     "report_revision": next_revision,
                     "is_amended": True,
                     "state": "verified",
+                    "report_pdf_attachment_id": False,
+                    "report_pdf_cached_at": False,
                 }
             )
             rec._log_timeline("amendment", _("Report amended to revision R%s") % next_revision)
             rec._create_signoff("amend", _("Amended report to revision R%s") % next_revision)
+
+    def _build_report_pdf_filename(self):
+        self.ensure_one()
+        suffix = "R%s" % (self.report_revision or 1)
+        return "%s_%s.pdf" % (self.name or "sample", suffix)
+
+    def _generate_report_pdf_attachment(self, force=False, suppress_error=False):
+        self.ensure_one()
+        if self.report_pdf_attachment_id and not force:
+            return self.report_pdf_attachment_id
+        try:
+            action_xmlid = self.get_report_action_xmlid()
+            action = self.env.ref(action_xmlid).sudo()
+            pdf_content, _content_type = action._render_qweb_pdf(action.report_name, res_ids=self.ids)
+            filename = self._build_report_pdf_filename()
+            vals = {
+                "name": filename,
+                "type": "binary",
+                "datas": base64.b64encode(pdf_content),
+                "res_model": "lab.sample",
+                "res_id": self.id,
+                "mimetype": "application/pdf",
+                "company_id": self.company_id.id,
+            }
+            attachment = self.report_pdf_attachment_id.sudo()
+            if attachment:
+                attachment.write(vals)
+            else:
+                attachment = self.env["ir.attachment"].sudo().create(vals)
+            self.sudo().write(
+                {
+                    "report_pdf_attachment_id": attachment.id,
+                    "report_pdf_cached_at": fields.Datetime.now(),
+                }
+            )
+            return attachment
+        except Exception:
+            if suppress_error:
+                return self.env["ir.attachment"]
+            raise
 
     def _log_timeline(self, event_type, note):
         self.ensure_one()
@@ -492,6 +702,8 @@ class LabSampleAnalysis(models.Model):
     is_retest = fields.Boolean(compute="_compute_is_retest")
     service_id = fields.Many2one("lab.service", required=True)
     reagent_lot_id = fields.Many2one("lab.reagent.lot", string="Reagent Lot")
+    reagent_scope = fields.Selection(related="reagent_lot_id.reagent_scope", string="Reagent Scope", store=True)
+    assay_kit_id = fields.Many2one(related="reagent_lot_id.assay_kit_id", string="Assay Kit", store=True)
     worksheet_id = fields.Many2one("lab.worksheet")
     analyst_id = fields.Many2one("res.users", string="Analyst")
     state = fields.Selection(
@@ -635,6 +847,85 @@ class LabSampleAnalysis(models.Model):
             rec.is_out_of_range = out_of_range
             rec.is_critical = is_critical
 
+    @api.onchange("service_id")
+    def _onchange_service_id_assign_panel_lot(self):
+        for rec in self:
+            if rec.reagent_lot_id:
+                continue
+            if not rec.sample_id:
+                continue
+            sibling_panel_lot = rec.sample_id.analysis_ids.filtered(
+                lambda x: x.id != rec.id
+                and x.reagent_lot_id
+                and x.reagent_lot_id.reagent_scope == "panel"
+                and x.reagent_lot_id._can_cover_service(rec.service_id)
+            )[:1].reagent_lot_id
+            if sibling_panel_lot:
+                rec.reagent_lot_id = sibling_panel_lot
+
+    @api.onchange("reagent_lot_id")
+    def _onchange_reagent_lot_id_propagate_panel(self):
+        for rec in self:
+            if rec.reagent_lot_id and rec.reagent_lot_id.reagent_scope == "panel":
+                rec._propagate_panel_lot_to_sample()
+
+    @api.constrains("service_id", "reagent_lot_id")
+    def _check_reagent_lot_coverage(self):
+        for rec in self:
+            if not rec.reagent_lot_id or not rec.service_id:
+                continue
+            if not rec.reagent_lot_id._can_cover_service(rec.service_id):
+                raise ValidationError(
+                    _("Reagent lot %(lot)s does not cover service %(service)s.")
+                    % {"lot": rec.reagent_lot_id.display_name, "service": rec.service_id.name}
+                )
+
+    def _propagate_panel_lot_to_sample(self):
+        for rec in self:
+            lot = rec.reagent_lot_id
+            if not lot or lot.reagent_scope != "panel":
+                continue
+            for line in rec.sample_id.analysis_ids.filtered(lambda x: not x.reagent_lot_id):
+                if lot._can_cover_service(line.service_id):
+                    line.reagent_lot_id = lot.id
+
+    def _consume_reagent_for_completion(self):
+        usage_obj = self.env["lab.reagent.usage"]
+        for rec in self:
+            lot = rec.reagent_lot_id
+            if not lot:
+                continue
+            existing = usage_obj.search(
+                [("reagent_lot_id", "=", lot.id), ("analysis_id", "=", rec.id), ("state", "=", "posted")],
+                limit=1,
+            )
+            if existing:
+                continue
+            if lot.reagent_scope == "single":
+                lot._consume(
+                    quantity=1.0,
+                    sample=rec.sample_id,
+                    analysis=rec,
+                    note=_("Single-service reagent consumption on result completion."),
+                )
+                continue
+
+            prior_usage = usage_obj.search(
+                [
+                    ("reagent_lot_id", "=", lot.id),
+                    ("sample_id", "=", rec.sample_id.id),
+                    ("state", "=", "posted"),
+                ],
+                limit=1,
+            )
+            if not prior_usage:
+                lot._consume(
+                    quantity=1.0,
+                    sample=rec.sample_id,
+                    analysis=rec,
+                    note=_("Panel reagent consumption once per sample."),
+                )
+
     @api.constrains("result_value", "service_id")
     def _check_numeric_result(self):
         for rec in self:
@@ -659,6 +950,7 @@ class LabSampleAnalysis(models.Model):
                     _("Reagent lot %(lot)s is expired and cannot be used.")
                     % {"lot": rec.reagent_lot_id.display_name}
                 )
+            rec._propagate_panel_lot_to_sample()
             if rec.service_id.require_qc:
                 qc_run = self.env["lab.qc.run"].search(
                     [("service_id", "=", rec.service_id.id)],
@@ -703,6 +995,7 @@ class LabSampleAnalysis(models.Model):
                     % {"service": rec.service_id.name},
                     subtype_xmlid="mail.mt_note",
                 )
+            rec._consume_reagent_for_completion()
         self._sync_sample_states()
 
     def action_verify_result(self):

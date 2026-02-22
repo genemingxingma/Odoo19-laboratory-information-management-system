@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_lab_service_company_scope" model="ir.rule">
+        <field name="name">Lab Service Company Scope</field>
+        <field name="model_id" ref="model_lab_service"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_lab_profile_company_scope" model="ir.rule">
+        <field name="name">Lab Profile Company Scope</field>
+        <field name="model_id" ref="model_lab_profile"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_lab_report_template_company_scope" model="ir.rule">
+        <field name="name">Lab Report Template Company Scope</field>
+        <field name="model_id" ref="model_lab_report_template"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_lab_test_request_company_scope" model="ir.rule">
+        <field name="name">Lab Test Request Company Scope</field>
+        <field name="model_id" ref="model_lab_test_request"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_test_request_line_company_scope" model="ir.rule">
+        <field name="name">Lab Test Request Line Company Scope</field>
+        <field name="model_id" ref="model_lab_test_request_line"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_test_request_timeline_company_scope" model="ir.rule">
+        <field name="name">Lab Test Request Timeline Company Scope</field>
+        <field name="model_id" ref="model_lab_test_request_timeline"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_test_request_quote_revision_company_scope" model="ir.rule">
+        <field name="name">Lab Test Request Quote Revision Company Scope</field>
+        <field name="model_id" ref="model_lab_test_request_quote_revision"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_lab_sample_company_scope" model="ir.rule">
+        <field name="name">Lab Sample Company Scope</field>
+        <field name="model_id" ref="model_lab_sample"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_sample_analysis_company_scope" model="ir.rule">
+        <field name="name">Lab Sample Analysis Company Scope</field>
+        <field name="model_id" ref="model_lab_sample_analysis"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_lab_report_dispatch_company_scope" model="ir.rule">
+        <field name="name">Lab Report Dispatch Company Scope</field>
+        <field name="model_id" ref="model_lab_report_dispatch"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_report_dispatch_log_company_scope" model="ir.rule">
+        <field name="name">Lab Report Dispatch Log Company Scope</field>
+        <field name="model_id" ref="model_lab_report_dispatch_log"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_report_ack_signature_company_scope" model="ir.rule">
+        <field name="name">Lab Report Ack Signature Company Scope</field>
+        <field name="model_id" ref="model_lab_report_ack_signature"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_lab_request_invoice_company_scope" model="ir.rule">
+        <field name="name">Lab Request Invoice Company Scope</field>
+        <field name="model_id" ref="model_lab_request_invoice"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_request_invoice_line_company_scope" model="ir.rule">
+        <field name="name">Lab Request Invoice Line Company Scope</field>
+        <field name="model_id" ref="model_lab_request_invoice_line"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_request_payment_company_scope" model="ir.rule">
+        <field name="name">Lab Request Payment Company Scope</field>
+        <field name="model_id" ref="model_lab_request_payment"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_request_refund_company_scope" model="ir.rule">
+        <field name="name">Lab Request Refund Company Scope</field>
+        <field name="model_id" ref="model_lab_request_refund"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_billing_reconciliation_company_scope" model="ir.rule">
+        <field name="name">Lab Billing Reconciliation Company Scope</field>
+        <field name="model_id" ref="model_lab_billing_reconciliation"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_billing_reconciliation_line_company_scope" model="ir.rule">
+        <field name="name">Lab Billing Reconciliation Line Company Scope</field>
+        <field name="model_id" ref="model_lab_billing_reconciliation_line"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_lab_physician_department_company_scope" model="ir.rule">
+        <field name="name">Lab Physician Department Company Scope</field>
+        <field name="model_id" ref="model_lab_physician_department"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_lab_sample_portal_company_scope" model="ir.rule">
+        <field name="name">Portal Lab Sample Company Scope</field>
+        <field name="model_id" ref="model_lab_sample"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_analysis_portal_company_scope" model="ir.rule">
+        <field name="name">Portal Lab Analysis Company Scope</field>
+        <field name="model_id" ref="model_lab_sample_analysis"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_report_dispatch_portal_company_scope" model="ir.rule">
+        <field name="name">Portal Lab Dispatch Company Scope</field>
+        <field name="model_id" ref="model_lab_report_dispatch"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_report_ack_signature_portal_company_scope" model="ir.rule">
+        <field name="name">Portal Lab Ack Signature Company Scope</field>
+        <field name="model_id" ref="model_lab_report_ack_signature"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_test_request_portal_company_scope" model="ir.rule">
+        <field name="name">Portal Lab Test Request Company Scope</field>
+        <field name="model_id" ref="model_lab_test_request"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_test_request_line_portal_company_scope" model="ir.rule">
+        <field name="name">Portal Lab Test Request Line Company Scope</field>
+        <field name="model_id" ref="model_lab_test_request_line"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_test_request_timeline_portal_company_scope" model="ir.rule">
+        <field name="name">Portal Lab Test Request Timeline Company Scope</field>
+        <field name="model_id" ref="model_lab_test_request_timeline"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_test_request_quote_revision_portal_company_scope" model="ir.rule">
+        <field name="name">Portal Lab Test Request Quote Revision Company Scope</field>
+        <field name="model_id" ref="model_lab_test_request_quote_revision"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_request_invoice_portal_company_scope" model="ir.rule">
+        <field name="name">Portal Lab Request Invoice Company Scope</field>
+        <field name="model_id" ref="model_lab_request_invoice"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_request_invoice_line_portal_company_scope" model="ir.rule">
+        <field name="name">Portal Lab Request Invoice Line Company Scope</field>
+        <field name="model_id" ref="model_lab_request_invoice_line"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_request_payment_portal_company_scope" model="ir.rule">
+        <field name="name">Portal Lab Request Payment Company Scope</field>
+        <field name="model_id" ref="model_lab_request_payment"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

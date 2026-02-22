@@ -420,7 +420,7 @@ msgstr "低于参考范围"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__blood
 msgid "Blood"
-msgstr "血"
+msgstr "全血"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
@@ -2321,7 +2321,7 @@ msgstr "根本原因"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__routine
 msgid "Routine"
-msgstr "例行公事"
+msgstr "常规"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_import_job_line__row_no
@@ -2355,7 +2355,7 @@ msgstr "短信发送错误"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__stat
 msgid "STAT"
-msgstr "统计数据"
+msgstr "急诊（STAT）"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__sample_id
@@ -2615,7 +2615,7 @@ msgstr "标准差"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__stool
 msgid "Stool"
-msgstr "凳子"
+msgstr "粪便"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_import_job_line__status__success
@@ -2630,7 +2630,7 @@ msgstr "成功行"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__swab
 msgid "Swab"
-msgstr "拭子"
+msgstr "拭子样本"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_kpi_dashboard_wizard_form
@@ -2801,7 +2801,7 @@ msgstr "单位"
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_sample__priority__urgent
 msgid "Urgent"
-msgstr "紧急"
+msgstr "加急"
 
 #. module: laboratory_management
 #: model:ir.model.fields.selection,name:laboratory_management.selection__lab_service__sample_type__urine
@@ -6251,3 +6251,19 @@ msgstr "因讲师排期冲突，培训已从%(old)s自动调整到%(new)s。"
 #. module: laboratory_management
 msgid "Lab: Auto Reschedule Training Conflicts"
 msgstr "实验室：自动调整培训排期冲突"
+
+#. module: laboratory_management
+msgid "Whole Blood"
+msgstr "全血"
+
+#. module: laboratory_management
+msgid "General"
+msgstr "综合科"
+
+#. module: laboratory_management
+msgid "Individual"
+msgstr "个人"
+
+#. module: laboratory_management
+msgid "Institution"
+msgstr "机构"
