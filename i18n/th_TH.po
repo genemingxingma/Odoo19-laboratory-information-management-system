@@ -425,7 +425,7 @@ msgstr "เลือดเต็มส่วน"
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
 msgid "CAPA"
-msgstr "คาปา"
+msgstr "การแก้ไขและป้องกัน (CAPA)"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__owner_id
@@ -442,7 +442,8 @@ msgstr "CAPA วางแผนไว้"
 msgid ""
 "CSV Columns: accession, instrument_code, test_code, result, remark(optional)"
 msgstr ""
-"CSV Columns: accession, instrument_code, test_code, result, remark(optional)"
+"คอลัมน์ CSV: accession (รหัสตัวอย่าง), instrument_code (รหัสเครื่อง), test_code "
+"(รหัสการทดสอบ), result (ผล), remark (หมายเหตุ, ไม่บังคับ)"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_result_import_wizard_form
@@ -456,8 +457,8 @@ msgid ""
 "CSV columns required: accession, instrument_code, test_code, result, "
 "remark(optional)."
 msgstr ""
-"CSV columns required: accession, instrument_code, test_code, result, "
-"remark(optional)."
+"คอลัมน์ CSV ที่ต้องมี: accession (รหัสตัวอย่าง), instrument_code (รหัสเครื่อง), "
+"test_code (รหัสการทดสอบ), result (ผล), remark (หมายเหตุ, ไม่บังคับ)"
 
 #. module: laboratory_management
 #. odoo-python
@@ -465,7 +466,8 @@ msgstr ""
 msgid ""
 "CSV columns required: accession, service_code, result, remark(optional)."
 msgstr ""
-"CSV columns required: accession, service_code, result, remark(optional)."
+"คอลัมน์ CSV ที่ต้องมี: accession (รหัสตัวอย่าง), service_code (รหัสบริการ), "
+"result (ผล), remark (หมายเหตุ, ไม่บังคับ)"
 
 #. module: laboratory_management
 #. odoo-python
@@ -679,8 +681,7 @@ msgid ""
 "Critical result detected: %(service)s = %(result)s %(unit)s (sample "
 "%(sample)s)"
 msgstr ""
-"Critical result detected: %(service)s = %(result)s %(unit)s (sample "
-"%(sample)s)"
+"ตรวจพบผลวิกฤต: %(service)s = %(result)s %(unit)s (ตัวอย่าง %(sample)s)"
 
 #. module: laboratory_management
 #. odoo-python
@@ -1455,8 +1456,7 @@ msgid ""
 "Latest QC for %(service)s is rejected (rule: %(rule)s). Please run QC again "
 "before releasing results."
 msgstr ""
-"Latest QC for %(service)s is rejected (rule: %(rule)s). Please run QC again "
-"before releasing results."
+"QC ล่าสุดของ %(service)s ไม่ผ่าน (กฎ: %(rule)s) กรุณารัน QC ใหม่ก่อนปล่อยผล"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_worksheet_form
@@ -2602,10 +2602,10 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
-"Status based on activities\n"
-"Overdue: Due date is already passed\n"
-"Today: Activity date is today\n"
-"Planned: Future activities."
+"สถานะตามกิจกรรม\n"
+"เกินกำหนด: วันครบกำหนดผ่านแล้ว\n"
+"วันนี้: วันที่กิจกรรมคือวันนี้\n"
+"วางแผน: กิจกรรมในอนาคต"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__std_dev
@@ -2912,13 +2912,13 @@ msgstr "บาร์โค้ด"
 #. odoo-python
 #: code:addons/laboratory_management/models/lab_sample.py:0
 msgid "parent_sample_id"
-msgstr "parent_sample_id"
+msgstr "รหัสตัวอย่างต้นทาง"
 
 #. module: laboratory_management
 #. odoo-python
 #: code:addons/laboratory_management/wizard/lab_kpi_dashboard_wizard.py:0
 msgid "run_date"
-msgstr "run_date"
+msgstr "วันที่รัน"
 
 #. module: laboratory_management
 #. odoo-python
@@ -2950,7 +2950,7 @@ msgstr "| <strong>รายงานแล้ว:</strong>"
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.report_lab_sample_compact_document
 msgid "| <strong>Rev:</strong> R"
-msgstr "| <strong>รายได้:</strong> อาร์"
+msgstr "| <strong>ฉบับแก้ไข:</strong> R"
 
 #. module: laboratory_management
 msgid "Show AI Summary in PDF"
@@ -5129,15 +5129,15 @@ msgstr "ผู้ตรวจสอบคุณภาพ"
 
 #. module: laboratory_management
 msgid "Qa Reviewer"
-msgstr "Qa ผู้วิจารณ์"
+msgstr "ผู้ทบทวน QA"
 
 #. module: laboratory_management
 msgid "Qa Signed At"
-msgstr "Qa ลงนามที่"
+msgstr "QA ลงนามเมื่อ"
 
 #. module: laboratory_management
 msgid "Qa Signed By"
-msgstr "Qa ลงนามโดย"
+msgstr "QA ลงนามโดย"
 
 #. module: laboratory_management
 msgid "Qc Reject"
@@ -5149,7 +5149,7 @@ msgstr "การควบคุมคุณภาพรวม"
 
 #. module: laboratory_management
 msgid "Quantity Ok"
-msgstr "ปริมาณ ตกลง"
+msgstr "ปริมาณปกติ"
 
 #. module: laboratory_management
 msgid "Queued At"
@@ -5165,7 +5165,7 @@ msgstr "นับจำนวนการแจ้งเตือนอัตโ
 
 #. module: laboratory_management
 msgid "Quote Days Left"
-msgstr "อ้างวันที่เหลือ"
+msgstr "จำนวนวันคงเหลือของใบเสนอราคา"
 
 #. module: laboratory_management
 msgid "Quote Expired"
@@ -5173,19 +5173,19 @@ msgstr "ใบเสนอราคาหมดอายุแล้ว"
 
 #. module: laboratory_management
 msgid "Quote Last Sent At"
-msgstr "อ้างอิง ส่งล่าสุดเมื่อ"
+msgstr "ส่งใบเสนอราคาล่าสุดเมื่อ"
 
 #. module: laboratory_management
 msgid "Quote Last Sent By"
-msgstr "ใบเสนอราคา ส่งล่าสุดโดย"
+msgstr "ผู้ส่งใบเสนอราคาล่าสุด"
 
 #. module: laboratory_management
 msgid "Quote Note"
-msgstr "หมายเหตุอ้างอิง"
+msgstr "หมายเหตุใบเสนอราคา"
 
 #. module: laboratory_management
 msgid "Quote Reference"
-msgstr "การอ้างอิงอ้างอิง"
+msgstr "เลขอ้างอิงใบเสนอราคา"
 
 #. module: laboratory_management
 msgid "Quote Revision Count"
@@ -5201,7 +5201,7 @@ msgstr "เหตุผล"
 
 #. module: laboratory_management
 msgid "Receipt Lines"
-msgstr "ใบเสร็จรับเงิน"
+msgstr "รายการรับเข้า"
 
 #. module: laboratory_management
 msgid "Receive Note"
@@ -6267,3 +6267,55 @@ msgstr "บุคคล"
 #. module: laboratory_management
 msgid "Institution"
 msgstr "หน่วยงาน"
+
+#. module: laboratory_management
+msgid "Queued"
+msgstr "อยู่ในคิว"
+
+#. module: laboratory_management
+msgid "Queued Worker"
+msgstr "ประมวลผลจากคิว"
+
+#. module: laboratory_management
+msgid "Generate AI Asynchronously on Report Release"
+msgstr "สร้างคำแปลผล AI แบบอะซิงโครนัสเมื่อปล่อยรายงาน"
+
+#. module: laboratory_management
+msgid "AI Queue Batch Size"
+msgstr "ขนาดชุดประมวลผลคิว AI"
+
+#. module: laboratory_management
+msgid "Cache Report PDF on Release"
+msgstr "แคชไฟล์ PDF รายงานเมื่อปล่อยผล"
+
+#. module: laboratory_management
+msgid "Queue AI generation during report release to reduce transaction latency."
+msgstr "นำงานสร้าง AI เข้าคิวระหว่างปล่อยรายงานเพื่อลดเวลาแฝงของธุรกรรม"
+
+#. module: laboratory_management
+msgid "Maximum queued AI items processed per scheduled run."
+msgstr "จำนวนงาน AI ในคิวสูงสุดที่ประมวลผลต่อรอบงานตามเวลา"
+
+#. module: laboratory_management
+msgid "Generate and cache PDF once at release so portal download can reuse attachment."
+msgstr "สร้างและแคช PDF หนึ่งครั้งตอนปล่อยผล เพื่อให้การดาวน์โหลดบนพอร์ทัลใช้ไฟล์แนบเดิมได้"
+
+#. module: laboratory_management
+msgid "Lab: Process AI Interpretation Queue"
+msgstr "ห้องปฏิบัติการ: ประมวลผลคิวการแปลผล AI"
+
+#. module: laboratory_management
+msgid "Cached Report PDF"
+msgstr "PDF รายงานที่แคชแล้ว"
+
+#. module: laboratory_management
+msgid "Report PDF Cached At"
+msgstr "เวลาแคช PDF รายงาน"
+
+#. module: laboratory_management
+msgid "Retry Failed AI Interpretation Jobs"
+msgstr "ลองใหม่งานแปลผล AI ที่ล้มเหลว"
+
+#. module: laboratory_management
+msgid "Retry Batch Size"
+msgstr "ขนาดชุดลองใหม่"

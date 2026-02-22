@@ -425,7 +425,7 @@ msgstr "全血"
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_nonconformance_form
 msgid "CAPA"
-msgstr "CAPA"
+msgstr "纠正与预防措施（CAPA）"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_nonconformance__owner_id
@@ -442,7 +442,8 @@ msgstr "CAPA 计划"
 msgid ""
 "CSV Columns: accession, instrument_code, test_code, result, remark(optional)"
 msgstr ""
-"CSV Columns: accession, instrument_code, test_code, result, remark(optional)"
+"CSV列：accession（样本号）、instrument_code（仪器代码）、test_code（检测代码）、"
+"result（结果）、remark（备注，可选）"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_result_import_wizard_form
@@ -456,8 +457,8 @@ msgid ""
 "CSV columns required: accession, instrument_code, test_code, result, "
 "remark(optional)."
 msgstr ""
-"CSV columns required: accession, instrument_code, test_code, result, "
-"remark(optional)."
+"CSV必填列：accession（样本号）、instrument_code（仪器代码）、test_code（检测代码）、"
+"result（结果）、remark（备注，可选）。"
 
 #. module: laboratory_management
 #. odoo-python
@@ -465,7 +466,7 @@ msgstr ""
 msgid ""
 "CSV columns required: accession, service_code, result, remark(optional)."
 msgstr ""
-"CSV columns required: accession, service_code, result, remark(optional)."
+"CSV必填列：accession（样本号）、service_code（项目代码）、result（结果）、remark（备注，可选）。"
 
 #. module: laboratory_management
 #. odoo-python
@@ -679,8 +680,7 @@ msgid ""
 "Critical result detected: %(service)s = %(result)s %(unit)s (sample "
 "%(sample)s)"
 msgstr ""
-"Critical result detected: %(service)s = %(result)s %(unit)s (sample "
-"%(sample)s)"
+"检测到危急结果：%(service)s = %(result)s %(unit)s（样本%(sample)s）"
 
 #. module: laboratory_management
 #. odoo-python
@@ -1455,8 +1455,7 @@ msgid ""
 "Latest QC for %(service)s is rejected (rule: %(rule)s). Please run QC again "
 "before releasing results."
 msgstr ""
-"Latest QC for %(service)s is rejected (rule: %(rule)s). Please run QC again "
-"before releasing results."
+"%(service)s 最近一次质控被拒绝（规则：%(rule)s）。请先重新完成质控再发布结果。"
 
 #. module: laboratory_management
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_worksheet_form
@@ -2602,10 +2601,10 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
-"Status based on activities\n"
-"Overdue: Due date is already passed\n"
-"Today: Activity date is today\n"
-"Planned: Future activities."
+"基于活动的状态\n"
+"逾期：截止日期已过\n"
+"今天：活动日期是今天\n"
+"计划中：未来活动。"
 
 #. module: laboratory_management
 #: model:ir.model.fields,field_description:laboratory_management.field_lab_qc_material__std_dev
@@ -5149,7 +5148,7 @@ msgstr "质量控制总计"
 
 #. module: laboratory_management
 msgid "Quantity Ok"
-msgstr "数量还可以"
+msgstr "数量正常"
 
 #. module: laboratory_management
 msgid "Queued At"
@@ -5185,7 +5184,7 @@ msgstr "报价备注"
 
 #. module: laboratory_management
 msgid "Quote Reference"
-msgstr "报价参考"
+msgstr "报价编号"
 
 #. module: laboratory_management
 msgid "Quote Revision Count"
@@ -6267,3 +6266,55 @@ msgstr "个人"
 #. module: laboratory_management
 msgid "Institution"
 msgstr "机构"
+
+#. module: laboratory_management
+msgid "Queued"
+msgstr "已入队"
+
+#. module: laboratory_management
+msgid "Queued Worker"
+msgstr "队列处理"
+
+#. module: laboratory_management
+msgid "Generate AI Asynchronously on Report Release"
+msgstr "报告发布时异步生成AI解读"
+
+#. module: laboratory_management
+msgid "AI Queue Batch Size"
+msgstr "AI队列批处理数量"
+
+#. module: laboratory_management
+msgid "Cache Report PDF on Release"
+msgstr "发布时缓存报告PDF"
+
+#. module: laboratory_management
+msgid "Queue AI generation during report release to reduce transaction latency."
+msgstr "在报告发布时将AI生成任务入队，以降低事务延迟。"
+
+#. module: laboratory_management
+msgid "Maximum queued AI items processed per scheduled run."
+msgstr "每次定时任务处理的AI队列最大数量。"
+
+#. module: laboratory_management
+msgid "Generate and cache PDF once at release so portal download can reuse attachment."
+msgstr "在发布时一次性生成并缓存PDF，Portal下载可复用该附件。"
+
+#. module: laboratory_management
+msgid "Lab: Process AI Interpretation Queue"
+msgstr "实验室：处理AI解读队列"
+
+#. module: laboratory_management
+msgid "Cached Report PDF"
+msgstr "缓存报告PDF"
+
+#. module: laboratory_management
+msgid "Report PDF Cached At"
+msgstr "报告PDF缓存时间"
+
+#. module: laboratory_management
+msgid "Retry Failed AI Interpretation Jobs"
+msgstr "重试失败的AI解读任务"
+
+#. module: laboratory_management
+msgid "Retry Batch Size"
+msgstr "重试批处理数量"
