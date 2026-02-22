@@ -1,0 +1,194 @@
+# Laboratory API Reference (CN / EN / TH)
+
+This package is optimized for both human integrators and AI code generation.
+
+## 1. Documents in this folder
+
+- `docs/openapi/external_api_v1.yaml`: OpenAPI 3.0 for external institution REST API.
+- `docs/openapi/interface_api_v1.yaml`: OpenAPI 3.0 for LIS/HIS interface channel API.
+- `docs/postman/LIS_External_API.postman_collection.json`: Postman collection (external + interface).
+
+## 2. Quick integration checklist
+
+### 中文
+1. 在后台创建 `Interface Endpoint`，协议使用 `REST`（外部机构API）或 `HL7/FHIR/REST`（接口通道）。
+2. 开启认证（推荐 `API Key` 或 `Bearer`），并配置 `external_api_enabled`。
+3. 配置机构范围：`external_partner_id`、`external_company_id`。
+4. 先调用“创建申请”接口，再按申请号/样本号轮询状态。
+5. 样本状态到 `verified/reported` 后下载 PDF。
+
+### English
+1. Create an `Interface Endpoint` in backend with protocol `REST` (external institution API) or `HL7/FHIR/REST` (interface channel).
+2. Enable authentication (`API Key` or `Bearer` recommended) and `external_api_enabled`.
+3. Configure data scope by `external_partner_id` and `external_company_id`.
+4. Call create-request first, then poll by request number or accession.
+5. Download PDF only after sample reaches `verified` or `reported`.
+
+### ไทย
+1. สร้าง `Interface Endpoint` ใน backend โดยใช้ protocol `REST` (External API) หรือ `HL7/FHIR/REST` (ช่องทาง interface)
+2. เปิดใช้งานการยืนยันตัวตน (`API Key` หรือ `Bearer`) และ `external_api_enabled`
+3. ตั้งค่า scope ข้อมูลด้วย `external_partner_id` และ `external_company_id`
+4. เรียก API สร้างคำขอก่อน แล้วค่อย polling ด้วย request number/accession
+5. ดาวน์โหลด PDF ได้เมื่อ sample อยู่สถานะ `verified` หรือ `reported`
+
+## 3. Authentication
+
+Supported auth configured on endpoint:
+- `X-API-Key: <key>`
+- `Authorization: Bearer <token>`
+- `Authorization: Basic <base64(username:password)>`
+
+If endpoint auth is set to `none`, requests are accepted without credentials (not recommended for production).
+
+## 4. External Institution REST API
+
+Base path:
+- `/lab/api/v1/{endpoint_code}`
+
+### 4.1 Create test request
+- `POST /requests`
+- Route type in Odoo: `json`
+- Content-Type: `application/json`
+
+Request payload contract:
+- `lines` (required, array)
+- `external_uid` (optional but strongly recommended for idempotency)
+- `patient` (optional object)
+- `physician` (optional object)
+- `priority`, `sample_type`, `clinical_note`, `preferred_template_code` (optional)
+
+Line rules:
+- `line_type` must be `service` or `profile`
+- if `service` -> `service_code` required
+- if `profile` -> `profile_code` required
+- `specimen_ref` default is `SP1`
+- `specimen_sample_type` default is `swab`
+- `quantity` default is `1`
+
+Successful response shape:
+```json
+{
+  "ok": true,
+  "deduplicated": false,
+  "request": {
+    "id": 320,
+    "request_no": "TRQ2602-00320",
+    "state": "submitted",
+    "samples": []
+  }
+}
+```
+
+### 4.2 Query request
+- `GET /requests/{request_no}`
+- Returns request header + patient summary + sample list.
+
+### 4.3 Query sample results
+- `GET /samples/{accession}/results`
+- Returns sample state + analysis lines + optional `ai_interpretation`.
+
+### 4.4 Download sample report PDF
+- `GET /samples/{accession}/report/pdf`
+- Binary PDF stream.
+- Returns `409 report_not_ready` before state is `verified/reported`.
+
+## 5. LIS/HIS Interface Channel API
+
+### 5.1 Inbound JSON-RPC
+- `POST /lab/interface/inbound/{endpoint_code}`
+- Route type: `jsonrpc`
+- Body fields:
+  - `message_type` (e.g. `order`)
+  - `payload` (object)
+  - `external_uid` (optional)
+  - `raw_message` (optional)
+
+Response includes ACK semantics:
+- `ack_code`: `AA` (accepted), `AE` (error), `AR` (rejected)
+
+### 5.2 Inbound raw message
+- `POST /lab/interface/inbound/{endpoint_code}/raw`
+- Route type: `http`
+- Protocol behavior:
+  - `hl7v2`: returns HL7 ACK text
+  - `fhir`: returns FHIR OperationOutcome JSON
+  - `rest`: treats body as JSON payload
+
+### 5.3 Outbound ACK receiver
+- `POST /lab/interface/outbound/{endpoint_code}/ack`
+- Route type: `jsonrpc`
+- Fields: `ack_code`, `job_name`/`job_id`, `external_uid`, `message`, `payload`
+
+## 6. Common error codes
+
+External API errors:
+- `endpoint_not_found`
+- `endpoint_protocol_not_rest`
+- `unauthorized`
+- `request_push_disabled`
+- `result_query_disabled`
+- `report_download_disabled`
+- `lines_required`
+- `invalid_line_type`
+- `service_not_found`
+- `profile_not_found`
+- `request_not_found`
+- `sample_not_found`
+- `report_not_ready`
+
+Interface API errors:
+- `endpoint_not_found`
+- `direction_not_allowed`
+- `unauthorized`
+- runtime exceptions returned as `error`
+
+## 7. AI-friendly field dictionary
+
+### Request states
+- `draft`: created but not submitted.
+- `submitted`: request submitted to lab workflow.
+- `approved`: request reviewed/approved.
+- `done`/`cancel`: terminal states depending on workflow.
+
+### Sample states
+- `draft` -> `received` -> `in_progress` -> `verified` -> `reported`
+
+### Result line fields
+- `service_code`: service unique code.
+- `result_value`: textual/numeric result value.
+- `binary_interpretation`: normalized positive/negative style interpretation.
+- `unit`, `ref_min`, `ref_max`: reference range metadata.
+
+## 8. cURL examples
+
+Create request:
+```bash
+curl -X POST "http://127.0.0.1:8069/lab/api/v1/ext_hospital_demo/requests" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: DEMO-HOSP-API-KEY-2026" \
+  -d '{
+    "external_uid": "HIS-REQ-20260222-9001",
+    "priority": "routine",
+    "patient": {"name": "API Patient A", "identifier": "API-9001", "gender": "female"},
+    "lines": [{"line_type": "service", "service_code": "STD_CT", "specimen_ref": "SP1", "specimen_sample_type": "swab"}]
+  }'
+```
+
+Query request:
+```bash
+curl -X GET "http://127.0.0.1:8069/lab/api/v1/ext_hospital_demo/requests/TRQ2602-00320" \
+  -H "X-API-Key: DEMO-HOSP-API-KEY-2026"
+```
+
+Query sample results:
+```bash
+curl -X GET "http://127.0.0.1:8069/lab/api/v1/ext_hospital_demo/samples/ACC2602-00318/results" \
+  -H "X-API-Key: DEMO-HOSP-API-KEY-2026"
+```
+
+Download PDF:
+```bash
+curl -X GET "http://127.0.0.1:8069/lab/api/v1/ext_hospital_demo/samples/ACC2602-00318/report/pdf" \
+  -H "X-API-Key: DEMO-HOSP-API-KEY-2026" \
+  -o report.pdf
+```

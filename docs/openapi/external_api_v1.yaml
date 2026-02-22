@@ -1,0 +1,441 @@
+openapi: 3.0.3
+info:
+  title: Laboratory External Institution API
+  version: 1.1.0
+  description: |
+    REST API for external hospitals/institutions.
+    Supports request push, request query, sample result query, and report PDF download.
+servers:
+  - url: https://{host}
+    variables:
+      host:
+        default: example.com
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+  - BasicAuth: []
+tags:
+  - name: Requests
+  - name: Samples
+  - name: Reports
+paths:
+  /lab/api/v1/{endpoint_code}/requests:
+    post:
+      tags: [Requests]
+      summary: Create test request
+      operationId: createExternalRequest
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRequestPayload'
+            examples:
+              serviceLine:
+                value:
+                  external_uid: HIS-REQ-20260222-9001
+                  priority: routine
+                  sample_type: swab
+                  clinical_note: External API demo request
+                  patient:
+                    name: API Patient A
+                    identifier: API-ID-9001
+                    gender: female
+                    birthdate: '1992-01-01'
+                    phone: '13800001111'
+                  physician:
+                    name: Dr. External
+                    partner_ref: PHY-001
+                  lines:
+                    - line_type: service
+                      service_code: STD_CT
+                      quantity: 1
+                      specimen_ref: SP1
+                      specimen_barcode: API-CUP-9001
+                      specimen_sample_type: swab
+      responses:
+        '200':
+          description: Created or deduplicated by external_uid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRequestResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                unauthorized:
+                  value: { ok: false, error: unauthorized }
+        '403':
+          description: Feature disabled or invalid endpoint protocol
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                disabled:
+                  value: { ok: false, error: request_push_disabled }
+        '404':
+          description: Endpoint not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notFound:
+                  value: { ok: false, error: endpoint_not_found }
+
+  /lab/api/v1/{endpoint_code}/requests/{request_no}:
+    get:
+      tags: [Requests]
+      summary: Query request by request number
+      operationId: getExternalRequest
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+        - in: path
+          name: request_no
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Request detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestQueryResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Result query disabled
+        '404':
+          description: Request not found or endpoint not found
+
+  /lab/api/v1/{endpoint_code}/samples/{accession}/results:
+    get:
+      tags: [Samples]
+      summary: Query sample results by accession
+      operationId: getExternalSampleResults
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+        - in: path
+          name: accession
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Sample result payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SampleResultResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Result query disabled
+        '404':
+          description: Sample not found or endpoint not found
+
+  /lab/api/v1/{endpoint_code}/samples/{accession}/report/pdf:
+    get:
+      tags: [Reports]
+      summary: Download sample report PDF
+      operationId: downloadExternalSampleReportPdf
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+        - in: path
+          name: accession
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: PDF binary
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized
+        '403':
+          description: Report download disabled
+        '404':
+          description: Sample/endpoint not found
+        '409':
+          description: Report not ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notReady:
+                  value: { ok: false, error: report_not_ready }
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+    BasicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [ok, error]
+      properties:
+        ok:
+          type: boolean
+          enum: [false]
+        error:
+          type: string
+
+    CreateRequestPayload:
+      type: object
+      required: [lines]
+      properties:
+        external_uid:
+          type: string
+          description: Idempotency key unique under one endpoint
+        requested_collection_date:
+          type: string
+          format: date-time
+        priority:
+          type: string
+          enum: [routine, urgent, stat]
+          default: routine
+        sample_type:
+          type: string
+          default: swab
+        clinical_note:
+          type: string
+        preferred_template_code:
+          type: string
+        patient:
+          $ref: '#/components/schemas/PatientInput'
+        physician:
+          $ref: '#/components/schemas/PhysicianInput'
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/RequestLineInput'
+
+    PatientInput:
+      type: object
+      properties:
+        name:
+          type: string
+        identifier:
+          type: string
+        gender:
+          type: string
+          enum: [male, female, other, unknown]
+          default: unknown
+        birthdate:
+          type: string
+          format: date
+        phone:
+          type: string
+
+    PhysicianInput:
+      type: object
+      properties:
+        name:
+          type: string
+        partner_ref:
+          type: string
+
+    RequestLineInput:
+      type: object
+      required: [line_type]
+      properties:
+        line_type:
+          type: string
+          enum: [service, profile]
+        service_code:
+          type: string
+          description: Required when line_type=service
+        profile_code:
+          type: string
+          description: Required when line_type=profile
+        quantity:
+          type: integer
+          minimum: 1
+          default: 1
+        specimen_ref:
+          type: string
+          default: SP1
+        specimen_barcode:
+          type: string
+        specimen_sample_type:
+          type: string
+          default: swab
+        note:
+          type: string
+
+    CreateRequestResponse:
+      type: object
+      required: [ok]
+      properties:
+        ok:
+          type: boolean
+        deduplicated:
+          type: boolean
+          description: true when external_uid already exists
+        request:
+          $ref: '#/components/schemas/RequestObject'
+
+    RequestQueryResponse:
+      type: object
+      required: [ok]
+      properties:
+        ok:
+          type: boolean
+        request:
+          $ref: '#/components/schemas/RequestObject'
+
+    RequestObject:
+      type: object
+      properties:
+        id:
+          type: integer
+        request_no:
+          type: string
+        state:
+          type: string
+        request_type:
+          type: string
+        requester:
+          type: string
+        institution:
+          type: string
+        priority:
+          type: string
+        submitted_at:
+          type: string
+          format: date-time
+          nullable: true
+        approved_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        patient:
+          type: object
+          properties:
+            id:
+              type: integer
+              nullable: true
+            name:
+              type: string
+            identifier:
+              type: string
+            gender:
+              type: string
+            phone:
+              type: string
+        samples:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestSample'
+
+    RequestSample:
+      type: object
+      properties:
+        sample_id:
+          type: integer
+        accession:
+          type: string
+        barcode:
+          type: string
+        state:
+          type: string
+        report_date:
+          type: string
+          format: date-time
+          nullable: true
+
+    SampleResultResponse:
+      type: object
+      required: [ok, sample]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        sample:
+          $ref: '#/components/schemas/SampleObject'
+
+    SampleObject:
+      type: object
+      properties:
+        id:
+          type: integer
+        accession:
+          type: string
+        barcode:
+          type: string
+        state:
+          type: string
+        report_date:
+          type: string
+          format: date-time
+          nullable: true
+        patient:
+          type: string
+        request_no:
+          type: string
+        ai_interpretation:
+          type: string
+          description: Empty string when AI text is not portal-visible
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultLine'
+
+    ResultLine:
+      type: object
+      properties:
+        service_code:
+          type: string
+        service_name:
+          type: string
+        result_value:
+          type: string
+        binary_interpretation:
+          type: string
+        state:
+          type: string
+        unit:
+          type: string
+        ref_min:
+          type: number
+          nullable: true
+        ref_max:
+          type: number
+          nullable: true

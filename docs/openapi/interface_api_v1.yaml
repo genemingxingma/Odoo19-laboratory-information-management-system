@@ -1,0 +1,171 @@
+openapi: 3.0.3
+info:
+  title: Laboratory LIS/HIS Interface API
+  version: 1.0.0
+  description: |
+    Integration channel API for inbound/outbound communication.
+    Includes JSON-RPC style endpoints and raw message endpoint.
+servers:
+  - url: https://{host}
+    variables:
+      host:
+        default: example.com
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+  - BasicAuth: []
+tags:
+  - name: Interface Inbound
+  - name: Interface Outbound
+paths:
+  /lab/interface/inbound/{endpoint_code}:
+    post:
+      tags: [Interface Inbound]
+      summary: Inbound JSON-RPC message
+      description: Odoo route type is jsonrpc; body shown here is effective message payload.
+      operationId: inboundJsonrpc
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InboundMessage'
+      responses:
+        '200':
+          description: ACK response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InboundAck'
+
+  /lab/interface/inbound/{endpoint_code}/raw:
+    post:
+      tags: [Interface Inbound]
+      summary: Inbound raw message (HL7/FHIR/REST)
+      operationId: inboundRaw
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Protocol-dependent ACK
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/fhir+json:
+              schema:
+                type: object
+        '400':
+          description: Parsing/processing error
+
+  /lab/interface/outbound/{endpoint_code}/ack:
+    post:
+      tags: [Interface Outbound]
+      summary: Receive outbound ACK callback
+      description: Odoo route type is jsonrpc; body shown here is effective payload.
+      operationId: outboundAck
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OutboundAckInput'
+      responses:
+        '200':
+          description: ACK accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OkResponse'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    InboundMessage:
+      type: object
+      properties:
+        message_type:
+          type: string
+          default: order
+        payload:
+          type: object
+          additionalProperties: true
+        external_uid:
+          type: string
+        raw_message:
+          type: string
+
+    InboundAck:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        ack_code:
+          type: string
+          description: AA (accept), AE (error), AR (reject)
+        job_id:
+          type: integer
+        job_name:
+          type: string
+        state:
+          type: string
+        error:
+          type: string
+
+    OutboundAckInput:
+      type: object
+      properties:
+        ack_code:
+          type: string
+          description: AA/AE/AR etc.
+        job_name:
+          type: string
+        job_id:
+          type: integer
+        external_uid:
+          type: string
+        message:
+          type: string
+        payload:
+          type: object
+          additionalProperties: true
+
+    OkResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        error:
+          type: string
