@@ -7,7 +7,9 @@
             <list>
                 <field name="name"/>
                 <field name="identifier"/>
+                <field name="passport_no"/>
                 <field name="birthdate"/>
+                <field name="age_display"/>
                 <field name="gender"/>
                 <field name="phone"/>
                 <field name="email"/>
@@ -29,7 +31,9 @@
                         <group>
                             <field name="name"/>
                             <field name="identifier"/>
+                            <field name="passport_no"/>
                             <field name="birthdate"/>
+                            <field name="age_display" readonly="1"/>
                             <field name="gender"/>
                             <field name="lang"/>
                             <field name="phone"/>
@@ -48,12 +52,12 @@
                         <group>
                             <field name="street"/>
                             <field name="street2"/>
-                            <field name="city"/>
+                            <field name="country_id"/>
+                            <field name="state_id" domain="[('country_id', '=', country_id)]"/>
+                            <field name="city_id" domain="[('country_id', '=', country_id), '|', ('state_id', '=', state_id), ('state_id', '=', False)]"/>
                         </group>
                         <group>
-                            <field name="state"/>
                             <field name="zip"/>
-                            <field name="country"/>
                         </group>
                     </group>
                     <group string="Emergency Contact">

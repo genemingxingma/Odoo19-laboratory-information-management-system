@@ -1,4 +1,6 @@
-from odoo import fields, models
+from dateutil.relativedelta import relativedelta
+
+from odoo import api, fields, models
 
 
 class LabPatient(models.Model):
@@ -10,8 +12,10 @@ class LabPatient(models.Model):
     active = fields.Boolean(default=True)
     company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company, index=True)
     name = fields.Char(required=True, tracking=True)
-    identifier = fields.Char(string="Patient ID / Passport", tracking=True, index=True)
+    identifier = fields.Char(string="Patient ID", tracking=True, index=True)
+    passport_no = fields.Char(string="Passport No.", tracking=True, index=True)
     birthdate = fields.Date(string="Date of Birth")
+    age_display = fields.Char(string="Age", compute="_compute_age_display")
     gender = fields.Selection(
         [("male", "Male"), ("female", "Female"), ("other", "Other"), ("unknown", "Unknown")],
         default="unknown",
@@ -21,10 +25,10 @@ class LabPatient(models.Model):
     lang = fields.Selection(selection=lambda self: self.env["res.lang"].get_installed(), string="Language")
     street = fields.Char(string="Street")
     street2 = fields.Char(string="Street 2")
-    city = fields.Char(string="City")
-    state = fields.Char(string="State/Province")
+    city_id = fields.Many2one("res.city", string="City")
+    state_id = fields.Many2one("res.country.state", string="State/Province")
     zip = fields.Char(string="ZIP")
-    country = fields.Char(string="Country")
+    country_id = fields.Many2one("res.country", string="Country")
 
     emergency_contact_name = fields.Char(string="Emergency Contact Name")
     emergency_contact_phone = fields.Char(string="Emergency Contact Phone")
@@ -57,6 +61,40 @@ class LabPatient(models.Model):
         (
             "lab_patient_identifier_company_uniq",
             "unique(identifier, company_id)",
-            "Patient identifier must be unique per company.",
+            "Patient ID must be unique per company.",
+        ),
+        (
+            "lab_patient_passport_company_uniq",
+            "unique(passport_no, company_id)",
+            "Passport number must be unique per company.",
         ),
     ]
+
+    @api.depends("birthdate")
+    def _compute_age_display(self):
+        today = fields.Date.context_today(self)
+        for rec in self:
+            if not rec.birthdate:
+                rec.age_display = False
+                continue
+            if rec.birthdate > today:
+                rec.age_display = "0年0月0日"
+                continue
+            delta = relativedelta(today, rec.birthdate)
+            rec.age_display = f"{delta.years}年{delta.months}月{delta.days}日"
+
+    @api.onchange("country_id")
+    def _onchange_country_id(self):
+        for rec in self:
+            if rec.state_id and rec.state_id.country_id != rec.country_id:
+                rec.state_id = False
+            if rec.city_id and rec.city_id.country_id != rec.country_id:
+                rec.city_id = False
+
+    @api.onchange("state_id")
+    def _onchange_state_id(self):
+        for rec in self:
+            if rec.state_id and rec.country_id != rec.state_id.country_id:
+                rec.country_id = rec.state_id.country_id
+            if rec.city_id and rec.city_id.state_id != rec.state_id:
+                rec.city_id = False

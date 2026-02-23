@@ -18,7 +18,7 @@ Features:
     "website": "https://imytest.local",
     "license": "LGPL-3",
     "images": ["static/description/icon.png"],
-    "depends": ["base", "mail", "portal", "website", "account", "product", "base_setup", "sale", "website_sale"],
+    "depends": ["base", "mail", "portal", "website", "account", "product", "base_setup", "base_address_extended", "sale", "website_sale"],
     "assets": {
         "web.assets_web": [
             "laboratory_management/static/src/scss/chatter_sidebar.scss",
