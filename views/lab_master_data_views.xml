@@ -4,7 +4,7 @@
         <field name="name">lab.department.type.list</field>
         <field name="model">lab.department.type</field>
         <field name="arch" type="xml">
-            <list editable="bottom">
+            <list>
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="code"/>
