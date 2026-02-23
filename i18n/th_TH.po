@@ -6545,12 +6545,20 @@ msgid "If enabled, selected services are excluded and all other services are all
 msgstr "เมื่อเปิดใช้งาน บริการที่เลือกจะถูกยกเว้น และอนุญาตบริการอื่นทั้งหมด"
 
 #. module: laboratory_management
+msgid "If enabled, selected services are excluded and all other services are allowed. If no services are selected, all services are allowed."
+msgstr "เมื่อเปิดใช้งาน บริการที่เลือกจะถูกยกเว้น และอนุญาตบริการอื่นทั้งหมด หากไม่เลือกบริการใดเลย จะถือว่าอนุญาตบริการทั้งหมด"
+
+#. module: laboratory_management
 msgid "Exclude Selected Profiles"
 msgstr "ยกเว้นโปรไฟล์ที่เลือก"
 
 #. module: laboratory_management
 msgid "If enabled, selected profiles are excluded and all other profiles are allowed."
 msgstr "เมื่อเปิดใช้งาน โปรไฟล์ที่เลือกจะถูกยกเว้น และอนุญาตโปรไฟล์อื่นทั้งหมด"
+
+#. module: laboratory_management
+msgid "If enabled, selected profiles are excluded and all other profiles are allowed. If no panels are selected, all panels are allowed."
+msgstr "เมื่อเปิดใช้งาน โปรไฟล์ที่เลือกจะถูกยกเว้น และอนุญาตโปรไฟล์อื่นทั้งหมด หากไม่เลือกแผงใดเลย จะถือว่าอนุญาตแผงทั้งหมด"
 
 #. module: laboratory_management
 msgid "Allowed Service Count"

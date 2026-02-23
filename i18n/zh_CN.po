@@ -6544,12 +6544,20 @@ msgid "If enabled, selected services are excluded and all other services are all
 msgstr "启用后，所选服务将被排除，其他服务均可用。"
 
 #. module: laboratory_management
+msgid "If enabled, selected services are excluded and all other services are allowed. If no services are selected, all services are allowed."
+msgstr "启用后，所选服务将被排除，其他服务均可用。若未选择任何服务，则默认全部服务可用。"
+
+#. module: laboratory_management
 msgid "Exclude Selected Profiles"
 msgstr "除外所选组合"
 
 #. module: laboratory_management
 msgid "If enabled, selected profiles are excluded and all other profiles are allowed."
 msgstr "启用后，所选组合将被排除，其他组合均可用。"
+
+#. module: laboratory_management
+msgid "If enabled, selected profiles are excluded and all other profiles are allowed. If no panels are selected, all panels are allowed."
+msgstr "启用后，所选面板将被排除，其他面板均可用。若未选择任何面板，则默认全部面板可用。"
 
 #. module: laboratory_management
 msgid "Allowed Service Count"

@@ -75,9 +75,17 @@
                     </group>
                     <group string="Request Type Catalog Scope">
                         <field name="exclude_selected_services"/>
-                        <field name="allowed_service_ids" widget="many2many_tags"/>
+                        <field
+                            name="allowed_service_ids"
+                            widget="many2many_tags"
+                            domain="[('active','=',True), ('company_id', '=', company_id), ('profile_only', '=', False), ('id', 'not in', allowed_service_ids)]"
+                        />
                         <field name="exclude_selected_profiles"/>
-                        <field name="allowed_profile_ids" widget="many2many_tags"/>
+                        <field
+                            name="allowed_profile_ids"
+                            widget="many2many_tags"
+                            domain="[('active','=',True), ('company_id', '=', company_id), ('id', 'not in', allowed_profile_ids)]"
+                        />
                     </group>
                 </sheet>
             </form>

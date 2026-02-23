@@ -198,7 +198,8 @@ class LabRequestType(models.Model):
     exclude_selected_services = fields.Boolean(
         string="Exclude Selected Services",
         default=False,
-        help="If enabled, selected services are excluded and all other services are allowed.",
+        help="If enabled, selected services are excluded and all other services are allowed. "
+        "If no services are selected, all services are allowed.",
     )
     allowed_profile_ids = fields.Many2many(
         "lab.profile",
@@ -211,7 +212,8 @@ class LabRequestType(models.Model):
     exclude_selected_profiles = fields.Boolean(
         string="Exclude Selected Profiles",
         default=False,
-        help="If enabled, selected profiles are excluded and all other profiles are allowed.",
+        help="If enabled, selected profiles are excluded and all other profiles are allowed. "
+        "If no panels are selected, all panels are allowed.",
     )
     allowed_service_count = fields.Integer(compute="_compute_allowed_counts", string="Allowed Service Count")
     allowed_profile_count = fields.Integer(compute="_compute_allowed_counts", string="Allowed Profile Count")
@@ -228,8 +230,49 @@ class LabRequestType(models.Model):
             if rec.allowed_profile_ids.filtered(lambda p: p.company_id and p.company_id != rec.company_id):
                 raise ValidationError(_("Allowed Profiles must belong to the same company as Request Type."))
 
-    @api.depends("allowed_service_ids", "allowed_profile_ids")
+    @api.depends(
+        "allowed_service_ids",
+        "allowed_profile_ids",
+        "exclude_selected_services",
+        "exclude_selected_profiles",
+        "company_id",
+    )
     def _compute_allowed_counts(self):
+        service_model = self.env["lab.service"].sudo()
+        profile_model = self.env["lab.profile"].sudo()
         for rec in self:
-            rec.allowed_service_count = len(rec.allowed_service_ids)
-            rec.allowed_profile_count = len(rec.allowed_profile_ids)
+            service_domain = [
+                ("active", "=", True),
+                ("company_id", "=", rec.company_id.id),
+                ("profile_only", "=", False),
+            ]
+            profile_domain = [
+                ("active", "=", True),
+                ("company_id", "=", rec.company_id.id),
+            ]
+
+            if rec.allowed_service_ids:
+                if rec.exclude_selected_services:
+                    service_domain.append(("id", "not in", rec.allowed_service_ids.ids))
+                    rec.allowed_service_count = service_model.search_count(service_domain)
+                else:
+                    rec.allowed_service_count = len(
+                        rec.allowed_service_ids.filtered(
+                            lambda s: s.active and s.company_id == rec.company_id and not s.profile_only
+                        )
+                    )
+            else:
+                # Empty list means all are allowed.
+                rec.allowed_service_count = service_model.search_count(service_domain)
+
+            if rec.allowed_profile_ids:
+                if rec.exclude_selected_profiles:
+                    profile_domain.append(("id", "not in", rec.allowed_profile_ids.ids))
+                    rec.allowed_profile_count = profile_model.search_count(profile_domain)
+                else:
+                    rec.allowed_profile_count = len(
+                        rec.allowed_profile_ids.filtered(lambda p: p.active and p.company_id == rec.company_id)
+                    )
+            else:
+                # Empty list means all are allowed.
+                rec.allowed_profile_count = profile_model.search_count(profile_domain)
