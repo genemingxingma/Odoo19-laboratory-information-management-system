@@ -46,10 +46,12 @@
         <field name="name">lab.request.type.list</field>
         <field name="model">lab.request.type</field>
         <field name="arch" type="xml">
-            <list editable="bottom">
+            <list>
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="code"/>
+                <field name="allowed_service_count" string="Services"/>
+                <field name="allowed_profile_count" string="Profiles"/>
                 <field name="is_default"/>
                 <field name="active"/>
             </list>
@@ -72,7 +74,9 @@
                         </group>
                     </group>
                     <group string="Request Type Catalog Scope">
+                        <field name="exclude_selected_services"/>
                         <field name="allowed_service_ids" widget="many2many_tags"/>
+                        <field name="exclude_selected_profiles"/>
                         <field name="allowed_profile_ids" widget="many2many_tags"/>
                     </group>
                 </sheet>

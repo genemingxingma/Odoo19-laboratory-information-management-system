@@ -195,6 +195,11 @@ class LabRequestType(models.Model):
         string="Allowed Services",
         domain="[('active','=',True), ('company_id', '=', company_id), ('profile_only', '=', False)]",
     )
+    exclude_selected_services = fields.Boolean(
+        string="Exclude Selected Services",
+        default=False,
+        help="If enabled, selected services are excluded and all other services are allowed.",
+    )
     allowed_profile_ids = fields.Many2many(
         "lab.profile",
         "lab_request_type_profile_rel",
@@ -203,6 +208,13 @@ class LabRequestType(models.Model):
         string="Allowed Profiles",
         domain="[('active','=',True), ('company_id', '=', company_id)]",
     )
+    exclude_selected_profiles = fields.Boolean(
+        string="Exclude Selected Profiles",
+        default=False,
+        help="If enabled, selected profiles are excluded and all other profiles are allowed.",
+    )
+    allowed_service_count = fields.Integer(compute="_compute_allowed_counts", string="Allowed Service Count")
+    allowed_profile_count = fields.Integer(compute="_compute_allowed_counts", string="Allowed Profile Count")
 
     _sql_constraints = [
         ("lab_request_type_code_uniq", "unique(code)", "Request type code must be unique."),
@@ -215,3 +227,9 @@ class LabRequestType(models.Model):
                 raise ValidationError(_("Allowed Services must belong to the same company as Request Type."))
             if rec.allowed_profile_ids.filtered(lambda p: p.company_id and p.company_id != rec.company_id):
                 raise ValidationError(_("Allowed Profiles must belong to the same company as Request Type."))
+
+    @api.depends("allowed_service_ids", "allowed_profile_ids")
+    def _compute_allowed_counts(self):
+        for rec in self:
+            rec.allowed_service_count = len(rec.allowed_service_ids)
+            rec.allowed_profile_count = len(rec.allowed_profile_ids)

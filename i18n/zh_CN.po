@@ -6534,3 +6534,27 @@ msgstr "服务 %(service)s 不允许用于申请类型 %(request_type)s。"
 #. module: laboratory_management
 msgid "Profile %(profile)s is not allowed for request type %(request_type)s."
 msgstr "组合 %(profile)s 不允许用于申请类型 %(request_type)s。"
+
+#. module: laboratory_management
+msgid "Exclude Selected Services"
+msgstr "除外所选服务"
+
+#. module: laboratory_management
+msgid "If enabled, selected services are excluded and all other services are allowed."
+msgstr "启用后，所选服务将被排除，其他服务均可用。"
+
+#. module: laboratory_management
+msgid "Exclude Selected Profiles"
+msgstr "除外所选组合"
+
+#. module: laboratory_management
+msgid "If enabled, selected profiles are excluded and all other profiles are allowed."
+msgstr "启用后，所选组合将被排除，其他组合均可用。"
+
+#. module: laboratory_management
+msgid "Allowed Service Count"
+msgstr "允许服务数量"
+
+#. module: laboratory_management
+msgid "Allowed Profile Count"
+msgstr "允许组合数量"
