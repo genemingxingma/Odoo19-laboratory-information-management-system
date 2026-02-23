@@ -1,8 +1,14 @@
 import hashlib
 import json
 import secrets
+from urllib.parse import urljoin
 
 from odoo import _, api, fields, models
+
+
+class _SafeFormatDict(dict):
+    def __missing__(self, key):
+        return ""
 
 
 class LabReportDispatch(models.Model):
@@ -97,6 +103,11 @@ class LabReportDispatch(models.Model):
         now = fields.Datetime.now()
         for rec in self:
             if rec.state == "cancel":
+                continue
+            send_ok = True
+            if rec.channel == "email":
+                send_ok = rec._send_report_email_notification(reminder=False)
+            if not send_ok:
                 continue
             rec.write(
                 {
@@ -226,6 +237,11 @@ class LabReportDispatch(models.Model):
         for rec in self:
             if rec.state in ("acknowledged", "cancel"):
                 continue
+            send_ok = True
+            if rec.channel == "email":
+                send_ok = rec._send_report_email_notification(reminder=True)
+            if not send_ok:
+                continue
             rec.write(
                 {
                     "reminder_count": rec.reminder_count + 1,
@@ -235,6 +251,53 @@ class LabReportDispatch(models.Model):
             rec._log_event("reminder", _("Acknowledgement reminder issued."))
             rec.message_post(body=_("Reminder sent to %s.") % (rec.partner_id.name,))
         return True
+
+    def _send_report_email_notification(self, reminder=False):
+        self.ensure_one()
+        if self.channel != "email":
+            return True
+
+        partner = self.partner_id.commercial_partner_id or self.partner_id
+        to_email = (self.partner_id.email or partner.email or "").strip()
+        if not to_email:
+            self._log_event("error", _("Email dispatch skipped: recipient email is empty."))
+            return False
+
+        sample = self.sample_id.sudo()
+        attachment = sample._generate_report_pdf_attachment(force=False, suppress_error=True)
+        if not attachment:
+            self._log_event("error", _("Email dispatch failed: report PDF is unavailable."))
+            return False
+
+        template = self.env["lab.report.email.template"].sudo().get_active_template(self.company_id)
+        if not template:
+            self._log_event("error", _("Email dispatch failed: active email template is missing."))
+            return False
+
+        try:
+            subject, body_html = template.render_for_dispatch(self, reminder=reminder)
+            mail_vals = {
+                "subject": subject,
+                "body_html": body_html,
+                "email_to": to_email,
+                "auto_delete": False,
+                "model": "lab.sample",
+                "res_id": self.sample_id.id,
+                "attachment_ids": [(4, attachment.id)],
+            }
+            if self.partner_id:
+                mail_vals["recipient_ids"] = [(4, self.partner_id.id)]
+            mail = self.env["mail.mail"].sudo().create(mail_vals)
+            mail.send()
+            self._log_event(
+                "email",
+                _("Report email sent to %s.") % (to_email,),
+                extra=("reminder" if reminder else "release"),
+            )
+            return True
+        except Exception as exc:
+            self._log_event("error", _("Email dispatch failed: %s") % (str(exc),))
+            return False
 
     @api.model
     def _cron_dispatch_ack_reminder(self):
@@ -286,6 +349,8 @@ class LabReportDispatchLog(models.Model):
             ("downloaded", "Downloaded"),
             ("acknowledged", "Acknowledged"),
             ("reminder", "Reminder"),
+            ("email", "Email"),
+            ("error", "Error"),
             ("cancel", "Cancelled"),
             ("reset", "Reset"),
         ],
@@ -318,3 +383,80 @@ class LabReportAckSignature(models.Model):
 
     payload_json = fields.Text(readonly=True)
     signature_hash = fields.Char(required=True, readonly=True, index=True)
+
+
+class LabReportEmailTemplate(models.Model):
+    _name = "lab.report.email.template"
+    _description = "Lab Report Email Template"
+    _order = "sequence, id"
+
+    _template_company_code_uniq = models.Constraint(
+        "unique(code, company_id)",
+        "Email template code must be unique per company.",
+    )
+
+    name = fields.Char(required=True, translate=True)
+    code = fields.Char(required=True, default="default")
+    active = fields.Boolean(default=True)
+    sequence = fields.Integer(default=10)
+    company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company, index=True)
+    auto_send_on_release = fields.Boolean(default=True)
+
+    reminder_prefix = fields.Char(
+        default="[Reminder]",
+        translate=True,
+        help="Prefix added to email subject when sending reminder notifications.",
+    )
+    subject_template = fields.Char(
+        required=True,
+        translate=True,
+        default="Lab report {sample_name} is ready",
+    )
+    body_html_template = fields.Html(
+        required=True,
+        translate=True,
+        sanitize=True,
+    )
+
+    @api.model
+    def get_active_template(self, company):
+        domain = [("active", "=", True), ("auto_send_on_release", "=", True)]
+        if company:
+            domain = domain + ["|", ("company_id", "=", company.id), ("company_id", "=", False)]
+        return self.search(domain, order="sequence asc, id asc", limit=1)
+
+    def _build_template_context(self, dispatch):
+        self.ensure_one()
+        sample = dispatch.sample_id
+        partner = dispatch.partner_id.commercial_partner_id or dispatch.partner_id
+        base_url = (self.env["ir.config_parameter"].sudo().get_param("web.base.url") or "").rstrip("/")
+
+        sample_url = "/my/lab/samples/%s/report/h5" % sample.id
+        history_url = "/my/lab/samples"
+        portal_sample_url = urljoin(base_url + "/", sample_url.lstrip("/")) if base_url else sample_url
+        portal_history_url = urljoin(base_url + "/", history_url.lstrip("/")) if base_url else history_url
+
+        return _SafeFormatDict(
+            {
+                "partner_name": partner.name or "",
+                "sample_name": sample.name or "",
+                "accession": sample.name or "",
+                "patient_name": sample.patient_id.name or "",
+                "report_date": sample.report_date or "",
+                "portal_sample_url": portal_sample_url,
+                "portal_history_url": portal_history_url,
+                "company_name": (dispatch.company_id.name if dispatch.company_id else self.env.company.name) or "",
+            }
+        )
+
+    def render_for_dispatch(self, dispatch, reminder=False):
+        self.ensure_one()
+        lang = dispatch.partner_id.lang or dispatch.partner_id.commercial_partner_id.lang or self.env.user.lang
+        tmpl = self.with_context(lang=lang)
+        values = tmpl._build_template_context(dispatch)
+
+        subject = (tmpl.subject_template or "").format_map(values)
+        if reminder and tmpl.reminder_prefix:
+            subject = "%s %s" % (tmpl.reminder_prefix, subject)
+        body_html = (tmpl.body_html_template or "").format_map(values)
+        return subject, body_html

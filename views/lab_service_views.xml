@@ -34,7 +34,7 @@
                             <field name="result_type"/>
                             <field name="list_price"/>
                             <field name="billable_product_id"/>
-                            <field name="unit"/>
+                            <field name="unit_id"/>
                             <field name="ref_min" invisible="result_type != 'numeric'"/>
                             <field name="ref_max" invisible="result_type != 'numeric'"/>
                             <field name="critical_min" invisible="result_type != 'numeric'"/>

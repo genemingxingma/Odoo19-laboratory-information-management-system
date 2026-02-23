@@ -6,7 +6,13 @@
     </record>
 
     <record id="base.group_system" model="res.groups">
-        <field name="implied_ids" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="implied_ids" eval="[
+            (4, ref('laboratory_management.group_lab_user')),
+            (4, ref('laboratory_management.group_lab_reception')),
+            (4, ref('laboratory_management.group_lab_manager')),
+            (4, ref('laboratory_management.group_lab_quality_manager')),
+            (4, ref('laboratory_management.group_lab_interface_admin'))
+        ]"/>
     </record>
 
     <record id="group_lab_reception" model="res.groups">

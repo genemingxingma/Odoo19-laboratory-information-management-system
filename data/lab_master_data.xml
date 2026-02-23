@@ -92,4 +92,46 @@
         <field name="code">institution</field>
         <field name="sequence">20</field>
     </record>
+
+    <record id="lab_result_unit_none" model="lab.result.unit">
+        <field name="name">No Unit</field>
+        <field name="code">none</field>
+        <field name="sequence">1</field>
+        <field name="is_default">1</field>
+    </record>
+    <record id="lab_result_unit_percent" model="lab.result.unit">
+        <field name="name">%</field>
+        <field name="code">percent</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="lab_result_unit_count" model="lab.result.unit">
+        <field name="name">count</field>
+        <field name="code">count</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="lab_result_unit_gray" model="lab.result.unit">
+        <field name="name">gray</field>
+        <field name="code">gray</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="lab_result_unit_copies_ml" model="lab.result.unit">
+        <field name="name">copies/mL</field>
+        <field name="code">copies_ml</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="lab_result_unit_ct" model="lab.result.unit">
+        <field name="name">Ct</field>
+        <field name="code">ct</field>
+        <field name="sequence">50</field>
+    </record>
+    <record id="lab_result_unit_iu_ml" model="lab.result.unit">
+        <field name="name">IU/mL</field>
+        <field name="code">iu_ml</field>
+        <field name="sequence">60</field>
+    </record>
+    <record id="lab_result_unit_ng_ml" model="lab.result.unit">
+        <field name="name">ng/mL</field>
+        <field name="code">ng_ml</field>
+        <field name="sequence">70</field>
+    </record>
 </odoo>

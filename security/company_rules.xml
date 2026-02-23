@@ -20,6 +20,18 @@
         <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
         <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
     </record>
+    <record id="rule_lab_report_email_template_company_scope" model="ir.rule">
+        <field name="name">Lab Report Email Template Company Scope</field>
+        <field name="model_id" ref="model_lab_report_email_template"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_result_unit_company_scope" model="ir.rule">
+        <field name="name">Lab Result Unit Company Scope</field>
+        <field name="model_id" ref="model_lab_result_unit"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
 
     <record id="rule_lab_test_request_company_scope" model="ir.rule">
         <field name="name">Lab Test Request Company Scope</field>

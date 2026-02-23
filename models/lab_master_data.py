@@ -62,6 +62,13 @@ class LabMasterDataMixin(models.AbstractModel):
         )
 
     @api.model
+    def _selection_result_unit(self):
+        return self._selection_from_master(
+            "lab.result.unit",
+            [("none", "No Unit"), ("percent", "%"), ("count", "count")],
+        )
+
+    @api.model
     def _default_department_code(self):
         return self._default_from_master("lab.department.type", "chemistry")
 
@@ -80,6 +87,7 @@ class LabMasterDataMixin(models.AbstractModel):
     @api.model
     def seed_i18n_master_data(self):
         """Seed core master-data names in EN/ZH/TH using code keys."""
+        available_langs = set(self.env["res.lang"].sudo().search([]).mapped("code"))
         translations = {
             "lab.department.type": {
                 "chemistry": {"en_US": "Clinical Chemistry", "zh_CN": "临床化学", "th_TH": "เคมีคลินิก"},
@@ -114,6 +122,8 @@ class LabMasterDataMixin(models.AbstractModel):
                 if not rec:
                     continue
                 for lang, value in lang_map.items():
+                    if lang not in available_langs:
+                        continue
                     rec.with_context(lang=lang).write({"name": value})
         return True
 

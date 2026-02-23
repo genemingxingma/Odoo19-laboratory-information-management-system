@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_report_email_template_list" model="ir.ui.view">
+        <field name="name">lab.report.email.template.list</field>
+        <field name="model">lab.report.email.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="company_id"/>
+                <field name="auto_send_on_release"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_report_email_template_form" model="ir.ui.view">
+        <field name="name">lab.report.email.template.form</field>
+        <field name="model">lab.report.email.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="company_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="auto_send_on_release"/>
+                            <field name="reminder_prefix"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="subject_template" placeholder="Lab report {sample_name} is ready"/>
+                        <field name="body_html_template" widget="html"/>
+                    </group>
+                    <group>
+                        <div class="o_form_label">Placeholders</div>
+                        <div>
+                            <p>
+                                Available variables:
+                                <code>{partner_name}</code>,
+                                <code>{sample_name}</code>,
+                                <code>{accession}</code>,
+                                <code>{patient_name}</code>,
+                                <code>{report_date}</code>,
+                                <code>{portal_sample_url}</code>,
+                                <code>{portal_history_url}</code>,
+                                <code>{company_name}</code>.
+                            </p>
+                        </div>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_report_email_template" model="ir.actions.act_window">
+        <field name="name">Report Email Templates</field>
+        <field name="res_model">lab.report.email.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_lab_report_email_template"
+        name="Report Email Templates"
+        parent="menu_laboratory_config"
+        action="action_lab_report_email_template"
+        sequence="31"
+        groups="laboratory_management.group_lab_manager"
+    />
+</odoo>

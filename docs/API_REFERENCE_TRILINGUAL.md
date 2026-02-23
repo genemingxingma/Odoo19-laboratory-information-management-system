@@ -55,7 +55,7 @@ Request payload contract:
 - `external_uid` (optional but strongly recommended for idempotency)
 - `patient` (optional object)
 - `physician` (optional object)
-- `priority`, `sample_type`, `clinical_note`, `preferred_template_code` (optional)
+- `priority`, `clinical_note`, `preferred_template_code` (optional)
 
 Line rules:
 - `line_type` must be `service` or `profile`
@@ -64,6 +64,10 @@ Line rules:
 - `specimen_ref` default is `SP1`
 - `specimen_sample_type` default is `swab`
 - `quantity` default is `1`
+
+Important:
+- Specimen type is controlled per line (`specimen_sample_type`).
+- Top-level `sample_type` should not be used by new integrations.
 
 Successful response shape:
 ```json
@@ -91,6 +95,42 @@ Successful response shape:
 - `GET /samples/{accession}/report/pdf`
 - Binary PDF stream.
 - Returns `409 report_not_ready` before state is `verified/reported`.
+
+### 4.5 Query sample types metadata
+- `GET /meta/sample_types`
+- Returns currently active sample types that can be used in request payload and specimen lines.
+```json
+{
+  "ok": true,
+  "sample_types": [
+    {"code": "swab", "name": "Swab", "is_default": true}
+  ]
+}
+```
+
+### 4.6 Query services metadata
+- `GET /meta/services`
+- Returns active service catalog (`code`, `name`, `sample_type`).
+```json
+{
+  "ok": true,
+  "services": [
+    {"code": "STD_CT", "name": "Chlamydia Trachomatis PCR", "sample_type": "swab"}
+  ]
+}
+```
+
+### 4.7 Query profiles metadata
+- `GET /meta/profiles`
+- Returns active profile catalog (`code`, `name`, `sample_type`).
+```json
+{
+  "ok": true,
+  "profiles": [
+    {"code": "STD7-7", "name": "STD 7 Panel", "sample_type": "swab"}
+  ]
+}
+```
 
 ## 5. LIS/HIS Interface Channel API
 
@@ -128,6 +168,7 @@ External API errors:
 - `request_push_disabled`
 - `result_query_disabled`
 - `report_download_disabled`
+- `metadata_query_disabled`
 - `lines_required`
 - `invalid_line_type`
 - `service_not_found`
@@ -191,4 +232,22 @@ Download PDF:
 curl -X GET "http://127.0.0.1:8069/lab/api/v1/ext_hospital_demo/samples/ACC2602-00318/report/pdf" \
   -H "X-API-Key: DEMO-HOSP-API-KEY-2026" \
   -o report.pdf
+```
+
+Query sample types metadata:
+```bash
+curl -X GET "http://127.0.0.1:8069/lab/api/v1/ext_hospital_demo/meta/sample_types" \
+  -H "X-API-Key: DEMO-HOSP-API-KEY-2026"
+```
+
+Query services metadata:
+```bash
+curl -X GET "http://127.0.0.1:8069/lab/api/v1/ext_hospital_demo/meta/services" \
+  -H "X-API-Key: DEMO-HOSP-API-KEY-2026"
+```
+
+Query profiles metadata:
+```bash
+curl -X GET "http://127.0.0.1:8069/lab/api/v1/ext_hospital_demo/meta/profiles" \
+  -H "X-API-Key: DEMO-HOSP-API-KEY-2026"
 ```

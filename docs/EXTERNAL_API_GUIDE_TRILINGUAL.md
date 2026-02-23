@@ -34,6 +34,7 @@ External hospitals/institutions can use API to:
    - `Allow Request Push`
    - `Allow Result Query`
    - `Allow Report Download`
+   - `Allow Metadata Query`
 
 ### English
 Path: `Laboratory > Configuration > Interface Endpoints`
@@ -45,6 +46,7 @@ Path: `Laboratory > Configuration > Interface Endpoints`
    - `Allow Request Push`
    - `Allow Result Query`
    - `Allow Report Download`
+   - `Allow Metadata Query`
 
 ### ไทย
 เมนู: `Laboratory > Configuration > Interface Endpoints`
@@ -56,6 +58,7 @@ Path: `Laboratory > Configuration > Interface Endpoints`
    - `Allow Request Push`
    - `Allow Result Query`
    - `Allow Report Download`
+   - `Allow Metadata Query`
 
 ---
 
@@ -67,6 +70,9 @@ Base: `/lab/api/v1/<endpoint_code>`
 2. `GET /requests/<request_no>`
 3. `GET /samples/<accession>/results`
 4. `GET /samples/<accession>/report/pdf`
+5. `GET /meta/sample_types`
+6. `GET /meta/services`
+7. `GET /meta/profiles`
 
 Auth header examples:
 - `X-API-Key: <api_key>`
@@ -79,7 +85,6 @@ Auth header examples:
 ```json
 {
   "external_uid": "HIS-REQ-20260222-0001",
-  "sample_type": "swab",
   "priority": "routine",
   "clinical_note": "STD panel",
   "preferred_template_code": "classic",
@@ -122,6 +127,7 @@ Response:
 Notes:
 - `external_uid` is idempotent key per endpoint.
 - Re-push with same `external_uid` returns existing request (`deduplicated=true`).
+- Specimen type should be passed by each line via `specimen_sample_type`.
 
 ---
 
@@ -167,3 +173,63 @@ If report not ready:
 - ข้อมูล API ถูกจำกัดด้วย `Data Company`
 - และกรองตามขอบเขตการมองเห็นของ `External Institution`
 - ไม่อนุญาต `auth_type = none` สำหรับ endpoint ภายนอก
+
+---
+
+## 8. Metadata Sync Recommendation | 元数据同步建议 | คำแนะนำการซิงค์ Metadata
+
+### 中文
+- 对接系统应先拉取 `sample_types/services/profiles`，再给用户展示可选项。
+- 建议定时刷新 metadata（例如每天或每次班次开始）。
+- 若返回 `metadata_query_disabled`，请联系管理员在 endpoint 上开启 `Allow Metadata Query`。
+
+### English
+- External clients should fetch `sample_types/services/profiles` before showing selectable options.
+- Refresh metadata regularly (for example, daily or at shift start).
+- If API returns `metadata_query_disabled`, ask LIS admin to enable `Allow Metadata Query` on endpoint.
+
+### ไทย
+- ระบบภายนอกควรดึง `sample_types/services/profiles` ก่อนแสดงตัวเลือกให้ผู้ใช้
+- ควรรีเฟรช metadata เป็นระยะ (เช่น ทุกวัน หรือก่อนเริ่มกะ)
+- หาก API ตอบกลับ `metadata_query_disabled` ให้ผู้ดูแล LIS เปิด `Allow Metadata Query` ที่ endpoint
+
+---
+
+## 9. Metadata Response Examples | 元数据响应示例 | ตัวอย่างผลลัพธ์ Metadata
+
+### Sample Types
+`GET /lab/api/v1/<endpoint_code>/meta/sample_types`
+
+```json
+{
+  "ok": true,
+  "sample_types": [
+    {"code": "swab", "name": "Swab", "is_default": true},
+    {"code": "blood", "name": "Whole Blood", "is_default": false}
+  ]
+}
+```
+
+### Services
+`GET /lab/api/v1/<endpoint_code>/meta/services`
+
+```json
+{
+  "ok": true,
+  "services": [
+    {"code": "STD_CT", "name": "Chlamydia Trachomatis PCR", "sample_type": "swab"}
+  ]
+}
+```
+
+### Profiles
+`GET /lab/api/v1/<endpoint_code>/meta/profiles`
+
+```json
+{
+  "ok": true,
+  "profiles": [
+    {"code": "STD7-7", "name": "STD 7 Panel", "sample_type": "swab"}
+  ]
+}
+```

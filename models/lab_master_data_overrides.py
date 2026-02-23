@@ -307,3 +307,13 @@ class LabQualityProgramLineMasterData(models.Model):
         default="general",
         required=True,
     )
+
+
+class LabRetestAnalyticsReportMasterData(models.Model):
+    _inherit = "lab.retest.analytics.report"
+
+    department = fields.Selection(
+        selection=lambda self: [("all", "All")] + self.env["lab.master.data.mixin"]._selection_department(),
+        default="all",
+        required=True,
+    )

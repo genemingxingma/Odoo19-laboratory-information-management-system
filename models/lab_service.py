@@ -17,7 +17,13 @@ class LabService(models.Model):
         default="numeric",
         required=True,
     )
-    unit = fields.Char()
+    unit_id = fields.Many2one(
+        "lab.result.unit",
+        string="Unit",
+        ondelete="restrict",
+        domain="[('active','=',True)]",
+    )
+    unit = fields.Char(related="unit_id.name", store=True, readonly=True)
     ref_min = fields.Float(string="Reference Min")
     ref_max = fields.Float(string="Reference Max")
     critical_min = fields.Float(string="Critical Min")
@@ -61,6 +67,29 @@ class LabService(models.Model):
     list_price = fields.Float(string="List Price", default=0.0)
     active = fields.Boolean(default=True)
     note = fields.Text()
+
+    @api.model
+    def _map_unit_text_to_unit_id(self, vals):
+        if vals.get("unit_id"):
+            vals.pop("unit", None)
+            return vals
+        unit_text = (vals.get("unit") or "").strip()
+        if not unit_text:
+            return vals
+        unit = self.env["lab.result.unit"].sudo().get_or_create_by_name(unit_text)
+        if unit:
+            vals["unit_id"] = unit.id
+        vals.pop("unit", None)
+        return vals
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        vals_list = [self._map_unit_text_to_unit_id(dict(vals)) for vals in vals_list]
+        return super().create(vals_list)
+
+    def write(self, vals):
+        vals = self._map_unit_text_to_unit_id(dict(vals))
+        return super().write(vals)
 
     @api.constrains("auto_binary_cutoff")
     def _check_auto_binary_cutoff(self):

@@ -26,6 +26,11 @@ class LabInterfaceEndpointExternalApi(models.Model):
     external_allow_request_push = fields.Boolean(string="Allow Request Push", default=True)
     external_allow_result_query = fields.Boolean(string="Allow Result Query", default=True)
     external_allow_report_download = fields.Boolean(string="Allow Report Download", default=True)
+    external_allow_metadata_query = fields.Boolean(
+        string="Allow Metadata Query",
+        default=True,
+        help="Allow external clients to query sample types, services, and profiles metadata.",
+    )
     external_auto_submit_request = fields.Boolean(
         string="Auto Submit New Request",
         default=True,

@@ -157,6 +157,12 @@ class LabReportTemplateCompany(models.Model):
     company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company, index=True)
 
 
+class LabReportEmailTemplateCompany(models.Model):
+    _inherit = "lab.report.email.template"
+
+    company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company, index=True)
+
+
 class LabDepartmentTypeCompany(models.Model):
     _inherit = "lab.department.type"
 
@@ -180,3 +186,8 @@ class LabRequestTypeCompany(models.Model):
 
     company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company, index=True)
 
+
+class LabResultUnitCompany(models.Model):
+    _inherit = "lab.result.unit"
+
+    company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company, index=True)

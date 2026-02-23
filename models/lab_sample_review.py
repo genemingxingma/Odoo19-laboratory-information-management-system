@@ -561,22 +561,42 @@ class LabSample(models.Model):
             if not partners:
                 continue
             for partner in partners:
-                exists = dispatch_obj.search_count(
+                portal_exists = dispatch_obj.search_count(
                     [
                         ("sample_id", "=", rec.id),
                         ("partner_id", "=", partner.id),
+                        ("channel", "=", "portal"),
                         ("state", "!=", "cancel"),
                     ]
                 )
-                if exists:
+                if not portal_exists:
+                    dispatch_obj.create(
+                        {
+                            "sample_id": rec.id,
+                            "partner_id": partner.id,
+                            "channel": "portal",
+                        }
+                    )
+
+                partner_email = (partner.email or partner.commercial_partner_id.email or "").strip()
+                if not partner_email:
                     continue
-                dispatch_obj.create(
-                    {
-                        "sample_id": rec.id,
-                        "partner_id": partner.id,
-                        "channel": "portal",
-                    }
+                email_exists = dispatch_obj.search_count(
+                    [
+                        ("sample_id", "=", rec.id),
+                        ("partner_id", "=", partner.id),
+                        ("channel", "=", "email"),
+                        ("state", "!=", "cancel"),
+                    ]
                 )
+                if not email_exists:
+                    dispatch_obj.create(
+                        {
+                            "sample_id": rec.id,
+                            "partner_id": partner.id,
+                            "channel": "email",
+                        }
+                    )
 
     def action_release_report(self):
         for rec in self:

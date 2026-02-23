@@ -38,7 +38,13 @@ class LabTestRequest(models.Model):
     )
     preferred_template_id = fields.Many2one("lab.report.template", string="Preferred Report Template")
     priority = fields.Selection(selection="_selection_priority", default=lambda self: self._default_priority_code(), required=True, tracking=True)
-    sample_type = fields.Selection(selection="_selection_sample_type", default=lambda self: self._default_sample_type_code(), required=True)
+    sample_type = fields.Selection(
+        selection="_selection_sample_type",
+        compute="_compute_sample_type",
+        store=True,
+        readonly=True,
+        help="Derived from request lines. Use each line's Specimen Type as the source of truth.",
+    )
     fasting_required = fields.Boolean(default=False)
     clinical_note = fields.Text(string="Clinical Note")
 
@@ -106,6 +112,13 @@ class LabTestRequest(models.Model):
     def _compute_sample_count(self):
         for rec in self:
             rec.sample_count = len(rec.sample_ids)
+
+    @api.depends("line_ids.specimen_sample_type")
+    def _compute_sample_type(self):
+        default_type = self._default_sample_type_code()
+        for rec in self:
+            line_type = next((x for x in rec.line_ids.mapped("specimen_sample_type") if x), False)
+            rec.sample_type = line_type or default_type
 
     def init(self):
         self.env.cr.execute(
@@ -447,7 +460,7 @@ class LabTestRequest(models.Model):
             grouped_payloads = {}
             for p in payloads:
                 specimen_ref = (p.get("specimen_ref") or "SP1").strip() or "SP1"
-                specimen_sample_type = p.get("specimen_sample_type") or rec.sample_type
+                specimen_sample_type = p.get("specimen_sample_type") or rec._default_sample_type_code()
                 specimen_barcode = (p.get("specimen_barcode") or "").strip()
                 key = (specimen_ref, specimen_sample_type, specimen_barcode)
                 grouped_payloads.setdefault(key, [])
@@ -659,10 +672,10 @@ class LabTestRequestLine(models.Model):
             else:
                 rec.effective_turnaround_hours = max(rec.profile_id.line_ids.mapped("service_id.turnaround_hours") or [0])
 
-    @api.depends("quantity", "unit_price", "discount_percent")
+    @api.depends("unit_price", "discount_percent")
     def _compute_amount(self):
         for rec in self:
-            qty = max(rec.quantity, 0)
+            qty = 1
             gross = qty * (rec.unit_price or 0.0)
             discount = gross * ((rec.discount_percent or 0.0) / 100.0)
             rec.discount_amount = discount
@@ -680,6 +693,7 @@ class LabTestRequestLine(models.Model):
         for rec in self:
             if rec.service_id and rec.line_type == "service":
                 rec.unit_price = rec.service_id.list_price
+                rec.specimen_sample_type = rec.service_id.sample_type or rec._default_sample_type_code()
 
     @api.onchange("profile_id")
     def _onchange_profile_id(self):
@@ -687,12 +701,11 @@ class LabTestRequestLine(models.Model):
             if rec.profile_id and rec.line_type == "profile":
                 prices = rec.profile_id.line_ids.mapped("service_id.list_price")
                 rec.unit_price = sum(prices)
+                rec.specimen_sample_type = getattr(rec.profile_id, "sample_type", False) or rec._default_sample_type_code()
 
-    @api.constrains("line_type", "service_id", "profile_id", "quantity", "specimen_ref", "specimen_sample_type")
+    @api.constrains("line_type", "service_id", "profile_id", "specimen_ref", "specimen_sample_type")
     def _check_line(self):
         for rec in self:
-            if rec.quantity <= 0:
-                raise ValidationError(_("Quantity must be greater than 0."))
             if not (rec.specimen_ref or "").strip():
                 raise ValidationError(_("Specimen Ref is required."))
             if not rec.specimen_sample_type:
@@ -706,51 +719,41 @@ class LabTestRequestLine(models.Model):
         self.ensure_one()
         payloads = []
         if self.line_type == "service":
-            for idx in range(self.quantity):
-                payloads.append(
-                    {
-                        "service_id": self.service_id.id,
-                        "specimen_ref": self.specimen_ref,
-                        "specimen_barcode": self.specimen_barcode,
-                        "specimen_sample_type": self.specimen_sample_type,
-                        "result_note": self.note
-                        or (
-                            _("Requested via test request line #%s") % self.id
-                            if self.quantity == 1
-                            else _("Requested via test request line #%s replicate %s/%s")
-                            % (self.id, idx + 1, self.quantity)
-                        ),
-                    }
-                )
+            payloads.append(
+                {
+                    "service_id": self.service_id.id,
+                    "specimen_ref": self.specimen_ref,
+                    "specimen_barcode": self.specimen_barcode,
+                    "specimen_sample_type": self.specimen_sample_type,
+                    "result_note": self.note or (_("Requested via test request line #%s") % self.id),
+                }
+            )
             return payloads
 
         profile_services = self.profile_id.line_ids.mapped("service_id")
-        for idx in range(self.quantity):
-            for service in profile_services:
-                payloads.append(
-                    {
-                        "service_id": service.id,
-                        "specimen_ref": self.specimen_ref,
-                        "specimen_barcode": self.specimen_barcode,
-                        "specimen_sample_type": self.specimen_sample_type,
-                        "result_note": self.note
-                        or (
-                            _("Requested via profile %(profile)s line %(line)s")
-                            % {"profile": self.profile_id.name, "line": self.id}
-                            if self.quantity == 1
-                            else _(
-                                "Requested via profile %(profile)s line %(line)s replicate %(n)s/%(q)s"
-                            )
-                            % {
-                                "profile": self.profile_id.name,
-                                "line": self.id,
-                                "n": idx + 1,
-                                "q": self.quantity,
-                            }
-                        ),
-                    }
-                )
+        for service in profile_services:
+            payloads.append(
+                {
+                    "service_id": service.id,
+                    "specimen_ref": self.specimen_ref,
+                    "specimen_barcode": self.specimen_barcode,
+                    "specimen_sample_type": self.specimen_sample_type,
+                    "result_note": self.note
+                    or (_("Requested via profile %(profile)s line %(line)s") % {"profile": self.profile_id.name, "line": self.id}),
+                }
+            )
         return payloads
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            vals["quantity"] = 1
+        return super().create(vals_list)
+
+    def write(self, vals):
+        if "quantity" in vals:
+            vals["quantity"] = 1
+        return super().write(vals)
 
 
 class LabTestRequestQuoteRevision(models.Model):

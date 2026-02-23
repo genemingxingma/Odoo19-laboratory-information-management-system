@@ -1,10 +1,11 @@
 openapi: 3.0.3
 info:
   title: Laboratory External Institution API
-  version: 1.1.0
+  version: 1.2.0
   description: |
     REST API for external hospitals/institutions.
-    Supports request push, request query, sample result query, and report PDF download.
+    Supports request push, request query, sample result query, report PDF download,
+    and metadata query for sample types/services/profiles.
 servers:
   - url: https://{host}
     variables:
@@ -18,6 +19,7 @@ tags:
   - name: Requests
   - name: Samples
   - name: Reports
+  - name: Metadata
 paths:
   /lab/api/v1/{endpoint_code}/requests:
     post:
@@ -41,7 +43,6 @@ paths:
                 value:
                   external_uid: HIS-REQ-20260222-9001
                   priority: routine
-                  sample_type: swab
                   clinical_note: External API demo request
                   patient:
                     name: API Patient A
@@ -188,6 +189,123 @@ paths:
                 notReady:
                   value: { ok: false, error: report_not_ready }
 
+  /lab/api/v1/{endpoint_code}/meta/sample_types:
+    get:
+      tags: [Metadata]
+      summary: Query sample types metadata
+      operationId: getExternalSampleTypesMeta
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Active sample type metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SampleTypesMetaResponse'
+              examples:
+                ok:
+                  value:
+                    ok: true
+                    sample_types:
+                      - code: swab
+                        name: Swab
+                        is_default: true
+        '401':
+          description: Unauthorized
+        '403':
+          description: Metadata query disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                disabled:
+                  value: { ok: false, error: metadata_query_disabled }
+        '404':
+          description: Endpoint not found
+
+  /lab/api/v1/{endpoint_code}/meta/services:
+    get:
+      tags: [Metadata]
+      summary: Query services metadata
+      operationId: getExternalServicesMeta
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Active service metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicesMetaResponse'
+              examples:
+                ok:
+                  value:
+                    ok: true
+                    services:
+                      - code: STD_CT
+                        name: Chlamydia Trachomatis PCR
+                        sample_type: swab
+        '401':
+          description: Unauthorized
+        '403':
+          description: Metadata query disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                disabled:
+                  value: { ok: false, error: metadata_query_disabled }
+        '404':
+          description: Endpoint not found
+
+  /lab/api/v1/{endpoint_code}/meta/profiles:
+    get:
+      tags: [Metadata]
+      summary: Query profiles metadata
+      operationId: getExternalProfilesMeta
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Active profile metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilesMetaResponse'
+              examples:
+                ok:
+                  value:
+                    ok: true
+                    profiles:
+                      - code: STD7-7
+                        name: STD 7 Panel
+                        sample_type: swab
+        '401':
+          description: Unauthorized
+        '403':
+          description: Metadata query disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                disabled:
+                  value: { ok: false, error: metadata_query_disabled }
+        '404':
+          description: Endpoint not found
+
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -226,9 +344,6 @@ components:
           type: string
           enum: [routine, urgent, stat]
           default: routine
-        sample_type:
-          type: string
-          default: swab
         clinical_note:
           type: string
         preferred_template_code:
@@ -391,6 +506,42 @@ components:
         sample:
           $ref: '#/components/schemas/SampleObject'
 
+    SampleTypesMetaResponse:
+      type: object
+      required: [ok, sample_types]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        sample_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/SampleTypeMeta'
+
+    ServicesMetaResponse:
+      type: object
+      required: [ok, services]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceMeta'
+
+    ProfilesMetaResponse:
+      type: object
+      required: [ok, profiles]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        profiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileMeta'
+
     SampleObject:
       type: object
       properties:
@@ -439,3 +590,33 @@ components:
         ref_max:
           type: number
           nullable: true
+
+    SampleTypeMeta:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        is_default:
+          type: boolean
+
+    ServiceMeta:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        sample_type:
+          type: string
+
+    ProfileMeta:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        sample_type:
+          type: string

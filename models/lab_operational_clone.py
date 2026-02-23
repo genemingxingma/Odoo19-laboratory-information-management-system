@@ -642,13 +642,42 @@ class LabComplianceAuditReportLine(models.Model):
     name = fields.Char(required=True)
     metric_value = fields.Float(required=True)
     target_value = fields.Float(required=True)
-    unit = fields.Char(default="%")
+    unit_id = fields.Many2one(
+        "lab.result.unit",
+        string="Unit",
+        ondelete="restrict",
+        domain="[('active','=',True)]",
+    )
+    unit = fields.Char(related="unit_id.name", store=True, readonly=True)
     risk_level = fields.Selection(
         [("low", "Low"), ("medium", "Medium"), ("high", "High")],
         required=True,
     )
     is_pass = fields.Boolean(compute="_compute_is_pass", store=True)
     detail = fields.Text()
+
+    @api.model
+    def _map_unit_text_to_unit_id(self, vals):
+        if vals.get("unit_id"):
+            vals.pop("unit", None)
+            return vals
+        unit_text = (vals.get("unit") or "").strip()
+        if not unit_text:
+            return vals
+        unit = self.env["lab.result.unit"].sudo().get_or_create_by_name(unit_text)
+        if unit:
+            vals["unit_id"] = unit.id
+        vals.pop("unit", None)
+        return vals
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        vals_list = [self._map_unit_text_to_unit_id(dict(vals)) for vals in vals_list]
+        return super().create(vals_list)
+
+    def write(self, vals):
+        vals = self._map_unit_text_to_unit_id(dict(vals))
+        return super().write(vals)
 
     @api.depends("metric_value", "target_value", "code")
     def _compute_is_pass(self):

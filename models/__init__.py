@@ -1,4 +1,5 @@
 from . import lab_master_data
+from . import lab_result_unit
 from . import lab_service
 from . import lab_activity_utils
 from . import lab_review

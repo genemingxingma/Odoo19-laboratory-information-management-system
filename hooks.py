@@ -147,5 +147,6 @@ def post_init_hook(env_or_cr, registry=None):
     sync_i18n_terms(env)
 
 
-def pre_init_hook(cr):
+def pre_init_hook(env_or_cr):
+    cr = env_or_cr.cr if hasattr(env_or_cr, "cr") else env_or_cr
     _ensure_partner_extension_columns(cr)

@@ -481,13 +481,9 @@ class LaboratoryPortal(CustomerPortal):
         line_type = (post.get("line_type") or "service").strip()
         request_type = "institution" if self._is_professional_partner(partner) else "individual"
         priority = (post.get("priority") or mixin._default_priority_code()).strip()
-        sample_type = (post.get("sample_type") or mixin._default_sample_type_code()).strip()
         valid_priorities = {code for code, _label in mixin._selection_priority()}
-        valid_sample_types = {code for code, _label in mixin._selection_sample_type()}
         if priority not in valid_priorities:
             priority = mixin._default_priority_code()
-        if sample_type not in valid_sample_types:
-            sample_type = mixin._default_sample_type_code()
 
         form = request.httprequest.form
         service_ids = [int(x) for x in form.getlist("service_ids") if str(x).strip().isdigit()]
@@ -497,6 +493,8 @@ class LaboratoryPortal(CustomerPortal):
             service_ids = [int(post.get("service_id"))]
         if not profile_ids and str(post.get("profile_id") or "").isdigit():
             profile_ids = [int(post.get("profile_id"))]
+
+        valid_sample_types = {code for code, _label in mixin._selection_sample_type()}
 
         specimen_payload_json = (post.get("specimen_payload_json") or "").strip()
         has_specimen_payload = bool(specimen_payload_json)
@@ -518,9 +516,9 @@ class LaboratoryPortal(CustomerPortal):
                     continue
                 specimen_ref = (row.get("specimen_ref") or "").strip() or "SP1"
                 specimen_barcode = (row.get("specimen_barcode") or "").strip() or False
-                specimen_type = (row.get("specimen_sample_type") or sample_type).strip()
+                specimen_type = (row.get("specimen_sample_type") or "").strip()
                 if specimen_type not in valid_sample_types:
-                    specimen_type = sample_type
+                    return request.redirect("/my/lab/requests/new?error=combination")
                 row_type = (row.get("line_type") or "service").strip()
                 row_note = (row.get("line_note") or line_note).strip()
                 row_service_ids = self._normalize_id_list(row.get("service_ids"))
@@ -561,40 +559,8 @@ class LaboratoryPortal(CustomerPortal):
                         )
             if not line_ids:
                 return request.redirect("/my/lab/requests/new?error=combination")
-
-        if not has_specimen_payload:
-            if line_type == "service":
-                for service_id in service_ids:
-                    line_ids.append(
-                        (
-                            0,
-                            0,
-                            {
-                                "line_type": "service",
-                                "service_id": service_id,
-                                "quantity": 1,
-                                "note": line_note,
-                                "specimen_ref": "SP1",
-                                "specimen_sample_type": sample_type,
-                            },
-                        )
-                    )
-            else:
-                for profile_id in profile_ids:
-                    line_ids.append(
-                        (
-                            0,
-                            0,
-                            {
-                                "line_type": "profile",
-                                "profile_id": profile_id,
-                                "quantity": 1,
-                                "note": line_note,
-                                "specimen_ref": "SP1",
-                                "specimen_sample_type": sample_type,
-                            },
-                        )
-                    )
+        else:
+            return request.redirect("/my/lab/requests/new?error=combination")
 
         physician_partner = request.env["res.partner"].browse()
         physician_department_id = int(post.get("physician_department_id") or 0)
@@ -628,8 +594,6 @@ class LaboratoryPortal(CustomerPortal):
             "physician_name": physician_partner.name or "",
             "clinical_note": (post.get("clinical_note") or "").strip(),
             "priority": priority,
-            "sample_type": sample_type,
-            "fasting_required": False,
             "company_id": request.env.company.id,
             "preferred_template_id": int(post.get("preferred_template_id") or 0) or False,
             "line_ids": line_ids,

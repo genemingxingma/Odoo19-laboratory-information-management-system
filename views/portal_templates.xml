@@ -775,14 +775,10 @@
 
                         var serviceOptionsTemplate = document.getElementById("lab_service_options_template");
                         var profileOptionsTemplate = document.getElementById("lab_profile_options_template");
+                        var sampleTypeOptionsTemplate = document.getElementById("lab_sample_type_options_template");
                         var serviceOptionsHtml = "";
                         var profileOptionsHtml = "";
-                        var sampleTypeOptionsHtml = (document.getElementById("lab_sample_type_options_template") || {}).innerHTML || "";
-                        var sampleTypeDefaultCode = "";
-                        var defaultSampleTypeOption = document.querySelector("#lab_sample_type_options_template option");
-                        if (defaultSampleTypeOption) {
-                            sampleTypeDefaultCode = defaultSampleTypeOption.value || "";
-                        }
+                        var sampleTypeOptionsHtml = (sampleTypeOptionsTemplate || {}).innerHTML || "";
 
                         function buildChecklistOptions(selectNode, inputClass) {
                             if (!selectNode) {
@@ -837,10 +833,6 @@
                                 '<div class="col-md-5"><label class="form-label">Container Code</label><input type="text" class="form-control js-specimen-barcode" placeholder="Container barcode / code"/></div>' +
                                 '<div class="col-md-2"><button type="button" class="btn btn-outline-danger btn-sm w-100 js-remove-specimen">Remove</button></div>';
                             specimenContainer.appendChild(specimenRow);
-                            var typeSelect = specimenRow.querySelector(".js-specimen-sample-type");
-                            if (typeSelect && sampleTypeDefaultCode) {
-                                typeSelect.value = sampleTypeDefaultCode;
-                            }
                             specimenRow.querySelector(".js-remove-specimen").addEventListener("click", function () {
                                 specimenRow.remove();
                             });

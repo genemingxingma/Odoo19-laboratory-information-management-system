@@ -91,8 +91,6 @@
                             <field name="client_partner_id" invisible="request_type != 'institution'"/>
                             <field name="priority"/>
                             <field name="requested_collection_date"/>
-                            <field name="sample_type"/>
-                            <field name="fasting_required"/>
                         </group>
                         <group>
                             <field name="patient_id"/>
@@ -123,6 +121,7 @@
                     </group>
                     <group>
                         <field name="clinical_note"/>
+                        <field name="fasting_required"/>
                         <field name="quote_note"/>
                         <field name="quote_last_sent_at" readonly="1"/>
                         <field name="quote_last_sent_by_id" readonly="1"/>
@@ -136,13 +135,12 @@
                             <field name="line_ids">
                                 <list editable="bottom">
                                     <field name="sequence" widget="handle"/>
-                                    <field name="specimen_ref"/>
-                                    <field name="specimen_sample_type"/>
-                                    <field name="specimen_barcode"/>
                                     <field name="line_type"/>
                                     <field name="service_id" invisible="line_type != 'service'"/>
                                     <field name="profile_id" invisible="line_type != 'profile'"/>
-                                    <field name="quantity"/>
+                                    <field name="specimen_sample_type"/>
+                                    <field name="specimen_ref"/>
+                                    <field name="specimen_barcode"/>
                                     <field name="service_count" readonly="1"/>
                                     <field name="effective_turnaround_hours" readonly="1"/>
                                     <field name="unit_price"/>

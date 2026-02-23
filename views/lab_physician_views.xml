@@ -97,12 +97,12 @@
     <!-- Shortcut menus to avoid deep navigation under Master Data -->
     <menuitem id="menu_lab_physician_department_shortcut"
               name="Physician Departments"
-              parent="menu_lab_config_org"
+              parent="menu_laboratory_config"
               action="action_lab_physician_department"
               sequence="55"/>
     <menuitem id="menu_lab_physician_contact_shortcut"
               name="Physicians"
-              parent="menu_lab_config_org"
+              parent="menu_laboratory_config"
               action="action_lab_physician_contact"
               sequence="56"/>
 </odoo>

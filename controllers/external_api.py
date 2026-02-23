@@ -106,6 +106,11 @@ class LaboratoryExternalApi(http.Controller):
             ],
         }
 
+    def _check_metadata_access(self, endpoint):
+        if not endpoint.external_allow_metadata_query:
+            return self._json_response({"ok": False, "error": "metadata_query_disabled"}, status=403)
+        return False
+
     @http.route(
         "/lab/api/v1/<string:endpoint_code>/requests",
         type="json",
@@ -159,17 +164,28 @@ class LaboratoryExternalApi(http.Controller):
         if physician_code:
             physician_partner = partner_obj.search([("ref", "=", physician_code)], limit=1)
 
+        valid_sample_types = {code for code, _label in request_obj._selection_sample_type()}
         line_vals = []
-        for line in lines:
+        for index, line in enumerate(lines, start=1):
             line_type = line.get("line_type") or "service"
             if line_type not in ("service", "profile"):
                 return {"ok": False, "error": "invalid_line_type"}
+            specimen_sample_type = (line.get("specimen_sample_type") or "").strip()
+            if not specimen_sample_type:
+                return {"ok": False, "error": "specimen_sample_type_required", "line_index": index}
+            if specimen_sample_type not in valid_sample_types:
+                return {
+                    "ok": False,
+                    "error": "invalid_specimen_sample_type",
+                    "line_index": index,
+                    "specimen_sample_type": specimen_sample_type,
+                }
             vals = {
                 "line_type": line_type,
-                "quantity": int(line.get("quantity") or 1),
+                "quantity": 1,
                 "specimen_ref": (line.get("specimen_ref") or "SP1").strip() or "SP1",
                 "specimen_barcode": (line.get("specimen_barcode") or "").strip(),
-                "specimen_sample_type": line.get("specimen_sample_type") or "swab",
+                "specimen_sample_type": specimen_sample_type,
                 "note": line.get("note") or "",
             }
             if line_type == "service":
@@ -199,7 +215,6 @@ class LaboratoryExternalApi(http.Controller):
             "physician_name": (physician.get("name") or "").strip() or False,
             "requested_collection_date": body.get("requested_collection_date") or fields.Datetime.now(),
             "priority": body.get("priority") or "routine",
-            "sample_type": body.get("sample_type") or "swab",
             "clinical_note": body.get("clinical_note") or False,
             "preferred_template_id": preferred_template.id if preferred_template else False,
             "line_ids": line_vals,
@@ -309,3 +324,97 @@ class LaboratoryExternalApi(http.Controller):
             ("Content-Disposition", 'attachment; filename="%s"' % filename),
         ]
         return request.make_response(pdf_content, headers=headers)
+
+    @http.route(
+        "/lab/api/v1/<string:endpoint_code>/meta/sample_types",
+        type="http",
+        auth="public",
+        methods=["GET"],
+        csrf=False,
+    )
+    def external_meta_sample_types(self, endpoint_code, **kwargs):
+        endpoint, error = self._lookup_endpoint(endpoint_code)
+        if error:
+            return error
+        deny = self._check_metadata_access(endpoint)
+        if deny:
+            return deny
+        recs = (
+            request.env["lab.sample.type"]
+            .sudo()
+            .with_company(endpoint.external_company_id)
+            .search([("active", "=", True)], order="sequence asc, id asc")
+        )
+        return self._json_response(
+            {
+                "ok": True,
+                "sample_types": [
+                    {
+                        "code": rec.code,
+                        "name": rec.name,
+                        "is_default": bool(rec.is_default),
+                    }
+                    for rec in recs
+                ],
+            }
+        )
+
+    @http.route(
+        "/lab/api/v1/<string:endpoint_code>/meta/services",
+        type="http",
+        auth="public",
+        methods=["GET"],
+        csrf=False,
+    )
+    def external_meta_services(self, endpoint_code, **kwargs):
+        endpoint, error = self._lookup_endpoint(endpoint_code)
+        if error:
+            return error
+        deny = self._check_metadata_access(endpoint)
+        if deny:
+            return deny
+        domain = [("active", "=", True), ("company_id", "=", endpoint.external_company_id.id)]
+        recs = request.env["lab.service"].sudo().with_company(endpoint.external_company_id).search(domain, order="code asc, id asc")
+        return self._json_response(
+            {
+                "ok": True,
+                "services": [
+                    {
+                        "code": rec.code,
+                        "name": rec.name,
+                        "sample_type": rec.sample_type or "",
+                    }
+                    for rec in recs
+                ],
+            }
+        )
+
+    @http.route(
+        "/lab/api/v1/<string:endpoint_code>/meta/profiles",
+        type="http",
+        auth="public",
+        methods=["GET"],
+        csrf=False,
+    )
+    def external_meta_profiles(self, endpoint_code, **kwargs):
+        endpoint, error = self._lookup_endpoint(endpoint_code)
+        if error:
+            return error
+        deny = self._check_metadata_access(endpoint)
+        if deny:
+            return deny
+        domain = [("active", "=", True), ("company_id", "=", endpoint.external_company_id.id)]
+        recs = request.env["lab.profile"].sudo().with_company(endpoint.external_company_id).search(domain, order="code asc, id asc")
+        return self._json_response(
+            {
+                "ok": True,
+                "profiles": [
+                    {
+                        "code": rec.code,
+                        "name": rec.name,
+                        "sample_type": getattr(rec, "sample_type", "") or "",
+                    }
+                    for rec in recs
+                ],
+            }
+        )

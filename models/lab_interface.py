@@ -518,7 +518,8 @@ class LabInterfaceJob(models.Model):
                         {
                             "line_type": "service",
                             "service_id": service.id,
-                            "quantity": int(item.get("qty") or 1),
+                            "specimen_sample_type": service.sample_type or self.env["lab.master.data.mixin"]._default_sample_type_code(),
+                            "quantity": 1,
                         },
                     )
                 )
@@ -531,7 +532,6 @@ class LabInterfaceJob(models.Model):
                     "request_type": "individual",
                     "patient_name": payload.get("patient_name") or _("External Patient"),
                     "priority": payload.get("priority") or "routine",
-                    "sample_type": payload.get("sample_type") or "blood",
                     "line_ids": lines,
                 }
             )

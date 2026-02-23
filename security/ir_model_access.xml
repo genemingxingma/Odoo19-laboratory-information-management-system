@@ -90,6 +90,24 @@
         <field name="perm_create">1</field>
         <field name="perm_unlink">1</field>
     </record>
+    <record id="access_lab_result_unit_user" model="ir.model.access">
+        <field name="name">lab.result.unit.user</field>
+        <field name="model_id" search="[('model','=','lab.result.unit')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_result_unit_manager" model="ir.model.access">
+        <field name="name">lab.result.unit.manager</field>
+        <field name="model_id" search="[('model','=','lab.result.unit')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
     <record id="access_lab_physician_department_user" model="ir.model.access">
         <field name="name">lab.physician.department.user</field>
         <field name="model_id" search="[('model','=','lab.physician.department')]"/>
@@ -3018,6 +3036,24 @@
     <record id="access_lab_reagent_usage_manager" model="ir.model.access">
         <field name="name">lab.reagent.usage.manager</field>
         <field name="model_id" search="[('model','=','lab.reagent.usage')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+    <record id="access_lab_report_email_template_user" model="ir.model.access">
+        <field name="name">lab.report.email.template.user</field>
+        <field name="model_id" search="[('model','=','lab.report.email.template')]"/>
+        <field name="group_id" ref="laboratory_management.group_lab_user"/>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+    <record id="access_lab_report_email_template_manager" model="ir.model.access">
+        <field name="name">lab.report.email.template.manager</field>
+        <field name="model_id" search="[('model','=','lab.report.email.template')]"/>
         <field name="group_id" ref="laboratory_management.group_lab_manager"/>
         <field name="perm_read">1</field>
         <field name="perm_write">1</field>

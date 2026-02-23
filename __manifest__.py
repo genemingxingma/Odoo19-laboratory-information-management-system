@@ -12,7 +12,7 @@ Features:
 - Result verification and report release
 - More portal functions and AI functions
 """,
-    "version": "19.0.2.0.21",
+    "version": "19.0.2.0.22",
     "category": "Healthcare",
     "author": "mamingxing",
     "website": "https://imytest.local",
@@ -47,6 +47,7 @@ Features:
         "data/lab_custody_closure_sequence.xml",
         "data/ir_cron.xml",
         "data/report_template_data.xml",
+        "data/lab_report_email_template_data.xml",
         "data/review_reason_template_data.xml",
         "data/custody_exception_template_data.xml",
         "data/lab_custody_sla_policy_data.xml",
@@ -71,6 +72,7 @@ Features:
         "views/lab_review_views.xml",
         "views/lab_profile_views.xml",
         "views/lab_report_template_views.xml",
+        "views/lab_report_email_template_views.xml",
         "views/lab_test_request_views.xml",
         "views/lab_request_billing_views.xml",
         "views/lab_ecommerce_views.xml",

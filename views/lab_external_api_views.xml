@@ -5,7 +5,7 @@
         <field name="model">lab.interface.endpoint</field>
         <field name="inherit_id" ref="laboratory_management.view_lab_interface_endpoint_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//group[@string='Credentials']" position="after">
+            <xpath expr="//group[field[@name='allowed_ip_list']]" position="after">
                 <group string="External Institution API">
                     <group>
                         <field name="external_api_enabled"/>
@@ -17,17 +17,20 @@
                         <field name="external_allow_request_push" invisible="not external_api_enabled"/>
                         <field name="external_allow_result_query" invisible="not external_api_enabled"/>
                         <field name="external_allow_report_download" invisible="not external_api_enabled"/>
+                        <field name="external_allow_metadata_query" invisible="not external_api_enabled"/>
                     </group>
-                    <label string="Endpoints (REST):"/>
+                    <div class="o_form_label">Endpoints (REST):</div>
                     <div>
                         <p><code>/lab/api/v1/&lt;endpoint_code&gt;/requests</code> (POST JSON)</p>
                         <p><code>/lab/api/v1/&lt;endpoint_code&gt;/requests/&lt;request_no&gt;</code> (GET)</p>
                         <p><code>/lab/api/v1/&lt;endpoint_code&gt;/samples/&lt;accession&gt;/results</code> (GET)</p>
                         <p><code>/lab/api/v1/&lt;endpoint_code&gt;/samples/&lt;accession&gt;/report/pdf</code> (GET)</p>
+                        <p><code>/lab/api/v1/&lt;endpoint_code&gt;/meta/sample_types</code> (GET)</p>
+                        <p><code>/lab/api/v1/&lt;endpoint_code&gt;/meta/services</code> (GET)</p>
+                        <p><code>/lab/api/v1/&lt;endpoint_code&gt;/meta/profiles</code> (GET)</p>
                     </div>
                 </group>
             </xpath>
         </field>
     </record>
 </odoo>
-

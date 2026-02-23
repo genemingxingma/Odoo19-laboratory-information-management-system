@@ -118,7 +118,6 @@ class LabProtocolAdapter(models.AbstractModel):
             payload = {
                 "patient_name": patient_name or _("External Patient"),
                 "priority": "routine",
-                "sample_type": "blood",
                 "lines": lines,
             }
         else:
@@ -204,7 +203,6 @@ class LabProtocolAdapter(models.AbstractModel):
                 "payload": {
                     "patient_name": patient_name,
                     "priority": "routine",
-                    "sample_type": "blood",
                     "lines": [{"service_code": code, "qty": 1}] if code else [],
                 },
                 "external_uid": data.get("id") or False,

@@ -19,7 +19,7 @@
             "url": "{{base_url}}/lab/api/v1/{{endpoint_code}}/requests",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"external_uid\": \"HIS-REQ-{{timestamp}}\",\n  \"priority\": \"routine\",\n  \"sample_type\": \"swab\",\n  \"clinical_note\": \"API intake request\",\n  \"patient\": {\n    \"name\": \"API Patient\",\n    \"identifier\": \"ID-001\",\n    \"gender\": \"female\",\n    \"birthdate\": \"1992-01-01\"\n  },\n  \"physician\": {\n    \"name\": \"Dr. External\",\n    \"partner_ref\": \"PHY-001\"\n  },\n  \"lines\": [\n    {\n      \"line_type\": \"service\",\n      \"service_code\": \"STD_CT\",\n      \"quantity\": 1,\n      \"specimen_ref\": \"SP1\",\n      \"specimen_barcode\": \"BC-{{timestamp}}\",\n      \"specimen_sample_type\": \"swab\"\n    }\n  ]\n}"
+              "raw": "{\n  \"external_uid\": \"HIS-REQ-{{timestamp}}\",\n  \"priority\": \"routine\",\n  \"clinical_note\": \"API intake request\",\n  \"patient\": {\n    \"name\": \"API Patient\",\n    \"identifier\": \"ID-001\",\n    \"gender\": \"female\",\n    \"birthdate\": \"1992-01-01\"\n  },\n  \"physician\": {\n    \"name\": \"Dr. External\",\n    \"partner_ref\": \"PHY-001\"\n  },\n  \"lines\": [\n    {\n      \"line_type\": \"service\",\n      \"service_code\": \"STD_CT\",\n      \"quantity\": 1,\n      \"specimen_ref\": \"SP1\",\n      \"specimen_barcode\": \"BC-{{timestamp}}\",\n      \"specimen_sample_type\": \"swab\"\n    }\n  ]\n}"
             }
           }
         },

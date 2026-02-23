@@ -202,6 +202,7 @@ class SaleOrderLabEcommerce(models.Model):
                         {
                             "line_type": "service",
                             "service_id": pkg.service_id.id,
+                            "specimen_sample_type": pkg.service_id.sample_type or self.env["lab.master.data.mixin"]._default_sample_type_code(),
                             "quantity": qty,
                             "unit_price": alloc_unit_price,
                             "discount_percent": so_line.discount,
@@ -213,6 +214,8 @@ class SaleOrderLabEcommerce(models.Model):
                         {
                             "line_type": "profile",
                             "profile_id": pkg.profile_id.id,
+                            "specimen_sample_type": getattr(pkg.profile_id, "sample_type", False)
+                            or self.env["lab.master.data.mixin"]._default_sample_type_code(),
                             "quantity": qty,
                             "unit_price": alloc_unit_price,
                             "discount_percent": so_line.discount,
@@ -226,6 +229,8 @@ class SaleOrderLabEcommerce(models.Model):
                 {
                     "line_type": "service",
                     "service_id": so_line.lab_service_id.id,
+                    "specimen_sample_type": so_line.lab_service_id.sample_type
+                    or self.env["lab.master.data.mixin"]._default_sample_type_code(),
                     "quantity": int(so_line.product_uom_qty),
                     "unit_price": so_line.price_unit,
                     "discount_percent": so_line.discount,
@@ -237,6 +242,8 @@ class SaleOrderLabEcommerce(models.Model):
                 {
                     "line_type": "profile",
                     "profile_id": so_line.lab_profile_id.id,
+                    "specimen_sample_type": getattr(so_line.lab_profile_id, "sample_type", False)
+                    or self.env["lab.master.data.mixin"]._default_sample_type_code(),
                     "quantity": int(so_line.product_uom_qty),
                     "unit_price": so_line.price_unit,
                     "discount_percent": so_line.discount,
@@ -251,14 +258,10 @@ class SaleOrderLabEcommerce(models.Model):
         is_professional = bool(partner.is_company)
 
         default_priority = "routine"
-        sample_type = "blood"
         for line in lab_lines:
             priority = line.product_template_id.lab_default_priority
             if priority:
                 default_priority = priority
-            if line.lab_service_id and line.lab_service_id.sample_type:
-                sample_type = line.lab_service_id.sample_type
-                break
 
         line_vals = []
         for so_line in lab_lines:
@@ -277,7 +280,6 @@ class SaleOrderLabEcommerce(models.Model):
             "patient_name": False if not is_professional else _("To be assigned by institution"),
             "patient_phone": partner.phone,
             "priority": default_priority,
-            "sample_type": sample_type,
             "clinical_note": _("Auto-created from Sale Order %(name)s") % {"name": self.name},
             "sale_order_id": self.id,
             "line_ids": line_vals,

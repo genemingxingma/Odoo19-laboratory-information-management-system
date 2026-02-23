@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="lab_report_email_template_default" model="lab.report.email.template">
+        <field name="sequence">10</field>
+        <field name="name">Default Report Notification</field>
+        <field name="code">default</field>
+        <field name="active">True</field>
+        <field name="auto_send_on_release">True</field>
+        <field name="reminder_prefix">[Reminder]</field>
+        <field name="subject_template">Lab report {sample_name} is ready</field>
+        <field name="body_html_template">
+            <![CDATA[
+<div>
+  <p>Dear {partner_name},</p>
+  <p>
+    Your laboratory report <strong>{sample_name}</strong> has been released.
+    The report PDF is attached to this email.
+  </p>
+  <p>
+    You can view detailed results here:
+    <a href="{portal_sample_url}">{portal_sample_url}</a>
+  </p>
+  <p>
+    You can also review your historical reports here:
+    <a href="{portal_history_url}">{portal_history_url}</a>
+  </p>
+  <p>Best regards,<br/>{company_name}</p>
+</div>
+            ]]>
+        </field>
+    </record>
+</odoo>
