@@ -69,6 +69,8 @@
                             <field name="name"/>
                             <field name="code"/>
                             <field name="sequence"/>
+                            <field name="allowed_service_count" readonly="1"/>
+                            <field name="allowed_profile_count" readonly="1"/>
                             <field name="is_default"/>
                             <field name="active"/>
                         </group>
