@@ -365,3 +365,46 @@ Recommended HPV/multiplex PCR setup:
 4. รายงานแสดงผลถูกต้องทั้งเทมเพลตและหลายภาษา
 5. สิทธิ์แต่ละบทบาทและเมนูถูกต้องตามที่ออกแบบ
 
+---
+
+## 8. New in 19.0.2.0.22 | 版本新增能力 | ความสามารถใหม่ในเวอร์ชัน 19.0.2.0.22
+
+### 中文
+1. 新增“动态表单”引擎：可将特定表单绑定到 Service/Panel，提交申请时必须填写。
+2. 新增实验室原生 `Patient` 与 `Physician` 主数据模型，支持更完整字段管理。
+3. 新增申请附件能力：Portal、内部工作台、外部API均可上传申请附件。
+4. 安装顺序优化：修复全新安装时安全组/菜单加载顺序问题。
+
+### English
+1. Added dynamic form engine with per-service/per-panel required forms.
+2. Added lab-native patient and physician master data models.
+3. Added request attachments in portal, internal workbench, and external API.
+4. Improved install order for security/menu loading on clean installs.
+
+### ไทย
+1. เพิ่มระบบ Dynamic Form ที่ผูกกับ Service/Panel และบังคับกรอกตอนส่งคำขอ
+2. เพิ่มโมเดลข้อมูลหลักของผู้ป่วยและแพทย์ในฝั่งห้องปฏิบัติการ
+3. เพิ่มการแนบไฟล์คำขอทั้งใน Portal, หลังบ้าน และ External API
+4. ปรับลำดับการติดตั้งให้เสถียรขึ้นสำหรับการติดตั้งใหม่
+
+---
+
+## 9. Dynamic Form Configuration SOP | 动态表单配置SOP | SOP การตั้งค่า Dynamic Form
+
+### 中文
+1. 菜单：`Laboratory > Configuration > Test Catalog > Dynamic Forms`
+2. 新建表单并新增字段（text/number/date/selection/boolean）。
+3. 在 `Analysis Services` 或 `Analysis Panels` 中绑定所需表单。
+4. 提交申请时，系统会自动校验必填字段并保存回答。
+
+### English
+1. Go to `Laboratory > Configuration > Test Catalog > Dynamic Forms`.
+2. Create a form and define fields (text/number/date/selection/boolean).
+3. Bind forms on service or panel configuration.
+4. On request submit, required form answers are validated and stored.
+
+### ไทย
+1. ไปที่ `Laboratory > Configuration > Test Catalog > Dynamic Forms`
+2. สร้างฟอร์มและกำหนดฟิลด์ (text/number/date/selection/boolean)
+3. ผูกฟอร์มที่จำเป็นกับ service หรือ panel
+4. ตอนส่งคำขอ ระบบจะตรวจสอบฟิลด์บังคับและบันทึกคำตอบอัตโนมัติ

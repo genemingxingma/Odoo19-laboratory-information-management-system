@@ -128,6 +128,23 @@ Notes:
 - `external_uid` is idempotent key per endpoint.
 - Re-push with same `external_uid` returns existing request (`deduplicated=true`).
 - Specimen type should be passed by each line via `specimen_sample_type`.
+- If target service/panel requires dynamic forms, pass `dynamic_forms` in request payload.
+
+Dynamic form payload example:
+```json
+{
+  "dynamic_forms": [
+    {
+      "form_code": "STD_PRETEST_QA",
+      "answers": {
+        "recent_exposure": "yes",
+        "symptoms": "no",
+        "consent": true
+      }
+    }
+  ]
+}
+```
 
 ---
 

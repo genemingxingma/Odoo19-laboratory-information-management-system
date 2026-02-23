@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Laboratory External Institution API
-  version: 1.2.0
+  version: 1.2.1
   description: |
     REST API for external hospitals/institutions.
     Supports request push, request query, sample result query, report PDF download,
@@ -60,6 +60,12 @@ paths:
                       specimen_ref: SP1
                       specimen_barcode: API-CUP-9001
                       specimen_sample_type: swab
+                  dynamic_forms:
+                    - form_code: STD_PRETEST_QA
+                      answers:
+                        recent_exposure: 'yes'
+                        symptoms: 'no'
+                        consent: true
       responses:
         '200':
           description: Created or deduplicated by external_uid
@@ -386,6 +392,24 @@ components:
           enum: [false]
         error:
           type: string
+          enum:
+            - endpoint_not_found
+            - endpoint_protocol_not_rest
+            - unauthorized
+            - request_push_disabled
+            - result_query_disabled
+            - report_download_disabled
+            - metadata_query_disabled
+            - lines_required
+            - invalid_line_type
+            - service_not_found
+            - profile_not_found
+            - request_not_found
+            - sample_not_found
+            - report_not_ready
+            - required_dynamic_form_missing
+            - required_dynamic_field_missing
+            - dynamic_form_not_found
 
     CreateRequestPayload:
       type: object
@@ -418,6 +442,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AttachmentInput'
+        dynamic_forms:
+          type: array
+          items:
+            $ref: '#/components/schemas/DynamicFormInput'
 
     PatientInput:
       type: object
@@ -483,6 +511,17 @@ components:
           description: Base64-encoded binary content
         mimetype:
           type: string
+
+    DynamicFormInput:
+      type: object
+      required: [form_code, answers]
+      properties:
+        form_code:
+          type: string
+        answers:
+          type: object
+          additionalProperties: true
+          description: Key-value map; key must match dynamic form field key.
 
     CreateRequestResponse:
       type: object

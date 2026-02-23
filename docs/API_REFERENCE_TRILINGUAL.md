@@ -57,6 +57,7 @@ Request payload contract:
 - `physician` (optional object)
 - `priority`, `clinical_note`, `preferred_template_code` (optional)
 - `attachments` (optional, array of base64 files)
+- `dynamic_forms` (optional, array of form responses)
 
 Attachment object:
 - `name` or `filename` (required)
@@ -75,6 +76,24 @@ Important:
 - Specimen type is controlled per line (`specimen_sample_type`).
 - Top-level `sample_type` should not be used by new integrations.
 - Each attachment max size is `10 MB`.
+- If a selected service/panel requires dynamic forms, missing required answers will be rejected.
+
+Dynamic form payload example:
+```json
+{
+  "dynamic_forms": [
+    {
+      "form_code": "STD_PRETEST_QA",
+      "answers": {
+        "recent_exposure": "yes",
+        "symptoms": "no",
+        "clinical_note": "No known exposure in last 14 days",
+        "consent": true
+      }
+    }
+  ]
+}
+```
 
 Successful response shape:
 ```json
@@ -191,6 +210,9 @@ External API errors:
 - `request_not_found`
 - `sample_not_found`
 - `report_not_ready`
+- `required_dynamic_form_missing`
+- `required_dynamic_field_missing`
+- `dynamic_form_not_found`
 
 Interface API errors:
 - `endpoint_not_found`
