@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 
 class LabPatient(models.Model):
@@ -78,10 +78,18 @@ class LabPatient(models.Model):
                 rec.age_display = False
                 continue
             if rec.birthdate > today:
-                rec.age_display = "0年0月0日"
+                rec.age_display = _("%(years)s years %(months)s months %(days)s days") % {
+                    "years": 0,
+                    "months": 0,
+                    "days": 0,
+                }
                 continue
             delta = relativedelta(today, rec.birthdate)
-            rec.age_display = f"{delta.years}年{delta.months}月{delta.days}日"
+            rec.age_display = _("%(years)s years %(months)s months %(days)s days") % {
+                "years": delta.years,
+                "months": delta.months,
+                "days": delta.days,
+            }
 
     @api.onchange("country_id")
     def _onchange_country_id(self):

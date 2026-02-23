@@ -99,45 +99,41 @@ class LabMasterDataMixin(models.AbstractModel):
 
     @api.model
     def seed_i18n_master_data(self):
-        """Seed core master-data names in EN/ZH/TH using code keys."""
-        available_langs = set(self.env["res.lang"].sudo().search([]).mapped("code"))
+        """Seed core master-data names using English source strings only."""
         translations = {
             "lab.department.type": {
-                "chemistry": {"en_US": "Clinical Chemistry", "zh_CN": "临床化学", "th_TH": "เคมีคลินิก"},
-                "general": {"en_US": "General", "zh_CN": "综合科", "th_TH": "ทั่วไป"},
-                "hematology": {"en_US": "Hematology", "zh_CN": "血液学", "th_TH": "โลหิตวิทยา"},
-                "microbiology": {"en_US": "Microbiology", "zh_CN": "微生物学", "th_TH": "จุลชีววิทยา"},
-                "immunology": {"en_US": "Immunology", "zh_CN": "免疫学", "th_TH": "ภูมิคุ้มกันวิทยา"},
-                "other": {"en_US": "Other", "zh_CN": "其他", "th_TH": "อื่นๆ"},
+                "chemistry": "Clinical Chemistry",
+                "general": "General",
+                "hematology": "Hematology",
+                "microbiology": "Microbiology",
+                "immunology": "Immunology",
+                "other": "Other",
             },
             "lab.sample.type": {
-                "blood": {"en_US": "Whole Blood", "zh_CN": "全血", "th_TH": "เลือดเต็มส่วน"},
-                "urine": {"en_US": "Urine", "zh_CN": "尿液", "th_TH": "ปัสสาวะ"},
-                "stool": {"en_US": "Stool", "zh_CN": "粪便", "th_TH": "อุจจาระ"},
-                "swab": {"en_US": "Swab", "zh_CN": "拭子样本", "th_TH": "ตัวอย่างสวอบ"},
-                "serum": {"en_US": "Serum", "zh_CN": "血清", "th_TH": "ซีรัม"},
-                "other": {"en_US": "Other", "zh_CN": "其他", "th_TH": "อื่นๆ"},
+                "blood": "Whole Blood",
+                "urine": "Urine",
+                "stool": "Stool",
+                "swab": "Swab",
+                "serum": "Serum",
+                "other": "Other",
             },
             "lab.priority.type": {
-                "routine": {"en_US": "Routine", "zh_CN": "常规", "th_TH": "ปกติ"},
-                "urgent": {"en_US": "Urgent", "zh_CN": "加急", "th_TH": "เร่งด่วน"},
-                "stat": {"en_US": "STAT", "zh_CN": "急诊（STAT）", "th_TH": "ด่วนพิเศษ (STAT)"},
+                "routine": "Routine",
+                "urgent": "Urgent",
+                "stat": "STAT",
             },
             "lab.request.type": {
-                "individual": {"en_US": "Individual", "zh_CN": "个人", "th_TH": "บุคคล"},
-                "institution": {"en_US": "Institution", "zh_CN": "机构", "th_TH": "หน่วยงาน"},
+                "individual": "Individual",
+                "institution": "Institution",
             },
         }
         for model_name, codes in translations.items():
             model = self.env[model_name].sudo()
-            for code, lang_map in codes.items():
+            for code, source_name in codes.items():
                 rec = model.search([("code", "=", code)], limit=1)
                 if not rec:
                     continue
-                for lang, value in lang_map.items():
-                    if lang not in available_langs:
-                        continue
-                    rec.with_context(lang=lang).write({"name": value})
+                rec.with_context(lang="en_US").write({"name": source_name})
         return True
 
 

@@ -12,10 +12,10 @@ summary.append('Master data i18n seeded')
 # 2) Ensure extra sample types for STD/PCR scenarios
 sample_type_model = env['lab.sample.type'].sudo()
 extra_sample_types = [
-    ('cervical_swab', {'en_US': 'Cervical Swab', 'zh_CN': '宫颈拭子', 'th_TH': 'สวอบปากมดลูก'}),
-    ('urethral_swab', {'en_US': 'Urethral Swab', 'zh_CN': '尿道拭子', 'th_TH': 'สวอบท่อปัสสาวะ'}),
-    ('vaginal_swab', {'en_US': 'Vaginal Swab', 'zh_CN': '阴道拭子', 'th_TH': 'สวอบช่องคลอด'}),
-    ('first_void_urine', {'en_US': 'First-void Urine', 'zh_CN': '首段尿', 'th_TH': 'ปัสสาวะช่วงต้น'}),
+    ('cervical_swab', {'en_US': 'Cervical Swab'}),
+    ('urethral_swab', {'en_US': 'Urethral Swab'}),
+    ('vaginal_swab', {'en_US': 'Vaginal Swab'}),
+    ('first_void_urine', {'en_US': 'First-void Urine'}),
 ]
 for code, names in extra_sample_types:
     rec = sample_type_model.search([('code', '=', code)], limit=1)

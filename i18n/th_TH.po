@@ -6623,3 +6623,27 @@ msgstr "บรรทัดแพ็กเกจแบบแผงต้องร
 #. module: laboratory_management
 msgid "If enabled, one ecommerce product can expand into multiple request lines (services/panels)."
 msgstr "เมื่อเปิดใช้งาน สินค้าอีคอมเมิร์ซหนึ่งรายการสามารถขยายเป็นหลายบรรทัดคำขอได้ (บริการ/แผง)"
+
+#. module: laboratory_management
+msgid "Patient ID"
+msgstr "รหัสผู้ป่วย"
+
+#. module: laboratory_management
+msgid "Passport No."
+msgstr "เลขหนังสือเดินทาง"
+
+#. module: laboratory_management
+msgid "Age"
+msgstr "อายุ"
+
+#. module: laboratory_management
+msgid "Patient ID must be unique per company."
+msgstr "รหัสผู้ป่วยต้องไม่ซ้ำกันภายในแต่ละบริษัท"
+
+#. module: laboratory_management
+msgid "Passport number must be unique per company."
+msgstr "เลขหนังสือเดินทางต้องไม่ซ้ำกันภายในแต่ละบริษัท"
+
+#. module: laboratory_management
+msgid "%(years)s years %(months)s months %(days)s days"
+msgstr "%(years)s ปี %(months)s เดือน %(days)s วัน"

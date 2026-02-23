@@ -6622,3 +6622,27 @@ msgstr "面板套餐明细必须选择面板。"
 #. module: laboratory_management
 msgid "If enabled, one ecommerce product can expand into multiple request lines (services/panels)."
 msgstr "启用后，一个电商商品可展开为多个申请明细（服务/面板）。"
+
+#. module: laboratory_management
+msgid "Patient ID"
+msgstr "患者ID"
+
+#. module: laboratory_management
+msgid "Passport No."
+msgstr "护照号"
+
+#. module: laboratory_management
+msgid "Age"
+msgstr "年龄"
+
+#. module: laboratory_management
+msgid "Patient ID must be unique per company."
+msgstr "患者ID在每个公司内必须唯一。"
+
+#. module: laboratory_management
+msgid "Passport number must be unique per company."
+msgstr "护照号在每个公司内必须唯一。"
+
+#. module: laboratory_management
+msgid "%(years)s years %(months)s months %(days)s days"
+msgstr "%(years)s年%(months)s月%(days)s日"
