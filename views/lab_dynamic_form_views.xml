@@ -110,14 +110,12 @@
         <field name="name">Dynamic Forms</field>
         <field name="res_model">lab.dynamic.form</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('company_id', 'in', company_ids)]</field>
     </record>
 
     <record id="action_lab_request_dynamic_form_response" model="ir.actions.act_window">
         <field name="name">Request Form Responses</field>
         <field name="res_model">lab.request.dynamic.form.response</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('request_id.company_id', 'in', company_ids)]</field>
     </record>
 
     <menuitem id="menu_lab_dynamic_form"
