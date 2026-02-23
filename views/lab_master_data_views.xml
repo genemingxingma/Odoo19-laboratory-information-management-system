@@ -50,8 +50,6 @@
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="code"/>
-                <field name="restrict_service_scope"/>
-                <field name="restrict_profile_scope"/>
                 <field name="is_default"/>
                 <field name="active"/>
             </list>
@@ -72,14 +70,10 @@
                             <field name="is_default"/>
                             <field name="active"/>
                         </group>
-                        <group>
-                            <field name="restrict_service_scope"/>
-                            <field name="restrict_profile_scope"/>
-                        </group>
                     </group>
                     <group string="Request Type Catalog Scope">
-                        <field name="allowed_service_ids" widget="many2many_tags" invisible="not restrict_service_scope"/>
-                        <field name="allowed_profile_ids" widget="many2many_tags" invisible="not restrict_profile_scope"/>
+                        <field name="allowed_service_ids" widget="many2many_tags"/>
+                        <field name="allowed_profile_ids" widget="many2many_tags"/>
                     </group>
                 </sheet>
             </form>

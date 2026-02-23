@@ -187,11 +187,6 @@ class LabRequestType(models.Model):
     sequence = fields.Integer(default=10)
     is_default = fields.Boolean(default=False)
     active = fields.Boolean(default=True)
-    restrict_service_scope = fields.Boolean(
-        string="Restrict Service Scope",
-        default=False,
-        help="If enabled, only selected services are available for this request type.",
-    )
     allowed_service_ids = fields.Many2many(
         "lab.service",
         "lab_request_type_service_rel",
@@ -199,11 +194,6 @@ class LabRequestType(models.Model):
         "service_id",
         string="Allowed Services",
         domain="[('active','=',True), ('company_id', '=', company_id), ('profile_only', '=', False)]",
-    )
-    restrict_profile_scope = fields.Boolean(
-        string="Restrict Profile Scope",
-        default=False,
-        help="If enabled, only selected profiles are available for this request type.",
     )
     allowed_profile_ids = fields.Many2many(
         "lab.profile",

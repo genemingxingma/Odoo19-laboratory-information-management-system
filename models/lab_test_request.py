@@ -284,7 +284,7 @@ class LabTestRequest(models.Model):
             ("profile_only", "=", False),
         ]
         request_type = self._request_type_scope_record(request_type_code, company=company)
-        if request_type and request_type.restrict_service_scope:
+        if request_type and request_type.allowed_service_ids:
             domain.append(("id", "in", request_type.allowed_service_ids.ids or [0]))
         return domain
 
@@ -296,7 +296,7 @@ class LabTestRequest(models.Model):
             ("company_id", "=", company.id),
         ]
         request_type = self._request_type_scope_record(request_type_code, company=company)
-        if request_type and request_type.restrict_profile_scope:
+        if request_type and request_type.allowed_profile_ids:
             domain.append(("id", "in", request_type.allowed_profile_ids.ids or [0]))
         return domain
 
