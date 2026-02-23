@@ -25,7 +25,7 @@ class LabPatient(models.Model):
     lang = fields.Selection(selection=lambda self: self.env["res.lang"].get_installed(), string="Language")
     street = fields.Char(string="Street")
     street2 = fields.Char(string="Street 2")
-    city_id = fields.Many2one("res.city", string="City")
+    city = fields.Char(string="City")
     state_id = fields.Many2one("res.country.state", string="State/Province")
     zip = fields.Char(string="ZIP")
     country_id = fields.Many2one("res.country", string="Country")
@@ -88,13 +88,9 @@ class LabPatient(models.Model):
         for rec in self:
             if rec.state_id and rec.state_id.country_id != rec.country_id:
                 rec.state_id = False
-            if rec.city_id and rec.city_id.country_id != rec.country_id:
-                rec.city_id = False
 
     @api.onchange("state_id")
     def _onchange_state_id(self):
         for rec in self:
             if rec.state_id and rec.country_id != rec.state_id.country_id:
                 rec.country_id = rec.state_id.country_id
-            if rec.city_id and rec.city_id.state_id != rec.state_id:
-                rec.city_id = False

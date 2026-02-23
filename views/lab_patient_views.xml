@@ -54,7 +54,7 @@
                             <field name="street2"/>
                             <field name="country_id"/>
                             <field name="state_id" domain="[('country_id', '=', country_id)]"/>
-                            <field name="city_id" domain="[('country_id', '=', country_id), '|', ('state_id', '=', state_id), ('state_id', '=', False)]"/>
+                            <field name="city"/>
                         </group>
                         <group>
                             <field name="zip"/>
