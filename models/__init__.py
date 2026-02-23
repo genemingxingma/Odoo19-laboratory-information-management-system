@@ -6,9 +6,11 @@ from . import lab_review
 from . import lab_notification
 from . import lab_profile
 from . import lab_physician
+from . import lab_patient
 from . import lab_interpretation
 from . import lab_report_template
 from . import lab_test_request
+from . import lab_dynamic_form
 from . import lab_request_billing
 from . import lab_ecommerce
 from . import lab_qc

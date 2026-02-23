@@ -57,10 +57,22 @@ class LabMasterDataMixin(models.AbstractModel):
 
     @api.model
     def _selection_request_type(self):
-        return self._selection_from_master(
-            "lab.request.type",
-            [("individual", "Individual"), ("institution", "Institution")],
+        records = (
+            self.env["lab.request.type"]
+            .sudo()
+            .search(
+                [
+                    ("active", "=", True),
+                    ("code", "in", ["individual", "institution"]),
+                ],
+                order="sequence asc, id asc",
+            )
         )
+        if records:
+            values = [(rec.code, rec.name) for rec in records]
+            if {"individual", "institution"}.issubset({code for code, _name in values}):
+                return values
+        return [("individual", "Individual"), ("institution", "Institution")]
 
     @api.model
     def _selection_result_unit(self):
@@ -181,6 +193,13 @@ class LabRequestType(models.Model):
     _name = "lab.request.type"
     _description = "Laboratory Request Type"
     _order = "sequence, id"
+    _ALLOWED_CODES = {"individual", "institution"}
+    _CONFIG_ONLY_FIELDS = {
+        "allowed_service_ids",
+        "exclude_selected_services",
+        "allowed_profile_ids",
+        "exclude_selected_profiles",
+    }
 
     name = fields.Char(required=True, translate=True)
     code = fields.Char(required=True)
@@ -221,6 +240,48 @@ class LabRequestType(models.Model):
     _sql_constraints = [
         ("lab_request_type_code_uniq", "unique(code)", "Request type code must be unique."),
     ]
+
+    def _is_system_write_context(self):
+        return bool(
+            self.env.context.get("install_mode")
+            or self.env.context.get("module")
+            or self.env.context.get("from_module")
+            or self.env.is_superuser()
+        )
+
+    @api.constrains("code")
+    def _check_builtin_code(self):
+        for rec in self:
+            if rec.code not in self._ALLOWED_CODES:
+                raise ValidationError(_("Only built-in request types are allowed: individual, institution."))
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        if not self._is_system_write_context():
+            raise ValidationError(_("Request type records are fixed by system and cannot be created manually."))
+        records = super().create(vals_list)
+        for rec in records:
+            if rec.code not in self._ALLOWED_CODES:
+                raise ValidationError(_("Only built-in request types are allowed: individual, institution."))
+        return records
+
+    def write(self, vals):
+        if self._is_system_write_context():
+            return super().write(vals)
+        invalid_fields = set(vals.keys()) - self._CONFIG_ONLY_FIELDS
+        if invalid_fields:
+            raise ValidationError(
+                _("Only service/panel scope fields can be updated on request types.")
+            )
+        invalid_records = self.filtered(lambda rec: rec.code not in rec._ALLOWED_CODES)
+        if invalid_records:
+            raise ValidationError(_("Only built-in request types can be configured."))
+        return super().write(vals)
+
+    def unlink(self):
+        if not self._is_system_write_context():
+            raise ValidationError(_("Request type records are fixed by system and cannot be deleted."))
+        return super().unlink()
 
     @api.constrains("allowed_service_ids", "allowed_profile_ids", "company_id")
     def _check_scope_company(self):

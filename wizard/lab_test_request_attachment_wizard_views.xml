@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_test_request_attachment_wizard_form" model="ir.ui.view">
+        <field name="name">lab.test.request.attachment.wizard.form</field>
+        <field name="model">lab.test.request.attachment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Request Attachments" create="0" edit="1">
+                <sheet>
+                    <group>
+                        <field name="request_id" readonly="1"/>
+                    </group>
+                    <field name="line_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <field name="file_data" filename="name"/>
+                            <field name="mimetype"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_upload" type="object" string="Upload" class="btn-primary"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

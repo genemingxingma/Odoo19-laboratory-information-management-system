@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_dynamic_form_list" model="ir.ui.view">
+        <field name="name">lab.dynamic.form.list</field>
+        <field name="model">lab.dynamic.form</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="required_field_count"/>
+                <field name="total_field_count"/>
+                <field name="company_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_dynamic_form_form" model="ir.ui.view">
+        <field name="name">lab.dynamic.form.form</field>
+        <field name="model">lab.dynamic.form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="company_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="required_field_count" readonly="1"/>
+                            <field name="total_field_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                    <field name="field_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="name"/>
+                            <field name="key"/>
+                            <field name="field_type"/>
+                            <field name="required"/>
+                            <field name="help_text"/>
+                            <field name="placeholder"/>
+                            <field name="selection_options" invisible="field_type != 'selection'"/>
+                            <field name="active"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_request_dynamic_form_response_list" model="ir.ui.view">
+        <field name="name">lab.request.dynamic.form.response.list</field>
+        <field name="model">lab.request.dynamic.form.response</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="request_id"/>
+                <field name="form_id"/>
+                <field name="is_complete"/>
+                <field name="completed_at"/>
+                <field name="completed_by_id"/>
+                <field name="source"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_request_dynamic_form_response_form" model="ir.ui.view">
+        <field name="name">lab.request.dynamic.form.response.form</field>
+        <field name="model">lab.request.dynamic.form.response</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_mark_complete" type="object" string="Mark Complete" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="request_id"/>
+                        <field name="form_id"/>
+                        <field name="is_complete" readonly="1"/>
+                        <field name="source"/>
+                        <field name="completed_at" readonly="1"/>
+                        <field name="completed_by_id" readonly="1"/>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="field_name" readonly="1"/>
+                            <field name="required" readonly="1"/>
+                            <field name="field_type" readonly="1"/>
+                            <field name="value_text" invisible="field_type not in ('text','textarea')"/>
+                            <field name="value_number" invisible="field_type != 'number'"/>
+                            <field name="value_date" invisible="field_type != 'date'"/>
+                            <field name="value_datetime" invisible="field_type != 'datetime'"/>
+                            <field name="value_boolean" invisible="field_type != 'boolean'"/>
+                            <field name="value_selection" invisible="field_type != 'selection'"/>
+                            <field name="display_value" readonly="1"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_dynamic_form" model="ir.actions.act_window">
+        <field name="name">Dynamic Forms</field>
+        <field name="res_model">lab.dynamic.form</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="action_lab_request_dynamic_form_response" model="ir.actions.act_window">
+        <field name="name">Request Form Responses</field>
+        <field name="res_model">lab.request.dynamic.form.response</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('request_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <menuitem id="menu_lab_dynamic_form"
+              name="Dynamic Forms"
+              parent="menu_lab_config_catalog"
+              action="action_lab_dynamic_form"
+              sequence="30"/>
+    <menuitem id="menu_lab_request_dynamic_form_response"
+              name="Form Responses"
+              parent="menu_laboratory_operations"
+              action="action_lab_request_dynamic_form_response"
+              sequence="9"/>
+</odoo>

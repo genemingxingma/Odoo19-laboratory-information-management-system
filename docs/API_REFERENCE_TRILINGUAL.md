@@ -56,6 +56,12 @@ Request payload contract:
 - `patient` (optional object)
 - `physician` (optional object)
 - `priority`, `clinical_note`, `preferred_template_code` (optional)
+- `attachments` (optional, array of base64 files)
+
+Attachment object:
+- `name` or `filename` (required)
+- `content_base64` or `datas` (required)
+- `mimetype` (optional)
 
 Line rules:
 - `line_type` must be `service` or `profile`
@@ -68,6 +74,7 @@ Line rules:
 Important:
 - Specimen type is controlled per line (`specimen_sample_type`).
 - Top-level `sample_type` should not be used by new integrations.
+- Each attachment max size is `10 MB`.
 
 Successful response shape:
 ```json
@@ -86,6 +93,14 @@ Successful response shape:
 ### 4.2 Query request
 - `GET /requests/{request_no}`
 - Returns request header + patient summary + sample list.
+- Also returns attachment summary list (`id/name/mimetype/size`).
+
+### 4.2.1 Upload attachments to existing request
+- `POST /requests/{request_no}/attachments`
+- Supports:
+  - `application/json` with `attachments` base64 payload
+  - `multipart/form-data` with repeated `files` fields
+- Response includes uploaded attachment metadata.
 
 ### 4.3 Query sample results
 - `GET /samples/{accession}/results`

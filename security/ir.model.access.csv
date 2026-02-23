@@ -8,7 +8,7 @@ access_lab_sample_type_manager,lab.sample.type.manager,model_lab_sample_type,lab
 access_lab_priority_type_user,lab.priority.type.user,model_lab_priority_type,laboratory_management.group_lab_user,1,0,0,0
 access_lab_priority_type_manager,lab.priority.type.manager,model_lab_priority_type,laboratory_management.group_lab_manager,1,1,1,1
 access_lab_request_type_user,lab.request.type.user,model_lab_request_type,laboratory_management.group_lab_user,1,0,0,0
-access_lab_request_type_manager,lab.request.type.manager,model_lab_request_type,laboratory_management.group_lab_manager,1,1,1,1
+access_lab_request_type_manager,lab.request.type.manager,model_lab_request_type,laboratory_management.group_lab_manager,1,1,0,0
 access_lab_storage_location_user,lab.storage.location.user,model_lab_storage_location,laboratory_management.group_lab_user,1,0,0,0
 access_lab_storage_location_manager,lab.storage.location.manager,model_lab_storage_location,laboratory_management.group_lab_manager,1,1,1,1
 access_lab_storage_event_user,lab.sample.storage.event.user,model_lab_sample_storage_event,laboratory_management.group_lab_user,1,0,0,0

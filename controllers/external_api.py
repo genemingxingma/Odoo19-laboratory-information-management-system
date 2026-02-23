@@ -1,10 +1,15 @@
+import base64
+import binascii
 import json
+import os
 
 from odoo import fields, http
 from odoo.http import request
 
 
 class LaboratoryExternalApi(http.Controller):
+    _MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
+
     def _authorize_endpoint(self, endpoint):
         auth_type = endpoint.auth_type or "none"
         headers = request.httprequest.headers
@@ -70,12 +75,24 @@ class LaboratoryExternalApi(http.Controller):
         if partner:
             domain += [
                 "|",
-                ("patient_id", "child_of", partner.id),
+                ("request_id.requester_partner_id", "child_of", partner.id),
                 ("client_id", "child_of", partner.id),
             ]
         return domain
 
     def _prepare_request_payload(self, rec):
+        attachment_recs = (
+            request.env["ir.attachment"]
+            .sudo()
+            .search(
+                [
+                    ("res_model", "=", "lab.test.request"),
+                    ("res_id", "=", rec.id),
+                    ("type", "=", "binary"),
+                ],
+                order="id asc",
+            )
+        )
         return {
             "id": rec.id,
             "request_no": rec.name,
@@ -104,7 +121,45 @@ class LaboratoryExternalApi(http.Controller):
                 }
                 for s in rec.sample_ids
             ],
+            "attachments": [
+                {
+                    "id": att.id,
+                    "name": att.name,
+                    "mimetype": att.mimetype or "",
+                    "size": att.file_size or 0,
+                }
+                for att in attachment_recs
+            ],
         }
+
+    def _normalize_api_attachments(self, attachments):
+        normalized = []
+        for index, item in enumerate(attachments or [], start=1):
+            if not isinstance(item, dict):
+                return None, {"ok": False, "error": "invalid_attachment_payload", "attachment_index": index}
+            name = os.path.basename((item.get("name") or item.get("filename") or "").strip())
+            data_b64 = (item.get("content_base64") or item.get("datas") or "").strip()
+            if not name or not data_b64:
+                return None, {"ok": False, "error": "attachment_name_or_data_missing", "attachment_index": index}
+            try:
+                content = base64.b64decode(data_b64, validate=True)
+            except (binascii.Error, ValueError):
+                return None, {"ok": False, "error": "attachment_decode_failed", "attachment_index": index}
+            if len(content) > self._MAX_ATTACHMENT_BYTES:
+                return None, {
+                    "ok": False,
+                    "error": "attachment_too_large",
+                    "attachment_index": index,
+                    "max_bytes": self._MAX_ATTACHMENT_BYTES,
+                }
+            normalized.append(
+                {
+                    "name": name,
+                    "content": content,
+                    "mimetype": (item.get("mimetype") or "application/octet-stream").strip(),
+                }
+            )
+        return normalized, None
 
     def _check_metadata_access(self, endpoint):
         if not endpoint.external_allow_metadata_query:
@@ -130,13 +185,15 @@ class LaboratoryExternalApi(http.Controller):
         patient = body.get("patient") or {}
         physician = body.get("physician") or {}
         lines = body.get("lines") or []
+        attachments_payload = body.get("attachments") or []
+        dynamic_forms_payload = body.get("dynamic_forms") or {}
         if not lines:
             return {"ok": False, "error": "lines_required"}
 
         request_obj = request.env["lab.test.request"].sudo().with_company(endpoint.external_company_id)
         service_obj = request.env["lab.service"].sudo().with_company(endpoint.external_company_id)
         profile_obj = request.env["lab.profile"].sudo().with_company(endpoint.external_company_id)
-        partner_obj = request.env["res.partner"].sudo().with_company(endpoint.external_company_id)
+        physician_obj = request.env["lab.physician"].sudo().with_company(endpoint.external_company_id)
         template_obj = request.env["lab.report.template"].sudo().with_company(endpoint.external_company_id)
 
         if external_uid:
@@ -160,9 +217,12 @@ class LaboratoryExternalApi(http.Controller):
             preferred_template = template_obj.search([("code", "=", template_code)], limit=1)
 
         physician_partner = False
-        physician_code = (physician.get("partner_ref") or "").strip()
+        physician_code = (physician.get("code") or physician.get("partner_ref") or "").strip()
         if physician_code:
-            physician_partner = partner_obj.search([("ref", "=", physician_code)], limit=1)
+            physician_partner = physician_obj.search(
+                ["|", ("code", "=", physician_code), ("license_no", "=", physician_code)],
+                limit=1,
+            )
 
         valid_sample_types = {code for code, _label in request_obj._selection_sample_type()}
         request_type = "institution" if client_partner else "individual"
@@ -218,6 +278,15 @@ class LaboratoryExternalApi(http.Controller):
                 vals["profile_id"] = profile.id
             line_vals.append((0, 0, vals))
 
+        required_forms = (
+            service_obj.browse([vals[2]["service_id"] for vals in line_vals if vals[2].get("service_id")]).mapped("dynamic_form_rel_ids.form_id")
+            | profile_obj.browse([vals[2]["profile_id"] for vals in line_vals if vals[2].get("profile_id")]).mapped("dynamic_form_rel_ids.form_id")
+        ).filtered(lambda x: x.active and x.company_id == endpoint.external_company_id)
+        try:
+            request_obj.validate_dynamic_form_payload(required_forms, dynamic_forms_payload)
+        except Exception as exc:
+            return {"ok": False, "error": "dynamic_form_required", "detail": str(exc)}
+
         request_vals = {
             "requester_partner_id": requester.id,
             "request_type": request_type,
@@ -239,9 +308,92 @@ class LaboratoryExternalApi(http.Controller):
             "external_request_uid": external_uid or False,
         }
         req = request_obj.create(request_vals)
+        if dynamic_forms_payload:
+            try:
+                req._apply_dynamic_form_payload(dynamic_forms_payload, source="api")
+            except Exception as exc:
+                return {"ok": False, "error": "dynamic_form_apply_failed", "detail": str(exc)}
+        if attachments_payload:
+            normalized_attachments, attachment_error = self._normalize_api_attachments(attachments_payload)
+            if attachment_error:
+                return attachment_error
+            req._create_request_attachments(normalized_attachments, source="external_api")
         if endpoint.external_auto_submit_request:
             req.action_submit()
         return {"ok": True, "request": self._prepare_request_payload(req)}
+
+    @http.route(
+        "/lab/api/v1/<string:endpoint_code>/requests/<string:request_no>/attachments",
+        type="http",
+        auth="public",
+        methods=["POST"],
+        csrf=False,
+    )
+    def external_request_upload_attachments(self, endpoint_code, request_no, **kwargs):
+        endpoint, error = self._lookup_endpoint(endpoint_code)
+        if error:
+            return error
+        if not endpoint.external_allow_request_push:
+            return self._json_response({"ok": False, "error": "request_push_disabled"}, status=403)
+        domain = [("name", "=", request_no)] + self._request_domain_for_endpoint(endpoint)
+        req = request.env["lab.test.request"].sudo().search(domain, limit=1)
+        if not req:
+            return self._json_response({"ok": False, "error": "request_not_found"}, status=404)
+
+        normalized = []
+        content_type = (request.httprequest.content_type or "").lower()
+        if content_type.startswith("application/json"):
+            try:
+                body = json.loads((request.httprequest.data or b"{}").decode("utf-8"))
+            except Exception:  # noqa: BLE001
+                return self._json_response({"ok": False, "error": "invalid_json"}, status=400)
+            payload = body.get("attachments") or []
+            normalized, attachment_error = self._normalize_api_attachments(payload)
+            if attachment_error:
+                return self._json_response(attachment_error, status=400)
+        else:
+            files = request.httprequest.files.getlist("files")
+            for idx, f in enumerate(files, start=1):
+                filename = os.path.basename((getattr(f, "filename", "") or "").strip())
+                content = f.read() if hasattr(f, "read") else b""
+                if not filename or not content:
+                    continue
+                if len(content) > self._MAX_ATTACHMENT_BYTES:
+                    return self._json_response(
+                        {
+                            "ok": False,
+                            "error": "attachment_too_large",
+                            "attachment_index": idx,
+                            "max_bytes": self._MAX_ATTACHMENT_BYTES,
+                        },
+                        status=400,
+                    )
+                normalized.append(
+                    {
+                        "name": filename,
+                        "content": content,
+                        "mimetype": (getattr(f, "mimetype", None) or "application/octet-stream"),
+                    }
+                )
+        if not normalized:
+            return self._json_response({"ok": False, "error": "attachments_required"}, status=400)
+        created = req._create_request_attachments(normalized, source="external_api")
+        return self._json_response(
+            {
+                "ok": True,
+                "request_no": req.name,
+                "attachments_uploaded": len(created),
+                "attachments": [
+                    {
+                        "id": att.id,
+                        "name": att.name,
+                        "mimetype": att.mimetype or "",
+                        "size": att.file_size or 0,
+                    }
+                    for att in created
+                ],
+            }
+        )
 
     @http.route(
         "/lab/api/v1/<string:endpoint_code>/requests/<string:request_no>",

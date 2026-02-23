@@ -625,7 +625,13 @@
             <t t-if="request.params.get('error') == 'physician_department'">
                 <div class="alert alert-danger">Selected physician does not match the selected department.</div>
             </t>
-            <form id="lab_test_request_form" action="/my/lab/requests/new" method="post" class="card">
+            <t t-if="request.params.get('error') == 'dynamic_form_required'">
+                <div class="alert alert-danger">Required custom form fields are missing. Please complete all required form items.</div>
+            </t>
+            <t t-if="request.params.get('error') == 'dynamic_form_payload'">
+                <div class="alert alert-danger">Custom form payload is invalid. Please refresh and submit again.</div>
+            </t>
+            <form id="lab_test_request_form" action="/my/lab/requests/new" method="post" enctype="multipart/form-data" class="card">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                 <div class="card-body">
                     <h5>Basic Information</h5>
@@ -696,14 +702,24 @@
                     <hr/>
                     <h5>Specimen and Test Combinations</h5>
                     <input type="hidden" name="specimen_payload_json" id="specimen_payload_json"/>
+                    <input type="hidden" name="dynamic_form_payload_json" id="dynamic_form_payload_json"/>
                     <div id="specimen_combo_container"></div>
                     <div class="mb-2">
                         <button type="button" id="btn_add_specimen_combo" class="btn btn-outline-secondary btn-sm">Add Combination</button>
+                    </div>
+                    <div id="dynamic_form_section" class="mt-3" style="display:none;">
+                        <h5>Custom Forms</h5>
+                        <div id="dynamic_form_container"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-2">
                             <label class="form-label">Line Note (applies if line has no specific note)</label>
                             <input type="text" class="form-control" name="line_note"/>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label">Request Attachments</label>
+                            <input type="file" class="form-control" name="request_attachments" multiple="multiple" accept=".pdf,.jpg,.jpeg,.png,.webp"/>
+                            <small class="text-muted">You can upload request form photos or related documents.</small>
                         </div>
                     </div>
                     <div class="form-check mt-2">
@@ -718,12 +734,12 @@
             <div class="d-none">
                 <select id="lab_service_options_template">
                     <t t-foreach="services" t-as="s">
-                        <option t-att-value="s.id"><t t-esc="s.name"/> (<t t-esc="s.code"/>)</option>
+                        <option t-att-value="s.id" t-att-data-form-codes="','.join(s.dynamic_form_rel_ids.mapped('form_id.code'))"><t t-esc="s.name"/> (<t t-esc="s.code"/>)</option>
                     </t>
                 </select>
                 <select id="lab_profile_options_template">
                     <t t-foreach="profiles" t-as="p">
-                        <option t-att-value="p.id"><t t-esc="p.name"/> (<t t-esc="p.code"/>)</option>
+                        <option t-att-value="p.id" t-att-data-form-codes="','.join(p.dynamic_form_rel_ids.mapped('form_id.code'))"><t t-esc="p.name"/> (<t t-esc="p.code"/>)</option>
                     </t>
                 </select>
                 <select id="lab_sample_type_options_template">
@@ -731,6 +747,7 @@
                         <option t-att-value="opt[0]"><t t-esc="opt[1]"/></option>
                     </t>
                 </select>
+                <script type="application/json" id="lab_dynamic_form_defs"><t t-raw="dynamic_form_defs_json"/></script>
             </div>
             <script type="text/javascript"><![CDATA[
                 (function () {
@@ -739,13 +756,16 @@
                         var container = document.getElementById("specimen_combo_container");
                         var addButton = document.getElementById("btn_add_specimen_combo");
                         var payloadInput = document.getElementById("specimen_payload_json");
+                        var dynamicPayloadInput = document.getElementById("dynamic_form_payload_json");
+                        var dynamicSection = document.getElementById("dynamic_form_section");
+                        var dynamicContainer = document.getElementById("dynamic_form_container");
                         var patientIdentifierInput = form ? form.querySelector('input[name="patient_identifier"]') : null;
                         var patientNameInput = form ? form.querySelector('input[name="patient_name"]') : null;
                         var patientPhoneInput = form ? form.querySelector('input[name="patient_phone"]') : null;
                         var physicianDepartmentSelect = document.getElementById("physician_department_id");
                         var physicianSelect = document.getElementById("physician_partner_id");
                         var patientHint = document.getElementById("patient_lookup_hint");
-                        if (!form || !container || !addButton || !payloadInput) {
+                        if (!form || !container || !addButton || !payloadInput || !dynamicPayloadInput || !dynamicSection || !dynamicContainer) {
                             return;
                         }
 
@@ -788,10 +808,11 @@
                             Array.prototype.forEach.call(selectNode.querySelectorAll("option"), function (opt) {
                                 var value = opt.value || "";
                                 var label = (opt.textContent || "").trim();
+                                var formCodes = (opt.getAttribute("data-form-codes") || "").trim();
                                 rows.push(
                                     '<div class="form-check">' +
                                     '<label class="form-check-label">' +
-                                    '<input class="form-check-input ' + inputClass + ' me-2" type="checkbox" value="' + value + '">' +
+                                    '<input class="form-check-input ' + inputClass + ' me-2" type="checkbox" value="' + value + '" data-form-codes="' + formCodes + '">' +
                                     label +
                                     "</label>" +
                                     "</div>"
@@ -819,6 +840,127 @@
                                 profileGroup.style.display = "none";
                                 Array.prototype.forEach.call(profileChecks || [], function (opt) { opt.checked = false; });
                             }
+                        }
+
+                        var dynamicFormDefs = {};
+                        try {
+                            var defsNode = document.getElementById("lab_dynamic_form_defs");
+                            dynamicFormDefs = JSON.parse((defsNode && defsNode.textContent) || "{}");
+                        } catch (e) {
+                            dynamicFormDefs = {};
+                        }
+
+                        function escapeHtml(str) {
+                            return String(str || "")
+                                .replace(/&/g, "&amp;")
+                                .replace(/</g, "&lt;")
+                                .replace(/>/g, "&gt;")
+                                .replace(/"/g, "&quot;")
+                                .replace(/'/g, "&#39;");
+                        }
+
+                        function collectSelectedFormCodes() {
+                            var set = {};
+                            var checked = container.querySelectorAll(".js-service-check:checked, .js-profile-check:checked");
+                            checked.forEach(function (input) {
+                                var raw = (input.getAttribute("data-form-codes") || "").trim();
+                                if (!raw) {
+                                    return;
+                                }
+                                raw.split(",").forEach(function (code) {
+                                    var c = (code || "").trim();
+                                    if (c && dynamicFormDefs[c]) {
+                                        set[c] = true;
+                                    }
+                                });
+                            });
+                            return Object.keys(set);
+                        }
+
+                        function fieldInputHtml(formCode, field) {
+                            var requiredMark = field.required ? ' <span class="text-danger">*</span>' : '';
+                            var key = 'df_' + formCode + '_' + field.key;
+                            var common = ' data-form-code="' + escapeHtml(formCode) + '" data-field-key="' + escapeHtml(field.key) + '"';
+                            var placeholder = field.placeholder ? ' placeholder="' + escapeHtml(field.placeholder) + '"' : "";
+                            if (field.field_type === "textarea") {
+                                return (
+                                    '<label class="form-label">' + escapeHtml(field.name) + requiredMark + '</label>' +
+                                    '<textarea class="form-control js-df-input"' + common + placeholder + ' rows="2"></textarea>'
+                                );
+                            }
+                            if (field.field_type === "number") {
+                                return (
+                                    '<label class="form-label">' + escapeHtml(field.name) + requiredMark + '</label>' +
+                                    '<input type="number" step="any" class="form-control js-df-input"' + common + placeholder + ' />'
+                                );
+                            }
+                            if (field.field_type === "date") {
+                                return (
+                                    '<label class="form-label">' + escapeHtml(field.name) + requiredMark + '</label>' +
+                                    '<input type="date" class="form-control js-df-input"' + common + ' />'
+                                );
+                            }
+                            if (field.field_type === "datetime") {
+                                return (
+                                    '<label class="form-label">' + escapeHtml(field.name) + requiredMark + '</label>' +
+                                    '<input type="datetime-local" class="form-control js-df-input"' + common + ' />'
+                                );
+                            }
+                            if (field.field_type === "boolean") {
+                                return (
+                                    '<div class="form-check mt-4">' +
+                                    '<input type="checkbox" class="form-check-input js-df-input" id="' + key + '"' + common + ' />' +
+                                    '<label class="form-check-label" for="' + key + '">' + escapeHtml(field.name) + requiredMark + '</label>' +
+                                    '</div>'
+                                );
+                            }
+                            if (field.field_type === "selection") {
+                                var options = (field.options || []).map(function (opt) {
+                                    return '<option value="' + escapeHtml(opt.key) + '">' + escapeHtml(opt.label) + '</option>';
+                                }).join("");
+                                return (
+                                    '<label class="form-label">' + escapeHtml(field.name) + requiredMark + '</label>' +
+                                    '<select class="form-select js-df-input"' + common + '><option value="">Select...</option>' + options + '</select>'
+                                );
+                            }
+                            return (
+                                '<label class="form-label">' + escapeHtml(field.name) + requiredMark + '</label>' +
+                                '<input type="text" class="form-control js-df-input"' + common + placeholder + ' />'
+                            );
+                        }
+
+                        function renderDynamicForms() {
+                            var selectedCodes = collectSelectedFormCodes();
+                            if (!selectedCodes.length) {
+                                dynamicSection.style.display = "none";
+                                dynamicContainer.innerHTML = "";
+                                return;
+                            }
+                            dynamicSection.style.display = "";
+                            dynamicContainer.innerHTML = selectedCodes.map(function (code) {
+                                var formDef = dynamicFormDefs[code];
+                                if (!formDef) {
+                                    return "";
+                                }
+                                var fieldsHtml = (formDef.fields || []).map(function (field) {
+                                    var help = field.help_text ? '<small class="text-muted d-block mb-1">' + escapeHtml(field.help_text) + '</small>' : '';
+                                    return (
+                                        '<div class="col-md-6 mb-2">' +
+                                        fieldInputHtml(code, field) +
+                                        help +
+                                        '</div>'
+                                    );
+                                }).join("");
+                                return (
+                                    '<div class="card mb-2">' +
+                                    '<div class="card-body">' +
+                                    '<h6 class="mb-1">' + escapeHtml(formDef.name) + '</h6>' +
+                                    (formDef.description ? '<p class="text-muted mb-2">' + escapeHtml(formDef.description) + '</p>' : '') +
+                                    '<div class="row">' + fieldsHtml + '</div>' +
+                                    '</div>' +
+                                    '</div>'
+                                );
+                            }).join("");
                         }
 
                         function addSpecimenRow(card) {
@@ -864,15 +1006,21 @@
                             wrapper.querySelector(".js-combo-profile-list").innerHTML = profileOptionsHtml;
                             wrapper.querySelector(".js-combo-line-type").addEventListener("change", function () {
                                 toggleCard(wrapper);
+                                renderDynamicForms();
                             });
                             wrapper.querySelector(".js-remove-combo").addEventListener("click", function () {
                                 wrapper.remove();
+                                renderDynamicForms();
                             });
                             wrapper.querySelector(".js-add-specimen-in-combo").addEventListener("click", function () {
                                 addSpecimenRow(wrapper);
                             });
                             toggleCard(wrapper);
                             addSpecimenRow(wrapper);
+                            wrapper.querySelectorAll(".js-service-check, .js-profile-check").forEach(function (el) {
+                                el.addEventListener("change", renderDynamicForms);
+                            });
+                            renderDynamicForms();
                         }
 
                         addButton.addEventListener("click", addCard);
@@ -955,6 +1103,26 @@
                                 return;
                             }
                             payloadInput.value = JSON.stringify(payload);
+
+                            var dynamicPayload = {};
+                            dynamicContainer.querySelectorAll(".js-df-input").forEach(function (input) {
+                                var formCode = (input.getAttribute("data-form-code") || "").trim();
+                                var fieldKey = (input.getAttribute("data-field-key") || "").trim();
+                                if (!formCode || !fieldKey) {
+                                    return;
+                                }
+                                if (!dynamicPayload[formCode]) {
+                                    dynamicPayload[formCode] = {};
+                                }
+                                var value;
+                                if (input.type === "checkbox") {
+                                    value = input.checked;
+                                } else {
+                                    value = input.value;
+                                }
+                                dynamicPayload[formCode][fieldKey] = value;
+                            });
+                            dynamicPayloadInput.value = JSON.stringify(dynamicPayload);
                         });
                     }
                     if (document.readyState === "loading") {
@@ -1079,6 +1247,33 @@
                             <td><t t-esc="qv.amount_total"/> <t t-esc="qv.currency_id.name"/></td>
                             <td><t t-esc="qv.quote_valid_until or '-'"/></td>
                             <td><t t-esc="qv.reason or '-'"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+
+            <t t-if="request_attachments">
+                <h5 class="mt-4">Attachments</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th>Type</th>
+                            <th>Uploaded At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="request_attachments" t-as="att">
+                            <td><t t-esc="att.name"/></td>
+                            <td><t t-esc="att.mimetype or '-'"/></td>
+                            <td><t t-esc="att.create_date or '-'"/></td>
+                            <td>
+                                <a
+                                    class="btn btn-sm btn-outline-primary"
+                                    t-att-href="'/my/lab/requests/%s/attachments/%s/download' % (record.id, att.id)"
+                                >Download</a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

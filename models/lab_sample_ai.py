@@ -220,7 +220,13 @@ class LabSample(models.Model):
 
     def _get_output_language(self):
         self.ensure_one()
-        lang = self.patient_id.lang or self.env.context.get("lang") or self.env.user.lang or "en_US"
+        lang = (
+            self.patient_id.lang
+            or (self.patient_id.partner_id.lang if self.patient_id.partner_id else False)
+            or self.env.context.get("lang")
+            or self.env.user.lang
+            or "en_US"
+        )
         if lang.startswith("zh"):
             return "Chinese"
         if lang.startswith("th"):

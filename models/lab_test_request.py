@@ -1,3 +1,5 @@
+import base64
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
@@ -19,7 +21,7 @@ class LabTestRequest(models.Model):
     )
     request_type = fields.Selection(selection="_selection_request_type", default=lambda self: self._default_request_type_code(), required=True, tracking=True, index=True)
     client_partner_id = fields.Many2one("res.partner", string="Institution / Client", tracking=True, index=True)
-    patient_id = fields.Many2one("res.partner", string="Existing Patient", tracking=True, index=True)
+    patient_id = fields.Many2one("lab.patient", string="Patient", tracking=True, index=True)
     patient_name = fields.Char(string="Patient Name", tracking=True)
     patient_identifier = fields.Char(string="Patient ID / Passport", index=True)
     patient_birthdate = fields.Date(string="Date of Birth")
@@ -29,7 +31,7 @@ class LabTestRequest(models.Model):
     )
     patient_phone = fields.Char(string="Patient Phone")
 
-    physician_partner_id = fields.Many2one("res.partner", string="Physician Contact", tracking=True)
+    physician_partner_id = fields.Many2one("lab.physician", string="Physician", tracking=True)
     physician_name = fields.Char(string="Physician")
     requested_collection_date = fields.Datetime(
         string="Requested Collection Time",
@@ -73,6 +75,7 @@ class LabTestRequest(models.Model):
     sample_ids = fields.One2many("lab.sample", "request_id", string="Generated Samples", readonly=True)
     sample_count = fields.Integer(compute="_compute_sample_count")
     quote_revision_count = fields.Integer(compute="_compute_quote_revision_count")
+    request_attachment_count = fields.Integer(compute="_compute_request_attachment_count")
 
     currency_id = fields.Many2one(
         "res.currency",
@@ -112,6 +115,13 @@ class LabTestRequest(models.Model):
     def _compute_sample_count(self):
         for rec in self:
             rec.sample_count = len(rec.sample_ids)
+
+    def _compute_request_attachment_count(self):
+        attachment_obj = self.env["ir.attachment"].sudo()
+        for rec in self:
+            rec.request_attachment_count = attachment_obj.search_count(
+                [("res_model", "=", rec._name), ("res_id", "=", rec.id), ("type", "=", "binary")]
+            )
 
     @api.depends("line_ids.specimen_sample_type")
     def _compute_sample_type(self):
@@ -331,6 +341,16 @@ class LabTestRequest(models.Model):
             if rec.physician_partner_id:
                 rec.physician_name = rec.physician_partner_id.name
 
+    @api.onchange("patient_id")
+    def _onchange_patient_id(self):
+        for rec in self:
+            if rec.patient_id:
+                rec.patient_name = rec.patient_id.name
+                rec.patient_identifier = rec.patient_id.identifier
+                rec.patient_birthdate = rec.patient_id.birthdate
+                rec.patient_gender = rec.patient_id.gender
+                rec.patient_phone = rec.patient_id.phone
+
     def action_submit(self):
         self._ensure_lines()
         for rec in self:
@@ -500,7 +520,37 @@ class LabTestRequest(models.Model):
             "context": {"default_request_id": self.id},
         }
 
-    def _prepare_patient_partner(self):
+    def action_view_request_attachments(self):
+        self.ensure_one()
+        return {
+            "name": _("Request Attachments"),
+            "type": "ir.actions.act_window",
+            "res_model": "ir.attachment",
+            "view_mode": "list,form",
+            "domain": [("res_model", "=", self._name), ("res_id", "=", self.id), ("type", "=", "binary")],
+            "context": {
+                "default_res_model": self._name,
+                "default_res_id": self.id,
+                "default_company_id": self.company_id.id,
+            },
+        }
+
+    def action_open_attachment_wizard(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Add Request Attachments"),
+            "res_model": "lab.test.request.attachment.wizard",
+            "view_mode": "form",
+            "target": "new",
+            "context": {
+                "active_model": self._name,
+                "active_id": self.id,
+                "default_request_id": self.id,
+            },
+        }
+
+    def _prepare_patient_record(self):
         self.ensure_one()
         if self.patient_id:
             return self.patient_id
@@ -509,18 +559,17 @@ class LabTestRequest(models.Model):
         if not name:
             name = _("Unnamed Patient")
 
-        commercial_partner = self.client_partner_id.commercial_partner_id if self.client_partner_id else False
-        partner_vals = {
+        patient_vals = {
             "name": name,
             "phone": self.patient_phone,
-            "is_company": False,
-            "parent_id": commercial_partner.id if commercial_partner else False,
-            "type": "contact",
-            "comment": self.patient_identifier or False,
+            "identifier": self.patient_identifier or False,
+            "birthdate": self.patient_birthdate,
+            "gender": self.patient_gender,
+            "company_id": self.company_id.id,
         }
-        partner = self.env["res.partner"].create(partner_vals)
-        self.patient_id = partner.id
-        return partner
+        patient = self.env["lab.patient"].create(patient_vals)
+        self.patient_id = patient.id
+        return patient
 
     def _expanded_service_payloads(self):
         self.ensure_one()
@@ -538,7 +587,7 @@ class LabTestRequest(models.Model):
             if rec.state not in ("approved", "in_progress"):
                 raise UserError(_("Only approved requests can create samples."))
 
-            patient = rec._prepare_patient_partner()
+            patient = rec._prepare_patient_record()
             payloads = rec._expanded_service_payloads()
             grouped_payloads = {}
             for p in payloads:
@@ -661,6 +710,45 @@ class LabTestRequest(models.Model):
                 "user_id": self.env.user.id,
             }
         )
+
+    def _create_request_attachments(self, attachments, source="manual"):
+        """Create request attachments from normalized payload list.
+
+        attachments item schema:
+        - name: str
+        - content: bytes
+        - mimetype: str (optional)
+        """
+        self.ensure_one()
+        created = self.env["ir.attachment"]
+        attachment_obj = self.env["ir.attachment"].sudo()
+        for item in attachments or []:
+            name = (item.get("name") or "").strip()
+            content = item.get("content")
+            if not name or not content:
+                continue
+            if isinstance(content, str):
+                content = content.encode("utf-8")
+            if not isinstance(content, (bytes, bytearray)):
+                continue
+            vals = {
+                "name": name,
+                "datas": base64.b64encode(bytes(content)),
+                "mimetype": (item.get("mimetype") or "application/octet-stream").strip(),
+                "res_model": self._name,
+                "res_id": self.id,
+                "type": "binary",
+                "company_id": self.company_id.id,
+            }
+            created |= attachment_obj.create(vals)
+        if created:
+            self.message_post(
+                body=_("%(count)s attachment(s) uploaded from %(source)s.")
+                % {"count": len(created), "source": source},
+                attachment_ids=created.ids,
+                subtype_xmlid="mail.mt_note",
+            )
+        return created
 
     @api.model
     def _cron_quote_expiry_followup(self):

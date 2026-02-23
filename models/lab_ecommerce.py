@@ -276,11 +276,35 @@ class SaleOrderLabEcommerce(models.Model):
         if not line_vals:
             return {}
 
+        patient_id = False
+        if not is_professional:
+            patient_obj = self.env["lab.patient"]
+            patient = patient_obj.search(
+                [
+                    ("company_id", "=", self.company_id.id),
+                    ("partner_id", "=", partner.id),
+                ],
+                limit=1,
+            )
+            if not patient:
+                patient = patient_obj.create(
+                    {
+                        "name": partner.name or _("Unnamed Patient"),
+                        "identifier": partner.ref or False,
+                        "phone": partner.phone or False,
+                        "email": partner.email or False,
+                        "lang": partner.lang or False,
+                        "company_id": self.company_id.id,
+                        "partner_id": partner.id,
+                    }
+                )
+            patient_id = patient.id
+
         return {
             "requester_partner_id": partner.id,
             "request_type": "institution" if is_professional else "individual",
             "client_partner_id": partner.id if is_professional else False,
-            "patient_id": partner.id if not is_professional else False,
+            "patient_id": patient_id,
             "patient_name": False if not is_professional else _("To be assigned by institution"),
             "patient_phone": partner.phone,
             "priority": default_priority,

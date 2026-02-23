@@ -556,7 +556,7 @@ class LabSample(models.Model):
     def _create_default_dispatches(self):
         dispatch_obj = self.env["lab.report.dispatch"]
         for rec in self:
-            partners = rec.patient_id | rec.client_id
+            partners = (rec.patient_id.partner_id | rec.client_id).filtered(lambda p: p)
             partners = partners.filtered(lambda p: p)
             if not partners:
                 continue

@@ -64,6 +64,7 @@
                     <button name="action_create_quote_revision" type="object" string="Revise Quote" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager" invisible="state != 'quoted'"/>
                     <button name="action_approve_quote" type="object" string="Approve" class="btn-primary" invisible="state != 'quoted'"/>
                     <button name="action_create_samples" type="object" string="Create Sample" class="btn-primary" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager" invisible="state not in ('approved','in_progress')"/>
+                    <button name="action_open_attachment_wizard" type="object" string="Add Attachments" groups="laboratory_management.group_lab_user"/>
                     <button name="action_mark_completed" type="object" string="Mark Completed" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="state not in ('approved','in_progress')"/>
                     <button name="action_reject" type="object" string="Reject" invisible="state in ('completed','cancelled','rejected')"/>
                     <button name="action_cancel" type="object" string="Cancel" invisible="state in ('completed','cancelled')"/>
@@ -80,6 +81,12 @@
                         </button>
                         <button class="oe_stat_button" name="action_view_interface_jobs" type="object" icon="fa-exchange">
                             <field name="interface_job_count" widget="statinfo" string="Interface Jobs"/>
+                        </button>
+                        <button class="oe_stat_button" name="action_view_request_attachments" type="object" icon="fa-paperclip">
+                            <field name="request_attachment_count" widget="statinfo" string="Attachments"/>
+                        </button>
+                        <button class="oe_stat_button" name="action_view_dynamic_form_responses" type="object" icon="fa-wpforms">
+                            <field name="dynamic_form_completed_count" widget="statinfo" string="Completed Forms"/>
                         </button>
                         <button class="oe_stat_button" name="action_open_portal" type="object" icon="fa-external-link" string="Portal"/>
                     </div>
@@ -184,6 +191,21 @@
                                     <field name="collection_date"/>
                                     <field name="state"/>
                                     <field name="report_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Dynamic Forms">
+                            <group>
+                                <field name="dynamic_form_required_count" readonly="1"/>
+                                <field name="dynamic_form_completed_count" readonly="1"/>
+                            </group>
+                            <field name="dynamic_form_response_ids">
+                                <list editable="bottom">
+                                    <field name="form_id" readonly="1"/>
+                                    <field name="is_complete" readonly="1"/>
+                                    <field name="source"/>
+                                    <field name="completed_at" readonly="1"/>
+                                    <field name="completed_by_id" readonly="1"/>
                                 </list>
                             </field>
                         </page>

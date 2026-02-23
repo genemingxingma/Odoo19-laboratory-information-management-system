@@ -21,6 +21,7 @@
                     <group>
                         <field name="name"/>
                         <field name="code"/>
+                        <field name="company_id"/>
                         <field name="active"/>
                     </group>
                     <field name="line_ids">
@@ -28,6 +29,14 @@
                             <field name="service_id"/>
                         </list>
                     </field>
+                    <group string="Dynamic Forms">
+                        <field name="dynamic_form_rel_ids">
+                            <list editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="form_id"/>
+                            </list>
+                        </field>
+                    </group>
                 </sheet>
             </form>
         </field>

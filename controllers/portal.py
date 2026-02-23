@@ -1,8 +1,10 @@
 import json
+import os
 
 from odoo import _, fields, http
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager
 from odoo.http import request
+from odoo.exceptions import ValidationError, UserError
 
 
 class LaboratoryPortal(CustomerPortal):
@@ -44,7 +46,7 @@ class LaboratoryPortal(CustomerPortal):
         return [
             ("company_id", "in", companies),
             "|",
-            ("patient_id", "child_of", partner.id),
+            ("request_id.requester_partner_id", "child_of", partner.id),
             ("client_id", "child_of", partner.id),
         ]
 
@@ -128,6 +130,23 @@ class LaboratoryPortal(CustomerPortal):
         else:
             values = []
         return [int(v) for v in values if str(v).isdigit()]
+
+    def _extract_request_attachments_from_post(self):
+        files = request.httprequest.files.getlist("request_attachments")
+        payload = []
+        for f in files:
+            filename = os.path.basename((getattr(f, "filename", "") or "").strip())
+            content = f.read() if hasattr(f, "read") else b""
+            if not filename or not content:
+                continue
+            payload.append(
+                {
+                    "name": filename,
+                    "content": content,
+                    "mimetype": (getattr(f, "mimetype", None) or "application/octet-stream"),
+                }
+            )
+        return payload
 
     def _professional_history_templates(self, partner, limit=8):
         order_obj = request.env["sale.order"].sudo()
@@ -398,14 +417,28 @@ class LaboratoryPortal(CustomerPortal):
         partner = self._current_commercial_partner()
         portal_request_type = "institution" if self._is_professional_partner(partner) else "individual"
         request_type_map = dict(mixin._selection_request_type())
+        services = (
+            request.env["lab.service"]
+            .sudo()
+            .search(req_obj._allowed_service_domain_for_request_type(portal_request_type), order="name asc")
+        )
+        profiles = (
+            request.env["lab.profile"]
+            .sudo()
+            .search(req_obj._allowed_profile_domain_for_request_type(portal_request_type), order="name asc")
+        )
+        dynamic_forms = (
+            services.mapped("dynamic_form_rel_ids.form_id") | profiles.mapped("dynamic_form_rel_ids.form_id")
+        ).filtered(lambda x: x.active and x.company_id in request.env.companies)
+        dynamic_form_defs = {form.code: form.to_portal_schema() for form in dynamic_forms}
         physician_domain = [
-            ("is_company", "=", False),
-            ("is_lab_physician", "=", True),
-            ("lab_physician_company_id", "in", request.env.companies.ids),
-            ("parent_id", "child_of", partner.id),
-            ("type", "in", ("contact", "other")),
+            ("active", "=", True),
+            ("company_id", "in", request.env.companies.ids),
+            "|",
+            ("institution_partner_id", "=", False),
+            ("institution_partner_id", "child_of", partner.id),
         ]
-        physicians = request.env["res.partner"].sudo().search(physician_domain, order="name asc")
+        physicians = request.env["lab.physician"].sudo().search(physician_domain, order="name asc")
         physician_departments = (
             request.env["lab.physician.department"]
             .sudo()
@@ -422,12 +455,8 @@ class LaboratoryPortal(CustomerPortal):
         values.update(
             {
                 "page_name": "lab_test_requests",
-                "services": request.env["lab.service"]
-                .sudo()
-                .search(req_obj._allowed_service_domain_for_request_type(portal_request_type), order="name asc"),
-                "profiles": request.env["lab.profile"]
-                .sudo()
-                .search(req_obj._allowed_profile_domain_for_request_type(portal_request_type), order="name asc"),
+                "services": services,
+                "profiles": profiles,
                 "physicians": physicians,
                 "physician_departments": physician_departments,
                 "templates": request.env["lab.report.template"].sudo().search([], order="name asc"),
@@ -435,6 +464,7 @@ class LaboratoryPortal(CustomerPortal):
                 "portal_request_type_label": request_type_map.get(portal_request_type, portal_request_type),
                 "priority_options": mixin._selection_priority(),
                 "sample_type_options": mixin._selection_sample_type(),
+                "dynamic_form_defs_json": json.dumps(dynamic_form_defs, ensure_ascii=False),
             }
         )
         return request.render("laboratory_management.portal_my_lab_test_request_new", values)
@@ -506,7 +536,14 @@ class LaboratoryPortal(CustomerPortal):
         allowed_profile_ids = allowed_catalog["profile_ids"]
 
         specimen_payload_json = (post.get("specimen_payload_json") or "").strip()
+        dynamic_form_payload_json = (post.get("dynamic_form_payload_json") or "").strip()
         has_specimen_payload = bool(specimen_payload_json)
+        dynamic_form_payload = {}
+        if dynamic_form_payload_json:
+            try:
+                dynamic_form_payload = json.loads(dynamic_form_payload_json)
+            except Exception:
+                return request.redirect("/my/lab/requests/new?error=dynamic_form_payload")
 
         if not has_specimen_payload and line_type == "service" and not service_ids:
             return request.redirect("/my/lab/requests/new?error=services")
@@ -573,21 +610,38 @@ class LaboratoryPortal(CustomerPortal):
         else:
             return request.redirect("/my/lab/requests/new?error=combination")
 
-        physician_partner = request.env["res.partner"].browse()
+        selected_service_ids = []
+        selected_profile_ids = []
+        for _cmd, _unused, line_val in line_ids:
+            if line_val.get("service_id"):
+                selected_service_ids.append(line_val["service_id"])
+            if line_val.get("profile_id"):
+                selected_profile_ids.append(line_val["profile_id"])
+        required_forms = (
+            request.env["lab.service"].sudo().browse(list(set(selected_service_ids))).mapped("dynamic_form_rel_ids.form_id")
+            | request.env["lab.profile"].sudo().browse(list(set(selected_profile_ids))).mapped("dynamic_form_rel_ids.form_id")
+        ).filtered(lambda x: x.active and x.company_id in request.env.companies)
+        try:
+            req_obj.validate_dynamic_form_payload(required_forms, dynamic_form_payload)
+        except Exception:
+            return request.redirect("/my/lab/requests/new?error=dynamic_form_required")
+
+        physician_partner = request.env["lab.physician"].browse()
         physician_department_id = int(post.get("physician_department_id") or 0)
         physician_partner_id = int(post.get("physician_partner_id") or 0)
         if physician_partner_id:
             physician_search_domain = [
                 ("id", "=", physician_partner_id),
-                ("is_company", "=", False),
-                ("is_lab_physician", "=", True),
-                ("lab_physician_company_id", "in", request.env.companies.ids),
-                ("parent_id", "child_of", partner.id),
+                ("active", "=", True),
+                ("company_id", "in", request.env.companies.ids),
+                "|",
+                ("institution_partner_id", "=", False),
+                ("institution_partner_id", "child_of", partner.id),
             ]
             if physician_department_id:
                 physician_search_domain.append(("lab_physician_department_id", "=", physician_department_id))
             physician_partner = (
-                request.env["res.partner"]
+                request.env["lab.physician"]
                 .sudo()
                 .search(physician_search_domain, limit=1)
             )
@@ -610,8 +664,19 @@ class LaboratoryPortal(CustomerPortal):
             "line_ids": line_ids,
         }
         test_request = request.env["lab.test.request"].sudo().create(values)
+        if dynamic_form_payload:
+            try:
+                test_request._apply_dynamic_form_payload(dynamic_form_payload, source="portal")
+            except ValidationError:
+                return request.redirect("/my/lab/requests/new?error=dynamic_form_required")
+        attachments = self._extract_request_attachments_from_post()
+        if attachments:
+            test_request._create_request_attachments(attachments, source="portal")
         if post.get("submit_now") in ("on", "true", "1"):
-            test_request.action_submit()
+            try:
+                test_request.action_submit()
+            except (ValidationError, UserError):
+                return request.redirect("/my/lab/requests/new?error=dynamic_form_required")
         return request.redirect("/my/lab/requests/%s" % test_request.id)
 
     @http.route("/my/lab/requests/<int:request_id>", type="http", auth="user", website=True)
@@ -620,9 +685,60 @@ class LaboratoryPortal(CustomerPortal):
         if not test_request:
             return request.redirect("/my/lab/requests")
 
+        attachment_records = (
+            request.env["ir.attachment"]
+            .sudo()
+            .search(
+                [
+                    ("res_model", "=", "lab.test.request"),
+                    ("res_id", "=", test_request.id),
+                    ("type", "=", "binary"),
+                ],
+                order="id desc",
+            )
+        )
         values = self._prepare_portal_layout_values()
-        values.update({"record": test_request, "page_name": "lab_test_requests"})
+        values.update(
+            {
+                "record": test_request,
+                "page_name": "lab_test_requests",
+                "request_attachments": attachment_records,
+            }
+        )
         return request.render("laboratory_management.portal_my_lab_test_request_detail", values)
+
+    @http.route(
+        "/my/lab/requests/<int:request_id>/attachments/<int:attachment_id>/download",
+        type="http",
+        auth="user",
+        website=True,
+    )
+    def portal_request_attachment_download(self, request_id, attachment_id, **kwargs):
+        test_request = self._get_authorized_request(request_id)
+        if not test_request:
+            return request.redirect("/my/lab/requests")
+        attachment = (
+            request.env["ir.attachment"]
+            .sudo()
+            .search(
+                [
+                    ("id", "=", attachment_id),
+                    ("res_model", "=", "lab.test.request"),
+                    ("res_id", "=", test_request.id),
+                    ("type", "=", "binary"),
+                ],
+                limit=1,
+            )
+        )
+        if not attachment:
+            return request.not_found()
+        content = attachment.raw or b""
+        headers = [
+            ("Content-Type", attachment.mimetype or "application/octet-stream"),
+            ("Content-Length", str(len(content))),
+            ("Content-Disposition", f'attachment; filename="{attachment.name or "attachment"}"'),
+        ]
+        return request.make_response(content, headers=headers)
 
     @http.route("/my/lab/requests/<int:request_id>/submit", type="http", auth="user", website=True, methods=["POST"])
     def portal_test_request_submit(self, request_id, **kwargs):

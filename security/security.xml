@@ -5,16 +5,6 @@
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
     </record>
 
-    <record id="base.group_system" model="res.groups">
-        <field name="implied_ids" eval="[
-            (4, ref('laboratory_management.group_lab_user')),
-            (4, ref('laboratory_management.group_lab_reception')),
-            (4, ref('laboratory_management.group_lab_manager')),
-            (4, ref('laboratory_management.group_lab_quality_manager')),
-            (4, ref('laboratory_management.group_lab_interface_admin'))
-        ]"/>
-    </record>
-
     <record id="group_lab_reception" model="res.groups">
         <field name="name">Lab Reception</field>
         <field name="implied_ids" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
@@ -45,11 +35,21 @@
         <field name="implied_ids" eval="[(4, ref('laboratory_management.group_lab_manager'))]"/>
     </record>
 
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[
+            (4, ref('laboratory_management.group_lab_user')),
+            (4, ref('laboratory_management.group_lab_reception')),
+            (4, ref('laboratory_management.group_lab_manager')),
+            (4, ref('laboratory_management.group_lab_quality_manager')),
+            (4, ref('laboratory_management.group_lab_interface_admin'))
+        ]"/>
+    </record>
+
     <record id="rule_lab_sample_portal_own" model="ir.rule">
         <field name="name">Portal: Own Lab Samples</field>
         <field name="model_id" ref="model_lab_sample"/>
         <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
-        <field name="domain_force">['|', ('patient_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="domain_force">['|', ('request_id.requester_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
         <field name="perm_read" eval="1"/>
         <field name="perm_write" eval="0"/>
         <field name="perm_create" eval="0"/>
@@ -60,7 +60,7 @@
         <field name="name">Portal: Own Lab Analyses</field>
         <field name="model_id" ref="model_lab_sample_analysis"/>
         <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
-        <field name="domain_force">['|', ('sample_id.patient_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('sample_id.client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="domain_force">['|', ('sample_id.request_id.requester_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('sample_id.client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
         <field name="perm_read" eval="1"/>
         <field name="perm_write" eval="0"/>
         <field name="perm_create" eval="0"/>
@@ -71,7 +71,7 @@
         <field name="name">Portal: Own Report Dispatches</field>
         <field name="model_id" ref="model_lab_report_dispatch"/>
         <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
-        <field name="domain_force">['|', ('sample_id.patient_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('sample_id.client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="domain_force">['|', ('sample_id.request_id.requester_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('sample_id.client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
         <field name="perm_read" eval="1"/>
         <field name="perm_write" eval="0"/>
         <field name="perm_create" eval="0"/>
@@ -82,7 +82,7 @@
         <field name="name">Portal: Own Ack Signatures</field>
         <field name="model_id" ref="model_lab_report_ack_signature"/>
         <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
-        <field name="domain_force">['|', ('sample_id.patient_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('sample_id.client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="domain_force">['|', ('sample_id.request_id.requester_partner_id', 'child_of', [user.partner_id.commercial_partner_id.id]), ('sample_id.client_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
         <field name="perm_read" eval="1"/>
         <field name="perm_write" eval="0"/>
         <field name="perm_create" eval="0"/>

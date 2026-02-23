@@ -133,7 +133,42 @@
         <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
         <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
     </record>
-
+    <record id="rule_lab_dynamic_form_company_scope" model="ir.rule">
+        <field name="name">Lab Dynamic Form Company Scope</field>
+        <field name="model_id" ref="model_lab_dynamic_form"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_dynamic_form_field_company_scope" model="ir.rule">
+        <field name="name">Lab Dynamic Form Field Company Scope</field>
+        <field name="model_id" ref="model_lab_dynamic_form_field"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('form_id.company_id', '=', False), ('form_id.company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_service_dynamic_form_rel_company_scope" model="ir.rule">
+        <field name="name">Lab Service Dynamic Form Rel Company Scope</field>
+        <field name="model_id" ref="model_lab_service_dynamic_form_rel"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_profile_dynamic_form_rel_company_scope" model="ir.rule">
+        <field name="name">Lab Profile Dynamic Form Rel Company Scope</field>
+        <field name="model_id" ref="model_lab_profile_dynamic_form_rel"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_request_dynamic_form_response_company_scope" model="ir.rule">
+        <field name="name">Lab Request Dynamic Form Response Company Scope</field>
+        <field name="model_id" ref="model_lab_request_dynamic_form_response"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('request_id.company_id', '=', False), ('request_id.company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_request_dynamic_form_response_line_company_scope" model="ir.rule">
+        <field name="name">Lab Request Dynamic Form Response Line Company Scope</field>
+        <field name="model_id" ref="model_lab_request_dynamic_form_response_line"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('response_id.request_id.company_id', '=', False), ('response_id.request_id.company_id', 'in', company_ids)]</field>
+    </record>
     <record id="rule_lab_sample_portal_company_scope" model="ir.rule">
         <field name="name">Portal Lab Sample Company Scope</field>
         <field name="model_id" ref="model_lab_sample"/>

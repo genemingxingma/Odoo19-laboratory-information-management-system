@@ -14,7 +14,7 @@ class LabSample(models.Model):
 
     name = fields.Char(string="Accession No.", default="New", readonly=True, copy=False, tracking=True)
     accession_barcode = fields.Char(string="Accession Barcode", copy=False, tracking=True, index=True)
-    patient_id = fields.Many2one("res.partner", required=True, tracking=True, index=True)
+    patient_id = fields.Many2one("lab.patient", required=True, tracking=True, index=True)
     client_id = fields.Many2one("res.partner", string="Client/Institution", tracking=True, index=True)
     request_id = fields.Many2one("lab.test.request", string="Test Request", copy=False, readonly=True, tracking=True, index=True)
     parent_sample_id = fields.Many2one("lab.sample", string="Parent Sample", copy=False, readonly=True)
