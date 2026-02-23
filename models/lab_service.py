@@ -67,9 +67,9 @@ class LabService(models.Model):
     list_price = fields.Float(string="List Price", default=0.0)
     active = fields.Boolean(default=True)
     profile_only = fields.Boolean(
-        string="Profile Only",
+        string="Panel Only",
         default=False,
-        help="If enabled, this service is hidden from standalone service selection and should be used via profiles.",
+        help="If enabled, this service is hidden from standalone service selection and should be used via panels.",
     )
     note = fields.Text()
 

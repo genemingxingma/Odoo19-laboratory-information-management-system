@@ -17,7 +17,7 @@ class ProductTemplateLabEcommerce(models.Model):
         string="Mapped Lab Service",
         domain=[("active", "=", True), ("profile_only", "=", False)],
     )
-    lab_profile_id = fields.Many2one("lab.profile", string="Mapped Lab Profile")
+    lab_profile_id = fields.Many2one("lab.profile", string="Mapped Lab Panel")
     lab_default_priority = fields.Selection(
         selection=lambda self: self.env["lab.master.data.mixin"]._selection_priority(),
         default=lambda self: self.env["lab.master.data.mixin"]._default_priority_code(),
@@ -26,7 +26,7 @@ class ProductTemplateLabEcommerce(models.Model):
     lab_turnaround_note = fields.Char(string="Turnaround Note")
     lab_package_enabled = fields.Boolean(
         string="Enable Package Mapping",
-        help="If enabled, one ecommerce product can expand into multiple request lines (services/profiles).",
+        help="If enabled, one ecommerce product can expand into multiple request lines (services/panels).",
     )
     lab_package_line_ids = fields.One2many(
         "lab.ecommerce.package.line",
@@ -54,7 +54,7 @@ class ProductTemplateLabEcommerce(models.Model):
             if rec.lab_package_enabled and not rec.lab_package_line_ids:
                 raise ValidationError(_("Package mapping is enabled but no package lines are configured."))
             if not rec.lab_package_enabled and not rec.lab_service_id and not rec.lab_profile_id:
-                raise ValidationError(_("Medical test product must map to at least one lab service or profile."))
+                raise ValidationError(_("Medical test product must map to at least one lab service or panel."))
 
 
 class LabEcommercePackageLine(models.Model):
@@ -64,9 +64,9 @@ class LabEcommercePackageLine(models.Model):
 
     product_tmpl_id = fields.Many2one("product.template", required=True, ondelete="cascade")
     sequence = fields.Integer(default=10)
-    line_type = fields.Selection([("service", "Service"), ("profile", "Profile")], default="service", required=True)
+    line_type = fields.Selection([("service", "Service"), ("profile", "Panel")], default="service", required=True)
     service_id = fields.Many2one("lab.service", string="Service")
-    profile_id = fields.Many2one("lab.profile", string="Profile")
+    profile_id = fields.Many2one("lab.profile", string="Panel")
     quantity = fields.Integer(default=1, required=True)
     price_weight = fields.Float(
         default=1.0,
@@ -82,7 +82,7 @@ class LabEcommercePackageLine(models.Model):
             if rec.line_type == "service" and not rec.service_id:
                 raise ValidationError(_("Service package line requires a service."))
             if rec.line_type == "profile" and not rec.profile_id:
-                raise ValidationError(_("Profile package line requires a profile."))
+                raise ValidationError(_("Panel package line requires a panel."))
 
 
 class ProductProductLabEcommerce(models.Model):

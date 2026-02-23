@@ -1323,7 +1323,7 @@
                                                 <option t-att-value="p.id">
                                                     <t t-esc="p.display_name"/>
                                                     <t t-if="p.lab_service_id"> - Service: <t t-esc="p.lab_service_id.name"/></t>
-                                                    <t t-if="p.lab_profile_id"> - Profile: <t t-esc="p.lab_profile_id.name"/></t>
+                                                    <t t-if="p.lab_profile_id"> - Panel: <t t-esc="p.lab_profile_id.name"/></t>
                                                 </option>
                                             </t>
                                         </select>
@@ -1340,7 +1340,7 @@
                                                 <option t-att-value="p.id">
                                                     <t t-esc="p.display_name"/>
                                                     <t t-if="p.lab_service_id"> - Service: <t t-esc="p.lab_service_id.name"/></t>
-                                                    <t t-if="p.lab_profile_id"> - Profile: <t t-esc="p.lab_profile_id.name"/></t>
+                                                    <t t-if="p.lab_profile_id"> - Panel: <t t-esc="p.lab_profile_id.name"/></t>
                                                 </option>
                                             </t>
                                         </select>
@@ -1357,7 +1357,7 @@
                                                 <option t-att-value="p.id">
                                                     <t t-esc="p.display_name"/>
                                                     <t t-if="p.lab_service_id"> - Service: <t t-esc="p.lab_service_id.name"/></t>
-                                                    <t t-if="p.lab_profile_id"> - Profile: <t t-esc="p.lab_profile_id.name"/></t>
+                                                    <t t-if="p.lab_profile_id"> - Panel: <t t-esc="p.lab_profile_id.name"/></t>
                                                 </option>
                                             </t>
                                         </select>

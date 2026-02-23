@@ -6558,3 +6558,59 @@ msgstr "允许服务数量"
 #. module: laboratory_management
 msgid "Allowed Profile Count"
 msgstr "允许组合数量"
+
+#. module: laboratory_management
+msgid "Analysis Panel"
+msgstr "分析面板"
+
+#. module: laboratory_management
+msgid "Analysis Panel Line"
+msgstr "分析面板明细"
+
+#. module: laboratory_management
+msgid "Analysis Panels"
+msgstr "分析面板"
+
+#. module: laboratory_management
+msgid "Panel Services"
+msgstr "面板项目"
+
+#. module: laboratory_management
+msgid "Panel"
+msgstr "面板"
+
+#. module: laboratory_management
+msgid "Panel Only"
+msgstr "仅用于面板"
+
+#. module: laboratory_management
+msgid "If enabled, this service is hidden from standalone service selection and should be used via panels."
+msgstr "启用后，该项目不会出现在单项服务选择中，仅可通过面板使用。"
+
+#. module: laboratory_management
+msgid "Panel-only services must be requested through a Panel line."
+msgstr "仅用于面板的项目必须通过面板明细申请。"
+
+#. module: laboratory_management
+msgid "Panel line must select Panel."
+msgstr "面板明细必须选择面板。"
+
+#. module: laboratory_management
+msgid "Requested via panel %(profile)s line %(line)s"
+msgstr "通过面板 %(profile)s 的明细 %(line)s 申请"
+
+#. module: laboratory_management
+msgid "Mapped Lab Panel"
+msgstr "映射实验室面板"
+
+#. module: laboratory_management
+msgid "Medical test product must map to at least one lab service or panel."
+msgstr "医学检测产品必须至少映射一个实验室服务或面板。"
+
+#. module: laboratory_management
+msgid "Panel package line requires a panel."
+msgstr "面板套餐明细必须选择面板。"
+
+#. module: laboratory_management
+msgid "If enabled, one ecommerce product can expand into multiple request lines (services/panels)."
+msgstr "启用后，一个电商商品可展开为多个申请明细（服务/面板）。"

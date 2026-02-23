@@ -712,7 +712,7 @@ class LabTestRequestLine(models.Model):
     sequence = fields.Integer(default=10)
 
     line_type = fields.Selection(
-        [("service", "Service"), ("profile", "Profile")],
+        [("service", "Service"), ("profile", "Panel")],
         default="service",
         required=True,
     )
@@ -729,7 +729,7 @@ class LabTestRequestLine(models.Model):
         string="Service",
         domain="[('id', 'in', allowed_service_ids)]",
     )
-    profile_id = fields.Many2one("lab.profile", string="Profile", domain="[('id', 'in', allowed_profile_ids)]")
+    profile_id = fields.Many2one("lab.profile", string="Panel", domain="[('id', 'in', allowed_profile_ids)]")
     allowed_service_ids = fields.Many2many("lab.service", compute="_compute_allowed_catalog_ids", compute_sudo=True)
     allowed_profile_ids = fields.Many2many("lab.profile", compute="_compute_allowed_catalog_ids", compute_sudo=True)
 
@@ -820,9 +820,9 @@ class LabTestRequestLine(models.Model):
             if rec.line_type == "service" and not rec.service_id:
                 raise ValidationError(_("Service line must select Service."))
             if rec.line_type == "service" and rec.service_id and rec.service_id.profile_only:
-                raise ValidationError(_("Profile-only services must be requested through a Profile line."))
+                raise ValidationError(_("Panel-only services must be requested through a Panel line."))
             if rec.line_type == "profile" and not rec.profile_id:
-                raise ValidationError(_("Profile line must select Profile."))
+                raise ValidationError(_("Panel line must select Panel."))
             if rec.request_id:
                 allowed = req_obj._allowed_catalog_ids_for_request_type(
                     rec.request_id.request_type,
@@ -863,7 +863,7 @@ class LabTestRequestLine(models.Model):
                     "specimen_barcode": self.specimen_barcode,
                     "specimen_sample_type": self.specimen_sample_type,
                     "result_note": self.note
-                    or (_("Requested via profile %(profile)s line %(line)s") % {"profile": self.profile_id.name, "line": self.id}),
+                    or (_("Requested via panel %(profile)s line %(line)s") % {"profile": self.profile_id.name, "line": self.id}),
                 }
             )
         return payloads

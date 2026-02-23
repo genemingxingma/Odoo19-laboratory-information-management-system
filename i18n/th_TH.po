@@ -6559,3 +6559,59 @@ msgstr "จำนวนบริการที่อนุญาต"
 #. module: laboratory_management
 msgid "Allowed Profile Count"
 msgstr "จำนวนโปรไฟล์ที่อนุญาต"
+
+#. module: laboratory_management
+msgid "Analysis Panel"
+msgstr "แผงการวิเคราะห์"
+
+#. module: laboratory_management
+msgid "Analysis Panel Line"
+msgstr "รายการแผงการวิเคราะห์"
+
+#. module: laboratory_management
+msgid "Analysis Panels"
+msgstr "แผงการวิเคราะห์"
+
+#. module: laboratory_management
+msgid "Panel Services"
+msgstr "บริการในแผง"
+
+#. module: laboratory_management
+msgid "Panel"
+msgstr "แผง"
+
+#. module: laboratory_management
+msgid "Panel Only"
+msgstr "เฉพาะในแผง"
+
+#. module: laboratory_management
+msgid "If enabled, this service is hidden from standalone service selection and should be used via panels."
+msgstr "เมื่อเปิดใช้งาน บริการนี้จะไม่แสดงในการเลือกแบบเดี่ยว และควรถูกใช้งานผ่านแผงเท่านั้น"
+
+#. module: laboratory_management
+msgid "Panel-only services must be requested through a Panel line."
+msgstr "บริการที่ใช้เฉพาะในแผง ต้องถูกขอผ่านบรรทัดประเภทแผง"
+
+#. module: laboratory_management
+msgid "Panel line must select Panel."
+msgstr "บรรทัดแผงต้องเลือกแผง"
+
+#. module: laboratory_management
+msgid "Requested via panel %(profile)s line %(line)s"
+msgstr "ร้องขอผ่านแผง %(profile)s บรรทัด %(line)s"
+
+#. module: laboratory_management
+msgid "Mapped Lab Panel"
+msgstr "แผงห้องปฏิบัติการที่แมป"
+
+#. module: laboratory_management
+msgid "Medical test product must map to at least one lab service or panel."
+msgstr "สินค้าตรวจทางการแพทย์ต้องแมปกับบริการห้องปฏิบัติการหรือแผงอย่างน้อยหนึ่งรายการ"
+
+#. module: laboratory_management
+msgid "Panel package line requires a panel."
+msgstr "บรรทัดแพ็กเกจแบบแผงต้องระบุแผง"
+
+#. module: laboratory_management
+msgid "If enabled, one ecommerce product can expand into multiple request lines (services/panels)."
+msgstr "เมื่อเปิดใช้งาน สินค้าอีคอมเมิร์ซหนึ่งรายการสามารถขยายเป็นหลายบรรทัดคำขอได้ (บริการ/แผง)"

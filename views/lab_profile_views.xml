@@ -34,10 +34,10 @@
     </record>
 
     <record id="action_lab_profile" model="ir.actions.act_window">
-        <field name="name">Analysis Profiles</field>
+        <field name="name">Analysis Panels</field>
         <field name="res_model">lab.profile</field>
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_lab_profile" name="Analysis Profiles" parent="menu_lab_config_catalog" action="action_lab_profile" sequence="20"/>
+    <menuitem id="menu_lab_profile" name="Analysis Panels" parent="menu_lab_config_catalog" action="action_lab_profile" sequence="20"/>
 </odoo>

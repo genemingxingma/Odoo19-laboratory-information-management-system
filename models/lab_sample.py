@@ -21,7 +21,7 @@ class LabSample(models.Model):
     aliquot_ids = fields.One2many("lab.sample", "parent_sample_id", string="Aliquots", readonly=True)
     aliquot_count = fields.Integer(compute="_compute_aliquot_count")
     physician_name = fields.Char()
-    profile_id = fields.Many2one("lab.profile", string="Profile")
+    profile_id = fields.Many2one("lab.profile", string="Panel")
     report_template_id = fields.Many2one(
         "lab.report.template",
         string="Report Template",
