@@ -218,6 +218,22 @@ class LabTestRequest(models.Model):
             if rec.state not in ("draft", "cancelled") and not rec.line_ids:
                 raise ValidationError(_("At least one requested test is required."))
 
+    @api.constrains("request_type", "line_ids.line_type", "line_ids.service_id", "line_ids.profile_id")
+    def _check_line_scope_by_request_type(self):
+        for rec in self:
+            allowed = rec._allowed_catalog_ids_for_request_type(rec.request_type, company=rec.company_id)
+            for line in rec.line_ids:
+                if line.line_type == "service" and line.service_id and line.service_id.id not in allowed["service_ids"]:
+                    raise ValidationError(
+                        _("Service %(service)s is not allowed for request type %(request_type)s.")
+                        % {"service": line.service_id.display_name, "request_type": rec.request_type}
+                    )
+                if line.line_type == "profile" and line.profile_id and line.profile_id.id not in allowed["profile_ids"]:
+                    raise ValidationError(
+                        _("Profile %(profile)s is not allowed for request type %(request_type)s.")
+                        % {"profile": line.profile_id.display_name, "request_type": rec.request_type}
+                    )
+
     @api.model_create_multi
     def create(self, vals_list):
         seq_model = self.env["ir.sequence"]
@@ -241,6 +257,67 @@ class LabTestRequest(models.Model):
         for rec in self:
             if not rec.line_ids:
                 raise UserError(_("Please add at least one test item."))
+
+    @api.model
+    def _request_type_scope_record(self, request_type_code, company=None):
+        company = company or self.env.company
+        return (
+            self.env["lab.request.type"]
+            .sudo()
+            .with_company(company)
+            .search(
+                [
+                    ("code", "=", request_type_code),
+                    ("active", "=", True),
+                    ("company_id", "=", company.id),
+                ],
+                limit=1,
+            )
+        )
+
+    @api.model
+    def _allowed_service_domain_for_request_type(self, request_type_code, company=None):
+        company = company or self.env.company
+        domain = [
+            ("active", "=", True),
+            ("company_id", "=", company.id),
+            ("profile_only", "=", False),
+        ]
+        request_type = self._request_type_scope_record(request_type_code, company=company)
+        if request_type and request_type.restrict_service_scope:
+            domain.append(("id", "in", request_type.allowed_service_ids.ids or [0]))
+        return domain
+
+    @api.model
+    def _allowed_profile_domain_for_request_type(self, request_type_code, company=None):
+        company = company or self.env.company
+        domain = [
+            ("active", "=", True),
+            ("company_id", "=", company.id),
+        ]
+        request_type = self._request_type_scope_record(request_type_code, company=company)
+        if request_type and request_type.restrict_profile_scope:
+            domain.append(("id", "in", request_type.allowed_profile_ids.ids or [0]))
+        return domain
+
+    @api.model
+    def _allowed_catalog_ids_for_request_type(self, request_type_code, company=None):
+        company = company or self.env.company
+        service_ids = set(
+            self.env["lab.service"]
+            .sudo()
+            .with_company(company)
+            .search(self._allowed_service_domain_for_request_type(request_type_code, company=company))
+            .ids
+        )
+        profile_ids = set(
+            self.env["lab.profile"]
+            .sudo()
+            .with_company(company)
+            .search(self._allowed_profile_domain_for_request_type(request_type_code, company=company))
+            .ids
+        )
+        return {"service_ids": service_ids, "profile_ids": profile_ids}
 
     @api.onchange("physician_partner_id")
     def _onchange_physician_partner_id(self):
@@ -641,8 +718,14 @@ class LabTestRequestLine(models.Model):
         default=lambda self: self._default_sample_type_code(),
         required=True,
     )
-    service_id = fields.Many2one("lab.service", string="Service")
-    profile_id = fields.Many2one("lab.profile", string="Profile")
+    service_id = fields.Many2one(
+        "lab.service",
+        string="Service",
+        domain="[('id', 'in', allowed_service_ids)]",
+    )
+    profile_id = fields.Many2one("lab.profile", string="Profile", domain="[('id', 'in', allowed_profile_ids)]")
+    allowed_service_ids = fields.Many2many("lab.service", compute="_compute_allowed_catalog_ids", compute_sudo=True)
+    allowed_profile_ids = fields.Many2many("lab.profile", compute="_compute_allowed_catalog_ids", compute_sudo=True)
 
     quantity = fields.Integer(default=1, required=True)
     unit_price = fields.Monetary(currency_field="currency_id")
@@ -655,6 +738,23 @@ class LabTestRequestLine(models.Model):
 
     service_count = fields.Integer(compute="_compute_service_count", store=True)
     effective_turnaround_hours = fields.Integer(compute="_compute_tat", store=True)
+
+    @api.depends("request_id.request_type", "request_id.company_id")
+    def _compute_allowed_catalog_ids(self):
+        req_obj = self.env["lab.test.request"]
+        empty_services = self.env["lab.service"].browse()
+        empty_profiles = self.env["lab.profile"].browse()
+        for rec in self:
+            if not rec.request_id:
+                rec.allowed_service_ids = empty_services
+                rec.allowed_profile_ids = empty_profiles
+                continue
+            allowed = req_obj._allowed_catalog_ids_for_request_type(
+                rec.request_id.request_type,
+                company=rec.request_id.company_id,
+            )
+            rec.allowed_service_ids = [(6, 0, list(allowed["service_ids"]))]
+            rec.allowed_profile_ids = [(6, 0, list(allowed["profile_ids"]))]
 
     @api.depends("line_type", "profile_id.line_ids", "service_id")
     def _compute_service_count(self):
@@ -705,6 +805,7 @@ class LabTestRequestLine(models.Model):
 
     @api.constrains("line_type", "service_id", "profile_id", "specimen_ref", "specimen_sample_type")
     def _check_line(self):
+        req_obj = self.env["lab.test.request"]
         for rec in self:
             if not (rec.specimen_ref or "").strip():
                 raise ValidationError(_("Specimen Ref is required."))
@@ -712,8 +813,25 @@ class LabTestRequestLine(models.Model):
                 raise ValidationError(_("Specimen Type is required."))
             if rec.line_type == "service" and not rec.service_id:
                 raise ValidationError(_("Service line must select Service."))
+            if rec.line_type == "service" and rec.service_id and rec.service_id.profile_only:
+                raise ValidationError(_("Profile-only services must be requested through a Profile line."))
             if rec.line_type == "profile" and not rec.profile_id:
                 raise ValidationError(_("Profile line must select Profile."))
+            if rec.request_id:
+                allowed = req_obj._allowed_catalog_ids_for_request_type(
+                    rec.request_id.request_type,
+                    company=rec.request_id.company_id,
+                )
+                if rec.line_type == "service" and rec.service_id and rec.service_id.id not in allowed["service_ids"]:
+                    raise ValidationError(
+                        _("Service %(service)s is not allowed for request type %(request_type)s.")
+                        % {"service": rec.service_id.display_name, "request_type": rec.request_id.request_type}
+                    )
+                if rec.line_type == "profile" and rec.profile_id and rec.profile_id.id not in allowed["profile_ids"]:
+                    raise ValidationError(
+                        _("Profile %(profile)s is not allowed for request type %(request_type)s.")
+                        % {"profile": rec.profile_id.display_name, "request_type": rec.request_id.request_type}
+                    )
 
     def expand_to_services(self):
         self.ensure_one()

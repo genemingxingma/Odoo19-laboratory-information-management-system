@@ -8,7 +8,7 @@ class LabService(models.Model):
     _inherit = ["lab.master.data.mixin"]
     _order = "name"
 
-    name = fields.Char(required=True)
+    name = fields.Char(required=True, translate=True)
     code = fields.Char(required=True)
     department = fields.Selection(selection="_selection_department", default=lambda self: self._default_department_code(), required=True)
     sample_type = fields.Selection(selection="_selection_sample_type", default=lambda self: self._default_sample_type_code(), required=True)
@@ -66,6 +66,11 @@ class LabService(models.Model):
     turnaround_hours = fields.Integer(default=24)
     list_price = fields.Float(string="List Price", default=0.0)
     active = fields.Boolean(default=True)
+    profile_only = fields.Boolean(
+        string="Profile Only",
+        default=False,
+        help="If enabled, this service is hidden from standalone service selection and should be used via profiles.",
+    )
     note = fields.Text()
 
     @api.model

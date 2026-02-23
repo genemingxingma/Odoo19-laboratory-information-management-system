@@ -12,7 +12,11 @@ class ProductTemplateLabEcommerce(models.Model):
         string="Sale Target",
         help="Individual: online direct customer. Professional: institution/hospital/doctor portal. Both: all channels.",
     )
-    lab_service_id = fields.Many2one("lab.service", string="Mapped Lab Service")
+    lab_service_id = fields.Many2one(
+        "lab.service",
+        string="Mapped Lab Service",
+        domain=[("active", "=", True), ("profile_only", "=", False)],
+    )
     lab_profile_id = fields.Many2one("lab.profile", string="Mapped Lab Profile")
     lab_default_priority = fields.Selection(
         selection=lambda self: self.env["lab.master.data.mixin"]._selection_priority(),

@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class LabMasterDataMixin(models.AbstractModel):
@@ -186,7 +187,41 @@ class LabRequestType(models.Model):
     sequence = fields.Integer(default=10)
     is_default = fields.Boolean(default=False)
     active = fields.Boolean(default=True)
+    restrict_service_scope = fields.Boolean(
+        string="Restrict Service Scope",
+        default=False,
+        help="If enabled, only selected services are available for this request type.",
+    )
+    allowed_service_ids = fields.Many2many(
+        "lab.service",
+        "lab_request_type_service_rel",
+        "request_type_id",
+        "service_id",
+        string="Allowed Services",
+        domain="[('active','=',True), ('company_id', '=', company_id), ('profile_only', '=', False)]",
+    )
+    restrict_profile_scope = fields.Boolean(
+        string="Restrict Profile Scope",
+        default=False,
+        help="If enabled, only selected profiles are available for this request type.",
+    )
+    allowed_profile_ids = fields.Many2many(
+        "lab.profile",
+        "lab_request_type_profile_rel",
+        "request_type_id",
+        "profile_id",
+        string="Allowed Profiles",
+        domain="[('active','=',True), ('company_id', '=', company_id)]",
+    )
 
     _sql_constraints = [
         ("lab_request_type_code_uniq", "unique(code)", "Request type code must be unique."),
     ]
+
+    @api.constrains("allowed_service_ids", "allowed_profile_ids", "company_id")
+    def _check_scope_company(self):
+        for rec in self:
+            if rec.allowed_service_ids.filtered(lambda s: s.company_id and s.company_id != rec.company_id):
+                raise ValidationError(_("Allowed Services must belong to the same company as Request Type."))
+            if rec.allowed_profile_ids.filtered(lambda p: p.company_id and p.company_id != rec.company_id):
+                raise ValidationError(_("Allowed Profiles must belong to the same company as Request Type."))

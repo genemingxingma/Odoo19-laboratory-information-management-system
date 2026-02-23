@@ -136,7 +136,7 @@
                                 <list editable="bottom">
                                     <field name="sequence" widget="handle"/>
                                     <field name="line_type"/>
-                                    <field name="service_id" invisible="line_type != 'service'"/>
+                                    <field name="service_id" invisible="line_type != 'service'" domain="[('active', '=', True), ('profile_only', '=', False)]"/>
                                     <field name="profile_id" invisible="line_type != 'profile'"/>
                                     <field name="specimen_sample_type"/>
                                     <field name="specimen_ref"/>

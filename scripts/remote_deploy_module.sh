@@ -49,10 +49,17 @@ printf '%s\n' '${REMOTE_PASSWORD}' | sudo -S -k bash -lc '
 '
 EOF
 
-echo "[4/4] Upgrading module in Odoo DB..."
+echo "[4/5] Upgrading module in Odoo DB..."
 "${SCRIPT_DIR}/remote_ssh.sh" 'bash -s' <<EOF
 set -e
 printf '%s\n' '${REMOTE_PASSWORD}' | sudo -S -k -u odoo /opt/odoo/venv/bin/python3 /opt/odoo/odoo19/odoo-bin -c /opt/odoo/config/odoo.conf -d odoo-26-1-16 -u ${MODULE_TECHNICAL_NAME} --stop-after-init --http-port=39569 --gevent-port=39572
+EOF
+
+echo "[5/5] Restarting Odoo service..."
+"${SCRIPT_DIR}/remote_ssh.sh" 'bash -s' <<EOF
+set -e
+printf '%s\n' '${REMOTE_PASSWORD}' | sudo -S -k systemctl restart odoo
+printf '%s\n' '${REMOTE_PASSWORD}' | sudo -S -k systemctl is-active odoo
 EOF
 
 echo "Deploy finished: ${MODULE_TECHNICAL_NAME}"

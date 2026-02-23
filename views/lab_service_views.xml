@@ -10,6 +10,7 @@
                 <field name="department"/>
                 <field name="sample_type"/>
                 <field name="result_type"/>
+                <field name="profile_only"/>
                 <field name="turnaround_hours"/>
                 <field name="list_price"/>
                 <field name="active"/>
@@ -33,6 +34,7 @@
                         <group>
                             <field name="result_type"/>
                             <field name="list_price"/>
+                            <field name="profile_only"/>
                             <field name="billable_product_id"/>
                             <field name="unit_id"/>
                             <field name="ref_min" invisible="result_type != 'numeric'"/>
@@ -69,7 +71,8 @@
         <field name="name">Analysis Services</field>
         <field name="res_model">lab.service</field>
         <field name="view_mode">list,form</field>
+        <field name="domain">[('profile_only', '=', False)]</field>
     </record>
 
-    <menuitem id="menu_lab_service" name="Analysis Services" parent="menu_laboratory_config" action="action_lab_service" sequence="10"/>
+    <menuitem id="menu_lab_service" name="Analysis Services" parent="menu_lab_config_catalog" action="action_lab_service" sequence="10"/>
 </odoo>

@@ -339,18 +339,18 @@ msgstr "分析"
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_profile
 msgid "Analysis Profile"
-msgstr "分析简介"
+msgstr "分析组合"
 
 #. module: laboratory_management
 #: model:ir.model,name:laboratory_management.model_lab_profile_line
 msgid "Analysis Profile Line"
-msgstr "分析轮廓线"
+msgstr "分析组合明细"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_profile
 #: model:ir.ui.menu,name:laboratory_management.menu_lab_profile
 msgid "Analysis Profiles"
-msgstr "分析概况"
+msgstr "分析组合"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_analysis_queue
@@ -1033,7 +1033,7 @@ msgstr "免疫学"
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_instrument_result_import_wizard_form
 #: model_terms:ir.ui.view,arch_db:laboratory_management.view_lab_result_import_wizard_form
 msgid "Import"
-msgstr "进口"
+msgstr "导入"
 
 #. module: laboratory_management
 #: model:ir.actions.act_window,name:laboratory_management.action_lab_instrument_result_import_wizard
@@ -6318,3 +6318,219 @@ msgstr "重试失败的AI解读任务"
 #. module: laboratory_management
 msgid "Retry Batch Size"
 msgstr "重试批处理数量"
+
+#. module: laboratory_management
+msgid "AI Settings"
+msgstr "AI 设置"
+
+#. module: laboratory_management
+msgid "Accession & Processing"
+msgstr "收样与处理"
+
+#. module: laboratory_management
+msgid "Assay Kits"
+msgstr "检测试剂盒"
+
+#. module: laboratory_management
+msgid "Billing"
+msgstr "账单"
+
+#. module: laboratory_management
+msgid "Billing Reconciliation"
+msgstr "账单对账"
+
+#. module: laboratory_management
+msgid "Chain of Custody"
+msgstr "样本流转链"
+
+#. module: laboratory_management
+msgid "Commerce"
+msgstr "商业配置"
+
+#. module: laboratory_management
+msgid "Compliance & CAPA"
+msgstr "合规与 CAPA"
+
+#. module: laboratory_management
+msgid "Connectivity & Imports"
+msgstr "接口与导入"
+
+#. module: laboratory_management
+msgid "Departments"
+msgstr "科室"
+
+#. module: laboratory_management
+msgid "EQA Closure Reports"
+msgstr "室间质评闭环报告"
+
+#. module: laboratory_management
+msgid "Exception & SLA Templates"
+msgstr "异常与 SLA 模板"
+
+#. module: laboratory_management
+msgid "Front Desk"
+msgstr "前台"
+
+#. module: laboratory_management
+msgid "Governance"
+msgstr "治理"
+
+#. module: laboratory_management
+msgid "Integration Settings"
+msgstr "集成设置"
+
+#. module: laboratory_management
+msgid "Interpretation Profiles"
+msgstr "解读模板"
+
+#. module: laboratory_management
+msgid "Inventory & Devices"
+msgstr "库存与设备"
+
+#. module: laboratory_management
+msgid "Master Data"
+msgstr "主数据"
+
+#. module: laboratory_management
+msgid "Method Validation"
+msgstr "方法学验证"
+
+#. module: laboratory_management
+msgid "Organization & Roles"
+msgstr "组织与角色"
+
+#. module: laboratory_management
+msgid "Permission & Interface Audit"
+msgstr "权限与接口审计"
+
+#. module: laboratory_management
+msgid "Physician Departments"
+msgstr "医生科室"
+
+#. module: laboratory_management
+msgid "Physicians"
+msgstr "医生"
+
+#. module: laboratory_management
+msgid "Priorities"
+msgstr "优先级"
+
+#. module: laboratory_management
+msgid "QC & EQA Programs"
+msgstr "质控与室间质评"
+
+#. module: laboratory_management
+msgid "QC Daily Snapshots"
+msgstr "质控日快照"
+
+#. module: laboratory_management
+msgid "QC Rule Library"
+msgstr "质控规则库"
+
+#. module: laboratory_management
+msgid "Reagent Usage"
+msgstr "试剂使用记录"
+
+#. module: laboratory_management
+msgid "Release & Traceability"
+msgstr "发布与可追溯"
+
+#. module: laboratory_management
+msgid "Report & Interpretation Templates"
+msgstr "报告与解读模板"
+
+#. module: laboratory_management
+msgid "Report Email Templates"
+msgstr "报告邮件模板"
+
+#. module: laboratory_management
+msgid "Request Refunds"
+msgstr "申请退款"
+
+#. module: laboratory_management
+msgid "Request Types"
+msgstr "申请类型"
+
+#. module: laboratory_management
+msgid "Result Units"
+msgstr "结果单位"
+
+#. module: laboratory_management
+msgid "Sample Types"
+msgstr "标本类型"
+
+#. module: laboratory_management
+msgid "Test Catalog"
+msgstr "检测目录"
+
+#. module: laboratory_management
+msgid "Training & Metrics"
+msgstr "培训与指标"
+
+#. module: laboratory_management
+msgid "Validation & Retest"
+msgstr "复核与复检"
+
+#. module: laboratory_management
+msgid "Verification Queues"
+msgstr "审核队列"
+
+#. module: laboratory_management
+msgid "Workflow & SOP"
+msgstr "流程与 SOP"
+
+#. module: laboratory_management
+msgid "Profile Only"
+msgstr "仅用于组合"
+
+#. module: laboratory_management
+msgid "If enabled, this service is hidden from standalone service selection and should be used via profiles."
+msgstr "启用后，该项目不会出现在单项服务选择中，仅可通过组合（Profile）使用。"
+
+#. module: laboratory_management
+msgid "Profile-only services must be requested through a Profile line."
+msgstr "仅用于组合的项目必须通过组合（Profile）明细申请。"
+
+#. module: laboratory_management
+msgid "Restrict Service Scope"
+msgstr "限制服务范围"
+
+#. module: laboratory_management
+msgid "If enabled, only selected services are available for this request type."
+msgstr "启用后，该申请类型仅允许选择指定服务。"
+
+#. module: laboratory_management
+msgid "Allowed Services"
+msgstr "允许的服务"
+
+#. module: laboratory_management
+msgid "Restrict Profile Scope"
+msgstr "限制组合范围"
+
+#. module: laboratory_management
+msgid "If enabled, only selected profiles are available for this request type."
+msgstr "启用后，该申请类型仅允许选择指定组合。"
+
+#. module: laboratory_management
+msgid "Allowed Profiles"
+msgstr "允许的组合"
+
+#. module: laboratory_management
+msgid "Allowed Services must belong to the same company as Request Type."
+msgstr "允许的服务必须与申请类型属于同一公司。"
+
+#. module: laboratory_management
+msgid "Allowed Profiles must belong to the same company as Request Type."
+msgstr "允许的组合必须与申请类型属于同一公司。"
+
+#. module: laboratory_management
+msgid "Request Type Catalog Scope"
+msgstr "申请类型目录范围"
+
+#. module: laboratory_management
+msgid "Service %(service)s is not allowed for request type %(request_type)s."
+msgstr "服务 %(service)s 不允许用于申请类型 %(request_type)s。"
+
+#. module: laboratory_management
+msgid "Profile %(profile)s is not allowed for request type %(request_type)s."
+msgstr "组合 %(profile)s 不允许用于申请类型 %(request_type)s。"

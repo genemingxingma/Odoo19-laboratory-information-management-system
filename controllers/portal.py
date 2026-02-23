@@ -394,6 +394,7 @@ class LaboratoryPortal(CustomerPortal):
     @http.route("/my/lab/requests/new", type="http", auth="user", website=True, methods=["GET"])
     def portal_test_request_new_form(self, **kwargs):
         mixin = request.env["lab.master.data.mixin"].sudo()
+        req_obj = request.env["lab.test.request"].sudo()
         partner = self._current_commercial_partner()
         portal_request_type = "institution" if self._is_professional_partner(partner) else "individual"
         request_type_map = dict(mixin._selection_request_type())
@@ -421,8 +422,12 @@ class LaboratoryPortal(CustomerPortal):
         values.update(
             {
                 "page_name": "lab_test_requests",
-                "services": request.env["lab.service"].sudo().search([("active", "=", True)], order="name asc"),
-                "profiles": request.env["lab.profile"].sudo().search([("active", "=", True)], order="name asc"),
+                "services": request.env["lab.service"]
+                .sudo()
+                .search(req_obj._allowed_service_domain_for_request_type(portal_request_type), order="name asc"),
+                "profiles": request.env["lab.profile"]
+                .sudo()
+                .search(req_obj._allowed_profile_domain_for_request_type(portal_request_type), order="name asc"),
                 "physicians": physicians,
                 "physician_departments": physician_departments,
                 "templates": request.env["lab.report.template"].sudo().search([], order="name asc"),
@@ -478,6 +483,7 @@ class LaboratoryPortal(CustomerPortal):
     def portal_test_request_create(self, **post):
         partner = self._current_commercial_partner()
         mixin = request.env["lab.master.data.mixin"].sudo()
+        req_obj = request.env["lab.test.request"].sudo()
         line_type = (post.get("line_type") or "service").strip()
         request_type = "institution" if self._is_professional_partner(partner) else "individual"
         priority = (post.get("priority") or mixin._default_priority_code()).strip()
@@ -495,6 +501,9 @@ class LaboratoryPortal(CustomerPortal):
             profile_ids = [int(post.get("profile_id"))]
 
         valid_sample_types = {code for code, _label in mixin._selection_sample_type()}
+        allowed_catalog = req_obj._allowed_catalog_ids_for_request_type(request_type, company=request.env.company)
+        allowed_service_ids = allowed_catalog["service_ids"]
+        allowed_profile_ids = allowed_catalog["profile_ids"]
 
         specimen_payload_json = (post.get("specimen_payload_json") or "").strip()
         has_specimen_payload = bool(specimen_payload_json)
@@ -523,6 +532,8 @@ class LaboratoryPortal(CustomerPortal):
                 row_note = (row.get("line_note") or line_note).strip()
                 row_service_ids = self._normalize_id_list(row.get("service_ids"))
                 row_profile_ids = self._normalize_id_list(row.get("profile_ids"))
+                row_service_ids = [service_id for service_id in row_service_ids if service_id in allowed_service_ids]
+                row_profile_ids = [profile_id for profile_id in row_profile_ids if profile_id in allowed_profile_ids]
                 if row_type == "profile":
                     for profile_id in row_profile_ids:
                         line_ids.append(

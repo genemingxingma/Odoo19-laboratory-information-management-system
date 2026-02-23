@@ -165,6 +165,11 @@ class LaboratoryExternalApi(http.Controller):
             physician_partner = partner_obj.search([("ref", "=", physician_code)], limit=1)
 
         valid_sample_types = {code for code, _label in request_obj._selection_sample_type()}
+        request_type = "institution" if client_partner else "individual"
+        allowed_catalog = request_obj._allowed_catalog_ids_for_request_type(
+            request_type,
+            company=endpoint.external_company_id,
+        )
         line_vals = []
         for index, line in enumerate(lines, start=1):
             line_type = line.get("line_type") or "service"
@@ -190,21 +195,32 @@ class LaboratoryExternalApi(http.Controller):
             }
             if line_type == "service":
                 code = (line.get("service_code") or "").strip()
-                service = service_obj.search([("code", "=", code)], limit=1)
+                service = service_obj.search(
+                    [
+                        ("code", "=", code),
+                        ("active", "=", True),
+                        ("profile_only", "=", False),
+                    ],
+                    limit=1,
+                )
                 if not service:
                     return {"ok": False, "error": "service_not_found", "service_code": code}
+                if service.id not in allowed_catalog["service_ids"]:
+                    return {"ok": False, "error": "service_not_allowed_for_request_type", "service_code": code}
                 vals["service_id"] = service.id
             else:
                 code = (line.get("profile_code") or "").strip()
                 profile = profile_obj.search([("code", "=", code)], limit=1)
                 if not profile:
                     return {"ok": False, "error": "profile_not_found", "profile_code": code}
+                if profile.id not in allowed_catalog["profile_ids"]:
+                    return {"ok": False, "error": "profile_not_allowed_for_request_type", "profile_code": code}
                 vals["profile_id"] = profile.id
             line_vals.append((0, 0, vals))
 
         request_vals = {
             "requester_partner_id": requester.id,
-            "request_type": "institution" if client_partner else "individual",
+            "request_type": request_type,
             "client_partner_id": client_partner.id if client_partner else False,
             "patient_name": (patient.get("name") or "").strip() or "Unknown",
             "patient_identifier": (patient.get("identifier") or "").strip() or False,
@@ -373,7 +389,11 @@ class LaboratoryExternalApi(http.Controller):
         deny = self._check_metadata_access(endpoint)
         if deny:
             return deny
-        domain = [("active", "=", True), ("company_id", "=", endpoint.external_company_id.id)]
+        domain = [
+            ("active", "=", True),
+            ("profile_only", "=", False),
+            ("company_id", "=", endpoint.external_company_id.id),
+        ]
         recs = request.env["lab.service"].sudo().with_company(endpoint.external_company_id).search(domain, order="code asc, id asc")
         return self._json_response(
             {
