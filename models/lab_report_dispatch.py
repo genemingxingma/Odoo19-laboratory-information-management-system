@@ -259,7 +259,7 @@ class LabReportDispatch(models.Model):
         cfg = self.env["ir.config_parameter"].sudo()
         email_enabled = (cfg.get_param("laboratory_management.dispatch_email_enabled") or "1").strip()
         if email_enabled in ("0", "false", "False"):
-            self._log_event("skipped", _("Email dispatch skipped by system setting."))
+            self._log_event("email", _("Email dispatch skipped by system setting."))
             return False
 
         partner = self.partner_id.commercial_partner_id or self.partner_id
