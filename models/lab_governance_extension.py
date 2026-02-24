@@ -32,6 +32,10 @@ TASK_WORKSTATIONS = [
 ]
 
 
+def _default_department_code(env):
+    return env["lab.master.data.mixin"]._default_department_code()
+
+
 class LabDepartmentExceptionTemplate(models.Model):
     _name = "lab.department.exception.template"
     _description = "Department Exception Template"
@@ -117,7 +121,7 @@ class LabDepartmentExceptionTemplate(models.Model):
         sample_type = sample.analysis_ids[:1].sample_type if sample.analysis_ids else "other"
         if self.sample_type != "all" and sample_type != self.sample_type:
             return False
-        department = sample.sop_id.department if sample.sop_id else "other"
+        department = sample.sop_id.department if sample.sop_id else _default_department_code(self.env)
         if department != self.department:
             return False
         return True
@@ -197,7 +201,7 @@ class LabSopBranchEngineTemplateMixin(models.AbstractModel):
         templates = template_obj.search(
             [
                 ("active", "=", True),
-                ("department", "=", sample.sop_id.department if sample.sop_id else "other"),
+                ("department", "=", sample.sop_id.department if sample.sop_id else _default_department_code(self.env)),
                 ("trigger_event", "=", event),
             ],
             order="sequence asc, id asc",
@@ -742,7 +746,7 @@ class LabSampleGovernanceMixin(models.Model):
     def _compute_exception_template_count(self):
         tmpl_obj = self.env["lab.department.exception.template"]
         for rec in self:
-            dept = rec.sop_id.department if rec.sop_id else "other"
+            dept = rec.sop_id.department if rec.sop_id else _default_department_code(self.env)
             rec.exception_template_count = tmpl_obj.search_count(
                 [("active", "=", True), ("department", "=", dept)]
             )

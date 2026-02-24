@@ -99,13 +99,17 @@ class LabSopWorkflowProfile(models.Model):
 
     _workflow_profile_code_uniq = models.Constraint("unique(code)", "Workflow profile code must be unique.")
 
+    @api.model
+    def _default_department_code(self):
+        return self.env["lab.master.data.mixin"]._default_department_code()
+
     def _sample_department(self, sample, analysis=False):
         self.ensure_one()
         if analysis and analysis.department:
             return analysis.department
         if sample.analysis_ids:
-            return sample.analysis_ids[:1].department or "other"
-        return "other"
+            return sample.analysis_ids[:1].department or self._default_department_code()
+        return self._default_department_code()
 
     def _sample_type(self, sample, analysis=False):
         self.ensure_one()
@@ -195,8 +199,9 @@ class LabSopWorkflowProfile(models.Model):
     def _select_for_sample(self, sample, analysis=False):
         if not sample:
             return False
-        dept = analysis.department if analysis and analysis.department else (sample.analysis_ids[:1].department if sample.analysis_ids else "other")
-        candidates = self.search([("active", "=", True), ("department", "=", dept or "other")], order="sequence asc, id asc")
+        default_department = self._default_department_code()
+        dept = analysis.department if analysis and analysis.department else (sample.analysis_ids[:1].department if sample.analysis_ids else default_department)
+        candidates = self.search([("active", "=", True), ("department", "=", dept or default_department)], order="sequence asc, id asc")
         for row in candidates:
             if row._matches(sample, analysis=analysis):
                 return row

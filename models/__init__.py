@@ -19,6 +19,8 @@ from . import lab_instrument
 from . import lab_import_job
 from . import lab_capa
 from . import lab_sample
+from . import lab_plate
+from . import lab_pathology
 from . import lab_sop
 from . import lab_sop_execution
 from . import lab_sop_profile_matrix
@@ -50,3 +52,4 @@ from . import lab_personnel_matrix
 from . import lab_training_authorization_template
 from . import lab_master_data_overrides
 from . import lab_company_scope
+from . import lab_control_center

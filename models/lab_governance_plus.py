@@ -350,12 +350,13 @@ class LabDepartmentExceptionTemplateCurrentMixin(models.AbstractModel):
         runs = super().run_rules(event, sample, analysis=analysis, interface_job=interface_job, payload=payload)
         if runs.filtered(lambda x: x.result_state == "executed"):
             return runs
+        default_department = self.env["lab.master.data.mixin"]._default_department_code()
 
         template = self.env["lab.department.exception.template"].search(
             [
                 ("active", "=", True),
                 ("superseded_by_id", "=", False),
-                ("department", "=", sample.sop_id.department if sample.sop_id else "other"),
+                ("department", "=", sample.sop_id.department if sample.sop_id else default_department),
                 ("trigger_event", "=", event),
             ],
             order="sequence asc, version_no desc, id desc",
