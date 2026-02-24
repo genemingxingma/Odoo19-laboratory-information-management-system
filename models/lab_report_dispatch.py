@@ -256,6 +256,11 @@ class LabReportDispatch(models.Model):
         self.ensure_one()
         if self.channel != "email":
             return True
+        cfg = self.env["ir.config_parameter"].sudo()
+        email_enabled = (cfg.get_param("laboratory_management.dispatch_email_enabled") or "1").strip()
+        if email_enabled in ("0", "false", "False"):
+            self._log_event("skipped", _("Email dispatch skipped by system setting."))
+            return False
 
         partner = self.partner_id.commercial_partner_id or self.partner_id
         to_email = (self.partner_id.email or partner.email or "").strip()

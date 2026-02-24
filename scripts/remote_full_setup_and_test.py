@@ -6,6 +6,8 @@ company = env.company
 admin_user = env.user
 param_model = env['ir.config_parameter'].sudo()
 enable_ai = (param_model.get_param('laboratory_management.test_enable_ai') or '').strip() == '1'
+# Avoid SMTP provider throttling from blocking smoke tests.
+param_model.set_param('laboratory_management.dispatch_email_enabled', '0')
 
 # 1) Master data i18n seed
 env['lab.master.data.mixin'].seed_i18n_master_data()
