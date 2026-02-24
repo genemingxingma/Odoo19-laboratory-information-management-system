@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Laboratory External Institution API
-  version: 1.2.1
+  version: 1.3.0
   description: |
     REST API for external hospitals/institutions.
     Supports request push, request query, sample result query, report PDF download,
@@ -47,12 +47,25 @@ paths:
                   patient:
                     name: API Patient A
                     identifier: API-ID-9001
+                    passport_no: P12345678
                     gender: female
                     birthdate: '1992-01-01'
                     phone: '13800001111'
+                    email: patient@example.com
+                    country_code: TH
+                    state_code: BKK
+                    city: Bangkok
+                    emergency_contact_name: Family A
+                    emergency_contact_phone: '13800002222'
+                    informed_consent_signed: true
                   physician:
                     name: Dr. External
                     partner_ref: PHY-001
+                    code: PHY-001
+                    license_no: LIC-9999
+                    specialty: Infectious Disease
+                    department_code: OPD
+                    institution_ref: HOSP-001
                   lines:
                     - line_type: service
                       service_code: STD_CT
@@ -450,10 +463,25 @@ components:
     PatientInput:
       type: object
       properties:
+        id:
+          type: integer
+          description: Existing lab.patient id (same company)
         name:
           type: string
+        patient_id_no:
+          type: string
+          description: Alias of identifier
+        id_no:
+          type: string
+          description: Alias of identifier
         identifier:
           type: string
+          description: Patient ID / national ID
+        passport_no:
+          type: string
+        passport:
+          type: string
+          description: Alias of passport_no
         gender:
           type: string
           enum: [male, female, other, unknown]
@@ -463,13 +491,101 @@ components:
           format: date
         phone:
           type: string
+        email:
+          type: string
+          format: email
+        lang:
+          type: string
+          description: Odoo language code, e.g. en_US / zh_CN / th_TH
+        street:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        state_id:
+          type: integer
+        state_code:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        country_id:
+          type: integer
+        country_code:
+          type: string
+        country:
+          type: string
+        emergency_contact_name:
+          type: string
+        emergency_contact_phone:
+          type: string
+        emergency_contact_relation:
+          type: string
+        allergy_history:
+          type: string
+        past_medical_history:
+          type: string
+        medication_history:
+          type: string
+        pregnancy_status:
+          type: string
+          enum: [not_applicable, pregnant, not_pregnant, unknown]
+        breastfeeding:
+          type: boolean
+        insurance_provider:
+          type: string
+        insurance_no:
+          type: string
+        informed_consent_signed:
+          type: boolean
+        informed_consent_date:
+          type: string
+          format: date
+        note:
+          type: string
 
     PhysicianInput:
       type: object
       properties:
+        id:
+          type: integer
+          description: Existing lab.physician id (same company)
         name:
           type: string
+        code:
+          type: string
         partner_ref:
+          type: string
+          description: Alias of code
+        license_no:
+          type: string
+        title:
+          type: string
+        specialty:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        department_id:
+          type: integer
+        department_code:
+          type: string
+        institution_id:
+          type: integer
+        institution_ref:
+          type: string
+          description: Match partner ref/vat
+        institution_name:
+          type: string
+        notify_by_email:
+          type: boolean
+        notify_by_sms:
+          type: boolean
+        note:
           type: string
 
     RequestLineInput:
@@ -574,19 +690,9 @@ components:
           format: date-time
           nullable: true
         patient:
-          type: object
-          properties:
-            id:
-              type: integer
-              nullable: true
-            name:
-              type: string
-            identifier:
-              type: string
-            gender:
-              type: string
-            phone:
-              type: string
+          $ref: '#/components/schemas/PatientSummary'
+        physician:
+          $ref: '#/components/schemas/PhysicianSummary'
         samples:
           type: array
           items:
@@ -702,7 +808,7 @@ components:
           format: date-time
           nullable: true
         patient:
-          type: string
+          $ref: '#/components/schemas/SamplePatientSummary'
         request_no:
           type: string
         ai_interpretation:
@@ -763,4 +869,127 @@ components:
         name:
           type: string
         sample_type:
+          type: string
+
+    PatientAddress:
+      type: object
+      properties:
+        street:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        state_code:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        country_code:
+          type: string
+        country:
+          type: string
+
+    PatientEmergencyContact:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+        relation:
+          type: string
+
+    PatientSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          nullable: true
+        name:
+          type: string
+        identifier:
+          type: string
+        passport_no:
+          type: string
+        gender:
+          type: string
+        birthdate:
+          type: string
+          format: date
+          nullable: true
+        age_display:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        lang:
+          type: string
+        address:
+          $ref: '#/components/schemas/PatientAddress'
+        emergency_contact:
+          $ref: '#/components/schemas/PatientEmergencyContact'
+
+    PhysicianDepartmentSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          nullable: true
+        code:
+          type: string
+        name:
+          type: string
+
+    PhysicianInstitutionSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          nullable: true
+        name:
+          type: string
+
+    PhysicianSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          nullable: true
+        name:
+          type: string
+        code:
+          type: string
+        license_no:
+          type: string
+        title:
+          type: string
+        specialty:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        department:
+          $ref: '#/components/schemas/PhysicianDepartmentSummary'
+        institution:
+          $ref: '#/components/schemas/PhysicianInstitutionSummary'
+        notify_by_email:
+          type: boolean
+        notify_by_sms:
+          type: boolean
+
+    SamplePatientSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          nullable: true
+        name:
+          type: string
+        identifier:
+          type: string
+        passport_no:
           type: string

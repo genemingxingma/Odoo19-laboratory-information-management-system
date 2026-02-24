@@ -10,6 +10,231 @@ from odoo.http import request
 class LaboratoryExternalApi(http.Controller):
     _MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
 
+    def _to_bool(self, value):
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, (int, float)):
+            return bool(value)
+        if isinstance(value, str):
+            val = value.strip().lower()
+            if val in {"1", "true", "yes", "y", "on"}:
+                return True
+            if val in {"0", "false", "no", "n", "off"}:
+                return False
+        return False
+
+    def _to_int(self, value):
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return False
+
+    def _resolve_country(self, payload):
+        country_obj = request.env["res.country"].sudo()
+        country_id = self._to_int(payload.get("country_id"))
+        if country_id:
+            country = country_obj.browse(country_id).exists()
+            if country:
+                return country
+        country_code = (payload.get("country_code") or "").strip()
+        if country_code:
+            country = country_obj.search([("code", "=", country_code.upper())], limit=1)
+            if country:
+                return country
+        country_name = (payload.get("country") or "").strip()
+        if country_name:
+            return country_obj.search([("name", "ilike", country_name)], limit=1)
+        return country_obj.browse()
+
+    def _resolve_state(self, payload, country=False):
+        state_obj = request.env["res.country.state"].sudo()
+        state_id = self._to_int(payload.get("state_id"))
+        if state_id:
+            state = state_obj.browse(state_id).exists()
+            if state and (not country or state.country_id == country):
+                return state
+        state_code = (payload.get("state_code") or "").strip()
+        if state_code:
+            domain = [("code", "=", state_code.upper())]
+            if country:
+                domain.append(("country_id", "=", country.id))
+            state = state_obj.search(domain, limit=1)
+            if state:
+                return state
+        state_name = (payload.get("state") or "").strip()
+        if state_name:
+            domain = [("name", "ilike", state_name)]
+            if country:
+                domain.append(("country_id", "=", country.id))
+            return state_obj.search(domain, limit=1)
+        return state_obj.browse()
+
+    def _find_or_create_patient(self, payload, company):
+        patient_obj = request.env["lab.patient"].sudo().with_company(company)
+        patient_id = self._to_int(payload.get("id") or payload.get("patient_id"))
+        if patient_id:
+            patient = patient_obj.browse(patient_id).exists()
+            if patient and patient.company_id == company:
+                return patient
+
+        identifier = (payload.get("identifier") or payload.get("patient_id_no") or payload.get("id_no") or "").strip()
+        passport_no = (payload.get("passport_no") or payload.get("passport") or "").strip()
+        name = (payload.get("name") or "").strip()
+        phone = (payload.get("phone") or "").strip()
+        gender = payload.get("gender") or "unknown"
+        birthdate = payload.get("birthdate") or False
+
+        patient = patient_obj.browse()
+        if identifier:
+            patient = patient_obj.search(
+                [
+                    ("company_id", "=", company.id),
+                    ("identifier", "=", identifier),
+                ],
+                limit=1,
+            )
+        if not patient and passport_no:
+            patient = patient_obj.search(
+                [
+                    ("company_id", "=", company.id),
+                    ("passport_no", "=", passport_no),
+                ],
+                limit=1,
+            )
+        if not patient and name and phone:
+            patient = patient_obj.search(
+                [
+                    ("company_id", "=", company.id),
+                    ("name", "=", name),
+                    ("phone", "=", phone),
+                ],
+                limit=1,
+            )
+
+        country = self._resolve_country(payload)
+        state = self._resolve_state(payload, country=country)
+        vals = {
+            "company_id": company.id,
+            "name": name or "Unknown",
+            "identifier": identifier or False,
+            "passport_no": passport_no or False,
+            "birthdate": birthdate or False,
+            "gender": gender if gender in {"male", "female", "other", "unknown"} else "unknown",
+            "phone": phone or False,
+            "email": (payload.get("email") or "").strip() or False,
+            "lang": (payload.get("lang") or "").strip() or False,
+            "street": (payload.get("street") or "").strip() or False,
+            "street2": (payload.get("street2") or "").strip() or False,
+            "city": (payload.get("city") or "").strip() or False,
+            "zip": (payload.get("zip") or "").strip() or False,
+            "country_id": country.id if country else False,
+            "state_id": state.id if state else False,
+            "emergency_contact_name": (payload.get("emergency_contact_name") or "").strip() or False,
+            "emergency_contact_phone": (payload.get("emergency_contact_phone") or "").strip() or False,
+            "emergency_contact_relation": (payload.get("emergency_contact_relation") or "").strip() or False,
+            "allergy_history": payload.get("allergy_history") or False,
+            "past_medical_history": payload.get("past_medical_history") or False,
+            "medication_history": payload.get("medication_history") or False,
+            "pregnancy_status": payload.get("pregnancy_status")
+            if payload.get("pregnancy_status") in {"not_applicable", "pregnant", "not_pregnant", "unknown"}
+            else "not_applicable",
+            "breastfeeding": self._to_bool(payload.get("breastfeeding")),
+            "insurance_provider": (payload.get("insurance_provider") or "").strip() or False,
+            "insurance_no": (payload.get("insurance_no") or "").strip() or False,
+            "informed_consent_signed": self._to_bool(payload.get("informed_consent_signed")),
+            "informed_consent_date": payload.get("informed_consent_date") or False,
+            "note": payload.get("note") or False,
+        }
+
+        if patient:
+            write_vals = {k: v for k, v in vals.items() if v not in (False, "", None)}
+            if write_vals:
+                patient.write(write_vals)
+            return patient
+
+        if not any([name, identifier, passport_no]):
+            return patient_obj.browse()
+        return patient_obj.create(vals)
+
+    def _find_or_create_physician(self, payload, company):
+        physician_obj = request.env["lab.physician"].sudo().with_company(company)
+        dep_obj = request.env["lab.physician.department"].sudo().with_company(company)
+        partner_obj = request.env["res.partner"].sudo().with_company(company)
+
+        physician_id = self._to_int(payload.get("id") or payload.get("physician_id"))
+        if physician_id:
+            physician = physician_obj.browse(physician_id).exists()
+            if physician and physician.company_id == company:
+                return physician
+
+        code = (payload.get("code") or payload.get("partner_ref") or "").strip()
+        license_no = (payload.get("license_no") or "").strip()
+        name = (payload.get("name") or "").strip()
+        phone = (payload.get("phone") or "").strip()
+
+        physician = physician_obj.browse()
+        if code:
+            physician = physician_obj.search([("company_id", "=", company.id), ("code", "=", code)], limit=1)
+        if not physician and license_no:
+            physician = physician_obj.search([("company_id", "=", company.id), ("license_no", "=", license_no)], limit=1)
+        if not physician and name and phone:
+            physician = physician_obj.search([("company_id", "=", company.id), ("name", "=", name), ("phone", "=", phone)], limit=1)
+
+        dept = dep_obj.browse()
+        dept_id = self._to_int(payload.get("department_id"))
+        if dept_id:
+            dept = dep_obj.browse(dept_id).exists()
+        if not dept:
+            dept_code = (payload.get("department_code") or "").strip()
+            if dept_code:
+                dept = dep_obj.search([("company_id", "=", company.id), ("code", "=", dept_code)], limit=1)
+
+        institution = partner_obj.browse()
+        institution_id = self._to_int(payload.get("institution_id"))
+        if institution_id:
+            institution = partner_obj.browse(institution_id).exists()
+        if not institution:
+            institution_ref = (payload.get("institution_ref") or "").strip()
+            if institution_ref:
+                institution = partner_obj.search(
+                    [
+                        "|",
+                        ("ref", "=", institution_ref),
+                        ("vat", "=", institution_ref),
+                    ],
+                    limit=1,
+                )
+        if not institution:
+            institution_name = (payload.get("institution_name") or "").strip()
+            if institution_name:
+                institution = partner_obj.search([("name", "=", institution_name)], limit=1)
+
+        vals = {
+            "company_id": company.id,
+            "name": name or (code or license_no or "Unknown Physician"),
+            "code": code or False,
+            "license_no": license_no or False,
+            "title": (payload.get("title") or "").strip() or False,
+            "specialty": (payload.get("specialty") or "").strip() or False,
+            "phone": phone or False,
+            "email": (payload.get("email") or "").strip() or False,
+            "institution_partner_id": institution.id if institution else False,
+            "lab_physician_department_id": dept.id if dept else False,
+            "notify_by_email": self._to_bool(payload.get("notify_by_email", True)),
+            "notify_by_sms": self._to_bool(payload.get("notify_by_sms")),
+            "note": payload.get("note") or False,
+        }
+
+        if physician:
+            write_vals = {k: v for k, v in vals.items() if v not in (False, "", None)}
+            if write_vals:
+                physician.write(write_vals)
+            return physician
+
+        if not any([name, code, license_no]):
+            return physician_obj.browse()
+        return physician_obj.create(vals)
+
     def _authorize_endpoint(self, endpoint):
         auth_type = endpoint.auth_type or "none"
         headers = request.httprequest.headers
@@ -104,8 +329,49 @@ class LaboratoryExternalApi(http.Controller):
                 "id": rec.patient_id.id if rec.patient_id else False,
                 "name": rec.patient_name or (rec.patient_id.name if rec.patient_id else ""),
                 "identifier": rec.patient_identifier or "",
+                "passport_no": rec.patient_id.passport_no if rec.patient_id else "",
                 "gender": rec.patient_gender or "",
+                "birthdate": rec.patient_birthdate.isoformat() if rec.patient_birthdate else None,
+                "age_display": rec.patient_id.age_display if rec.patient_id else "",
                 "phone": rec.patient_phone or "",
+                "email": rec.patient_id.email if rec.patient_id else "",
+                "lang": rec.patient_id.lang if rec.patient_id else "",
+                "address": {
+                    "street": rec.patient_id.street if rec.patient_id else "",
+                    "street2": rec.patient_id.street2 if rec.patient_id else "",
+                    "city": rec.patient_id.city if rec.patient_id else "",
+                    "state_code": rec.patient_id.state_id.code if rec.patient_id and rec.patient_id.state_id else "",
+                    "state": rec.patient_id.state_id.name if rec.patient_id and rec.patient_id.state_id else "",
+                    "zip": rec.patient_id.zip if rec.patient_id else "",
+                    "country_code": rec.patient_id.country_id.code if rec.patient_id and rec.patient_id.country_id else "",
+                    "country": rec.patient_id.country_id.name if rec.patient_id and rec.patient_id.country_id else "",
+                },
+                "emergency_contact": {
+                    "name": rec.patient_id.emergency_contact_name if rec.patient_id else "",
+                    "phone": rec.patient_id.emergency_contact_phone if rec.patient_id else "",
+                    "relation": rec.patient_id.emergency_contact_relation if rec.patient_id else "",
+                },
+            },
+            "physician": {
+                "id": rec.physician_partner_id.id if rec.physician_partner_id else False,
+                "name": rec.physician_name or (rec.physician_partner_id.name if rec.physician_partner_id else ""),
+                "code": rec.physician_partner_id.code if rec.physician_partner_id else "",
+                "license_no": rec.physician_partner_id.license_no if rec.physician_partner_id else "",
+                "title": rec.physician_partner_id.title if rec.physician_partner_id else "",
+                "specialty": rec.physician_partner_id.specialty if rec.physician_partner_id else "",
+                "phone": rec.physician_partner_id.phone if rec.physician_partner_id else "",
+                "email": rec.physician_partner_id.email if rec.physician_partner_id else "",
+                "department": {
+                    "id": rec.physician_partner_id.lab_physician_department_id.id if rec.physician_partner_id and rec.physician_partner_id.lab_physician_department_id else False,
+                    "code": rec.physician_partner_id.lab_physician_department_id.code if rec.physician_partner_id and rec.physician_partner_id.lab_physician_department_id else "",
+                    "name": rec.physician_partner_id.lab_physician_department_id.name if rec.physician_partner_id and rec.physician_partner_id.lab_physician_department_id else "",
+                },
+                "institution": {
+                    "id": rec.physician_partner_id.institution_partner_id.id if rec.physician_partner_id and rec.physician_partner_id.institution_partner_id else False,
+                    "name": rec.physician_partner_id.institution_partner_id.name if rec.physician_partner_id and rec.physician_partner_id.institution_partner_id else "",
+                },
+                "notify_by_email": bool(rec.physician_partner_id.notify_by_email) if rec.physician_partner_id else False,
+                "notify_by_sms": bool(rec.physician_partner_id.notify_by_sms) if rec.physician_partner_id else False,
             },
             "priority": rec.priority,
             "submitted_at": rec.submitted_at.isoformat() if rec.submitted_at else None,
@@ -216,13 +482,8 @@ class LaboratoryExternalApi(http.Controller):
         if template_code:
             preferred_template = template_obj.search([("code", "=", template_code)], limit=1)
 
-        physician_partner = False
-        physician_code = (physician.get("code") or physician.get("partner_ref") or "").strip()
-        if physician_code:
-            physician_partner = physician_obj.search(
-                ["|", ("code", "=", physician_code), ("license_no", "=", physician_code)],
-                limit=1,
-            )
+        patient_record = self._find_or_create_patient(patient, endpoint.external_company_id)
+        physician_partner = self._find_or_create_physician(physician, endpoint.external_company_id)
 
         valid_sample_types = {code for code, _label in request_obj._selection_sample_type()}
         request_type = "institution" if client_partner else "individual"
@@ -291,13 +552,14 @@ class LaboratoryExternalApi(http.Controller):
             "requester_partner_id": requester.id,
             "request_type": request_type,
             "client_partner_id": client_partner.id if client_partner else False,
-            "patient_name": (patient.get("name") or "").strip() or "Unknown",
-            "patient_identifier": (patient.get("identifier") or "").strip() or False,
-            "patient_gender": patient.get("gender") or "unknown",
-            "patient_phone": (patient.get("phone") or "").strip() or False,
-            "patient_birthdate": patient.get("birthdate") or False,
+            "patient_id": patient_record.id if patient_record else False,
+            "patient_name": (patient.get("name") or (patient_record.name if patient_record else "")).strip() or "Unknown",
+            "patient_identifier": (patient.get("identifier") or patient.get("patient_id_no") or patient.get("id_no") or (patient_record.identifier if patient_record else "")).strip() or False,
+            "patient_gender": (patient.get("gender") or (patient_record.gender if patient_record else "unknown")) or "unknown",
+            "patient_phone": (patient.get("phone") or (patient_record.phone if patient_record else "")).strip() or False,
+            "patient_birthdate": patient.get("birthdate") or (patient_record.birthdate if patient_record else False),
             "physician_partner_id": physician_partner.id if physician_partner else False,
-            "physician_name": (physician.get("name") or "").strip() or False,
+            "physician_name": (physician.get("name") or (physician_partner.name if physician_partner else "")).strip() or False,
             "requested_collection_date": body.get("requested_collection_date") or fields.Datetime.now(),
             "priority": body.get("priority") or "routine",
             "clinical_note": body.get("clinical_note") or False,
@@ -439,7 +701,12 @@ class LaboratoryExternalApi(http.Controller):
                 "barcode": sample.accession_barcode or "",
                 "state": sample.state,
                 "report_date": sample.report_date.isoformat() if sample.report_date else None,
-                "patient": sample.patient_id.name,
+                "patient": {
+                    "id": sample.patient_id.id if sample.patient_id else False,
+                    "name": sample.patient_id.name if sample.patient_id else "",
+                    "identifier": sample.patient_id.identifier if sample.patient_id else "",
+                    "passport_no": sample.patient_id.passport_no if sample.patient_id else "",
+                },
                 "request_no": sample.request_id.name if sample.request_id else "",
                 "results": [
                     {

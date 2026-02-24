@@ -77,6 +77,19 @@ Important:
 - Top-level `sample_type` should not be used by new integrations.
 - Each attachment max size is `10 MB`.
 - If a selected service/panel requires dynamic forms, missing required answers will be rejected.
+- API now supports extended patient/physician fields and will match-or-create records under `external_company_id`.
+
+Patient input (extended, key fields):
+- identity: `id`, `identifier`, `patient_id_no`, `id_no`, `passport_no`, `passport`
+- demographics: `name`, `gender`, `birthdate`, `phone`, `email`, `lang`
+- address: `street`, `street2`, `city`, `state_id|state_code|state`, `zip`, `country_id|country_code|country`
+- emergency/medical: `emergency_contact_*`, `allergy_history`, `past_medical_history`, `medication_history`, `pregnancy_status`, `breastfeeding`, `insurance_*`, `informed_consent_*`, `note`
+
+Physician input (extended, key fields):
+- identity: `id`, `code`, `partner_ref` (alias of code), `license_no`, `name`
+- profile: `title`, `specialty`, `phone`, `email`
+- organization: `department_id|department_code`, `institution_id|institution_ref|institution_name`
+- notification/note: `notify_by_email`, `notify_by_sms`, `note`
 
 Dynamic form payload example:
 ```json
@@ -104,6 +117,22 @@ Successful response shape:
     "id": 320,
     "request_no": "TRQ2602-00320",
     "state": "submitted",
+    "patient": {
+      "id": 15,
+      "name": "API Patient A",
+      "identifier": "API-9001",
+      "passport_no": "P12345678",
+      "gender": "female",
+      "birthdate": "1992-01-01",
+      "age_display": "34 years 1 months 0 days"
+    },
+    "physician": {
+      "id": 12,
+      "name": "Dr. External",
+      "code": "PHY-001",
+      "license_no": "LIC-9999",
+      "department": {"code": "OPD", "name": "Outpatient"}
+    },
     "samples": []
   }
 }
@@ -124,6 +153,8 @@ Successful response shape:
 ### 4.3 Query sample results
 - `GET /samples/{accession}/results`
 - Returns sample state + analysis lines + optional `ai_interpretation`.
+- `sample.patient` now returns a structured object:
+  - `id`, `name`, `identifier`, `passport_no`
 
 ### 4.4 Download sample report PDF
 - `GET /samples/{accession}/report/pdf`

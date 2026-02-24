@@ -91,13 +91,25 @@ Auth header examples:
   "patient": {
     "name": "Patient A",
     "identifier": "ID-123456",
+    "passport_no": "P12345678",
     "gender": "female",
     "birthdate": "1992-01-01",
-    "phone": "13800000000"
+    "phone": "13800000000",
+    "email": "patient@example.com",
+    "country_code": "TH",
+    "state_code": "BKK",
+    "city": "Bangkok",
+    "emergency_contact_name": "Family A",
+    "emergency_contact_phone": "13800009999",
+    "informed_consent_signed": true
   },
   "physician": {
     "name": "Dr. Lee",
-    "partner_ref": "DR-LEE-001"
+    "partner_ref": "DR-LEE-001",
+    "license_no": "LIC-001",
+    "specialty": "Infectious Disease",
+    "department_code": "OPD",
+    "institution_ref": "HOSP-001"
   },
   "lines": [
     {
@@ -129,6 +141,19 @@ Notes:
 - Re-push with same `external_uid` returns existing request (`deduplicated=true`).
 - Specimen type should be passed by each line via `specimen_sample_type`.
 - If target service/panel requires dynamic forms, pass `dynamic_forms` in request payload.
+- API will match-or-create `lab.patient` / `lab.physician` using supplied identity fields under endpoint `Data Company`.
+
+Patient matching priority:
+1. `patient.id`
+2. `patient.identifier` / `patient_id_no` / `id_no`
+3. `patient.passport_no`
+4. `patient.name + patient.phone`
+
+Physician matching priority:
+1. `physician.id`
+2. `physician.code` / `partner_ref`
+3. `physician.license_no`
+4. `physician.name + physician.phone`
 
 Dynamic form payload example:
 ```json
@@ -157,6 +182,7 @@ Response includes:
 - sample state
 - analysis lines (`service_code`, `result_value`, `binary_interpretation`)
 - approved AI interpretation text (if visible)
+- structured patient info (`id`, `name`, `identifier`, `passport_no`)
 
 ---
 
