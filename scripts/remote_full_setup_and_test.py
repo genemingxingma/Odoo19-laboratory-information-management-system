@@ -4,6 +4,8 @@ from odoo import fields
 summary = []
 company = env.company
 admin_user = env.user
+param_model = env['ir.config_parameter'].sudo()
+enable_ai = (param_model.get_param('laboratory_management.test_enable_ai') or '').strip() == '1'
 
 # 1) Master data i18n seed
 env['lab.master.data.mixin'].seed_i18n_master_data()
@@ -34,26 +36,26 @@ summary.append(f'Physician department: {phy_dept.name}')
 
 # 4) Institution + physician partner
 partner_model = env['res.partner'].sudo()
+patient_model = env['lab.patient'].sudo()
+physician_model = env['lab.physician'].sudo()
 institution = partner_model.search([('name', '=', 'iMyTest Women Health Center')], limit=1)
 if not institution:
     institution = partner_model.create({'name': 'iMyTest Women Health Center', 'is_company': True, 'company_type': 'company'})
 
-physician = partner_model.search([('name', '=', 'Dr. Lin Mei'), ('is_lab_physician', '=', True)], limit=1)
+physician = physician_model.search([('code', '=', 'DR-LIN-MEI'), ('company_id', '=', company.id)], limit=1)
 if not physician:
-    physician = partner_model.create({
+    physician = physician_model.create({
         'name': 'Dr. Lin Mei',
-        'is_company': False,
-        'is_lab_physician': True,
-        'lab_physician_company_id': company.id,
+        'code': 'DR-LIN-MEI',
+        'company_id': company.id,
         'lab_physician_department_id': phy_dept.id,
-        'parent_id': institution.id,
+        'institution_partner_id': institution.id,
         'email': 'dr.lin.mei@imytest.local',
     })
 summary.append(f'Physician: {physician.name}')
 
 # 5) Portal users
 portal_group = env.ref('base.group_portal')
-public_group = env.ref('base.group_public')
 
 def ensure_portal_user(login, name, password, partner):
     user = env['res.users'].sudo().search([('login', '=', login)], limit=1)
@@ -76,6 +78,17 @@ portal01_partner = partner_model.search([('email', '=', 'portal-01@imytest.local
 if not portal01_partner:
     portal01_partner = partner_model.create({'name': 'Portal 01', 'email': 'portal-01@imytest.local', 'phone': '13900000001'})
 portal01_user = ensure_portal_user('portal-01@imytest.local', 'portal-01', 'Portal@12345', portal01_partner)
+portal01_patient = patient_model.search([('partner_id', '=', portal01_partner.id)], limit=1)
+if not portal01_patient:
+    portal01_patient = patient_model.create({
+        'name': portal01_partner.name,
+        'identifier': 'PORTAL01-PAT',
+        'gender': 'unknown',
+        'phone': portal01_partner.phone,
+        'email': portal01_partner.email,
+        'partner_id': portal01_partner.id,
+        'company_id': company.id,
+    })
 
 # institutional portal user
 inst_portal_partner = partner_model.search([('email', '=', 'portal-inst-01@imytest.local')], limit=1)
@@ -216,8 +229,8 @@ summary.append(f'Reagent lot: {lot.lot_number}')
 report_tpl = env['lab.report.template'].sudo().search([('code', '=', 'classic')], limit=1)
 if report_tpl:
     report_tpl.write({
-        'ai_interpretation_enabled': True,
-        'ai_auto_generate_on_release': True,
+        'ai_interpretation_enabled': bool(enable_ai),
+        'ai_auto_generate_on_release': False,
         'show_ai_summary_in_pdf': True,
         'ai_system_prompt': (
             'You are a laboratory report interpretation assistant for molecular infectious disease PCR testing. '
@@ -247,7 +260,7 @@ request_model = env['lab.test.request'].sudo()
 req = request_model.create({
     'requester_partner_id': portal01_partner.id,
     'request_type': 'individual',
-    'patient_id': portal01_partner.id,
+    'patient_id': portal01_patient.id,
     'patient_name': 'Test Patient STD',
     'patient_identifier': 'ID-STD-001',
     'patient_gender': 'female',
@@ -309,15 +322,17 @@ req.action_mark_completed()
 # AI generation (only if key/base available)
 ai_status = 'skipped'
 try:
-    provider = (env['ir.config_parameter'].sudo().get_param('laboratory_management.ai_provider') or 'openai').strip()
+    if not enable_ai:
+        raise Exception('disabled_by_test_flag')
+    provider = (param_model.get_param('laboratory_management.ai_provider') or 'openai').strip()
     if provider == 'openai':
-        key = (env['ir.config_parameter'].sudo().get_param('laboratory_management.openai_api_key') or '').strip()
+        key = (param_model.get_param('laboratory_management.openai_api_key') or '').strip()
         ready = bool(key)
     elif provider == 'openai_compatible':
-        base = (env['ir.config_parameter'].sudo().get_param('laboratory_management.openai_compatible_base_url') or '').strip()
+        base = (param_model.get_param('laboratory_management.openai_compatible_base_url') or '').strip()
         ready = bool(base)
     else:
-        base = (env['ir.config_parameter'].sudo().get_param('laboratory_management.ollama_base_url') or '').strip()
+        base = (param_model.get_param('laboratory_management.ollama_base_url') or '').strip()
         ready = bool(base)
 
     if ready:
@@ -331,7 +346,7 @@ try:
     else:
         ai_status = 'skipped(not configured)'
 except Exception as exc:
-    ai_status = f'error({exc})'
+    ai_status = f'skipped({exc})'
 
 # Ensure dispatch sent
 dispatches = env['lab.report.dispatch'].sudo().search([('sample_id', '=', sample.id)])
@@ -356,13 +371,24 @@ inst_profile_codes = ['STD3-PCR', 'STD4-PCR', 'STD6-PCR', 'STD7-PCR', 'STD7-PCR'
 for idx in range(1, 6):
     p_name = f'Inst Patient {idx:02d}'
     p_email = f'inst-patient-{idx:02d}@imytest.local'
-    patient = partner_model.search([('email', '=', p_email)], limit=1)
-    if not patient:
-        patient = partner_model.create({
+    patient_partner = partner_model.search([('email', '=', p_email)], limit=1)
+    if not patient_partner:
+        patient_partner = partner_model.create({
             'name': p_name,
             'email': p_email,
             'phone': f'13800000{idx:03d}',
             'parent_id': institution.id,
+        })
+    patient = patient_model.search([('partner_id', '=', patient_partner.id)], limit=1)
+    if not patient:
+        patient = patient_model.create({
+            'name': patient_partner.name,
+            'identifier': f'INST-PAT-{idx:03d}',
+            'gender': 'female' if idx % 2 else 'male',
+            'phone': patient_partner.phone,
+            'email': patient_partner.email,
+            'partner_id': patient_partner.id,
+            'company_id': company.id,
         })
 
     profile = profiles[inst_profile_codes[idx - 1]]
@@ -415,7 +441,7 @@ for idx in range(1, 6):
     inst_samples |= inst_sample
 
 # Portal counters
-portal_sample_count = env['lab.sample'].sudo().search_count([('patient_id', '=', portal01_partner.id)])
+portal_sample_count = env['lab.sample'].sudo().search_count([('patient_id', '=', portal01_patient.id)])
 portal_request_count = env['lab.test.request'].sudo().search_count([('requester_partner_id', '=', portal01_partner.id)])
 inst_portal_sample_count = env['lab.sample'].sudo().search_count([('client_id', 'child_of', institution.commercial_partner_id.id)])
 inst_portal_request_count = env['lab.test.request'].sudo().search_count([('requester_partner_id', 'child_of', institution.commercial_partner_id.id)])
@@ -435,3 +461,4 @@ print('Portal partner sample count:', portal_sample_count)
 print('Portal partner request count:', portal_request_count)
 print('Institution portal sample count:', inst_portal_sample_count)
 print('Institution portal request count:', inst_portal_request_count)
+env.cr.commit()

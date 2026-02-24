@@ -89,7 +89,7 @@
         parent="menu_laboratory_config"
         action="action_lab_ai_settings"
         sequence="15"
-        groups="laboratory_management.group_lab_manager"
+        groups="base.group_system"
     />
 
     <record id="view_res_config_settings_inherit_lab_ai" model="ir.ui.view">
