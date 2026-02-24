@@ -1,81 +1,107 @@
-# Development Guide
+# Development Guide (CN / EN / TH)
 
-## 1. Scope
+## CN - 开发维护指南
 
-This guide targets developers maintaining `laboratory_management` on Odoo 19.
+### 1) 适用范围
+面向 Odoo 19 `laboratory_management` 的开发与维护人员。
 
-## 2. Core Architecture
+### 2) 核心架构
+- `models/lab_test_request.py`：申请单与生命周期
+- `models/lab_sample.py`：样本流程与报告状态
+- `models/lab_service.py` / `models/lab_profile.py`：检测目录
+- `models/lab_patient.py` / `models/lab_physician.py`：实验室主数据
+- `models/lab_dynamic_form.py`：动态表单
+- `controllers/portal.py`：portal 入口
+- `controllers/external_api.py`：外部机构接口
 
-- `models/lab_test_request.py`: request header, request lines, lifecycle, quotation/billing links.
-- `models/lab_sample.py`: accession/sample lifecycle and report state flow.
-- `models/lab_service.py` + `models/lab_profile.py`: test catalog (service/panel).
-- `models/lab_patient.py`: lab-native patient master model.
-- `models/lab_physician.py`: lab-native physician master model.
-- `models/lab_dynamic_form.py`: dynamic forms, form fields, request responses.
-- `controllers/portal.py`: portal request/report pages.
-- `controllers/external_api.py`: external REST API for institutions/hospitals.
+### 3) 最近关键能力
+- 动态表单绑定 service/panel 并统一校验
+- 申请附件支持 portal/内部/API 上传
+- 患者/医生主数据与 `res.partner` 解耦
 
-## 3. New Capability Baseline (19.0.2.0.22)
+### 4) 开发流程
+1. 修改代码
+2. 升级模块
+3. 验证菜单、申请、样本、报告、AI流程
 
-### 3.1 Dynamic Form Binding
+升级命令示例：
+```bash
+python <odoo-bin> -c <conf> -d <db> -u laboratory_management --stop-after-init
+```
 
-- Services and panels can require one or more dynamic forms.
-- On request submission, required forms are validated and stored as response records.
-- Same logic is reused by portal submit and external API submit.
+### 5) 编码与i18n规范
+- 代码源语言统一英文
+- 通过翻译文件提供中文和泰文
+- 业务规则尽量数据驱动，避免硬编码
 
-### 3.2 Request Attachments
+---
 
-- Attachments can be added in:
-  - Portal request creation
-  - Internal request workbench
-  - External API (`POST /requests` and `POST /requests/{no}/attachments`)
+## EN - Development Guide
 
-### 3.3 Lab-native Master Data
+### 1) Scope
+For developers maintaining `laboratory_management` on Odoo 19.
 
-- Patient/physician data are moved to lab models instead of relying only on `res.partner`.
-- Request/sample links use lab models where applicable.
+### 2) Core architecture
+- `models/lab_test_request.py`: request lifecycle and business rules
+- `models/lab_sample.py`: accession, analysis, and report release states
+- `models/lab_service.py` / `models/lab_profile.py`: catalog and panels
+- `models/lab_patient.py` / `models/lab_physician.py`: lab-native master data
+- `models/lab_dynamic_form.py`: dynamic form engine
+- `controllers/portal.py`: portal flows
+- `controllers/external_api.py`: institution API endpoints
 
-## 4. Data Migration / Upgrade Risk Notes
+### 3) Current baseline capabilities
+- Dynamic forms bound to services/panels with unified validation
+- Request attachments in portal/backoffice/API
+- Patient and physician models decoupled from plain partner usage
 
-When upgrading from older schema versions, ensure:
+### 4) Standard dev workflow
+1. Update code
+2. Upgrade module
+3. Verify menu loading, request flow, sample flow, report (H5/PDF), AI interpretation
 
-- Legacy foreign keys referencing removed partner-based ids are cleaned.
-- `lab_test_request.patient_id` and related fields do not keep dangling ids.
-- If the database has severe legacy divergence, prefer clean uninstall/reinstall.
+Upgrade command:
+```bash
+python <odoo-bin> -c <conf> -d <db> -u laboratory_management --stop-after-init
+```
 
-## 5. Local Development Workflow
+### 5) Coding and i18n rules
+- Source code language: English
+- Translation support: Chinese and Thai
+- Keep logic data-driven; avoid hard-coded business catalogs
 
-1. Update code in this repository.
-2. Upgrade module:
-   - `python <odoo-bin> -c <conf> -d <db> -u laboratory_management --stop-after-init`
-3. Start service and verify:
-   - menu load
-   - request create
-   - sample lifecycle
-   - report render (H5/PDF)
-   - AI interpretation pipeline
+---
 
-## 6. Remote Deployment Workflow
+## TH - คู่มือนักพัฒนา
 
-1. Push code to GitHub.
-2. Sync module directory on server.
-3. Stop Odoo service.
-4. Upgrade module with `--stop-after-init --no-http`.
-5. Start Odoo service.
-6. Validate endpoint/UI health.
+### 1) ขอบเขต
+สำหรับนักพัฒนาที่ดูแล `laboratory_management` บน Odoo 19
 
-If upgrade fails due to historical schema conflicts, run clean uninstall/reinstall on target DB.
+### 2) โครงสร้างหลัก
+- `models/lab_test_request.py`: วงจรคำขอ
+- `models/lab_sample.py`: วงจรตัวอย่างและการปล่อยรายงาน
+- `models/lab_service.py` / `models/lab_profile.py`: รายการตรวจและแพ็กเกจ
+- `models/lab_patient.py` / `models/lab_physician.py`: ข้อมูลหลักของห้องปฏิบัติการ
+- `models/lab_dynamic_form.py`: แบบฟอร์มแบบไดนามิก
+- `controllers/portal.py`: ขั้นตอนในพอร์ทัล
+- `controllers/external_api.py`: API ภายนอก
 
-## 7. Coding and i18n Rules
+### 3) ความสามารถหลักล่าสุด
+- dynamic form ผูกกับ service/panel และตรวจสอบครบก่อนส่ง
+- รองรับไฟล์แนบใน portal/backoffice/API
+- แยกโมเดลผู้ป่วย/แพทย์จาก `res.partner` แบบเดิม
 
-- Source strings in code must be English.
-- Use translation files for Chinese and Thai.
-- Keep business logic data-driven; avoid hard-coded medical catalog values.
+### 4) ขั้นตอนพัฒนา
+1. แก้โค้ด
+2. อัปเกรดโมดูล
+3. ทดสอบเมนู คำขอ ตัวอย่าง รายงาน (H5/PDF) และ AI interpretation
 
-## 8. Regression Checklist
+คำสั่งอัปเกรด:
+```bash
+python <odoo-bin> -c <conf> -d <db> -u laboratory_management --stop-after-init
+```
 
-- Request type visibility and service/panel scope filtering.
-- Portal request/report card layout and icons.
-- Result release and PDF download.
-- Attachment upload/download permissions.
-- Multi-company isolation record rules.
+### 5) กฎการเขียนโค้ดและ i18n
+- ภาษาโค้ดหลักเป็นภาษาอังกฤษ
+- รองรับคำแปลภาษาจีนและภาษาไทย
+- ใช้แนวทาง data-driven และหลีกเลี่ยง hard-coded business logic

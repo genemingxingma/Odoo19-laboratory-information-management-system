@@ -11,7 +11,11 @@ Laboratory management workflow implemented on Odoo:
 ## Documentation
 
 - `/docs/LIS_CONFIGURATION_AND_ROLE_SOP_TRILINGUAL.md` - full configuration and role SOP (CN/EN/TH)
-- `/docs/DEVELOPMENT_GUIDE.md` - developer guide and architecture notes
+- `/docs/LEARNING_DOCS_TRILINGUAL_INDEX.md` - trilingual learning docs index (CN/EN/TH)
+- `/docs/DEVELOPMENT_GUIDE.md` - developer guide (CN/EN/TH)
+- `/docs/FULL_DEMO_CONFIGURATION_GUIDE_ZH.md` - full demo configuration guide (CN/EN/TH)
+- `/docs/QUALITY_BASELINE_GUIDE_ZH.md` - quality baseline guide (CN/EN/TH)
+- `/docs/OPERATION_SOP_STD7_PANEL.md` - STD7 SOP guide (CN/EN/TH)
 - `/docs/API_REFERENCE_TRILINGUAL.md` - integration reference (CN/EN/TH)
 - `/docs/EXTERNAL_API_GUIDE_TRILINGUAL.md` - external institution integration guide
 - `/docs/openapi/external_api_v1.yaml` - OpenAPI for external REST endpoints

@@ -1,123 +1,113 @@
-# Laboratory Operation SOP: STD7 Multiplex PCR Panel (3/4/6/7 Packages)
+# STD7 Multiplex PCR SOP (CN / EN / TH)
 
-## 1. Scope
-This SOP defines how to configure and operate one multiplex PCR assay kit (STD7) for multiple package combinations (3-item, 4-item, 6-item, 7-item) in the Laboratory Management module.
+## CN - 标准操作流程
 
-## 2. Preconditions
+### 1) 适用范围
+用于同一多重PCR试剂盒（STD7）支持 3/4/6/7 项套餐配置与运行。
+
+### 2) 前置条件
+- 已安装模块：`laboratory_management`
+- 角色：Manager / Reviewer / Reception / Portal
+- 如需AI解读，已配置 AI provider
+
+### 3) 配置步骤
+1. 配置 7 个 Service（CT/NG/UU/HSV1/HSV2/CA/GV）
+2. 创建 Assay Kit：`STD7-MPX-KIT`
+3. 创建 Reagent Lot（Scope=`Panel`）
+4. 创建 Panel：`STD7-3P/4P/6P/7P`
+
+关键设置：
+- `Require Reagent Lot = True`
+- `Result Type = Numeric`
+- 可选 `Auto binary cutoff = 33`
+
+### 4) 流程步骤
+1. Portal/后台创建申请（选某个STD套餐）
+2. Submit -> Quote -> Approve -> Create Sample
+3. 收样并开始检测，给样本分析项绑定 panel lot
+4. 录结果并完成验证
+5. 通过技术/医学审核后发布报告
+6. 可触发 AI 解读并审批后在 portal 显示
+
+### 5) 验证清单
+- 样本状态 = `reported`
+- 同一样本所有分析项使用同一 panel lot
+- 试剂消耗按样本+批号记一次
+- portal 权限域正确
+- AI 状态为 done/approved/portal visible（如启用）
+
+---
+
+## EN - Standard Operating Procedure
+
+### 1) Scope
+Operate one STD7 multiplex PCR kit as multiple packages (3/4/6/7 analytes).
+
+### 2) Preconditions
 - Module installed: `laboratory_management`
-- User roles ready: Lab Manager / Reviewer / Reception / Portal User
-- AI provider configured (OpenAI / OpenAI-compatible / Ollama) if AI interpretation is required
+- Roles available: manager/reviewer/reception/portal
+- AI provider configured if interpretation is needed
 
-## 3. Master Data Setup
-
-### 3.1 Configure Services (7 analytes)
-Menu: `Laboratory > Configuration > Services`
-
-Create 7 services (example codes):
-- `STD7-CT` Chlamydia trachomatis PCR
-- `STD7-NG` Neisseria gonorrhoeae PCR
-- `STD7-UU` Ureaplasma urealyticum PCR
-- `STD7-HSV1` HSV-I PCR
-- `STD7-HSV2` HSV-II PCR
-- `STD7-CA` Candida albicans PCR
-- `STD7-GV` Gardnerella vaginalis PCR
+### 3) Configuration
+1. Create 7 services (CT/NG/UU/HSV1/HSV2/CA/GV)
+2. Create assay kit `STD7-MPX-KIT`
+3. Create panel-scope reagent lot
+4. Create panels `STD7-3P/4P/6P/7P`
 
 Required options:
 - `Require Reagent Lot = True`
 - `Result Type = Numeric`
-- (Optional) Auto binary cutoff rule (example: cutoff 33)
+- Optional binary cutoff (example `33`)
 
-### 3.2 Configure Assay Kit (Multiplex panel)
-Menu: `Laboratory > Configuration > Assay Kits`
+### 4) Workflow
+1. Create request from portal/backoffice with one STD package
+2. `Submit -> Quote -> Approve -> Create Sample`
+3. Receive/start sample and assign panel lot
+4. Enter results and verify
+5. Complete release gate and release report
+6. Trigger/approve AI interpretation for portal visibility
 
-Create assay kit:
-- Name: `STD7 Multiplex PCR Kit`
-- Code: `STD7-MPX-KIT`
-- Method: `Multiplex PCR`
-- Covered Services: select all 7 STD services
-
-### 3.3 Configure Reagent Lot (Panel scope)
-Menu: `Laboratory > Configuration > Reagent Lots`
-
-Create lot:
-- Scope: `Panel`
-- Assay Kit: `STD7-MPX-KIT`
-- Lot Number: e.g. `STD7-PANEL-LOT-A1`
-- Expiry Date / Reactions Total / Vendor
-
-Important logic:
-- One sample using this panel lot consumes reagent once (not once per analyte).
-
-### 3.4 Configure Package Profiles (3/4/6/7)
-Menu: `Laboratory > Configuration > Profiles`
-
-Create profiles:
-- `STD7-3P` (3 analytes)
-- `STD7-4P` (4 analytes)
-- `STD7-6P` (6 analytes)
-- `STD7-7P` (7 analytes)
-
-Each profile includes subset services from the same STD7 panel.
-
-## 4. End-to-End Workflow
-
-### 4.1 Request creation
-- Portal user creates test request using one package profile.
-- Backoffice transitions request: `Submit -> Quote -> Approve -> Create Sample`.
-
-### 4.2 Sample and analysis
-- Receive/start sample.
-- Assign panel lot to one analysis line.
-- System auto-propagates the same panel lot to all covered analytes in the same sample.
-- Enter results and mark done.
-
-### 4.3 Verification and report release
-- Verify sample.
-- Complete technical/medical review if release gate enabled.
-- Release report (`state = reported`).
-
-### 4.4 AI interpretation
-- Trigger AI interpretation manually or from portal/report action.
-- Approve AI interpretation to expose in portal/report:
-  - `AI state = done`
-  - `AI review state = approved`
-  - `AI visible in portal = True`
-
-## 5. Validation Checklist
-For each sample in STD7 package flow:
+### 5) Validation checklist
 - Sample state is `reported`
-- All analysis lines use same panel lot
-- Reagent usage has one posted usage record per sample+lot
-- Request and sample visible under intended portal partner domain
-- (If AI required) AI generated and approved
+- All analytes in same sample share one panel lot
+- One usage record per sample+lot
+- Portal domain visibility is correct
+- AI flags are done/approved/visible when enabled
 
-## 6. Troubleshooting
+---
 
-### 6.1 Portal cannot see request/report
-Check:
-- Portal login account (actual login, not display name)
-- Partner/commercial partner linkage
-- Domain logic:
-  - Requests: requester/client child_of portal commercial partner
-  - Samples: patient/client child_of portal commercial partner
-- Report publication state and dispatch status
+## TH - ขั้นตอนปฏิบัติงานมาตรฐาน
 
-### 6.2 AI generated but not shown in portal
-Check:
-- `ai_interpretation_state = done`
-- `ai_review_state = approved`
-- `ai_portal_visible = True`
-- User browser cache (hard refresh)
+### 1) ขอบเขต
+ใช้ชุดตรวจ STD7 multiplex PCR ชุดเดียวเพื่อทำแพ็กเกจ 3/4/6/7 รายการ
 
-### 6.3 Reagent usage incorrect
-Check:
-- Lot scope is `Panel`
-- Lot is not expired
-- Assay kit covers all target analytes
+### 2) เงื่อนไขก่อนเริ่ม
+- ติดตั้งโมดูล `laboratory_management`
+- มีสิทธิ์ผู้ใช้ครบ (manager/reviewer/reception/portal)
+- ตั้งค่า AI provider แล้ว (ถ้าต้องการแปลผลด้วย AI)
 
-## 7. Reference Demo Records (server)
-Committed demo set:
-- Requests: `TRQ2602-00016` to `TRQ2602-00019`
-- Samples: `ACC2602-00016` to `ACC2602-00019`
-- Packages: `STD7-3P`, `STD7-4P`, `STD7-6P`, `STD7-7P`
+### 3) การตั้งค่า
+1. สร้าง service 7 รายการ (CT/NG/UU/HSV1/HSV2/CA/GV)
+2. สร้าง assay kit `STD7-MPX-KIT`
+3. สร้าง reagent lot แบบ `Panel`
+4. สร้าง panel `STD7-3P/4P/6P/7P`
 
+ค่าที่ต้องตั้ง:
+- `Require Reagent Lot = True`
+- `Result Type = Numeric`
+- ตั้ง cutoff อัตโนมัติได้ (ตัวอย่าง `33`)
+
+### 4) ขั้นตอนทำงาน
+1. สร้างคำขอจาก portal/backoffice
+2. `Submit -> Quote -> Approve -> Create Sample`
+3. รับตัวอย่างและผูก panel lot
+4. บันทึกผลและ verify
+5. ผ่าน technical/medical review แล้ว release report
+6. เรียกใช้และอนุมัติ AI interpretation เพื่อแสดงใน portal
+
+### 5) เช็กลิสต์ตรวจสอบ
+- สถานะตัวอย่างเป็น `reported`
+- analyte ในตัวอย่างเดียวกันใช้ panel lot เดียวกัน
+- มีบันทึกการใช้ reagent 1 รายการต่อ sample+lot
+- สิทธิ์การมองเห็นใน portal ถูกต้อง
+- สถานะ AI เป็น done/approved/visible (เมื่อเปิดใช้งาน)

@@ -1,0 +1,31 @@
+# Learning Docs Index (CN / EN / TH)
+
+## CN
+以下文档均为中英泰三语：
+- `docs/LIS_CONFIGURATION_AND_ROLE_SOP_TRILINGUAL.md`
+- `docs/EXTERNAL_API_GUIDE_TRILINGUAL.md`
+- `docs/API_REFERENCE_TRILINGUAL.md`
+- `docs/FULL_DEMO_CONFIGURATION_GUIDE_ZH.md`
+- `docs/QUALITY_BASELINE_GUIDE_ZH.md`
+- `docs/OPERATION_SOP_STD7_PANEL.md`
+- `docs/DEVELOPMENT_GUIDE.md`
+
+## EN
+All learning documents below are trilingual (Chinese/English/Thai):
+- `docs/LIS_CONFIGURATION_AND_ROLE_SOP_TRILINGUAL.md`
+- `docs/EXTERNAL_API_GUIDE_TRILINGUAL.md`
+- `docs/API_REFERENCE_TRILINGUAL.md`
+- `docs/FULL_DEMO_CONFIGURATION_GUIDE_ZH.md`
+- `docs/QUALITY_BASELINE_GUIDE_ZH.md`
+- `docs/OPERATION_SOP_STD7_PANEL.md`
+- `docs/DEVELOPMENT_GUIDE.md`
+
+## TH
+เอกสารสำหรับการเรียนรู้ด้านล่างเป็น 3 ภาษา (จีน/อังกฤษ/ไทย):
+- `docs/LIS_CONFIGURATION_AND_ROLE_SOP_TRILINGUAL.md`
+- `docs/EXTERNAL_API_GUIDE_TRILINGUAL.md`
+- `docs/API_REFERENCE_TRILINGUAL.md`
+- `docs/FULL_DEMO_CONFIGURATION_GUIDE_ZH.md`
+- `docs/QUALITY_BASELINE_GUIDE_ZH.md`
+- `docs/OPERATION_SOP_STD7_PANEL.md`
+- `docs/DEVELOPMENT_GUIDE.md`
