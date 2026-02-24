@@ -61,5 +61,4 @@
         <field name="target">current</field>
     </record>
 
-    <menuitem id="menu_lab_control_center" name="Control Center" parent="menu_laboratory_root" action="action_lab_control_center_wizard" sequence="1"/>
 </odoo>
