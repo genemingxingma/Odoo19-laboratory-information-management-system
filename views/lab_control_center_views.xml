@@ -61,4 +61,16 @@
         <field name="target">current</field>
     </record>
 
+    <record id="menu_laboratory_root" model="ir.ui.menu">
+        <field name="action" ref="action_lab_control_center_wizard"/>
+    </record>
+
+    <menuitem
+        id="menu_laboratory_control_center"
+        name="Control Center"
+        parent="menu_laboratory_root"
+        action="action_lab_control_center_wizard"
+        sequence="5"
+    />
+
 </odoo>
