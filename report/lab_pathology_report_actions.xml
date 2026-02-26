@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_lab_pathology_case" model="ir.actions.report">
+        <field name="name">Pathology Report</field>
+        <field name="model">lab.pathology.case</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">laboratory_management.report_lab_pathology_case</field>
+        <field name="report_file">laboratory_management.report_lab_pathology_case</field>
+        <field name="print_report_name">'Pathology Report - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_lab_pathology_case"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

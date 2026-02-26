@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_lab_pathology_case_document">
+        <t t-foreach="docs" t-as="doc">
+            <div class="page">
+                <h2>Pathology Report</h2>
+                <table class="table table-sm table-bordered" style="width:100%; font-size: 12px;">
+                    <tbody>
+                        <tr>
+                            <td><strong>Case No.</strong></td>
+                            <td><span t-field="doc.name"/></td>
+                            <td><strong>Accession</strong></td>
+                            <td><span t-field="doc.sample_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Patient</strong></td>
+                            <td><span t-field="doc.patient_id.name"/></td>
+                            <td><strong>Client</strong></td>
+                            <td><span t-field="doc.client_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Physician</strong></td>
+                            <td><span t-esc="doc.physician_name or '-'"/></td>
+                            <td><strong>Reported At</strong></td>
+                            <td><span t-esc="doc.reported_at or '-'"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pathology Type</strong></td>
+                            <td><span t-esc="dict(doc._fields['pathology_type'].selection).get(doc.pathology_type, '-')"/></td>
+                            <td><strong>Diagnosis Category</strong></td>
+                            <td><span t-esc="dict(doc._fields['diagnosis_category'].selection).get(doc.diagnosis_category, '-')"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>ICD-O</strong></td>
+                            <td><span t-esc="doc.icd_o_code or '-'"/></td>
+                            <td><strong>TNM/Grade</strong></td>
+                            <td><span t-esc="(doc.tnm_stage or '-') + ' / ' + dict(doc._fields['tumor_grade'].selection).get(doc.tumor_grade, '-')"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin-top: 10px;">Clinical History</h4>
+                <div t-field="doc.clinical_history"/>
+
+                <h4 style="margin-top: 10px;">Gross Description</h4>
+                <div t-field="doc.gross_description"/>
+
+                <h4 style="margin-top: 10px;">Microscopic Description</h4>
+                <div t-field="doc.microscopic_description"/>
+
+                <h4 style="margin-top: 10px;">Final Diagnosis</h4>
+                <div t-field="doc.final_diagnosis"/>
+
+                <h4 style="margin-top: 10px;">Interpretation Comment</h4>
+                <div t-field="doc.interpretation_comment"/>
+
+                <h4 style="margin-top: 10px;">Recommendation</h4>
+                <div><span t-esc="doc.recommendation or '-'"/></div>
+
+                <h4 style="margin-top: 10px;">Synoptic Summary</h4>
+                <pre style="white-space: pre-wrap; font-size: 11px;"><span t-esc="doc.synoptic_summary or '-'"/></pre>
+
+                <h4 style="margin-top: 10px;">Specimens and Slides</h4>
+                <table class="table table-sm table-striped" style="width:100%; font-size: 11px;">
+                    <thead>
+                        <tr>
+                            <th>Specimen</th>
+                            <th>Site</th>
+                            <th>Container</th>
+                            <th>Slides</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="doc.specimen_ids" t-as="sp">
+                            <td><span t-field="sp.name"/></td>
+                            <td><span t-esc="sp.specimen_site or '-'"/></td>
+                            <td><span t-esc="sp.container_no or '-'"/></td>
+                            <td>
+                                <t t-if="sp.slide_ids">
+                                    <t t-foreach="sp.slide_ids" t-as="sl">
+                                        <div><span t-field="sl.name"/> (<span t-esc="sl.stain_method or '-'"/>)</div>
+                                    </t>
+                                </t>
+                                <t t-else="">-</t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <t t-if="doc.image_ids">
+                    <h4 style="margin-top: 10px;">Selected Images</h4>
+                    <div style="display:flex; flex-wrap: wrap; gap: 8px;">
+                        <t t-foreach="doc.image_ids[:8]" t-as="img">
+                            <div style="width: 48%; border: 1px solid #ccc; padding: 6px;">
+                                <div style="font-size: 11px; margin-bottom: 4px;"><strong><t t-esc="img.name"/></strong><t t-if="img.magnification"> - <t t-esc="img.magnification"/></t></div>
+                                <img t-if="img.image_1920" t-att-src="image_data_uri(img.image_1920)" style="width: 100%; max-height: 240px; object-fit: contain;" alt="Pathology image"/>
+                                <div t-if="img.note" style="font-size: 10px; margin-top: 4px;"><t t-esc="img.note"/></div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+
+                <div style="margin-top: 16px; font-size: 11px;">
+                    <strong>Reviewed By:</strong> <span t-esc="doc.reviewed_by_id.name or '-'"/> |
+                    <strong>Signed By:</strong> <span t-esc="doc.signed_by_id.name or '-'"/>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_lab_pathology_case">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-call="laboratory_management.report_lab_pathology_case_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>
