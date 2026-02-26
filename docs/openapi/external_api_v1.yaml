@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Laboratory External Institution API
-  version: 1.3.0
+  version: 1.4.0
   description: |
     REST API for external hospitals/institutions.
     Supports request push, request query, sample result query, report PDF download,
@@ -17,6 +17,7 @@ security:
   - BasicAuth: []
 tags:
   - name: Requests
+  - name: Results
   - name: Samples
   - name: Reports
   - name: Metadata
@@ -199,7 +200,85 @@ paths:
         '404':
           description: Request not found or endpoint not found
 
+  /lab/api/v1/{endpoint_code}/results:
+    post:
+      tags: [Results]
+      summary: Push analysis results by accession
+      operationId: pushExternalResults
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResultPushPayload'
+            examples:
+              resultPush:
+                value:
+                  external_uid: HIS-RES-20260226-0001
+                  accession: ACC2602-00318
+                  results:
+                    - service_code: HPV16
+                      result: "31.8"
+                      note: Ct from analyzer
+                    - service_code: HPV18
+                      result: "0"
+                      note: not detected
+      responses:
+        '200':
+          description: Result accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultPushResponse'
+        '400':
+          description: Invalid payload or ingest failed
+        '401':
+          description: Unauthorized
+        '403':
+          description: Result push disabled or protocol not allowed
+        '404':
+          description: Endpoint not found
+
   /lab/api/v1/{endpoint_code}/samples/{accession}/results:
+    post:
+      tags: [Results]
+      summary: Push analysis results by accession (path mode)
+      operationId: pushExternalSampleResults
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+        - in: path
+          name: accession
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResultPushPayloadByPath'
+      responses:
+        '200':
+          description: Result accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultPushResponse'
+        '400':
+          description: Invalid payload or ingest failed
+        '401':
+          description: Unauthorized
+        '403':
+          description: Result push disabled or protocol not allowed
+        '404':
+          description: Endpoint not found
     get:
       tags: [Samples]
       summary: Query sample results by accession
@@ -226,6 +305,38 @@ paths:
           description: Result query disabled
         '404':
           description: Sample not found or endpoint not found
+
+  /lab/api/v1/{endpoint_code}/hl7/oru:
+    post:
+      tags: [Results]
+      summary: Push HL7 ORU^R01 raw message
+      operationId: pushExternalHl7Oru
+      parameters:
+        - in: path
+          name: endpoint_code
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: HL7 ACK text
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Invalid HL7 payload
+        '401':
+          description: Unauthorized
+        '403':
+          description: Result push disabled, endpoint protocol not hl7v2, or direction not allowed
+        '404':
+          description: Endpoint not found
 
   /lab/api/v1/{endpoint_code}/samples/{accession}/report/pdf:
     get:
@@ -407,12 +518,15 @@ components:
           type: string
           enum:
             - endpoint_not_found
-            - endpoint_protocol_not_rest
+            - endpoint_protocol_not_allowed
             - unauthorized
             - request_push_disabled
+            - result_push_disabled
             - result_query_disabled
             - report_download_disabled
             - metadata_query_disabled
+            - accession_required
+            - results_required
             - lines_required
             - invalid_line_type
             - service_not_found
@@ -459,6 +573,66 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DynamicFormInput'
+
+    ResultLineInput:
+      type: object
+      required: [service_code, result]
+      properties:
+        service_code:
+          type: string
+        result:
+          type: string
+        note:
+          type: string
+
+    ResultPushPayload:
+      type: object
+      required: [accession, results]
+      properties:
+        external_uid:
+          type: string
+        accession:
+          type: string
+        results:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ResultLineInput'
+        meta:
+          type: object
+          additionalProperties: true
+
+    ResultPushPayloadByPath:
+      type: object
+      required: [results]
+      properties:
+        external_uid:
+          type: string
+        results:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ResultLineInput'
+        meta:
+          type: object
+          additionalProperties: true
+
+    ResultPushResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        ack_code:
+          type: string
+          enum: [AA, AE, AR]
+        job_id:
+          type: integer
+        job_name:
+          type: string
+        state:
+          type: string
+        error:
+          type: string
 
     PatientInput:
       type: object

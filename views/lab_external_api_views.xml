@@ -15,6 +15,7 @@
                     </group>
                     <group>
                         <field name="external_allow_request_push" invisible="not external_api_enabled"/>
+                        <field name="external_allow_result_push" invisible="not external_api_enabled"/>
                         <field name="external_allow_result_query" invisible="not external_api_enabled"/>
                         <field name="external_allow_report_download" invisible="not external_api_enabled"/>
                         <field name="external_allow_metadata_query" invisible="not external_api_enabled"/>
@@ -22,12 +23,18 @@
                     <div class="o_form_label">Endpoints (REST):</div>
                     <div>
                         <p><code>/lab/api/v1/&lt;endpoint_code&gt;/requests</code> (POST JSON)</p>
+                        <p><code>/lab/api/v1/&lt;endpoint_code&gt;/results</code> (POST JSON)</p>
+                        <p><code>/lab/api/v1/&lt;endpoint_code&gt;/samples/&lt;accession&gt;/results</code> (POST JSON)</p>
                         <p><code>/lab/api/v1/&lt;endpoint_code&gt;/requests/&lt;request_no&gt;</code> (GET)</p>
                         <p><code>/lab/api/v1/&lt;endpoint_code&gt;/samples/&lt;accession&gt;/results</code> (GET)</p>
                         <p><code>/lab/api/v1/&lt;endpoint_code&gt;/samples/&lt;accession&gt;/report/pdf</code> (GET)</p>
                         <p><code>/lab/api/v1/&lt;endpoint_code&gt;/meta/sample_types</code> (GET)</p>
                         <p><code>/lab/api/v1/&lt;endpoint_code&gt;/meta/services</code> (GET)</p>
                         <p><code>/lab/api/v1/&lt;endpoint_code&gt;/meta/profiles</code> (GET)</p>
+                    </div>
+                    <div class="o_form_label">Endpoint (HL7 ORU):</div>
+                    <div>
+                        <p><code>/lab/api/v1/&lt;endpoint_code&gt;/hl7/oru</code> (POST HL7 text)</p>
                     </div>
                 </group>
             </xpath>

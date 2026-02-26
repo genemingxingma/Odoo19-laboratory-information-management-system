@@ -156,6 +156,29 @@ Successful response shape:
 - `sample.patient` now returns a structured object:
   - `id`, `name`, `identifier`, `passport_no`
 
+### 4.3.1 Push sample results (REST)
+- `POST /results`
+- `POST /samples/{accession}/results`
+- Requires endpoint protocol `REST`.
+- Requires endpoint option `Allow Result Push = enabled`.
+- Payload:
+```json
+{
+  "external_uid": "HIS-RES-20260226-0001",
+  "accession": "ACC2602-00318",
+  "results": [
+    {"service_code": "HPV16", "result": "31.8", "note": "Ct from analyzer"},
+    {"service_code": "HPV18", "result": "0", "note": "not detected"}
+  ]
+}
+```
+
+### 4.3.2 Push sample results (HL7 ORU)
+- `POST /hl7/oru`
+- Requires endpoint protocol `HL7 v2.x`.
+- Body is raw HL7 ORU text.
+- Returns HL7 ACK text (`AA/AE/AR`).
+
 ### 4.4 Download sample report PDF
 - `GET /samples/{accession}/report/pdf`
 - Binary PDF stream.
@@ -293,6 +316,26 @@ Query sample results:
 ```bash
 curl -X GET "http://127.0.0.1:8069/lab/api/v1/ext_hospital_demo/samples/ACC2602-00318/results" \
   -H "X-API-Key: DEMO-HOSP-API-KEY-2026"
+```
+
+Push sample results (REST):
+```bash
+curl -X POST "http://127.0.0.1:8069/lab/api/v1/ext_hospital_demo/results" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: DEMO-HOSP-API-KEY-2026" \
+  -d '{
+    "external_uid": "HIS-RES-20260226-0001",
+    "accession": "ACC2602-00318",
+    "results": [{"service_code":"STD_CT","result":"7.2","note":"Analyzer A1"}]
+  }'
+```
+
+Push HL7 ORU:
+```bash
+curl -X POST "http://127.0.0.1:8069/lab/api/v1/ext_hospital_demo/hl7/oru" \
+  -H "Content-Type: text/plain" \
+  -H "X-API-Key: DEMO-HOSP-API-KEY-2026" \
+  --data-binary $'MSH|^~\\&|HIS|HOSP|LIS|LAB|202602261130||ORU^R01|MSG00001|P|2.5\\rPID|||P001||DOE^JANE\\rOBR|1||ACC2602-00318|STD7\\rOBX|1|NM|STD_CT||7.2\\r'
 ```
 
 Download PDF:

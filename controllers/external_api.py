@@ -269,7 +269,7 @@ class LaboratoryExternalApi(http.Controller):
             status=status,
         )
 
-    def _lookup_endpoint(self, endpoint_code):
+    def _lookup_endpoint(self, endpoint_code, allowed_protocols=("rest",)):
         endpoint = (
             request.env["lab.interface.endpoint"]
             .sudo()
@@ -277,11 +277,43 @@ class LaboratoryExternalApi(http.Controller):
         )
         if not endpoint:
             return None, self._json_response({"ok": False, "error": "endpoint_not_found"}, status=404)
-        if endpoint.protocol != "rest":
-            return None, self._json_response({"ok": False, "error": "endpoint_protocol_not_rest"}, status=403)
+        if allowed_protocols and endpoint.protocol not in allowed_protocols:
+            return None, self._json_response(
+                {"ok": False, "error": "endpoint_protocol_not_allowed", "allowed_protocols": list(allowed_protocols)},
+                status=403,
+            )
         if not self._authorize_endpoint(endpoint):
             return None, self._json_response({"ok": False, "error": "unauthorized"}, status=401)
         return endpoint, None
+
+    def _ingest_result_payload(self, endpoint, payload, *, external_uid=False, raw_message=False, source_ip=False):
+        if not endpoint.external_allow_result_push:
+            return None, self._json_response({"ok": False, "error": "result_push_disabled"}, status=403)
+        if endpoint.direction not in ("inbound", "bidirectional"):
+            return None, self._json_response({"ok": False, "error": "direction_not_allowed"}, status=403)
+        accession = (payload.get("accession") or "").strip()
+        results = payload.get("results") or []
+        if not accession:
+            return None, self._json_response({"ok": False, "error": "accession_required"}, status=400)
+        if not isinstance(results, list) or not results:
+            return None, self._json_response({"ok": False, "error": "results_required"}, status=400)
+        try:
+            job = endpoint.ingest_message(
+                message_type="result",
+                payload=payload,
+                external_uid=external_uid,
+                source_ip=source_ip,
+                raw_message=raw_message,
+            )
+        except Exception as err:  # noqa: BLE001
+            return None, self._json_response({"ok": False, "error": "ingest_failed", "detail": str(err)}, status=400)
+        return job, None
+
+    def _parse_http_json_body(self):
+        try:
+            return json.loads((request.httprequest.data or b"{}").decode("utf-8"))
+        except Exception:  # noqa: BLE001
+            return None
 
     def _request_domain_for_endpoint(self, endpoint):
         domain = [("company_id", "=", endpoint.external_company_id.id)]
@@ -583,6 +615,139 @@ class LaboratoryExternalApi(http.Controller):
         if endpoint.external_auto_submit_request:
             req.action_submit()
         return {"ok": True, "request": self._prepare_request_payload(req)}
+
+    @http.route(
+        "/lab/api/v1/<string:endpoint_code>/results",
+        type="http",
+        auth="public",
+        methods=["POST"],
+        csrf=False,
+    )
+    def external_result_push(self, endpoint_code, **kwargs):
+        endpoint, error = self._lookup_endpoint(endpoint_code, allowed_protocols=("rest",))
+        if error:
+            return error
+        body = self._parse_http_json_body()
+        if body is None:
+            return self._json_response({"ok": False, "error": "invalid_json"}, status=400)
+        payload = {
+            "accession": (body.get("accession") or "").strip(),
+            "results": body.get("results") or [],
+        }
+        if body.get("meta"):
+            payload["meta"] = body.get("meta")
+        external_uid = (body.get("external_uid") or "").strip() or False
+        job, ingest_error = self._ingest_result_payload(
+            endpoint,
+            payload,
+            external_uid=external_uid,
+            raw_message=False,
+            source_ip=request.httprequest.remote_addr or "",
+        )
+        if ingest_error:
+            return ingest_error
+        return self._json_response(
+            {
+                "ok": job.state == "done",
+                "ack_code": job.ack_code or ("AA" if job.state == "done" else "AE"),
+                "job_id": job.id,
+                "job_name": job.name,
+                "state": job.state,
+                "error": job.error_message or "",
+            }
+        )
+
+    @http.route(
+        "/lab/api/v1/<string:endpoint_code>/samples/<string:accession>/results",
+        type="http",
+        auth="public",
+        methods=["POST"],
+        csrf=False,
+    )
+    def external_sample_result_push(self, endpoint_code, accession, **kwargs):
+        endpoint, error = self._lookup_endpoint(endpoint_code, allowed_protocols=("rest",))
+        if error:
+            return error
+        body = self._parse_http_json_body()
+        if body is None:
+            return self._json_response({"ok": False, "error": "invalid_json"}, status=400)
+        payload = {
+            "accession": accession,
+            "results": body.get("results") or [],
+        }
+        if body.get("meta"):
+            payload["meta"] = body.get("meta")
+        external_uid = (body.get("external_uid") or "").strip() or False
+        job, ingest_error = self._ingest_result_payload(
+            endpoint,
+            payload,
+            external_uid=external_uid,
+            raw_message=False,
+            source_ip=request.httprequest.remote_addr or "",
+        )
+        if ingest_error:
+            return ingest_error
+        return self._json_response(
+            {
+                "ok": job.state == "done",
+                "ack_code": job.ack_code or ("AA" if job.state == "done" else "AE"),
+                "job_id": job.id,
+                "job_name": job.name,
+                "state": job.state,
+                "error": job.error_message or "",
+            }
+        )
+
+    @http.route(
+        "/lab/api/v1/<string:endpoint_code>/hl7/oru",
+        type="http",
+        auth="public",
+        methods=["POST"],
+        csrf=False,
+    )
+    def external_hl7_oru_push(self, endpoint_code, **kwargs):
+        endpoint, error = self._lookup_endpoint(endpoint_code, allowed_protocols=("hl7v2",))
+        if error:
+            return error
+        if not endpoint.external_allow_result_push:
+            return request.make_response("result_push_disabled", status=403)
+        if endpoint.direction not in ("inbound", "bidirectional"):
+            return request.make_response("direction_not_allowed", status=403)
+
+        adapter = request.env["lab.protocol.adapter"].sudo()
+        raw = request.httprequest.get_data(as_text=True) or ""
+        if not raw.strip():
+            return request.make_response("hl7_payload_required", status=400)
+
+        schema = {}
+        try:
+            schema = json.loads(endpoint.mapping_schema or "{}")
+        except Exception:  # noqa: BLE001
+            schema = {}
+        try:
+            parsed = adapter.parse_hl7_message(raw, field_map=(schema.get("hl7_field_map") or {}))
+            message_type = parsed.get("message_type") or "result"
+            if message_type not in ("result", "report"):
+                ack = adapter.build_hl7_ack("AR", (parsed.get("meta") or {}).get("control_id"), "only_result_or_report")
+                return request.make_response(ack, headers=[("Content-Type", "text/plain; charset=utf-8")], status=400)
+            payload = parsed.get("payload") or {}
+            external_uid = parsed.get("external_uid")
+            job = endpoint.ingest_message(
+                message_type=message_type,
+                payload=payload,
+                external_uid=external_uid,
+                source_ip=request.httprequest.remote_addr or "",
+                raw_message=raw,
+            )
+            ack = adapter.build_hl7_ack(
+                job.ack_code or ("AA" if job.state == "done" else "AE"),
+                (parsed.get("meta") or {}).get("control_id"),
+                job.error_message or "",
+            )
+            return request.make_response(ack, headers=[("Content-Type", "text/plain; charset=utf-8")], status=200)
+        except Exception as err:  # noqa: BLE001
+            ack = adapter.build_hl7_ack("AR", "", str(err))
+            return request.make_response(ack, headers=[("Content-Type", "text/plain; charset=utf-8")], status=400)
 
     @http.route(
         "/lab/api/v1/<string:endpoint_code>/requests/<string:request_no>/attachments",

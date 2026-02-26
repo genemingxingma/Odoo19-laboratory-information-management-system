@@ -24,6 +24,11 @@ class LabInterfaceEndpointExternalApi(models.Model):
         required=True,
     )
     external_allow_request_push = fields.Boolean(string="Allow Request Push", default=True)
+    external_allow_result_push = fields.Boolean(
+        string="Allow Result Push",
+        default=True,
+        help="Allow external systems to push analysis results into LIS.",
+    )
     external_allow_result_query = fields.Boolean(string="Allow Result Query", default=True)
     external_allow_report_download = fields.Boolean(string="Allow Report Download", default=True)
     external_allow_metadata_query = fields.Boolean(

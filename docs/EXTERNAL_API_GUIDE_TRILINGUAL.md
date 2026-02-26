@@ -67,12 +67,15 @@ Path: `Laboratory > Configuration > Interface Endpoints`
 Base: `/lab/api/v1/<endpoint_code>`
 
 1. `POST /requests`
-2. `GET /requests/<request_no>`
-3. `GET /samples/<accession>/results`
-4. `GET /samples/<accession>/report/pdf`
-5. `GET /meta/sample_types`
-6. `GET /meta/services`
-7. `GET /meta/profiles`
+2. `POST /results` (REST result push)
+3. `POST /samples/<accession>/results` (REST result push by accession path)
+4. `POST /hl7/oru` (HL7 ORU raw text push)
+5. `GET /requests/<request_no>`
+6. `GET /samples/<accession>/results`
+7. `GET /samples/<accession>/report/pdf`
+8. `GET /meta/sample_types`
+9. `GET /meta/services`
+10. `GET /meta/profiles`
 
 Auth header examples:
 - `X-API-Key: <api_key>`
@@ -183,6 +186,26 @@ Response includes:
 - analysis lines (`service_code`, `result_value`, `binary_interpretation`)
 - approved AI interpretation text (if visible)
 - structured patient info (`id`, `name`, `identifier`, `passport_no`)
+
+---
+
+## 5.1 Result Push Example | 结果回传示例 | ตัวอย่างส่งผลตรวจกลับ
+
+REST JSON:
+```json
+{
+  "external_uid": "HIS-RES-20260226-0001",
+  "accession": "ACC2602-00001",
+  "results": [
+    {"service_code": "STD_CT", "result": "7.2", "note": "Analyzer A1"}
+  ]
+}
+```
+
+HL7 ORU endpoint:
+- `POST /lab/api/v1/<endpoint_code>/hl7/oru`
+- Body is raw HL7 ORU message text
+- Returns HL7 ACK (`AA/AE/AR`)
 
 ---
 
