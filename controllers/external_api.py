@@ -491,7 +491,6 @@ class LaboratoryExternalApi(http.Controller):
         request_obj = request.env["lab.test.request"].sudo().with_company(endpoint.external_company_id)
         service_obj = request.env["lab.service"].sudo().with_company(endpoint.external_company_id)
         profile_obj = request.env["lab.profile"].sudo().with_company(endpoint.external_company_id)
-        physician_obj = request.env["lab.physician"].sudo().with_company(endpoint.external_company_id)
         template_obj = request.env["lab.report.template"].sudo().with_company(endpoint.external_company_id)
 
         if external_uid:
@@ -579,6 +578,11 @@ class LaboratoryExternalApi(http.Controller):
             request_obj.validate_dynamic_form_payload(required_forms, dynamic_forms_payload)
         except Exception as exc:
             return {"ok": False, "error": "dynamic_form_required", "detail": str(exc)}
+        normalized_attachments = []
+        if attachments_payload:
+            normalized_attachments, attachment_error = self._normalize_api_attachments(attachments_payload)
+            if attachment_error:
+                return attachment_error
 
         request_vals = {
             "requester_partner_id": requester.id,
@@ -601,19 +605,17 @@ class LaboratoryExternalApi(http.Controller):
             "external_endpoint_id": endpoint.id,
             "external_request_uid": external_uid or False,
         }
-        req = request_obj.create(request_vals)
-        if dynamic_forms_payload:
-            try:
-                req._apply_dynamic_form_payload(dynamic_forms_payload, source="api")
-            except Exception as exc:
-                return {"ok": False, "error": "dynamic_form_apply_failed", "detail": str(exc)}
-        if attachments_payload:
-            normalized_attachments, attachment_error = self._normalize_api_attachments(attachments_payload)
-            if attachment_error:
-                return attachment_error
-            req._create_request_attachments(normalized_attachments, source="external_api")
-        if endpoint.external_auto_submit_request:
-            req.action_submit()
+        try:
+            with request.env.cr.savepoint():
+                req = request_obj.create(request_vals)
+                if dynamic_forms_payload:
+                    req._apply_dynamic_form_payload(dynamic_forms_payload, source="api")
+                if normalized_attachments:
+                    req._create_request_attachments(normalized_attachments, source="external_api")
+                if endpoint.external_auto_submit_request:
+                    req.action_submit()
+        except Exception as exc:
+            return {"ok": False, "error": "request_create_failed", "detail": str(exc)}
         return {"ok": True, "request": self._prepare_request_payload(req)}
 
     @http.route(

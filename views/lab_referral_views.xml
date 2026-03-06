@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_referral_lab_list" model="ir.ui.view">
+        <field name="name">lab.referral.lab.list</field>
+        <field name="model">lab.referral.lab</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="accreditation_body"/>
+                <field name="accreditation_number"/>
+                <field name="accreditation_valid_until"/>
+                <field name="expected_tat_hours"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_referral_lab_form" model="ir.ui.view">
+        <field name="name">lab.referral.lab.form</field>
+        <field name="model">lab.referral.lab</field>
+        <field name="arch" type="xml">
+            <form string="Referral Laboratory">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="active"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group>
+                            <field name="accreditation_body"/>
+                            <field name="accreditation_number"/>
+                            <field name="accreditation_valid_until"/>
+                            <field name="expected_tat_hours"/>
+                            <field name="contact_person"/>
+                            <field name="contact_phone"/>
+                            <field name="contact_email"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="service_ids" widget="many2many_tags"/>
+                        <field name="panel_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="accreditation_scope"/>
+                        <field name="report_format_note"/>
+                        <field name="sla_note"/>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_referral_lab" model="ir.actions.act_window">
+        <field name="name">Referral Labs</field>
+        <field name="res_model">lab.referral.lab</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_referral_order_list" model="ir.ui.view">
+        <field name="name">lab.referral.order.list</field>
+        <field name="model">lab.referral.order</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'completed'" decoration-warning="state in ('sent','result_received')">
+                <field name="name"/>
+                <field name="sample_id"/>
+                <field name="patient_id"/>
+                <field name="referral_lab_id"/>
+                <field name="reason"/>
+                <field name="line_count"/>
+                <field name="completed_line_count"/>
+                <field name="sent_at"/>
+                <field name="result_received_at"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_referral_order_form" model="ir.ui.view">
+        <field name="name">lab.referral.order.form</field>
+        <field name="model">lab.referral.order</field>
+        <field name="arch" type="xml">
+            <form string="Referral Order">
+                <header>
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="state != 'submitted'"/>
+                    <button name="action_send" type="object" string="Mark Sent" class="btn-primary" invisible="state not in ('submitted', 'approved')"/>
+                    <button name="action_mark_result_received" type="object" string="Result Received" class="btn-primary" invisible="state not in ('sent', 'approved')"/>
+                    <button name="action_mark_reviewed" type="object" string="Review Result" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="state != 'result_received'"/>
+                    <button name="action_apply_results_to_sample" type="object" string="Apply to Analyses" invisible="state not in ('result_received', 'reviewed')"/>
+                    <button name="action_complete" type="object" string="Complete" class="btn-primary" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager" invisible="state not in ('result_received', 'reviewed')"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('completed', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,sent,result_received,reviewed,completed,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_attachments" class="oe_stat_button" icon="fa-paperclip">
+                            <field name="attachment_count" widget="statinfo" string="Attachments"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="sample_id" readonly="state != 'draft'"/>
+                            <field name="request_id" readonly="1"/>
+                            <field name="patient_id" readonly="1"/>
+                            <field name="client_id" readonly="1"/>
+                            <field name="referral_lab_id" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="reason" readonly="state != 'draft'"/>
+                            <field name="reason_note" readonly="state != 'draft'"/>
+                            <field name="sent_at" readonly="1"/>
+                            <field name="sent_by_id" readonly="1"/>
+                            <field name="result_received_at" readonly="1"/>
+                            <field name="result_received_by_id" readonly="1"/>
+                            <field name="reviewed_at" readonly="1"/>
+                            <field name="reviewed_by_id" readonly="1"/>
+                            <field name="completed_at" readonly="1"/>
+                            <field name="completed_by_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                        <field name="cancel_reason" invisible="state != 'cancelled'"/>
+                    </group>
+                    <notebook>
+                        <page string="Referral Lines">
+                            <field name="line_ids" readonly="state not in ('draft', 'submitted', 'approved', 'sent', 'result_received', 'reviewed')">
+                                <list editable="bottom">
+                                    <field name="analysis_id" domain="[('sample_id', '=', parent.sample_id)]"/>
+                                    <field name="service_id"/>
+                                    <field name="external_result_value" readonly="state == 'applied'"/>
+                                    <field name="external_result_note" readonly="state == 'applied'"/>
+                                    <field name="external_reference"/>
+                                    <field name="state"/>
+                                    <field name="applied_at" readonly="1"/>
+                                    <field name="applied_by_id" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_referral_order_search" model="ir.ui.view">
+        <field name="name">lab.referral.order.search</field>
+        <field name="model">lab.referral.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="sample_id"/>
+                <field name="request_id"/>
+                <field name="patient_id"/>
+                <field name="referral_lab_id"/>
+                <field name="state"/>
+                <filter name="f_open" string="Open" domain="[('state', 'not in', ('completed','cancelled'))]"/>
+                <filter name="f_completed" string="Completed" domain="[('state', '=', 'completed')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_referral_order" model="ir.actions.act_window">
+        <field name="name">Referral Orders</field>
+        <field name="res_model">lab.referral.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_referral_order_search"/>
+    </record>
+
+    <record id="view_lab_service_form_referral_inherit" model="ir.ui.view">
+        <field name="name">lab.service.form.referral.inherit</field>
+        <field name="model">lab.service</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_service_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='turnaround_hours']" position="after">
+                <field name="allow_referral"/>
+                <field name="default_referral_lab_id" invisible="not allow_referral"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_sample_form_referral_inherit" model="ir.ui.view">
+        <field name="name">lab.sample.form.referral.inherit</field>
+        <field name="model">lab.sample</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_sample_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_referral_order" type="object" string="Create Referral Order" groups="laboratory_management.group_lab_user" invisible="state in ('cancel','reported')"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_referral_orders" icon="fa-truck">
+                    <field name="referral_order_count" widget="statinfo" string="Referral Orders"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_lab_referral_order" name="Referral Orders" parent="menu_laboratory_operations" action="action_lab_referral_order" sequence="55"/>
+    <menuitem id="menu_lab_referral_lab" name="Referral Labs" parent="menu_lab_config_operations" action="action_lab_referral_lab" sequence="25"/>
+</odoo>

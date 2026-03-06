@@ -198,7 +198,7 @@ class LabPathologyCase(models.Model):
             if not rec.specimen_ids.mapped("slide_ids"):
                 raise UserError(_("At least one pathology slide is required before releasing report."))
             rec.write({"state": "reported", "reported_at": now, "signed_by_id": self.env.user.id})
-            rec._generate_report_pdf_attachment(force=True, suppress_error=True)
+            rec._generate_report_pdf_attachment(force=True, suppress_error=False)
 
     def action_cancel(self):
         for rec in self:
@@ -248,7 +248,7 @@ class LabPathologyCase(models.Model):
                 return self.env["ir.attachment"]
             raise UserError(_("Pathology PDF report action is missing."))
         try:
-            pdf_content, _fmt = action._render_qweb_pdf(self.id)
+            pdf_content, _fmt = action._render_qweb_pdf(action.report_name, res_ids=self.ids)
             datas = base64.b64encode(pdf_content or b"")
             vals = {
                 "name": "%s - Pathology Report.pdf" % (self.name or "Pathology"),
