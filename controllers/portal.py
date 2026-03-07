@@ -1,5 +1,8 @@
+import csv
+import io
 import json
 import os
+import zipfile
 
 from odoo import _, fields, http
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager
@@ -147,6 +150,153 @@ class LaboratoryPortal(CustomerPortal):
                 }
             )
         return payload
+
+    def _get_sample_pdf_content(self, sample):
+        attachment = sample.sudo()._generate_report_pdf_attachment(force=False, suppress_error=True)
+        pdf_content = attachment.raw or b""
+        if pdf_content:
+            return pdf_content
+        action_xmlid = sample.get_report_action_xmlid()
+        action = request.env.ref(action_xmlid).sudo()
+        pdf_content, _content_type = action._render_qweb_pdf(action.report_name, res_ids=sample.ids)
+        return pdf_content
+
+    def _parse_portal_bulk_request_csv(self, csv_file, request_type):
+        try:
+            payload = csv_file.read()
+            if isinstance(payload, bytes):
+                payload = payload.decode("utf-8-sig")
+        except Exception as exc:
+            raise ValidationError(_("Unable to read CSV file.")) from exc
+        if not payload.strip():
+            raise ValidationError(_("CSV file is empty."))
+
+        reader = csv.DictReader(io.StringIO(payload))
+        if not reader.fieldnames:
+            raise ValidationError(_("CSV header is missing."))
+
+        req_obj = request.env["lab.test.request"].sudo()
+        allowed_catalog = req_obj._allowed_catalog_ids_for_request_type(request_type, company=request.env.company)
+        service_map = {
+            rec.code.upper(): rec.id
+            for rec in request.env["lab.service"].sudo().browse(allowed_catalog["service_ids"]).exists()
+            if rec.code
+        }
+        profile_map = {
+            rec.code.upper(): rec.id
+            for rec in request.env["lab.profile"].sudo().browse(allowed_catalog["profile_ids"]).exists()
+            if rec.code
+        }
+        valid_sample_types = {code for code, _label in req_obj._selection_sample_type()}
+        valid_priorities = {code for code, _label in req_obj._selection_priority()}
+
+        rows = []
+        for line_no, row in enumerate(reader, start=2):
+            normalized = {str(k or "").strip(): str(v or "").strip() for k, v in (row or {}).items()}
+            patient_name = normalized.get("patient_name", "")
+            specimen_type = normalized.get("specimen_sample_type", "")
+            service_codes = [code.strip().upper() for code in normalized.get("service_codes", "").split(",") if code.strip()]
+            profile_codes = [code.strip().upper() for code in normalized.get("panel_codes", "").split(",") if code.strip()]
+            line_type = (normalized.get("line_type") or ("profile" if profile_codes and not service_codes else "service")).strip()
+            if not patient_name:
+                raise ValidationError(_("CSV row %(line)s is missing patient_name.") % {"line": line_no})
+            if specimen_type not in valid_sample_types:
+                raise ValidationError(_("CSV row %(line)s has invalid specimen_sample_type.") % {"line": line_no})
+            if line_type not in ("service", "profile"):
+                raise ValidationError(_("CSV row %(line)s has invalid line_type.") % {"line": line_no})
+            if line_type == "service" and not service_codes:
+                raise ValidationError(_("CSV row %(line)s must include service_codes.") % {"line": line_no})
+            if line_type == "profile" and not profile_codes:
+                raise ValidationError(_("CSV row %(line)s must include panel_codes.") % {"line": line_no})
+
+            service_ids = [service_map[code] for code in service_codes if code in service_map]
+            profile_ids = [profile_map[code] for code in profile_codes if code in profile_map]
+            if line_type == "service" and len(service_ids) != len(service_codes):
+                missing = [code for code in service_codes if code not in service_map]
+                raise ValidationError(
+                    _("CSV row %(line)s contains unavailable service code(s): %(codes)s")
+                    % {"line": line_no, "codes": ", ".join(missing)}
+                )
+            if line_type == "profile" and len(profile_ids) != len(profile_codes):
+                missing = [code for code in profile_codes if code not in profile_map]
+                raise ValidationError(
+                    _("CSV row %(line)s contains unavailable panel code(s): %(codes)s")
+                    % {"line": line_no, "codes": ", ".join(missing)}
+                )
+
+            priority = (normalized.get("priority") or req_obj._default_priority_code()).strip()
+            if priority not in valid_priorities:
+                priority = req_obj._default_priority_code()
+
+            rows.append(
+                {
+                    "patient_name": patient_name,
+                    "patient_identifier": normalized.get("patient_identifier", ""),
+                    "patient_phone": normalized.get("patient_phone", ""),
+                    "clinical_note": normalized.get("clinical_note", ""),
+                    "priority": priority,
+                    "line_note": normalized.get("line_note", ""),
+                    "specimen_ref": normalized.get("specimen_ref", "") or ("SP%s" % (line_no - 1)),
+                    "specimen_barcode": normalized.get("specimen_barcode", ""),
+                    "specimen_sample_type": specimen_type,
+                    "line_type": line_type,
+                    "service_ids": service_ids,
+                    "profile_ids": profile_ids,
+                }
+            )
+        if not rows:
+            raise ValidationError(_("CSV file contains no data rows."))
+        return rows
+
+    def _create_portal_bulk_requests(self, partner, rows):
+        created = request.env["lab.test.request"].sudo()
+        request_type = "institution" if self._is_professional_partner(partner) else "individual"
+        default_template = partner.lab_default_report_template_id or request.env.ref(
+            "laboratory_management.report_template_classic", raise_if_not_found=False
+        )
+        physician_id = 0
+        if request.httprequest.form.get("bulk_physician_partner_id", "").isdigit():
+            physician_id = int(request.httprequest.form.get("bulk_physician_partner_id"))
+        physician = request.env["lab.physician"].sudo().browse(physician_id).exists() if physician_id else request.env["lab.physician"]
+
+        for row in rows:
+            line_ids = []
+            target_ids = row["profile_ids"] if row["line_type"] == "profile" else row["service_ids"]
+            for target_id in target_ids:
+                line_vals = {
+                    "line_type": row["line_type"],
+                    "quantity": 1,
+                    "note": row["line_note"],
+                    "specimen_ref": row["specimen_ref"],
+                    "specimen_barcode": row["specimen_barcode"],
+                    "specimen_sample_type": row["specimen_sample_type"],
+                }
+                if row["line_type"] == "profile":
+                    line_vals["profile_id"] = target_id
+                else:
+                    line_vals["service_id"] = target_id
+                line_ids.append((0, 0, line_vals))
+
+            test_request = request.env["lab.test.request"].sudo().create(
+                {
+                    "requester_partner_id": partner.id,
+                    "request_type": request_type,
+                    "client_partner_id": partner.id if request_type == "institution" else False,
+                    "patient_name": row["patient_name"],
+                    "patient_identifier": row["patient_identifier"],
+                    "patient_phone": row["patient_phone"],
+                    "clinical_note": row["clinical_note"],
+                    "priority": row["priority"],
+                    "physician_partner_id": physician.id or False,
+                    "physician_name": physician.name or "",
+                    "company_id": request.env.company.id,
+                    "preferred_template_id": default_template.id or False,
+                    "line_ids": line_ids,
+                }
+            )
+            test_request.action_submit()
+            created |= test_request
+        return created
 
     def _professional_history_templates(self, partner, limit=8):
         order_obj = request.env["sale.order"].sudo()
@@ -405,12 +555,7 @@ class LaboratoryPortal(CustomerPortal):
         if dispatch:
             dispatch.action_mark_downloaded()
 
-        attachment = sample.sudo()._generate_report_pdf_attachment(force=False, suppress_error=True)
-        pdf_content = attachment.raw or b""
-        if not pdf_content:
-            action_xmlid = sample.get_report_action_xmlid()
-            action = request.env.ref(action_xmlid).sudo()
-            pdf_content, _content_type = action._render_qweb_pdf(action.report_name, res_ids=sample.ids)
+        pdf_content = self._get_sample_pdf_content(sample)
         filename = f"{sample.name}.pdf"
         headers = [
             ("Content-Type", "application/pdf"),
@@ -418,6 +563,38 @@ class LaboratoryPortal(CustomerPortal):
             ("Content-Disposition", f'attachment; filename="{filename}"'),
         ]
         return request.make_response(pdf_content, headers=headers)
+
+    @http.route("/my/lab/samples/reports/zip", type="http", auth="user", website=True, methods=["POST"])
+    def portal_sample_report_zip_download(self, **post):
+        sample_ids = [int(x) for x in request.httprequest.form.getlist("sample_ids") if str(x).isdigit()]
+        if not sample_ids:
+            return request.redirect("/my/lab/samples?zip_error=selection")
+        samples = request.env["lab.sample"].sudo().search(
+            self._sample_domain_for_current_user()
+            + [
+                ("id", "in", sample_ids),
+                ("state", "in", ("verified", "reported")),
+                ("report_publication_state", "=", "active"),
+            ],
+            order="id desc",
+        )
+        if not samples:
+            return request.redirect("/my/lab/samples?zip_error=selection")
+
+        payload = io.BytesIO()
+        with zipfile.ZipFile(payload, "w", zipfile.ZIP_DEFLATED) as archive:
+            for sample in samples:
+                archive.writestr(f"{sample.name}.pdf", self._get_sample_pdf_content(sample))
+
+        filename = "Lab-Reports-%s.zip" % fields.Date.today()
+        return request.make_response(
+            payload.getvalue(),
+            headers=[
+                ("Content-Type", "application/zip"),
+                ("Content-Length", str(payload.tell())),
+                ("Content-Disposition", f'attachment; filename="{filename}"'),
+            ],
+        )
 
     @http.route(
         "/my/lab/samples/<int:sample_id>/report/ai",
@@ -773,6 +950,21 @@ class LaboratoryPortal(CustomerPortal):
             except (ValidationError, UserError):
                 return request.redirect("/my/lab/requests/new?error=dynamic_form_required")
         return request.redirect("/my/lab/requests/%s" % test_request.id)
+
+    @http.route("/my/lab/requests/import", type="http", auth="user", website=True, methods=["POST"])
+    def portal_test_request_import(self, **post):
+        partner = self._current_commercial_partner()
+        if not self._is_professional_partner(partner):
+            return request.redirect("/my/lab/requests/new?error=professional_only")
+        csv_file = request.httprequest.files.get("bulk_request_csv")
+        if not csv_file:
+            return request.redirect("/my/lab/requests/new?error=bulk_csv")
+        try:
+            rows = self._parse_portal_bulk_request_csv(csv_file, "institution")
+            created = self._create_portal_bulk_requests(partner, rows)
+        except (ValidationError, UserError):
+            return request.redirect("/my/lab/requests/new?error=bulk_csv")
+        return request.redirect("/my/lab/requests?bulk_created=%s" % len(created))
 
     @http.route("/my/lab/requests/<int:request_id>", type="http", auth="user", website=True)
     def portal_test_request_detail(self, request_id, **kwargs):

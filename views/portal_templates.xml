@@ -212,14 +212,26 @@
             <div class="lab-filter-chips">
                 <a t-foreach="filters.items()" t-as="flt" t-att-href="'/my/lab/samples?filterby=%s&amp;sortby=%s' % (flt[0], sortby)" t-att-class="'lab-filter-chip active' if filterby == flt[0] else 'lab-filter-chip'"><t t-esc="flt[1]['label']"/></a>
             </div>
+            <t t-if="request.params.get('zip_error') == 'selection'">
+                <div class="alert alert-danger">Select at least one released report before downloading a ZIP package.</div>
+            </t>
             <t t-if="not records">
                 <div class="lab-empty-state">No sample records found for this filter.</div>
             </t>
             <t t-if="records">
+                <form action="/my/lab/samples/reports/zip" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <div class="lab-page-actions mb-3">
+                    <div class="text-muted">Select released reports and export them as one ZIP package.</div>
+                    <button type="submit" class="btn btn-outline-primary">Download Selected PDFs</button>
+                </div>
                 <div class="lab-table-card">
                 <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>
+                            <th class="text-center" style="width:48px;">
+                                <input type="checkbox" class="form-check-input" onclick="document.querySelectorAll('.js-sample-zip-check').forEach(el => el.checked = this.checked)"/>
+                            </th>
                             <th>Accession</th>
                             <th>Patient</th>
                             <th>Status</th>
@@ -229,6 +241,15 @@
                     </thead>
                     <tbody>
                         <tr t-foreach="records" t-as="rec">
+                            <td class="text-center">
+                                <input
+                                    t-if="rec.state in ('verified', 'reported') and rec.report_publication_state == 'active'"
+                                    class="form-check-input js-sample-zip-check"
+                                    type="checkbox"
+                                    name="sample_ids"
+                                    t-att-value="rec.id"
+                                />
+                            </td>
                             <td><a t-att-href="'/my/lab/samples/%s' % rec.id"><t t-esc="rec.name"/></a></td>
                             <td><t t-esc="rec.patient_id.name"/></td>
                             <td><span class="lab-badge"><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></span></td>
@@ -238,6 +259,7 @@
                     </tbody>
                 </table>
                 </div>
+                </form>
                 <t t-call="portal.pager"/>
             </t>
         </t>
@@ -245,9 +267,13 @@
 
     <template id="portal_my_lab_sample_detail" name="Portal Lab Sample Detail">
         <t t-call="portal.portal_layout">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="mb-0">Sample <t t-esc="record.name"/></h3>
+            <div class="lab-page-header">
                 <div>
+                    <span class="lab-portal-eyebrow">Laboratory Report</span>
+                    <h3 class="mb-1">Sample <t t-esc="record.name"/></h3>
+                    <p class="text-muted mb-0">Core accession data, analytical status and result summary.</p>
+                </div>
+                <div class="lab-dashboard-header__actions">
                     <a t-if="record.state in ('verified', 'reported') and record.report_publication_state == 'active'" t-att-href="'/my/lab/samples/%s/report/h5' % record.id" class="btn btn-primary me-2">View H5 Report</a>
                     <a t-if="record.state in ('verified', 'reported') and record.report_publication_state == 'active'" t-att-href="'/my/lab/samples/%s/report/pdf' % record.id" class="btn btn-outline-primary me-2">Download PDF</a>
                     <a href="/my/lab/samples" class="btn btn-secondary">Back</a>
@@ -258,20 +284,30 @@
                     This report is withdrawn and currently unavailable for external access.
                 </div>
             </t>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <p><strong>Patient:</strong> <t t-esc="record.patient_id.name"/></p>
-                    <p><strong>Physician:</strong> <t t-esc="record.physician_name or '-'"/></p>
-                    <p><strong>Template:</strong> <t t-esc="record.report_template_id.name or '-'"/></p>
-                    <p><strong>Revision:</strong> R<t t-esc="record.report_revision"/> <t t-if="record.is_amended">(Amended)</t></p>
-                    <p><strong>Status:</strong> <t t-esc="dict(record._fields['state'].selection).get(record.state)"/></p>
-                    <p><strong>Collection Date:</strong> <t t-esc="record.collection_date or '-'"/></p>
-                    <p><strong>Report Date:</strong> <t t-esc="record.report_date or '-'"/></p>
-                </div>
+            <div class="lab-info-grid mb-3">
+                <section class="lab-info-card">
+                    <h5>Case Summary</h5>
+                    <div class="lab-kv-list">
+                        <div><span>Patient</span><strong><t t-esc="record.patient_id.name"/></strong></div>
+                        <div><span>Physician</span><strong><t t-esc="record.physician_name or '-'"/></strong></div>
+                        <div><span>Client</span><strong><t t-esc="record.client_id.name or '-'"/></strong></div>
+                        <div><span>Template</span><strong><t t-esc="record.report_template_id.name or '-'"/></strong></div>
+                    </div>
+                </section>
+                <section class="lab-info-card">
+                    <h5>Release Status</h5>
+                    <div class="lab-kv-list">
+                        <div><span>Status</span><strong><span class="lab-badge"><t t-esc="dict(record._fields['state'].selection).get(record.state)"/></span></strong></div>
+                        <div><span>Revision</span><strong>R<t t-esc="record.report_revision"/> <t t-if="record.is_amended">(Amended)</t></strong></div>
+                        <div><span>Collection Date</span><strong><t t-esc="record.collection_date or '-'"/></strong></div>
+                        <div><span>Report Date</span><strong><t t-esc="record.report_date or '-'"/></strong></div>
+                    </div>
+                </section>
             </div>
 
             <h5>Analysis Results</h5>
-            <table class="table table-striped lab-h5-result-table">
+            <div class="lab-table-card">
+            <table class="table table-striped lab-h5-result-table mb-0">
                 <thead>
                     <tr>
                         <th>Analysis</th>
@@ -291,6 +327,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
             <div t-if="record.panel_interpretation_has_data" class="alert alert-info mt-3">
                 <p class="mb-1"><strong>Panel Interpretation:</strong> <t t-esc="record.panel_interpretation_summary or '-'"/></p>
                 <p class="mb-0"><strong>Detected Items:</strong> <t t-esc="record.panel_detected_items or '-'"/></p>
@@ -306,9 +343,13 @@
 
     <template id="portal_my_lab_sample_report_h5" name="Portal Lab Sample H5 Report">
         <t t-call="portal.portal_layout">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="mb-0">H5 Report - <t t-esc="record.name"/></h3>
+            <div class="lab-page-header">
                 <div>
+                    <span class="lab-portal-eyebrow">Published Report</span>
+                    <h3 class="mb-1">H5 Report - <t t-esc="record.name"/></h3>
+                    <p class="text-muted mb-0">Patient-facing report view with AI interpretation, dispatch status and acknowledgement trail.</p>
+                </div>
+                <div class="lab-dashboard-header__actions">
                     <a t-att-href="'/my/lab/samples/%s/report/pdf' % record.id" class="btn btn-primary me-2">Download PDF</a>
                     <a t-att-href="'/my/lab/samples/%s' % record.id" class="btn btn-secondary">Back to Sample</a>
                 </div>
@@ -319,37 +360,44 @@
                 </div>
             </t>
 
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>Accession:</strong> <t t-esc="record.name"/></p>
-                            <p><strong>Patient:</strong> <t t-esc="record.patient_id.name"/></p>
-                            <p><strong>Client:</strong> <t t-esc="record.client_id.name or '-'"/></p>
-                            <p><strong>Physician:</strong> <t t-esc="record.physician_name or '-'"/></p>
-                            <p><strong>Template:</strong> <t t-esc="record.report_template_id.name or '-'"/></p>
-                        </div>
-                        <div class="col-md-6">
-                            <p><strong>Status:</strong> <t t-esc="dict(record._fields['state'].selection).get(record.state)"/></p>
-                            <p><strong>Revision:</strong> R<t t-esc="record.report_revision"/> <t t-if="record.is_amended">(Amended)</t></p>
-                            <p><strong>Collection Date:</strong> <t t-esc="record.collection_date or '-'"/></p>
-                            <p><strong>Verified Date:</strong> <t t-esc="record.verified_date or '-'"/></p>
-                            <p><strong>Report Date:</strong> <t t-esc="record.report_date or '-'"/></p>
-                        </div>
+            <div class="lab-info-grid mb-3">
+                <section class="lab-info-card">
+                    <h5>Report Header</h5>
+                    <div class="lab-kv-list">
+                        <div><span>Accession</span><strong><t t-esc="record.name"/></strong></div>
+                        <div><span>Patient</span><strong><t t-esc="record.patient_id.name"/></strong></div>
+                        <div><span>Client</span><strong><t t-esc="record.client_id.name or '-'"/></strong></div>
+                        <div><span>Physician</span><strong><t t-esc="record.physician_name or '-'"/></strong></div>
+                        <div><span>Template</span><strong><t t-esc="record.report_template_id.name or '-'"/></strong></div>
                     </div>
-                    <t t-if="dispatch">
-                        <hr/>
-                        <p><strong>Dispatch State:</strong> <t t-esc="dict(dispatch._fields['state'].selection).get(dispatch.state)"/></p>
-                        <p t-if="dispatch.sent_at"><strong>Sent:</strong> <t t-esc="dispatch.sent_at"/></p>
-                        <p t-if="dispatch.viewed_at"><strong>Viewed:</strong> <t t-esc="dispatch.viewed_at"/></p>
-                        <p t-if="dispatch.downloaded_at"><strong>Downloaded:</strong> <t t-esc="dispatch.downloaded_at"/></p>
-                        <p t-if="dispatch.acknowledged_at"><strong>Acknowledged:</strong> <t t-esc="dispatch.acknowledged_at"/> (<t t-esc="dispatch.acknowledged_by_name or '-'"/>)</p>
-                    </t>
-                </div>
+                </section>
+                <section class="lab-info-card">
+                    <h5>Publication Status</h5>
+                    <div class="lab-kv-list">
+                        <div><span>Status</span><strong><span class="lab-badge"><t t-esc="dict(record._fields['state'].selection).get(record.state)"/></span></strong></div>
+                        <div><span>Revision</span><strong>R<t t-esc="record.report_revision"/> <t t-if="record.is_amended">(Amended)</t></strong></div>
+                        <div><span>Collection Date</span><strong><t t-esc="record.collection_date or '-'"/></strong></div>
+                        <div><span>Verified Date</span><strong><t t-esc="record.verified_date or '-'"/></strong></div>
+                        <div><span>Report Date</span><strong><t t-esc="record.report_date or '-'"/></strong></div>
+                    </div>
+                </section>
             </div>
+            <t t-if="dispatch">
+                <section class="lab-info-card mb-3">
+                    <h5>Dispatch Timeline</h5>
+                    <div class="lab-kv-list">
+                        <div><span>Dispatch State</span><strong><t t-esc="dict(dispatch._fields['state'].selection).get(dispatch.state)"/></strong></div>
+                        <div t-if="dispatch.sent_at"><span>Sent</span><strong><t t-esc="dispatch.sent_at"/></strong></div>
+                        <div t-if="dispatch.viewed_at"><span>Viewed</span><strong><t t-esc="dispatch.viewed_at"/></strong></div>
+                        <div t-if="dispatch.downloaded_at"><span>Downloaded</span><strong><t t-esc="dispatch.downloaded_at"/></strong></div>
+                        <div t-if="dispatch.acknowledged_at"><span>Acknowledged</span><strong><t t-esc="dispatch.acknowledged_at"/> (<t t-esc="dispatch.acknowledged_by_name or '-'"/>)</strong></div>
+                    </div>
+                </section>
+            </t>
 
             <h5>Results</h5>
-            <table class="table table-bordered table-striped lab-h5-result-table">
+            <div class="lab-table-card">
+            <table class="table table-bordered table-striped lab-h5-result-table mb-0">
                 <thead>
                     <tr>
                         <th>Analysis</th>
@@ -371,6 +419,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
             <div t-if="record.panel_interpretation_has_data" class="alert alert-info mt-3">
                 <p class="mb-1"><strong>Panel Interpretation:</strong> <t t-esc="record.panel_interpretation_summary or '-'"/></p>
                 <p class="mb-0"><strong>Detected Items:</strong> <t t-esc="record.panel_detected_items or '-'"/></p>
@@ -731,6 +780,9 @@
             <div class="lab-filter-chips">
                 <a t-foreach="filters.items()" t-as="flt" t-att-href="'/my/lab/requests?filterby=%s&amp;sortby=%s' % (flt[0], sortby)" t-att-class="'lab-filter-chip active' if filterby == flt[0] else 'lab-filter-chip'"><t t-esc="flt[1]['label']"/></a>
             </div>
+            <t t-if="request.params.get('bulk_created')">
+                <div class="alert alert-success">Bulk import completed. Created <t t-esc="request.params.get('bulk_created')"/> request(s).</div>
+            </t>
             <t t-if="not records">
                 <div class="lab-empty-state">No test request records found for this filter.</div>
             </t>
@@ -799,6 +851,18 @@
             <t t-if="request.params.get('error') == 'dynamic_form_payload'">
                 <div class="alert alert-danger">Custom form payload is invalid. Please refresh and submit again.</div>
             </t>
+            <t t-if="request.params.get('error') == 'bulk_csv'">
+                <div class="alert alert-danger">Bulk CSV import failed. Check required columns and allowed service or panel codes.</div>
+            </t>
+            <t t-if="request.params.get('error') == 'professional_only'">
+                <div class="alert alert-danger">Bulk CSV import is available for institution accounts only.</div>
+            </t>
+            <div class="lab-request-steps mb-3">
+                <div class="lab-request-step is-active"><span>1</span><strong>Basic Information</strong></div>
+                <div class="lab-request-step"><span>2</span><strong>Specimens and Tests</strong></div>
+                <div class="lab-request-step"><span>3</span><strong>Forms and Attachments</strong></div>
+                <div class="lab-request-step"><span>4</span><strong>Submit</strong></div>
+            </div>
             <form id="lab_test_request_form" action="/my/lab/requests/new" method="post" enctype="multipart/form-data" class="card">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                 <div class="card-body">
@@ -890,6 +954,38 @@
                     <button type="submit" class="btn btn-primary">Create Request</button>
                 </div>
             </form>
+            <t t-if="portal_request_type == 'institution'">
+                <section class="lab-info-card mt-4">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                        <div>
+                            <h5 class="mb-1">Bulk Institution Upload</h5>
+                            <p class="text-muted mb-0">Upload one CSV file to create multiple request records at once. One row creates one request.</p>
+                        </div>
+                        <a href="data:text/csv;charset=utf-8,patient_name,patient_identifier,patient_phone,specimen_ref,specimen_barcode,specimen_sample_type,line_type,service_codes,panel_codes,line_note,clinical_note,priority%0AJohn%20Doe,ID-001,0812345678,SP1,BOX-001,swab,service,HPV16, ,Routine%20HPV%20screening,Follow%20up,normal" class="btn btn-outline-secondary" download="lab_bulk_request_template.csv">Download CSV Template</a>
+                    </div>
+                    <form action="/my/lab/requests/import" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">CSV File</label>
+                                <input type="file" class="form-control" name="bulk_request_csv" accept=".csv" required="required"/>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Optional Default Physician</label>
+                                <select class="form-select" name="bulk_physician_partner_id">
+                                    <option value="">No default physician</option>
+                                    <t t-foreach="physicians" t-as="phy">
+                                        <option t-att-value="phy.id"><t t-esc="phy.name"/></option>
+                                    </t>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-end mt-2">
+                            <button type="submit" class="btn btn-outline-primary">Create Requests from CSV</button>
+                        </div>
+                    </form>
+                </section>
+            </t>
             <div class="d-none">
                 <select id="lab_service_options_template">
                     <t t-foreach="services" t-as="s">
@@ -1296,9 +1392,13 @@
 
     <template id="portal_my_lab_test_request_detail" name="Portal Test Request Detail">
         <t t-call="portal.portal_layout">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="mb-0">Request <t t-esc="record.name"/></h3>
+            <div class="lab-page-header">
                 <div>
+                    <span class="lab-portal-eyebrow">Request Lifecycle</span>
+                    <h3 class="mb-1">Request <t t-esc="record.name"/></h3>
+                    <p class="text-muted mb-0">Overview, requested items, generated samples and uploaded source documents.</p>
+                </div>
+                <div class="lab-dashboard-header__actions">
                     <t t-if="record.state in ('draft','cancelled')">
                         <form t-att-action="'/my/lab/requests/%s/submit' % record.id" method="post" class="d-inline">
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
@@ -1309,29 +1409,30 @@
                 </div>
             </div>
 
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>Requester:</strong> <t t-esc="record.requester_partner_id.name"/></p>
-                            <p><strong>Patient:</strong> <t t-esc="record.patient_id.name or record.patient_name or '-'"/></p>
-                            <p><strong>Physician:</strong> <t t-esc="record.physician_name or '-'"/></p>
-                            <p><strong>Priority:</strong> <t t-esc="dict(request.env['lab.master.data.mixin'].sudo()._selection_priority()).get(record.priority, record.priority)"/></p>
-                        </div>
-                        <div class="col-md-6">
-                            <p><strong>Status:</strong> <t t-esc="dict(record._fields['state'].selection).get(record.state)"/></p>
-                            <p><strong>Collection:</strong> <t t-esc="record.requested_collection_date or '-'"/></p>
-                            <p><strong>Estimated Report:</strong> <t t-esc="record.estimated_report_date or '-'"/></p>
-                            <p><strong>Quote Valid Until:</strong> <t t-esc="record.quote_valid_until or '-'"/></p>
-                            <p t-if="record.state == 'quoted'"><strong>Quote Days Left:</strong> <t t-esc="record.quote_days_left"/></p>
-                            <p><strong>Total:</strong> <t t-esc="record.amount_total"/> <t t-esc="record.currency_id.name"/></p>
-                        </div>
+            <div class="lab-info-grid mb-3">
+                <section class="lab-info-card">
+                    <h5>Request Summary</h5>
+                    <div class="lab-kv-list">
+                        <div><span>Requester</span><strong><t t-esc="record.requester_partner_id.name"/></strong></div>
+                        <div><span>Patient</span><strong><t t-esc="record.patient_id.name or record.patient_name or '-'"/></strong></div>
+                        <div><span>Physician</span><strong><t t-esc="record.physician_name or '-'"/></strong></div>
+                        <div><span>Priority</span><strong><t t-esc="dict(request.env['lab.master.data.mixin'].sudo()._selection_priority()).get(record.priority, record.priority)"/></strong></div>
                     </div>
-                </div>
+                </section>
+                <section class="lab-info-card">
+                    <h5>Timing and Billing</h5>
+                    <div class="lab-kv-list">
+                        <div><span>Status</span><strong><span class="lab-badge"><t t-esc="dict(record._fields['state'].selection).get(record.state)"/></span></strong></div>
+                        <div><span>Collection</span><strong><t t-esc="record.requested_collection_date or '-'"/></strong></div>
+                        <div><span>Estimated Report</span><strong><t t-esc="record.estimated_report_date or '-'"/></strong></div>
+                        <div><span>Total</span><strong><t t-esc="record.amount_total"/> <t t-esc="record.currency_id.name"/></strong></div>
+                    </div>
+                </section>
             </div>
 
             <h5>Requested Tests</h5>
-            <table class="table table-striped">
+            <div class="lab-table-card">
+            <table class="table table-striped mb-0">
                 <thead>
                     <tr>
                         <th>Specimen Ref</th>
@@ -1362,10 +1463,12 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
 
             <t t-if="record.sample_ids">
                 <h5 class="mt-4">Generated Samples</h5>
-                <table class="table table-striped">
+                <div class="lab-table-card">
+                <table class="table table-striped mb-0">
                     <thead>
                         <tr>
                             <th>Sample</th>
@@ -1383,6 +1486,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </t>
 
             <t t-if="record.quote_revision_ids">
@@ -1413,7 +1517,8 @@
 
             <t t-if="request_attachments">
                 <h5 class="mt-4">Attachments</h5>
-                <table class="table table-striped">
+                <div class="lab-table-card">
+                <table class="table table-striped mb-0">
                     <thead>
                         <tr>
                             <th>File Name</th>
@@ -1436,6 +1541,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </t>
         </t>
     </template>
