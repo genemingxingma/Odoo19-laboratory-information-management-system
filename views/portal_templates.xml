@@ -1,53 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="portal_my_home_laboratory" inherit_id="portal.portal_my_home" priority="30">
-        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <div class="o_portal_category mt-3" id="portal_laboratory_category">
-                <t t-call="portal.portal_docs_entry">
-                    <t t-set="icon" t-value="'/laboratory_management/static/src/img/portal_lab_reports.svg'"/>
-                    <t t-set="title">Lab Reports</t>
-                    <t t-set="url" t-value="'/my/lab/samples'"/>
-                    <t t-set="text">Track sample status and view released reports</t>
-                    <t t-set="placeholder_count" t-value="'lab_sample_count'"/>
-                </t>
-                <t t-call="portal.portal_docs_entry">
-                    <t t-set="icon" t-value="'/laboratory_management/static/src/img/portal_lab_requests.svg'"/>
-                    <t t-set="title">Test Requests</t>
-                    <t t-set="url" t-value="'/my/lab/requests'"/>
-                    <t t-set="text">Submit test requests and track request lifecycle</t>
-                    <t t-set="placeholder_count" t-value="'lab_test_request_count'"/>
-                    <t t-set="config_card" t-value="True"/>
-                </t>
-                <t t-call="portal.portal_docs_entry">
-                    <t t-set="icon" t-value="'/web/static/img/icons/money.png'"/>
-                    <t t-set="title">Request Invoices</t>
-                    <t t-set="url" t-value="'/my/lab/invoices'"/>
-                    <t t-set="text">Check invoice balances and submit payment references</t>
-                    <t t-set="placeholder_count" t-value="'lab_request_invoice_count'"/>
-                </t>
-                <t t-call="portal.portal_docs_entry">
-                    <t t-set="icon" t-value="'/web/static/img/icons/cart.png'"/>
-                    <t t-set="title">Professional Purchase</t>
-                    <t t-set="url" t-value="'/my/lab/professional/purchase'"/>
-                    <t t-set="text">Professional customers create lab service purchase orders</t>
-                    <t t-set="placeholder_count" t-value="'0'"/>
-                </t>
-                <t t-call="portal.portal_docs_entry">
-                    <t t-set="icon" t-value="'/web/static/img/icons/clock.png'"/>
-                    <t t-set="title">Custody Batches</t>
-                    <t t-set="url" t-value="'/my/lab/custody/batches'"/>
-                    <t t-set="text">Track handover and receive session progress</t>
-                    <t t-set="placeholder_count" t-value="'lab_custody_batch_count'"/>
-                </t>
-                <t t-call="portal.portal_docs_entry">
-                    <t t-set="icon" t-value="'/web/static/img/icons/settings.png'"/>
-                    <t t-set="title">Custody Investigations</t>
-                    <t t-set="url" t-value="'/my/lab/custody/investigations'"/>
-                    <t t-set="text">Follow investigation, CAPA and closure status</t>
-                    <t t-set="placeholder_count" t-value="'lab_custody_investigation_count'"/>
-                </t>
-            </div>
+        <xpath expr="//div[hasclass('o_portal_my_home')]" position="inside">
+            <section class="lab-portal-hero">
+                <div class="lab-portal-hero__intro">
+                    <span class="lab-portal-eyebrow">Laboratory Portal</span>
+                    <h2>Requests, reports, billing and follow-up in one place</h2>
+                    <p>Use the dashboard for daily work, then move into request, report and invoice details when needed.</p>
+                </div>
+                <div class="lab-portal-hero__actions">
+                    <a href="/my/lab/dashboard" class="btn btn-primary">Open Lab Dashboard</a>
+                    <a href="/my/lab/requests/new" class="btn btn-outline-primary">Create Request</a>
+                </div>
+            </section>
         </xpath>
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/laboratory_management/static/src/img/portal_lab_reports.svg'"/>
+                <t t-set="title">Lab Reports</t>
+                <t t-set="url" t-value="'/my/lab/samples'"/>
+                <t t-set="text">Track sample status and view released reports</t>
+                <t t-set="placeholder_count" t-value="'lab_sample_count'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/laboratory_management/static/src/img/portal_lab_requests.svg'"/>
+                <t t-set="title">Test Requests</t>
+                <t t-set="url" t-value="'/my/lab/requests'"/>
+                <t t-set="text">Submit test requests and track request lifecycle</t>
+                <t t-set="placeholder_count" t-value="'lab_test_request_count'"/>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/web/static/img/icons/money.png'"/>
+                <t t-set="title">Request Invoices</t>
+                <t t-set="url" t-value="'/my/lab/invoices'"/>
+                <t t-set="text">Check invoice balances and submit payment references</t>
+                <t t-set="placeholder_count" t-value="'lab_request_invoice_count'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/web/static/img/icons/cart.png'"/>
+                <t t-set="title">Professional Purchase</t>
+                <t t-set="url" t-value="'/my/lab/professional/purchase'"/>
+                <t t-set="text">Professional customers create lab service purchase orders</t>
+                <t t-set="placeholder_count" t-value="'0'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/web/static/img/icons/clock.png'"/>
+                <t t-set="title">Custody Batches</t>
+                <t t-set="url" t-value="'/my/lab/custody/batches'"/>
+                <t t-set="text">Track handover and receive session progress</t>
+                <t t-set="placeholder_count" t-value="'lab_custody_batch_count'"/>
+            </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/web/static/img/icons/settings.png'"/>
+                <t t-set="title">Custody Investigations</t>
+                <t t-set="url" t-value="'/my/lab/custody/investigations'"/>
+                <t t-set="text">Follow investigation, CAPA and closure status</t>
+                <t t-set="placeholder_count" t-value="'lab_custody_investigation_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_lab_dashboard" name="Laboratory Portal Dashboard">
+        <t t-call="portal.portal_layout">
+            <section class="lab-dashboard-shell">
+                <div class="lab-dashboard-header">
+                    <div>
+                        <span class="lab-portal-eyebrow">Laboratory</span>
+                        <h2 class="mb-1">Control Dashboard</h2>
+                        <p class="text-muted mb-0">Monitor requests, active samples, released reports and open billing items.</p>
+                    </div>
+                    <div class="lab-dashboard-header__actions">
+                        <a href="/my/lab/requests/new" class="btn btn-primary">New Request</a>
+                        <a href="/my/lab/samples" class="btn btn-outline-primary">Browse Reports</a>
+                    </div>
+                </div>
+                <div class="lab-dashboard-grid">
+                    <div class="lab-dashboard-stat">
+                        <div class="lab-dashboard-stat__label">Requests Pending</div>
+                        <div class="lab-dashboard-stat__value"><t t-esc="lab_dashboard_requests.get('pending', 0)"/></div>
+                        <a href="/my/lab/requests?filterby=pending">Open queue</a>
+                    </div>
+                    <div class="lab-dashboard-stat">
+                        <div class="lab-dashboard-stat__label">Samples In Progress</div>
+                        <div class="lab-dashboard-stat__value"><t t-esc="lab_dashboard_samples.get('in_progress', 0)"/></div>
+                        <a href="/my/lab/samples?filterby=active">Track samples</a>
+                    </div>
+                    <div class="lab-dashboard-stat">
+                        <div class="lab-dashboard-stat__label">Reports Released</div>
+                        <div class="lab-dashboard-stat__value"><t t-esc="lab_dashboard_samples.get('reported', 0)"/></div>
+                        <a href="/my/lab/samples?filterby=reported">View reports</a>
+                    </div>
+                    <div class="lab-dashboard-stat">
+                        <div class="lab-dashboard-stat__label">Open Invoices</div>
+                        <div class="lab-dashboard-stat__value"><t t-esc="lab_dashboard_invoices.get('open', 0)"/></div>
+                        <a href="/my/lab/invoices?filterby=open">Review billing</a>
+                    </div>
+                </div>
+                <div class="lab-dashboard-panels">
+                    <section class="lab-dashboard-panel">
+                        <div class="lab-dashboard-panel__header">
+                            <h5 class="mb-0">Recent Reports</h5>
+                            <a href="/my/lab/samples?filterby=reported">All reports</a>
+                        </div>
+                        <t t-if="lab_dashboard_recent_reports">
+                            <div class="lab-mini-list">
+                                <a t-foreach="lab_dashboard_recent_reports" t-as="rec" t-att-href="'/my/lab/samples/%s/report/h5' % rec.id" class="lab-mini-list__row">
+                                    <div>
+                                        <strong><t t-esc="rec.name"/></strong>
+                                        <div class="text-muted"><t t-esc="rec.patient_id.name or '-'"/></div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div><t t-esc="rec.report_date or '-'"/></div>
+                                        <span class="lab-badge lab-badge--success">Reported</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </t>
+                        <t t-if="not lab_dashboard_recent_reports">
+                            <div class="lab-empty-state">No released reports yet.</div>
+                        </t>
+                    </section>
+                    <section class="lab-dashboard-panel">
+                        <div class="lab-dashboard-panel__header">
+                            <h5 class="mb-0">Recent Requests</h5>
+                            <a href="/my/lab/requests">All requests</a>
+                        </div>
+                        <t t-if="lab_dashboard_recent_requests">
+                            <div class="lab-mini-list">
+                                <a t-foreach="lab_dashboard_recent_requests" t-as="rec" t-att-href="'/my/lab/requests/%s' % rec.id" class="lab-mini-list__row">
+                                    <div>
+                                        <strong><t t-esc="rec.name"/></strong>
+                                        <div class="text-muted"><t t-esc="rec.patient_name or rec.patient_id.name or '-'"/></div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div><t t-esc="rec.create_date or '-'"/></div>
+                                        <span class="lab-badge"><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></span>
+                                    </div>
+                                </a>
+                            </div>
+                        </t>
+                        <t t-if="not lab_dashboard_recent_requests">
+                            <div class="lab-empty-state">No requests found.</div>
+                        </t>
+                    </section>
+                </div>
+                <div class="lab-dashboard-panels">
+                    <section class="lab-dashboard-panel">
+                        <div class="lab-dashboard-panel__header">
+                            <h5 class="mb-0">Pending Actions</h5>
+                            <a href="/my/lab/requests?filterby=pending">Open pending</a>
+                        </div>
+                        <t t-if="lab_dashboard_pending_requests">
+                            <div class="lab-mini-list">
+                                <a t-foreach="lab_dashboard_pending_requests" t-as="rec" t-att-href="'/my/lab/requests/%s' % rec.id" class="lab-mini-list__row">
+                                    <div>
+                                        <strong><t t-esc="rec.name"/></strong>
+                                        <div class="text-muted"><t t-esc="rec.patient_name or rec.patient_id.name or '-'"/></div>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="lab-badge lab-badge--warning"><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></span>
+                                    </div>
+                                </a>
+                            </div>
+                        </t>
+                        <t t-if="not lab_dashboard_pending_requests">
+                            <div class="lab-empty-state">No pending actions.</div>
+                        </t>
+                    </section>
+                    <section class="lab-dashboard-panel">
+                        <div class="lab-dashboard-panel__header">
+                            <h5 class="mb-0">Billing Snapshot</h5>
+                            <a href="/my/lab/invoices">All invoices</a>
+                        </div>
+                        <t t-if="lab_dashboard_recent_invoices">
+                            <div class="lab-mini-list">
+                                <a t-foreach="lab_dashboard_recent_invoices" t-as="rec" t-att-href="'/my/lab/invoices/%s' % rec.id" class="lab-mini-list__row">
+                                    <div>
+                                        <strong><t t-esc="rec.name"/></strong>
+                                        <div class="text-muted"><t t-esc="rec.request_id.name or '-'"/></div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div><t t-esc="rec.amount_residual"/> <t t-esc="rec.currency_id.name"/></div>
+                                        <span class="lab-badge"><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></span>
+                                    </div>
+                                </a>
+                            </div>
+                        </t>
+                        <t t-if="not lab_dashboard_recent_invoices">
+                            <div class="lab-empty-state">No invoice records found.</div>
+                        </t>
+                    </section>
+                </div>
+            </section>
+        </t>
     </template>
 
     <template id="portal_my_lab_samples" name="Portal Lab Samples">
@@ -56,12 +202,22 @@
             <t t-call="portal.portal_searchbar">
                 <t t-set="title">My Lab Samples</t>
             </t>
-            <h3 class="mb-3">My Lab Samples</h3>
+            <div class="lab-page-header">
+                <div>
+                    <h3 class="mb-1">Lab Reports</h3>
+                    <p class="text-muted mb-0">Released reports, active accessions and withdrawn publications.</p>
+                </div>
+                <a href="/my/lab/dashboard" class="btn btn-outline-primary">Dashboard</a>
+            </div>
+            <div class="lab-filter-chips">
+                <a t-foreach="filters.items()" t-as="flt" t-att-href="'/my/lab/samples?filterby=%s&amp;sortby=%s' % (flt[0], sortby)" t-att-class="'lab-filter-chip active' if filterby == flt[0] else 'lab-filter-chip'"><t t-esc="flt[1]['label']"/></a>
+            </div>
             <t t-if="not records">
-                <div class="alert alert-info">No lab sample records found.</div>
+                <div class="lab-empty-state">No sample records found for this filter.</div>
             </t>
             <t t-if="records">
-                <table class="table table-hover">
+                <div class="lab-table-card">
+                <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>
                             <th>Accession</th>
@@ -75,12 +231,13 @@
                         <tr t-foreach="records" t-as="rec">
                             <td><a t-att-href="'/my/lab/samples/%s' % rec.id"><t t-esc="rec.name"/></a></td>
                             <td><t t-esc="rec.patient_id.name"/></td>
-                            <td><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></td>
+                            <td><span class="lab-badge"><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></span></td>
                             <td><t t-esc="rec.collection_date or '-'"/></td>
                             <td><t t-esc="rec.report_date or '-'"/></td>
                         </tr>
                     </tbody>
                 </table>
+                </div>
                 <t t-call="portal.pager"/>
             </t>
         </t>
@@ -564,15 +721,22 @@
             <t t-call="portal.portal_searchbar">
                 <t t-set="title">Test Requests</t>
             </t>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="mb-0">My Test Requests</h3>
+            <div class="lab-page-header">
+                <div>
+                    <h3 class="mb-1">Test Requests</h3>
+                    <p class="text-muted mb-0">Create, review and track request lifecycle.</p>
+                </div>
                 <a href="/my/lab/requests/new" class="btn btn-primary">New Request</a>
             </div>
+            <div class="lab-filter-chips">
+                <a t-foreach="filters.items()" t-as="flt" t-att-href="'/my/lab/requests?filterby=%s&amp;sortby=%s' % (flt[0], sortby)" t-att-class="'lab-filter-chip active' if filterby == flt[0] else 'lab-filter-chip'"><t t-esc="flt[1]['label']"/></a>
+            </div>
             <t t-if="not records">
-                <div class="alert alert-info">No test request records found.</div>
+                <div class="lab-empty-state">No test request records found for this filter.</div>
             </t>
             <t t-if="records">
-                <table class="table table-hover">
+                <div class="lab-table-card">
+                <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>
                             <th>Request No.</th>
@@ -592,10 +756,11 @@
                             <td><t t-esc="rec.requested_collection_date or '-'"/></td>
                             <td><t t-esc="rec.estimated_report_date or '-'"/></td>
                             <td><t t-esc="rec.amount_total"/> <t t-esc="rec.currency_id.name"/></td>
-                            <td><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></td>
+                            <td><span class="lab-badge"><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></span></td>
                         </tr>
                     </tbody>
                 </table>
+                </div>
                 <t t-call="portal.pager"/>
             </t>
         </t>
@@ -603,8 +768,11 @@
 
     <template id="portal_my_lab_test_request_new" name="Portal New Test Request">
         <t t-call="portal.portal_layout">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="mb-0">Create Test Request</h3>
+            <div class="lab-page-header">
+                <div>
+                    <h3 class="mb-1">Create Test Request</h3>
+                    <p class="text-muted mb-0">Build specimen and test combinations, upload attachments, then submit.</p>
+                </div>
                 <a href="/my/lab/requests" class="btn btn-secondary">Back</a>
             </div>
             <t t-if="request.params.get('error') == 'service'">
@@ -684,15 +852,6 @@
                                 </t>
                             </select>
                             <small class="text-muted">Physician is managed in laboratory backend.</small>
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Report Template</label>
-                            <select class="form-select" name="preferred_template_id">
-                                <option value="">Default</option>
-                                <t t-foreach="templates" t-as="tpl">
-                                    <option t-att-value="tpl.id"><t t-esc="tpl.name"/></option>
-                                </t>
-                            </select>
                         </div>
                         <div class="col-md-12 mb-2">
                             <label class="form-label">Clinical Note</label>
@@ -1287,12 +1446,22 @@
             <t t-call="portal.portal_searchbar">
                 <t t-set="title">Request Invoices</t>
             </t>
-            <h3 class="mb-3">Request Invoices</h3>
+            <div class="lab-page-header">
+                <div>
+                    <h3 class="mb-1">Request Invoices</h3>
+                    <p class="text-muted mb-0">Track invoice state, outstanding balances and payment submissions.</p>
+                </div>
+                <a href="/my/lab/dashboard" class="btn btn-outline-primary">Dashboard</a>
+            </div>
+            <div class="lab-filter-chips">
+                <a t-foreach="filters.items()" t-as="flt" t-att-href="'/my/lab/invoices?filterby=%s&amp;sortby=%s' % (flt[0], sortby)" t-att-class="'lab-filter-chip active' if filterby == flt[0] else 'lab-filter-chip'"><t t-esc="flt[1]['label']"/></a>
+            </div>
             <t t-if="not records">
-                <div class="alert alert-info">No request invoice records found.</div>
+                <div class="lab-empty-state">No request invoice records found for this filter.</div>
             </t>
             <t t-if="records">
-                <table class="table table-hover">
+                <div class="lab-table-card">
+                <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>
                             <th>Invoice</th>
@@ -1314,10 +1483,11 @@
                             <td><t t-esc="rec.amount_total"/> <t t-esc="rec.currency_id.name"/></td>
                             <td><t t-esc="rec.amount_paid"/> <t t-esc="rec.currency_id.name"/></td>
                             <td><t t-esc="rec.amount_residual"/> <t t-esc="rec.currency_id.name"/></td>
-                            <td><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></td>
+                            <td><span class="lab-badge"><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></span></td>
                         </tr>
                     </tbody>
                 </table>
+                </div>
                 <t t-call="portal.pager"/>
             </t>
         </t>

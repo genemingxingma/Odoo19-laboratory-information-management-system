@@ -31,12 +31,12 @@ class LaboratoryPortal(CustomerPortal):
             lambda: request.env["lab.sample"].sudo().search(self._sample_domain_for_current_user()).ids,
         )
 
-    def _portal_list_records(self, *, model_name, domain, sortings, sortby, url, page, step=20):
+    def _portal_list_records(self, *, model_name, domain, sortings, sortby, url, page, step=20, url_args=None):
         sort_key = sortby if sortby in sortings else next(iter(sortings.keys()))
         sort_order = sortings[sort_key]["order"]
         model = request.env[model_name].sudo()
         total = model.search_count(domain)
-        pager = portal_pager(url=url, total=total, page=page, step=step, url_args={"sortby": sort_key})
+        pager = portal_pager(url=url, total=total, page=page, step=step, url_args={"sortby": sort_key, **(url_args or {})})
         records = model.search(domain, order=sort_order, limit=step, offset=pager["offset"])
         return records, pager, sort_key
 
@@ -227,6 +227,90 @@ class LaboratoryPortal(CustomerPortal):
             )
         return values
 
+    def _sample_filter_options(self):
+        return {
+            "all": {"label": _("All"), "domain": []},
+            "active": {"label": _("In Progress"), "domain": [("state", "in", ("draft", "received", "in_progress", "to_verify", "verified"))]},
+            "reported": {"label": _("Reported"), "domain": [("state", "=", "reported"), ("report_publication_state", "=", "active")]},
+            "withdrawn": {"label": _("Withdrawn"), "domain": [("report_publication_state", "=", "withdrawn")]},
+        }
+
+    def _request_filter_options(self):
+        return {
+            "all": {"label": _("All"), "domain": []},
+            "draft": {"label": _("Draft"), "domain": [("state", "=", "draft")]},
+            "pending": {"label": _("Pending Review"), "domain": [("state", "in", ("submitted", "triage", "quoted", "approved"))]},
+            "running": {"label": _("In Progress"), "domain": [("state", "=", "in_progress")]},
+            "done": {"label": _("Completed"), "domain": [("state", "=", "completed")]},
+        }
+
+    def _invoice_filter_options(self):
+        return {
+            "all": {"label": _("All"), "domain": []},
+            "open": {"label": _("Outstanding"), "domain": [("state", "in", ("issued", "partially_paid"))]},
+            "paid": {"label": _("Paid"), "domain": [("state", "=", "paid")]},
+            "void": {"label": _("Void"), "domain": [("state", "=", "void")]},
+        }
+
+    def _apply_filter_domain(self, base_domain, filter_map, filterby):
+        filter_key = filterby if filterby in filter_map else next(iter(filter_map.keys()))
+        return base_domain + filter_map[filter_key]["domain"], filter_key
+
+    def _prepare_lab_dashboard_values(self):
+        partner = self._current_commercial_partner()
+        sample_obj = request.env["lab.sample"].sudo()
+        request_obj = request.env["lab.test.request"].sudo()
+        invoice_obj = request.env["lab.request.invoice"].sudo()
+
+        sample_domain = self._sample_domain_for_current_user()
+        request_domain = self._request_domain_for_current_user()
+        invoice_domain = self._request_invoice_domain_for_current_user()
+
+        sample_state_domains = {
+            "received": sample_domain + [("state", "=", "received")],
+            "in_progress": sample_domain + [("state", "=", "in_progress")],
+            "to_verify": sample_domain + [("state", "=", "to_verify")],
+            "reported": sample_domain + [("state", "=", "reported"), ("report_publication_state", "=", "active")],
+        }
+        request_state_domains = {
+            "draft": request_domain + [("state", "=", "draft")],
+            "pending": request_domain + [("state", "in", ("submitted", "triage", "quoted", "approved"))],
+            "running": request_domain + [("state", "=", "in_progress")],
+            "completed": request_domain + [("state", "=", "completed")],
+        }
+        invoice_state_domains = {
+            "open": invoice_domain + [("state", "in", ("issued", "partially_paid"))],
+            "paid": invoice_domain + [("state", "=", "paid")],
+        }
+
+        values = {
+            "lab_portal_partner": partner,
+            "lab_portal_is_professional": self._is_professional_partner(partner),
+            "lab_dashboard_samples": {key: sample_obj.search_count(domain) for key, domain in sample_state_domains.items()},
+            "lab_dashboard_requests": {key: request_obj.search_count(domain) for key, domain in request_state_domains.items()},
+            "lab_dashboard_invoices": {key: invoice_obj.search_count(domain) for key, domain in invoice_state_domains.items()},
+            "lab_dashboard_recent_reports": sample_obj.search(
+                sample_domain + [("state", "=", "reported"), ("report_publication_state", "=", "active")],
+                order="report_date desc, id desc",
+                limit=5,
+            ),
+            "lab_dashboard_recent_requests": request_obj.search(request_domain, order="id desc", limit=5),
+            "lab_dashboard_recent_invoices": invoice_obj.search(invoice_domain, order="id desc", limit=5),
+            "lab_dashboard_pending_requests": request_obj.search(
+                request_domain + [("state", "in", ("submitted", "triage", "quoted", "approved"))],
+                order="write_date desc, id desc",
+                limit=5,
+            ),
+        }
+        return values
+
+    @http.route("/my/lab/dashboard", type="http", auth="user", website=True)
+    def portal_lab_dashboard(self, **kwargs):
+        values = self._prepare_portal_layout_values()
+        values.update(self._prepare_lab_dashboard_values())
+        values["page_name"] = "lab_dashboard"
+        return request.render("laboratory_management.portal_lab_dashboard", values)
+
     def _get_authorized_sample(self, sample_id):
         sample_domain = [("id", "=", sample_id)] + self._sample_domain_for_current_user()
         return request.env["lab.sample"].sudo().search(sample_domain, limit=1) or None
@@ -248,8 +332,8 @@ class LaboratoryPortal(CustomerPortal):
         return request.env["lab.request.invoice"].sudo().search(domain, limit=1) or None
 
     @http.route(["/my/lab/samples", "/my/lab/samples/page/<int:page>"], type="http", auth="user", website=True)
-    def portal_my_samples(self, page=1, sortby="date", **kwargs):
-        domain = self._sample_domain_for_current_user()
+    def portal_my_samples(self, page=1, sortby="date", filterby="all", **kwargs):
+        domain, filterby = self._apply_filter_domain(self._sample_domain_for_current_user(), self._sample_filter_options(), filterby)
         sortings = {
             "date": {"label": _("Newest"), "order": "id desc"},
             "name": {"label": _("Accession"), "order": "name asc"},
@@ -263,6 +347,7 @@ class LaboratoryPortal(CustomerPortal):
             sortby=sortby,
             url="/my/lab/samples",
             page=page,
+            url_args={"filterby": filterby},
         )
 
         values = self._prepare_portal_layout_values()
@@ -274,6 +359,8 @@ class LaboratoryPortal(CustomerPortal):
                 "default_url": "/my/lab/samples",
                 "sortings": sortings,
                 "sortby": sortby,
+                "filters": self._sample_filter_options(),
+                "filterby": filterby,
             }
         )
         return request.render("laboratory_management.portal_my_lab_samples", values)
@@ -380,8 +467,8 @@ class LaboratoryPortal(CustomerPortal):
         return request.redirect("/my/lab/samples/%s/report/h5" % sample_id)
 
     @http.route(["/my/lab/requests", "/my/lab/requests/page/<int:page>"], type="http", auth="user", website=True)
-    def portal_my_test_requests(self, page=1, sortby="date", **kwargs):
-        domain = self._request_domain_for_current_user()
+    def portal_my_test_requests(self, page=1, sortby="date", filterby="all", **kwargs):
+        domain, filterby = self._apply_filter_domain(self._request_domain_for_current_user(), self._request_filter_options(), filterby)
         sortings = {
             "date": {"label": _("Newest"), "order": "id desc"},
             "name": {"label": _("Request No."), "order": "name asc"},
@@ -395,6 +482,7 @@ class LaboratoryPortal(CustomerPortal):
             sortby=sortby,
             url="/my/lab/requests",
             page=page,
+            url_args={"filterby": filterby},
         )
 
         values = self._prepare_portal_layout_values()
@@ -406,6 +494,8 @@ class LaboratoryPortal(CustomerPortal):
                 "default_url": "/my/lab/requests",
                 "sortings": sortings,
                 "sortby": sortby,
+                "filters": self._request_filter_options(),
+                "filterby": filterby,
             }
         )
         return request.render("laboratory_management.portal_my_lab_test_requests", values)
@@ -459,7 +549,6 @@ class LaboratoryPortal(CustomerPortal):
                 "profiles": profiles,
                 "physicians": physicians,
                 "physician_departments": physician_departments,
-                "templates": request.env["lab.report.template"].sudo().search([], order="name asc"),
                 "portal_request_type": portal_request_type,
                 "portal_request_type_label": request_type_map.get(portal_request_type, portal_request_type),
                 "priority_options": mixin._selection_priority(),
@@ -648,10 +737,16 @@ class LaboratoryPortal(CustomerPortal):
             if not physician_partner:
                 return request.redirect("/my/lab/requests/new?error=physician_department")
 
+        client_partner_id = int(post.get("client_partner_id") or 0) or (partner.id if request_type == "institution" else False)
+        institution_partner = request.env["res.partner"].sudo().browse(client_partner_id).exists() if client_partner_id else request.env["res.partner"]
+        default_template = institution_partner.lab_default_report_template_id if institution_partner else request.env["lab.report.template"]
+        if not default_template:
+            default_template = request.env.ref("laboratory_management.report_template_classic", raise_if_not_found=False)
+
         values = {
             "requester_partner_id": partner.id,
             "request_type": request_type,
-            "client_partner_id": int(post.get("client_partner_id") or 0) or (partner.id if request_type == "institution" else False),
+            "client_partner_id": client_partner_id,
             "patient_name": (post.get("patient_name") or "").strip(),
             "patient_identifier": (post.get("patient_identifier") or "").strip(),
             "patient_phone": (post.get("patient_phone") or "").strip(),
@@ -660,7 +755,7 @@ class LaboratoryPortal(CustomerPortal):
             "clinical_note": (post.get("clinical_note") or "").strip(),
             "priority": priority,
             "company_id": request.env.company.id,
-            "preferred_template_id": int(post.get("preferred_template_id") or 0) or False,
+            "preferred_template_id": default_template.id or False,
             "line_ids": line_ids,
         }
         test_request = request.env["lab.test.request"].sudo().create(values)
@@ -750,8 +845,8 @@ class LaboratoryPortal(CustomerPortal):
         return request.redirect("/my/lab/requests/%s" % request_id)
 
     @http.route(["/my/lab/invoices", "/my/lab/invoices/page/<int:page>"], type="http", auth="user", website=True)
-    def portal_my_request_invoices(self, page=1, sortby="date", **kwargs):
-        domain = self._request_invoice_domain_for_current_user()
+    def portal_my_request_invoices(self, page=1, sortby="date", filterby="all", **kwargs):
+        domain, filterby = self._apply_filter_domain(self._request_invoice_domain_for_current_user(), self._invoice_filter_options(), filterby)
         sortings = {
             "date": {"label": _("Newest"), "order": "id desc"},
             "name": {"label": _("Invoice No."), "order": "name asc"},
@@ -766,6 +861,7 @@ class LaboratoryPortal(CustomerPortal):
             sortby=sortby,
             url="/my/lab/invoices",
             page=page,
+            url_args={"filterby": filterby},
         )
 
         values = self._prepare_portal_layout_values()
@@ -777,6 +873,8 @@ class LaboratoryPortal(CustomerPortal):
                 "default_url": "/my/lab/invoices",
                 "sortings": sortings,
                 "sortby": sortby,
+                "filters": self._invoice_filter_options(),
+                "filterby": filterby,
             }
         )
         return request.render("laboratory_management.portal_my_lab_request_invoices", values)
