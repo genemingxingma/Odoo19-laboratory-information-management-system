@@ -10,7 +10,6 @@
                 </div>
                 <div class="lab-portal-hero__actions">
                     <a href="/my/lab/dashboard" class="btn btn-primary">Open Lab Dashboard</a>
-                    <a href="/my/lab/requests/new" class="btn btn-outline-primary">Create Request</a>
                 </div>
             </section>
         </xpath>
@@ -21,14 +20,6 @@
                 <t t-set="url" t-value="'/my/lab/samples'"/>
                 <t t-set="text">Track sample status and view released reports</t>
                 <t t-set="placeholder_count" t-value="'lab_sample_count'"/>
-            </t>
-            <t t-call="portal.portal_docs_entry">
-                <t t-set="icon" t-value="'/laboratory_management/static/src/img/portal_lab_requests.svg'"/>
-                <t t-set="title">Test Requests</t>
-                <t t-set="url" t-value="'/my/lab/requests'"/>
-                <t t-set="text">Submit test requests and track request lifecycle</t>
-                <t t-set="placeholder_count" t-value="'lab_test_request_count'"/>
-                <t t-set="config_card" t-value="True"/>
             </t>
             <t t-call="portal.portal_docs_entry">
                 <t t-set="icon" t-value="'/web/static/img/icons/money.png'"/>
@@ -212,6 +203,24 @@
             <div class="lab-filter-chips">
                 <a t-foreach="filters.items()" t-as="flt" t-att-href="'/my/lab/samples?filterby=%s&amp;sortby=%s' % (flt[0], sortby)" t-att-class="'lab-filter-chip active' if filterby == flt[0] else 'lab-filter-chip'"><t t-esc="flt[1]['label']"/></a>
             </div>
+            <form action="/my/lab/samples" method="get" class="lab-search-panel mb-3">
+                <input type="hidden" name="filterby" t-att-value="filterby"/>
+                <input type="hidden" name="sortby" t-att-value="sortby"/>
+                <div class="row g-2">
+                    <div class="col-12 col-md-5">
+                        <input type="text" class="form-control" name="q" t-att-value="q" placeholder="Search accession, patient or test item"/>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <input type="date" class="form-control" name="date_from" t-att-value="date_from"/>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <input type="date" class="form-control" name="date_to" t-att-value="date_to"/>
+                    </div>
+                    <div class="col-12 col-md-1 d-grid">
+                        <button type="submit" class="btn btn-outline-primary">Go</button>
+                    </div>
+                </div>
+            </form>
             <t t-if="request.params.get('zip_error') == 'selection'">
                 <div class="alert alert-danger">Select at least one released report before downloading a ZIP package.</div>
             </t>
@@ -221,9 +230,16 @@
             <t t-if="records">
                 <form action="/my/lab/samples/reports/zip" method="post">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="filterby" t-att-value="filterby"/>
+                <input type="hidden" name="q" t-att-value="q"/>
+                <input type="hidden" name="date_from" t-att-value="date_from"/>
+                <input type="hidden" name="date_to" t-att-value="date_to"/>
                 <div class="lab-page-actions mb-3">
-                    <div class="text-muted">Select released reports and export them as one ZIP package.</div>
-                    <button type="submit" class="btn btn-outline-primary">Download Selected PDFs</button>
+                    <div class="text-muted">Select released reports or export the current reported filter as one ZIP package.</div>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button type="submit" class="btn btn-outline-primary">Download Selected PDFs</button>
+                        <button type="submit" name="download_scope" value="current_filter" class="btn btn-primary">Download Current Filter ZIP</button>
+                    </div>
                 </div>
                 <div class="lab-table-card">
                 <table class="table table-hover align-middle mb-0">
@@ -866,92 +882,115 @@
             <form id="lab_test_request_form" action="/my/lab/requests/new" method="post" enctype="multipart/form-data" class="card">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                 <div class="card-body">
-                    <h5>Basic Information</h5>
-                    <div class="row">
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Request Type</label>
-                            <input type="text" class="form-control" t-att-value="portal_request_type_label" readonly="readonly"/>
+                    <div class="js-request-step-panel" data-step-panel="1">
+                        <h5>Basic Information</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Request Type</label>
+                                <input type="text" class="form-control" t-att-value="portal_request_type_label" readonly="readonly"/>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Priority</label>
+                                <select class="form-select" name="priority">
+                                    <t t-foreach="priority_options" t-as="opt">
+                                        <option t-att-value="opt[0]"><t t-esc="opt[1]"/></option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Patient Name</label>
+                                <input type="text" class="form-control" name="patient_name" required="required"/>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Patient ID / Passport</label>
+                                <input type="text" class="form-control" name="patient_identifier"/>
+                                <small id="patient_lookup_hint" class="text-muted d-block mt-1"></small>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Patient Phone</label>
+                                <input type="text" class="form-control" name="patient_phone"/>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Department</label>
+                                <select class="form-select" name="physician_department_id" id="physician_department_id">
+                                    <option value="">Select Department</option>
+                                    <t t-foreach="physician_departments" t-as="dept">
+                                        <option t-att-value="dept.id"><t t-esc="dept.name"/></option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Physician</label>
+                                <select class="form-select mb-2" name="physician_partner_id" id="physician_partner_id">
+                                    <option value="">Select Physician</option>
+                                    <t t-foreach="physicians" t-as="phy">
+                                        <option
+                                            t-att-value="phy.id"
+                                            t-att-data-department-id="phy.lab_physician_department_id.id if phy.lab_physician_department_id else ''"
+                                        >
+                                            <t t-esc="phy.name"/><t t-if="phy.lab_physician_department_id"> (<t t-esc="phy.lab_physician_department_id.name"/>)</t>
+                                        </option>
+                                    </t>
+                                </select>
+                                <small class="text-muted">Physician is managed in laboratory backend.</small>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Clinical Note</label>
+                                <textarea class="form-control" name="clinical_note" rows="2"/>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Priority</label>
-                            <select class="form-select" name="priority">
-                                <t t-foreach="priority_options" t-as="opt">
-                                    <option t-att-value="opt[0]"><t t-esc="opt[1]"/></option>
-                                </t>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Patient Name</label>
-                            <input type="text" class="form-control" name="patient_name" required="required"/>
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Patient ID / Passport</label>
-                            <input type="text" class="form-control" name="patient_identifier"/>
-                            <small id="patient_lookup_hint" class="text-muted d-block mt-1"></small>
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Patient Phone</label>
-                            <input type="text" class="form-control" name="patient_phone"/>
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Department</label>
-                            <select class="form-select" name="physician_department_id" id="physician_department_id">
-                                <option value="">Select Department</option>
-                                <t t-foreach="physician_departments" t-as="dept">
-                                    <option t-att-value="dept.id"><t t-esc="dept.name"/></option>
-                                </t>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <label class="form-label">Physician</label>
-                            <select class="form-select mb-2" name="physician_partner_id" id="physician_partner_id">
-                                <option value="">Select Physician</option>
-                                <t t-foreach="physicians" t-as="phy">
-                                    <option
-                                        t-att-value="phy.id"
-                                        t-att-data-department-id="phy.lab_physician_department_id.id if phy.lab_physician_department_id else ''"
-                                    >
-                                        <t t-esc="phy.name"/><t t-if="phy.lab_physician_department_id"> (<t t-esc="phy.lab_physician_department_id.name"/>)</t>
-                                    </option>
-                                </t>
-                            </select>
-                            <small class="text-muted">Physician is managed in laboratory backend.</small>
-                        </div>
-                        <div class="col-md-12 mb-2">
-                            <label class="form-label">Clinical Note</label>
-                            <textarea class="form-control" name="clinical_note" rows="2"/>
-                        </div>
-                    </div>
-                    <hr/>
-                    <h5>Specimen and Test Combinations</h5>
-                    <input type="hidden" name="specimen_payload_json" id="specimen_payload_json"/>
-                    <input type="hidden" name="dynamic_form_payload_json" id="dynamic_form_payload_json"/>
-                    <div id="specimen_combo_container"></div>
-                    <div class="mb-2">
-                        <button type="button" id="btn_add_specimen_combo" class="btn btn-outline-secondary btn-sm">Add Combination</button>
-                    </div>
-                    <div id="dynamic_form_section" class="mt-3" style="display:none;">
-                        <h5>Custom Forms</h5>
-                        <div id="dynamic_form_container"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mb-2">
-                            <label class="form-label">Line Note (applies if line has no specific note)</label>
-                            <input type="text" class="form-control" name="line_note"/>
-                        </div>
-                        <div class="col-md-12 mb-2">
-                            <label class="form-label">Request Attachments</label>
-                            <input type="file" class="form-control" name="request_attachments" multiple="multiple" accept=".pdf,.jpg,.jpeg,.png,.webp"/>
-                            <small class="text-muted">You can upload request form photos or related documents.</small>
+                        <div class="lab-step-actions">
+                            <button type="button" class="btn btn-primary js-request-next" data-next-step="2">Next</button>
                         </div>
                     </div>
-                    <div class="form-check mt-2">
-                        <input class="form-check-input" type="checkbox" name="submit_now" id="submit_now" checked="checked"/>
-                        <label class="form-check-label" for="submit_now">Submit request immediately</label>
+                    <div class="js-request-step-panel" data-step-panel="2" style="display:none;">
+                        <h5>Specimen and Test Combinations</h5>
+                        <input type="hidden" name="specimen_payload_json" id="specimen_payload_json"/>
+                        <input type="hidden" name="dynamic_form_payload_json" id="dynamic_form_payload_json"/>
+                        <div id="specimen_combo_container"></div>
+                        <div class="mb-2">
+                            <button type="button" id="btn_add_specimen_combo" class="btn btn-outline-secondary btn-sm">Add Combination</button>
+                        </div>
+                        <div class="lab-step-actions">
+                            <button type="button" class="btn btn-outline-secondary js-request-prev" data-prev-step="1">Back</button>
+                            <button type="button" class="btn btn-primary js-request-next" data-next-step="3">Next</button>
+                        </div>
                     </div>
-                </div>
-                <div class="card-footer text-end">
-                    <button type="submit" class="btn btn-primary">Create Request</button>
+                    <div class="js-request-step-panel" data-step-panel="3" style="display:none;">
+                        <div id="dynamic_form_section" class="mt-3" style="display:none;">
+                            <h5>Custom Forms</h5>
+                            <div id="dynamic_form_container"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Line Note (applies if line has no specific note)</label>
+                                <input type="text" class="form-control" name="line_note"/>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Request Attachments</label>
+                                <input type="file" class="form-control" name="request_attachments" multiple="multiple" accept=".pdf,.jpg,.jpeg,.png,.webp"/>
+                                <small class="text-muted">You can upload request form photos or related documents.</small>
+                            </div>
+                        </div>
+                        <div class="lab-step-actions">
+                            <button type="button" class="btn btn-outline-secondary js-request-prev" data-prev-step="2">Back</button>
+                            <button type="button" class="btn btn-primary js-request-next" data-next-step="4">Review Submit</button>
+                        </div>
+                    </div>
+                    <div class="js-request-step-panel" data-step-panel="4" style="display:none;">
+                        <section class="lab-info-card">
+                            <h5 class="mb-2">Submission</h5>
+                            <p class="text-muted mb-3">The request will be created from the information entered in previous steps. Attachments and dynamic forms will be submitted together.</p>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" name="submit_now" id="submit_now" checked="checked"/>
+                                <label class="form-check-label" for="submit_now">Submit request immediately</label>
+                            </div>
+                        </section>
+                        <div class="lab-step-actions">
+                            <button type="button" class="btn btn-outline-secondary js-request-prev" data-prev-step="3">Back</button>
+                            <button type="submit" class="btn btn-primary">Create Request</button>
+                        </div>
+                    </div>
                 </div>
             </form>
             <t t-if="portal_request_type == 'institution'">
@@ -1020,9 +1059,33 @@
                         var physicianDepartmentSelect = document.getElementById("physician_department_id");
                         var physicianSelect = document.getElementById("physician_partner_id");
                         var patientHint = document.getElementById("patient_lookup_hint");
+                        var stepPanels = Array.prototype.slice.call(form.querySelectorAll(".js-request-step-panel"));
+                        var stepIndicators = Array.prototype.slice.call(document.querySelectorAll(".lab-request-step"));
                         if (!form || !container || !addButton || !payloadInput || !dynamicPayloadInput || !dynamicSection || !dynamicContainer) {
                             return;
                         }
+
+                        function setStep(stepNo) {
+                            stepPanels.forEach(function (panel) {
+                                panel.style.display = String(panel.getAttribute("data-step-panel")) === String(stepNo) ? "" : "none";
+                            });
+                            stepIndicators.forEach(function (indicator, idx) {
+                                indicator.classList.toggle("is-active", idx + 1 === Number(stepNo));
+                            });
+                            window.scrollTo({top: form.offsetTop - 24, behavior: "smooth"});
+                        }
+
+                        form.querySelectorAll(".js-request-next").forEach(function (btn) {
+                            btn.addEventListener("click", function () {
+                                setStep(btn.getAttribute("data-next-step"));
+                            });
+                        });
+                        form.querySelectorAll(".js-request-prev").forEach(function (btn) {
+                            btn.addEventListener("click", function () {
+                                setStep(btn.getAttribute("data-prev-step"));
+                            });
+                        });
+                        setStep(1);
 
                         function filterPhysiciansByDepartment() {
                             if (!physicianDepartmentSelect || !physicianSelect) {
@@ -1387,6 +1450,61 @@
                     }
                 })();
             ]]></script>
+        </t>
+    </template>
+
+    <template id="portal_lab_import_result" name="Portal Lab Import Result">
+        <t t-call="portal.portal_layout">
+            <div class="lab-page-header">
+                <div>
+                    <span class="lab-portal-eyebrow">Bulk Import</span>
+                    <h3 class="mb-1">CSV Import Result</h3>
+                    <p class="text-muted mb-0">Review created requests or download the error detail file for failed imports.</p>
+                </div>
+                <div class="lab-dashboard-header__actions">
+                    <a href="/my/lab/requests/new" class="btn btn-outline-primary">Back to Request Wizard</a>
+                    <a href="/my/lab/requests" class="btn btn-secondary">Request List</a>
+                </div>
+            </div>
+            <t t-if="bulk_import_result.get('status') == 'success'">
+                <div class="alert alert-success">
+                    <strong><t t-esc="bulk_import_result.get('message') or 'Success'"/></strong>
+                    <span class="ms-2">Created <t t-esc="bulk_import_result.get('created_count', 0)"/> request(s).</span>
+                </div>
+            </t>
+            <t t-if="bulk_import_result.get('status') == 'error'">
+                <div class="alert alert-danger">
+                    <strong>Import failed.</strong>
+                    <div class="mt-2"><t t-esc="bulk_import_result.get('message') or '-'"/></div>
+                    <div class="mt-3">
+                        <a href="/my/lab/requests/import/result/error.txt" class="btn btn-outline-danger btn-sm">Download Error Detail</a>
+                    </div>
+                </div>
+            </t>
+            <t t-if="bulk_import_records">
+                <div class="lab-table-card">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Request</th>
+                                <th>Patient</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="bulk_import_records" t-as="rec">
+                                <td><a t-att-href="'/my/lab/requests/%s' % rec.id"><t t-esc="rec.name"/></a></td>
+                                <td><t t-esc="rec.patient_id.name or rec.patient_name or '-'"/></td>
+                                <td><t t-esc="dict(request.env['lab.master.data.mixin'].sudo()._selection_priority()).get(rec.priority, rec.priority)"/></td>
+                                <td><span class="lab-badge"><t t-esc="dict(rec._fields['state'].selection).get(rec.state)"/></span></td>
+                                <td><t t-esc="rec.amount_total"/> <t t-esc="rec.currency_id.name"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
         </t>
     </template>
 

@@ -406,6 +406,24 @@ class LaboratoryPortal(CustomerPortal):
         filter_key = filterby if filterby in filter_map else next(iter(filter_map.keys()))
         return base_domain + filter_map[filter_key]["domain"], filter_key
 
+    def _apply_sample_search_domain(self, domain, q=None, date_from=None, date_to=None):
+        search_domain = list(domain)
+        if q:
+            term = q.strip()
+            if term:
+                search_domain += [
+                    "|",
+                    "|",
+                    ("name", "ilike", term),
+                    ("patient_id.name", "ilike", term),
+                    ("analysis_ids.service_id.name", "ilike", term),
+                ]
+        if date_from:
+            search_domain.append(("report_date", ">=", date_from))
+        if date_to:
+            search_domain.append(("report_date", "<=", date_to))
+        return search_domain
+
     def _prepare_lab_dashboard_values(self):
         partner = self._current_commercial_partner()
         sample_obj = request.env["lab.sample"].sudo()
@@ -482,8 +500,9 @@ class LaboratoryPortal(CustomerPortal):
         return request.env["lab.request.invoice"].sudo().search(domain, limit=1) or None
 
     @http.route(["/my/lab/samples", "/my/lab/samples/page/<int:page>"], type="http", auth="user", website=True)
-    def portal_my_samples(self, page=1, sortby="date", filterby="all", **kwargs):
+    def portal_my_samples(self, page=1, sortby="date", filterby="all", q=None, date_from=None, date_to=None, **kwargs):
         domain, filterby = self._apply_filter_domain(self._sample_domain_for_current_user(), self._sample_filter_options(), filterby)
+        domain = self._apply_sample_search_domain(domain, q=q, date_from=date_from, date_to=date_to)
         sortings = {
             "date": {"label": _("Newest"), "order": "id desc"},
             "name": {"label": _("Accession"), "order": "name asc"},
@@ -497,7 +516,7 @@ class LaboratoryPortal(CustomerPortal):
             sortby=sortby,
             url="/my/lab/samples",
             page=page,
-            url_args={"filterby": filterby},
+            url_args={"filterby": filterby, "q": q or "", "date_from": date_from or "", "date_to": date_to or ""},
         )
 
         values = self._prepare_portal_layout_values()
@@ -511,6 +530,9 @@ class LaboratoryPortal(CustomerPortal):
                 "sortby": sortby,
                 "filters": self._sample_filter_options(),
                 "filterby": filterby,
+                "q": q or "",
+                "date_from": date_from or "",
+                "date_to": date_to or "",
             }
         )
         return request.render("laboratory_management.portal_my_lab_samples", values)
@@ -567,17 +589,19 @@ class LaboratoryPortal(CustomerPortal):
     @http.route("/my/lab/samples/reports/zip", type="http", auth="user", website=True, methods=["POST"])
     def portal_sample_report_zip_download(self, **post):
         sample_ids = [int(x) for x in request.httprequest.form.getlist("sample_ids") if str(x).isdigit()]
-        if not sample_ids:
-            return request.redirect("/my/lab/samples?zip_error=selection")
-        samples = request.env["lab.sample"].sudo().search(
-            self._sample_domain_for_current_user()
-            + [
-                ("id", "in", sample_ids),
-                ("state", "in", ("verified", "reported")),
-                ("report_publication_state", "=", "active"),
-            ],
-            order="id desc",
-        )
+        scope = (post.get("download_scope") or "selection").strip()
+        filterby = (post.get("filterby") or "reported").strip()
+        q = (post.get("q") or "").strip()
+        date_from = (post.get("date_from") or "").strip()
+        date_to = (post.get("date_to") or "").strip()
+        domain, filterby = self._apply_filter_domain(self._sample_domain_for_current_user(), self._sample_filter_options(), filterby)
+        domain = self._apply_sample_search_domain(domain, q=q, date_from=date_from, date_to=date_to)
+        domain += [("state", "in", ("verified", "reported")), ("report_publication_state", "=", "active")]
+        if scope != "current_filter":
+            if not sample_ids:
+                return request.redirect("/my/lab/samples?zip_error=selection")
+            domain.append(("id", "in", sample_ids))
+        samples = request.env["lab.sample"].sudo().search(domain, order="id desc", limit=500)
         if not samples:
             return request.redirect("/my/lab/samples?zip_error=selection")
 
@@ -955,16 +979,68 @@ class LaboratoryPortal(CustomerPortal):
     def portal_test_request_import(self, **post):
         partner = self._current_commercial_partner()
         if not self._is_professional_partner(partner):
-            return request.redirect("/my/lab/requests/new?error=professional_only")
+            request.session["lab_bulk_import_result"] = {
+                "status": "error",
+                "message": _("Bulk CSV import is available for institution accounts only."),
+            }
+            return request.redirect("/my/lab/requests/import/result")
         csv_file = request.httprequest.files.get("bulk_request_csv")
         if not csv_file:
-            return request.redirect("/my/lab/requests/new?error=bulk_csv")
+            request.session["lab_bulk_import_result"] = {
+                "status": "error",
+                "message": _("No CSV file was uploaded."),
+            }
+            return request.redirect("/my/lab/requests/import/result")
         try:
             rows = self._parse_portal_bulk_request_csv(csv_file, "institution")
             created = self._create_portal_bulk_requests(partner, rows)
-        except (ValidationError, UserError):
-            return request.redirect("/my/lab/requests/new?error=bulk_csv")
-        return request.redirect("/my/lab/requests?bulk_created=%s" % len(created))
+        except (ValidationError, UserError) as exc:
+            request.session["lab_bulk_import_result"] = {
+                "status": "error",
+                "message": str(exc),
+            }
+            return request.redirect("/my/lab/requests/import/result")
+        request.session["lab_bulk_import_result"] = {
+            "status": "success",
+            "message": _("Bulk import completed successfully."),
+            "created_count": len(created),
+            "request_ids": created.ids,
+        }
+        return request.redirect("/my/lab/requests/import/result")
+
+    @http.route("/my/lab/requests/import/result", type="http", auth="user", website=True, methods=["GET"])
+    def portal_test_request_import_result(self, **kwargs):
+        payload = request.session.get("lab_bulk_import_result") or {}
+        request_ids = payload.get("request_ids") or []
+        records = request.env["lab.test.request"].sudo().search(
+            [("id", "in", request_ids)] + self._request_domain_for_current_user(),
+            order="id desc",
+            limit=50,
+        )
+        values = self._prepare_portal_layout_values()
+        values.update(
+            {
+                "page_name": "lab_test_requests",
+                "bulk_import_result": payload,
+                "bulk_import_records": records,
+            }
+        )
+        return request.render("laboratory_management.portal_lab_import_result", values)
+
+    @http.route("/my/lab/requests/import/result/error.txt", type="http", auth="user", website=True, methods=["GET"])
+    def portal_test_request_import_error_download(self, **kwargs):
+        payload = request.session.get("lab_bulk_import_result") or {}
+        if payload.get("status") != "error":
+            return request.redirect("/my/lab/requests/import/result")
+        content = (payload.get("message") or _("No error details available.")).encode("utf-8")
+        return request.make_response(
+            content,
+            headers=[
+                ("Content-Type", "text/plain; charset=utf-8"),
+                ("Content-Length", str(len(content))),
+                ("Content-Disposition", 'attachment; filename="lab-bulk-import-error.txt"'),
+            ],
+        )
 
     @http.route("/my/lab/requests/<int:request_id>", type="http", auth="user", website=True)
     def portal_test_request_detail(self, request_id, **kwargs):
