@@ -1,10 +1,11 @@
 openapi: 3.0.3
 info:
-  title: Laboratory LIS/HIS Interface API
-  version: 1.0.0
+  title: Laboratory Interface Channel API
+  version: 1.1.0
   description: |
-    Integration channel API for inbound/outbound communication.
-    Includes JSON-RPC style endpoints and raw message endpoint.
+    Lower-level LIS/HIS/instrument interface channel API.
+    This specification is aligned to controllers/interface_api.py.
+    It documents inbound JSON-RPC, inbound raw protocol messages and outbound ACK callback.
 servers:
   - url: https://{host}
     variables:
@@ -22,8 +23,9 @@ paths:
     post:
       tags: [Interface Inbound]
       summary: Inbound JSON-RPC message
-      description: Odoo route type is jsonrpc; body shown here is effective message payload.
-      operationId: inboundJsonrpc
+      description: |
+        Odoo route type is `jsonrpc`. The body shown here is the effective business payload.
+      operationId: interfaceInboundJsonrpc
       parameters:
         - in: path
           name: endpoint_code
@@ -37,7 +39,7 @@ paths:
               $ref: '#/components/schemas/InboundMessage'
       responses:
         '200':
-          description: ACK response
+          description: ACK payload
           content:
             application/json:
               schema:
@@ -46,8 +48,8 @@ paths:
   /lab/interface/inbound/{endpoint_code}/raw:
     post:
       tags: [Interface Inbound]
-      summary: Inbound raw message (HL7/FHIR/REST)
-      operationId: inboundRaw
+      summary: Inbound raw HL7/FHIR/REST message
+      operationId: interfaceInboundRaw
       parameters:
         - in: path
           name: endpoint_code
@@ -64,7 +66,7 @@ paths:
               type: object
       responses:
         '200':
-          description: Protocol-dependent ACK
+          description: Protocol-specific ACK
           content:
             text/plain:
               schema:
@@ -72,15 +74,23 @@ paths:
             application/fhir+json:
               schema:
                 type: object
+                additionalProperties: true
         '400':
-          description: Parsing/processing error
+          description: Parse or processing failure
+        '401':
+          description: Unauthorized
+        '403':
+          description: Direction not allowed
+        '404':
+          description: Endpoint not found
 
   /lab/interface/outbound/{endpoint_code}/ack:
     post:
       tags: [Interface Outbound]
       summary: Receive outbound ACK callback
-      description: Odoo route type is jsonrpc; body shown here is effective payload.
-      operationId: outboundAck
+      description: |
+        Odoo route type is `jsonrpc`. The body shown here is the effective business payload.
+      operationId: interfaceOutboundAck
       parameters:
         - in: path
           name: endpoint_code
@@ -99,7 +109,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OkResponse'
-
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -134,7 +143,7 @@ components:
           type: boolean
         ack_code:
           type: string
-          description: AA (accept), AE (error), AR (reject)
+          description: AA = accepted, AE = error, AR = rejected
         job_id:
           type: integer
         job_name:
@@ -149,7 +158,6 @@ components:
       properties:
         ack_code:
           type: string
-          description: AA/AE/AR etc.
         job_name:
           type: string
         job_id:

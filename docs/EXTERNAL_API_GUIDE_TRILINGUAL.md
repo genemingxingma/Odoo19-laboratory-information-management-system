@@ -1,93 +1,102 @@
-# External API Guide (Chinese / English / Thai)
+# External / Interface API Guide (Chinese / English / Thai)
 
-## 1. Scope | 范围 | ขอบเขต
+Scope note: portal website routes are excluded from this guide. This guide documents only machine-to-machine integration APIs.
 
-### 中文
-外部医院/机构可通过 API：
-- 推送检验申请
-- 查询申请与样本结果
-- 下载 PDF 报告
-
-### English
-External hospitals/institutions can use API to:
-- Push lab test requests
-- Query request/sample results
-- Download PDF reports
-
-### ไทย
-โรงพยาบาล/หน่วยงานภายนอกสามารถใช้ API เพื่อ:
-- ส่งคำขอตรวจ
-- ตรวจสอบผลคำขอและผลตัวอย่าง
-- ดาวน์โหลดรายงาน PDF
-
----
-
-## 2. Endpoint Setup | 接口端点配置 | การตั้งค่า Endpoint
+## 1. What This Guide Covers | 本指南覆盖内容 | คู่มือนี้ครอบคลุมอะไร
 
 ### 中文
-路径：`Laboratory > Configuration > Interface Endpoints`
-1. 新建 endpoint（`protocol=REST`）
-2. 设置鉴权（建议 `API Key` 或 `Bearer`）
-3. 勾选 `Enable External Lab API`
-4. 绑定 `External Institution` 与 `Data Company`
-5. 勾选能力：
-   - `Allow Request Push`
-   - `Allow Result Query`
-   - `Allow Report Download`
-   - `Allow Metadata Query`
+本文件同时说明两类接口：
+- 外部机构业务接口 `External Institution API`
+- LIS/HIS/仪器接口通道 `Interface Channel API`
 
 ### English
-Path: `Laboratory > Configuration > Interface Endpoints`
-1. Create endpoint (`protocol=REST`)
-2. Set authentication (`API Key` or `Bearer` recommended)
-3. Enable `Enable External Lab API`
-4. Bind `External Institution` and `Data Company`
-5. Enable capabilities:
-   - `Allow Request Push`
-   - `Allow Result Query`
-   - `Allow Report Download`
-   - `Allow Metadata Query`
+This guide covers two different integration layers:
+- `External Institution API`
+- `Interface Channel API`
 
 ### ไทย
-เมนู: `Laboratory > Configuration > Interface Endpoints`
-1. สร้าง endpoint (`protocol=REST`)
-2. ตั้งค่าการยืนยันตัวตน (แนะนำ `API Key` หรือ `Bearer`)
-3. เปิด `Enable External Lab API`
-4. ผูก `External Institution` และ `Data Company`
-5. เปิดสิทธิ์:
+คู่มือนี้อธิบาย 2 ชั้นของการเชื่อมต่อ:
+- `External Institution API`
+- `Interface Channel API`
+
+## 2. When To Use Which API | 何时使用哪类API | ควรใช้ API แบบใดเมื่อไร
+
+### 中文
+如果你是医院、机构、预约平台、在线商城、表单系统，请优先用 `External Institution API`。
+如果你是在做 HL7/FHIR、仪器结果回传、ACK 通道、HIS/LIS 双向消息，请用 `Interface Channel API`。
+
+### English
+Use `External Institution API` for hospital/institution ordering, portal-like request submission, marketplace integration, or form system integration.
+Use `Interface Channel API` for HL7/FHIR messaging, analyzer/LIS connectivity, raw interface channels, and ACK callbacks.
+
+### ไทย
+ใช้ `External Institution API` เมื่อทำระบบสั่งตรวจจากโรงพยาบาล/หน่วยงาน/แพลตฟอร์มภายนอก
+ใช้ `Interface Channel API` เมื่อทำ HL7/FHIR, เครื่องมือส่งผล, หรือช่องทาง ACK ระดับระบบ
+
+## 3. Backend Setup | 后台配置 | การตั้งค่า Backend
+
+### External Institution API
+Path:
+- `Laboratory > Configuration > Interface Endpoints`
+
+Required setup:
+1. `protocol = REST` for request/query/report/metadata APIs
+2. `protocol = HL7 v2.x` only if using `/hl7/oru`
+3. enable `Enable External Lab API`
+4. set authentication
+5. set `Data Company`
+6. bind `External Institution` when data scope should be restricted
+7. enable needed capability flags:
    - `Allow Request Push`
+   - `Allow Result Push`
    - `Allow Result Query`
    - `Allow Report Download`
    - `Allow Metadata Query`
 
----
+### Interface Channel API
+Path:
+- `Laboratory > Configuration > Interface Endpoints`
 
-## 3. API Endpoints | API地址 | เส้นทาง API
+Required setup:
+1. choose correct `protocol`: `REST`, `FHIR`, or `HL7 v2.x`
+2. choose `direction`: `inbound`, `outbound`, or `bidirectional`
+3. set authentication
+4. configure mapping schema if HL7/FHIR parsing needs field mapping
 
-Base: `/lab/api/v1/<endpoint_code>`
+## 4. External Institution API Flow | 外部机构API流程 | ลำดับการใช้งาน External API
 
+### Recommended business flow
+1. fetch metadata
+2. create request
+3. optionally upload request attachments
+4. poll request and/or sample status
+5. query sample results
+6. download final PDF
+7. optionally push external analyzer result back by REST or HL7 ORU
+
+## 5. External Institution API Routes | 外部机构API路由 | เส้นทาง External API
+
+Base:
+- `/lab/api/v1/<endpoint_code>`
+
+Routes:
 1. `POST /requests`
-2. `POST /results` (REST result push)
-3. `POST /samples/<accession>/results` (REST result push by accession path)
-4. `POST /hl7/oru` (HL7 ORU raw text push)
-5. `GET /requests/<request_no>`
+2. `POST /requests/<request_no>/attachments`
+3. `GET /requests/<request_no>`
+4. `POST /results`
+5. `POST /samples/<accession>/results`
 6. `GET /samples/<accession>/results`
-7. `GET /samples/<accession>/report/pdf`
-8. `GET /meta/sample_types`
-9. `GET /meta/services`
-10. `GET /meta/profiles`
+7. `POST /hl7/oru`
+8. `GET /samples/<accession>/report/pdf`
+9. `GET /meta/sample_types`
+10. `GET /meta/services`
+11. `GET /meta/profiles`
 
-Auth header examples:
-- `X-API-Key: <api_key>`
-- `Authorization: Bearer <token>`
-
----
-
-## 4. Request Push Example | 申请推送示例 | ตัวอย่างส่งคำขอ
+## 6. External Request Example | 外部申请示例 | ตัวอย่างสร้างคำขอ
 
 ```json
 {
-  "external_uid": "HIS-REQ-20260222-0001",
+  "external_uid": "HIS-REQ-20260307-0001",
   "priority": "routine",
   "clinical_note": "STD panel",
   "preferred_template_code": "classic",
@@ -102,8 +111,6 @@ Auth header examples:
     "country_code": "TH",
     "state_code": "BKK",
     "city": "Bangkok",
-    "emergency_contact_name": "Family A",
-    "emergency_contact_phone": "13800009999",
     "informed_consent_signed": true
   },
   "physician": {
@@ -118,7 +125,6 @@ Auth header examples:
     {
       "line_type": "profile",
       "profile_code": "STD7-7",
-      "quantity": 1,
       "specimen_ref": "SP1",
       "specimen_barcode": "CUP-0001",
       "specimen_sample_type": "swab",
@@ -128,73 +134,34 @@ Auth header examples:
 }
 ```
 
-Response:
+## 7. Attachment Upload Example | 附件上传示例 | ตัวอย่างอัปโหลดไฟล์แนบ
+
+### JSON base64 mode
 ```json
 {
-  "ok": true,
-  "request": {
-    "request_no": "REQ2602-00001",
-    "state": "submitted"
-  }
-}
-```
-
-Notes:
-- `external_uid` is idempotent key per endpoint.
-- Re-push with same `external_uid` returns existing request (`deduplicated=true`).
-- Specimen type should be passed by each line via `specimen_sample_type`.
-- If target service/panel requires dynamic forms, pass `dynamic_forms` in request payload.
-- API will match-or-create `lab.patient` / `lab.physician` using supplied identity fields under endpoint `Data Company`.
-
-Patient matching priority:
-1. `patient.id`
-2. `patient.identifier` / `patient_id_no` / `id_no`
-3. `patient.passport_no`
-4. `patient.name + patient.phone`
-
-Physician matching priority:
-1. `physician.id`
-2. `physician.code` / `partner_ref`
-3. `physician.license_no`
-4. `physician.name + physician.phone`
-
-Dynamic form payload example:
-```json
-{
-  "dynamic_forms": [
+  "attachments": [
     {
-      "form_code": "STD_PRETEST_QA",
-      "answers": {
-        "recent_exposure": "yes",
-        "symptoms": "no",
-        "consent": true
-      }
+      "name": "request-form.jpg",
+      "content_base64": "<base64>",
+      "mimetype": "image/jpeg"
     }
   ]
 }
 ```
 
----
+### Multipart mode
+- form field name: `files`
+- repeat field for multiple files
 
-## 5. Result Query Example | 结果查询示例 | ตัวอย่างตรวจผล
+## 8. Result Query / Result Push | 结果查询与回传 | ตรวจผลและส่งผลกลับ
 
-Request:
-- `GET /lab/api/v1/<endpoint_code>/samples/ACC2602-00001/results`
+### Query sample result
+- `GET /lab/api/v1/<endpoint_code>/samples/<accession>/results`
 
-Response includes:
-- sample state
-- analysis lines (`service_code`, `result_value`, `binary_interpretation`)
-- approved AI interpretation text (if visible)
-- structured patient info (`id`, `name`, `identifier`, `passport_no`)
-
----
-
-## 5.1 Result Push Example | 结果回传示例 | ตัวอย่างส่งผลตรวจกลับ
-
-REST JSON:
+### Push result by REST
 ```json
 {
-  "external_uid": "HIS-RES-20260226-0001",
+  "external_uid": "HIS-RES-20260307-0001",
   "accession": "ACC2602-00001",
   "results": [
     {"service_code": "STD_CT", "result": "7.2", "note": "Analyzer A1"}
@@ -202,100 +169,89 @@ REST JSON:
 }
 ```
 
-HL7 ORU endpoint:
+### Push result by HL7 ORU
 - `POST /lab/api/v1/<endpoint_code>/hl7/oru`
-- Body is raw HL7 ORU message text
-- Returns HL7 ACK (`AA/AE/AR`)
+- body is raw HL7 text
+- response is raw HL7 ACK
 
----
+## 9. PDF Download | PDF下载 | ดาวน์โหลด PDF
 
-## 6. PDF Download | PDF下载 | ดาวน์โหลด PDF
+- `GET /lab/api/v1/<endpoint_code>/samples/<accession>/report/pdf`
 
-Request:
-- `GET /lab/api/v1/<endpoint_code>/samples/ACC2602-00001/report/pdf`
+If report is not ready:
+```json
+{ "ok": false, "error": "report_not_ready" }
+```
 
-Return:
-- `Content-Type: application/pdf`
-- attachment file
+## 10. Metadata Sync | 元数据同步 | การซิงค์ Metadata
 
-If report not ready:
-- HTTP 409 + JSON `{ "ok": false, "error": "report_not_ready" }`
+Recommended sequence:
+1. sync `sample_types`
+2. sync `services`
+3. sync `profiles`
+4. cache locally
+5. refresh on schedule or before each shift
 
----
+## 11. Interface Channel API Routes | 接口通道路由 | เส้นทาง Interface API
 
-## 7. Data Isolation and Security | 数据隔离与安全 | การแยกข้อมูลและความปลอดภัย
+Base:
+- `/lab/interface`
+
+Routes:
+1. `POST /inbound/<endpoint_code>`
+2. `POST /inbound/<endpoint_code>/raw`
+3. `POST /outbound/<endpoint_code>/ack`
+
+### JSON-RPC inbound payload
+```json
+{
+  "message_type": "order",
+  "payload": {"external_uid": "ORDER-001"},
+  "external_uid": "ORDER-001"
+}
+```
+
+### Outbound ACK callback payload
+```json
+{
+  "ack_code": "AA",
+  "job_name": "OUT-0001",
+  "job_id": 321,
+  "external_uid": "ORDER-001",
+  "message": "accepted",
+  "payload": {}
+}
+```
+
+## 12. Important Behavior Notes | 重要行为说明 | หมายเหตุสำคัญ
 
 ### 中文
-- 所有 API 查询默认限定 `Data Company`
-- 且限定在 `External Institution` 的可见范围内
-- 禁止使用 `auth_type = none`
+- `auth_type = none` 当前实现允许，但不建议生产环境使用。
+- `External Institution API` 中 `/requests` 是 Odoo `json` 路由；其余多数是 `http` 路由。
+- `Interface Channel API` 中 `/inbound` 和 `/outbound/.../ack` 是 `jsonrpc` 路由。
+- `/hl7/oru` 返回纯文本 ACK，不返回 JSON。
+- 附件上传支持 JSON base64 和 multipart 两种模式。
 
 ### English
-- All API data is scoped by `Data Company`
-- Further filtered by `External Institution` visibility domain
-- `auth_type = none` is blocked for external API endpoints
+- `auth_type = none` is currently allowed by code, but not recommended for production.
+- In `External Institution API`, `/requests` is an Odoo `json` route; most others are `http` routes.
+- In `Interface Channel API`, `/inbound` and `/outbound/.../ack` are `jsonrpc` routes.
+- `/hl7/oru` returns plain text ACK, not JSON.
+- Attachment upload supports both JSON base64 and multipart modes.
 
 ### ไทย
-- ข้อมูล API ถูกจำกัดด้วย `Data Company`
-- และกรองตามขอบเขตการมองเห็นของ `External Institution`
-- ไม่อนุญาต `auth_type = none` สำหรับ endpoint ภายนอก
+- โค้ดปัจจุบันอนุญาต `auth_type = none` แต่ไม่แนะนำใน production
+- ใน `External Institution API` เส้นทาง `/requests` เป็น `json` route ของ Odoo ส่วนใหญ่เส้นทางอื่นเป็น `http`
+- ใน `Interface Channel API` เส้นทาง `/inbound` และ `/outbound/.../ack` เป็น `jsonrpc`
+- `/hl7/oru` ตอบกลับเป็น ACK แบบข้อความล้วน ไม่ใช่ JSON
+- การอัปโหลดไฟล์แนบรองรับทั้ง JSON base64 และ multipart
 
----
+## 13. Source of Truth | 真实依据 | แหล่งอ้างอิงจริง
 
-## 8. Metadata Sync Recommendation | 元数据同步建议 | คำแนะนำการซิงค์ Metadata
+Implementation source files:
+- `/Users/mingxingmac/Documents/Codex/Odoo19-laboratory-information-management-system/controllers/external_api.py`
+- `/Users/mingxingmac/Documents/Codex/Odoo19-laboratory-information-management-system/controllers/interface_api.py`
 
-### 中文
-- 对接系统应先拉取 `sample_types/services/profiles`，再给用户展示可选项。
-- 建议定时刷新 metadata（例如每天或每次班次开始）。
-- 若返回 `metadata_query_disabled`，请联系管理员在 endpoint 上开启 `Allow Metadata Query`。
-
-### English
-- External clients should fetch `sample_types/services/profiles` before showing selectable options.
-- Refresh metadata regularly (for example, daily or at shift start).
-- If API returns `metadata_query_disabled`, ask LIS admin to enable `Allow Metadata Query` on endpoint.
-
-### ไทย
-- ระบบภายนอกควรดึง `sample_types/services/profiles` ก่อนแสดงตัวเลือกให้ผู้ใช้
-- ควรรีเฟรช metadata เป็นระยะ (เช่น ทุกวัน หรือก่อนเริ่มกะ)
-- หาก API ตอบกลับ `metadata_query_disabled` ให้ผู้ดูแล LIS เปิด `Allow Metadata Query` ที่ endpoint
-
----
-
-## 9. Metadata Response Examples | 元数据响应示例 | ตัวอย่างผลลัพธ์ Metadata
-
-### Sample Types
-`GET /lab/api/v1/<endpoint_code>/meta/sample_types`
-
-```json
-{
-  "ok": true,
-  "sample_types": [
-    {"code": "swab", "name": "Swab", "is_default": true},
-    {"code": "blood", "name": "Whole Blood", "is_default": false}
-  ]
-}
-```
-
-### Services
-`GET /lab/api/v1/<endpoint_code>/meta/services`
-
-```json
-{
-  "ok": true,
-  "services": [
-    {"code": "STD_CT", "name": "Chlamydia Trachomatis PCR", "sample_type": "swab"}
-  ]
-}
-```
-
-### Profiles
-`GET /lab/api/v1/<endpoint_code>/meta/profiles`
-
-```json
-{
-  "ok": true,
-  "profiles": [
-    {"code": "STD7-7", "name": "STD 7 Panel", "sample_type": "swab"}
-  ]
-}
-```
+Machine-readable specs:
+- `/Users/mingxingmac/Documents/Codex/Odoo19-laboratory-information-management-system/docs/openapi/external_api_v1.yaml`
+- `/Users/mingxingmac/Documents/Codex/Odoo19-laboratory-information-management-system/docs/openapi/interface_api_v1.yaml`

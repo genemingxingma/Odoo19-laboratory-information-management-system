@@ -1,11 +1,12 @@
 openapi: 3.0.3
 info:
   title: Laboratory External Institution API
-  version: 1.4.0
+  version: 1.5.0
   description: |
-    REST API for external hospitals/institutions.
-    Supports request push, request query, sample result query, report PDF download,
-    and metadata query for sample types/services/profiles.
+    External business API for hospitals, institutions, partner platforms and ordering systems.
+    This specification is aligned to the current implementation in controllers/external_api.py.
+    It covers request creation, attachment upload, request query, sample result query,
+    REST/HL7 result push, PDF report download and metadata endpoints.
 servers:
   - url: https://{host}
     variables:
@@ -25,95 +26,41 @@ paths:
   /lab/api/v1/{endpoint_code}/requests:
     post:
       tags: [Requests]
-      summary: Create test request
+      summary: Create external test request
+      description: |
+        Odoo route type is `json`. Integrators should send a JSON body containing the business payload.
+        If `external_uid` already exists under the same endpoint, the response is deduplicated.
       operationId: createExternalRequest
       parameters:
         - in: path
           name: endpoint_code
           required: true
-          schema:
-            type: string
+          schema: { type: string }
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateRequestPayload'
-            examples:
-              serviceLine:
-                value:
-                  external_uid: HIS-REQ-20260222-9001
-                  priority: routine
-                  clinical_note: External API demo request
-                  patient:
-                    name: API Patient A
-                    identifier: API-ID-9001
-                    passport_no: P12345678
-                    gender: female
-                    birthdate: '1992-01-01'
-                    phone: '13800001111'
-                    email: patient@example.com
-                    country_code: TH
-                    state_code: BKK
-                    city: Bangkok
-                    emergency_contact_name: Family A
-                    emergency_contact_phone: '13800002222'
-                    informed_consent_signed: true
-                  physician:
-                    name: Dr. External
-                    partner_ref: PHY-001
-                    code: PHY-001
-                    license_no: LIC-9999
-                    specialty: Infectious Disease
-                    department_code: OPD
-                    institution_ref: HOSP-001
-                  lines:
-                    - line_type: service
-                      service_code: STD_CT
-                      quantity: 1
-                      specimen_ref: SP1
-                      specimen_barcode: API-CUP-9001
-                      specimen_sample_type: swab
-                  dynamic_forms:
-                    - form_code: STD_PRETEST_QA
-                      answers:
-                        recent_exposure: 'yes'
-                        symptoms: 'no'
-                        consent: true
       responses:
         '200':
-          description: Created or deduplicated by external_uid
+          description: Request created or deduplicated
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateRequestResponse'
+        '400':
+          description: Validation or create failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                unauthorized:
-                  value: { ok: false, error: unauthorized }
         '403':
-          description: Feature disabled or invalid endpoint protocol
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                disabled:
-                  value: { ok: false, error: request_push_disabled }
+          description: Request push disabled
         '404':
           description: Endpoint not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                notFound:
-                  value: { ok: false, error: endpoint_not_found }
 
   /lab/api/v1/{endpoint_code}/requests/{request_no}:
     get:
@@ -141,13 +88,13 @@ paths:
         '403':
           description: Result query disabled
         '404':
-          description: Request not found or endpoint not found
+          description: Request or endpoint not found
 
   /lab/api/v1/{endpoint_code}/requests/{request_no}/attachments:
     post:
       tags: [Requests]
-      summary: Upload request attachments
-      operationId: uploadExternalRequestAttachments
+      summary: Upload attachments to an existing request
+      operationId: uploadRequestAttachments
       parameters:
         - in: path
           name: endpoint_code
@@ -182,7 +129,7 @@ paths:
                     format: binary
       responses:
         '200':
-          description: Attachment uploaded
+          description: Attachments stored
           content:
             application/json:
               schema:
@@ -198,13 +145,13 @@ paths:
         '403':
           description: Request push disabled
         '404':
-          description: Request not found or endpoint not found
+          description: Request or endpoint not found
 
   /lab/api/v1/{endpoint_code}/results:
     post:
       tags: [Results]
-      summary: Push analysis results by accession
-      operationId: pushExternalResults
+      summary: Push results by accession in payload
+      operationId: pushResultsByPayload
       parameters:
         - in: path
           name: endpoint_code
@@ -216,39 +163,27 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ResultPushPayload'
-            examples:
-              resultPush:
-                value:
-                  external_uid: HIS-RES-20260226-0001
-                  accession: ACC2602-00318
-                  results:
-                    - service_code: HPV16
-                      result: "31.8"
-                      note: Ct from analyzer
-                    - service_code: HPV18
-                      result: "0"
-                      note: not detected
       responses:
         '200':
-          description: Result accepted
+          description: Ingest ACK payload
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResultPushResponse'
         '400':
-          description: Invalid payload or ingest failed
+          description: Invalid JSON or ingest failure
         '401':
           description: Unauthorized
         '403':
-          description: Result push disabled or protocol not allowed
+          description: Result push disabled, protocol not allowed, or direction not allowed
         '404':
           description: Endpoint not found
 
   /lab/api/v1/{endpoint_code}/samples/{accession}/results:
     post:
       tags: [Results]
-      summary: Push analysis results by accession (path mode)
-      operationId: pushExternalSampleResults
+      summary: Push results by accession in path
+      operationId: pushResultsByPath
       parameters:
         - in: path
           name: endpoint_code
@@ -266,23 +201,23 @@ paths:
               $ref: '#/components/schemas/ResultPushPayloadByPath'
       responses:
         '200':
-          description: Result accepted
+          description: Ingest ACK payload
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResultPushResponse'
         '400':
-          description: Invalid payload or ingest failed
+          description: Invalid JSON or ingest failure
         '401':
           description: Unauthorized
         '403':
-          description: Result push disabled or protocol not allowed
+          description: Result push disabled, protocol not allowed, or direction not allowed
         '404':
           description: Endpoint not found
     get:
       tags: [Samples]
       summary: Query sample results by accession
-      operationId: getExternalSampleResults
+      operationId: getSampleResults
       parameters:
         - in: path
           name: endpoint_code
@@ -304,13 +239,15 @@ paths:
         '403':
           description: Result query disabled
         '404':
-          description: Sample not found or endpoint not found
+          description: Sample or endpoint not found
 
   /lab/api/v1/{endpoint_code}/hl7/oru:
     post:
       tags: [Results]
-      summary: Push HL7 ORU^R01 raw message
-      operationId: pushExternalHl7Oru
+      summary: Push raw HL7 ORU message
+      description: |
+        Endpoint protocol must be `hl7v2`. Response is plain text HL7 ACK.
+      operationId: pushHl7Oru
       parameters:
         - in: path
           name: endpoint_code
@@ -334,15 +271,15 @@ paths:
         '401':
           description: Unauthorized
         '403':
-          description: Result push disabled, endpoint protocol not hl7v2, or direction not allowed
+          description: Result push disabled, protocol mismatch, or direction not allowed
         '404':
           description: Endpoint not found
 
   /lab/api/v1/{endpoint_code}/samples/{accession}/report/pdf:
     get:
       tags: [Reports]
-      summary: Download sample report PDF
-      operationId: downloadExternalSampleReportPdf
+      summary: Download report PDF
+      operationId: downloadReportPdf
       parameters:
         - in: path
           name: endpoint_code
@@ -354,7 +291,7 @@ paths:
           schema: { type: string }
       responses:
         '200':
-          description: PDF binary
+          description: PDF stream
           content:
             application/pdf:
               schema:
@@ -365,22 +302,19 @@ paths:
         '403':
           description: Report download disabled
         '404':
-          description: Sample/endpoint not found
+          description: Sample or endpoint not found
         '409':
           description: Report not ready
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                notReady:
-                  value: { ok: false, error: report_not_ready }
 
   /lab/api/v1/{endpoint_code}/meta/sample_types:
     get:
       tags: [Metadata]
-      summary: Query sample types metadata
-      operationId: getExternalSampleTypesMeta
+      summary: Query specimen type metadata
+      operationId: getSampleTypesMeta
       parameters:
         - in: path
           name: endpoint_code
@@ -388,38 +322,23 @@ paths:
           schema: { type: string }
       responses:
         '200':
-          description: Active sample type metadata
+          description: Active specimen types
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SampleTypesMetaResponse'
-              examples:
-                ok:
-                  value:
-                    ok: true
-                    sample_types:
-                      - code: swab
-                        name: Swab
-                        is_default: true
         '401':
           description: Unauthorized
         '403':
           description: Metadata query disabled
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                disabled:
-                  value: { ok: false, error: metadata_query_disabled }
         '404':
           description: Endpoint not found
 
   /lab/api/v1/{endpoint_code}/meta/services:
     get:
       tags: [Metadata]
-      summary: Query services metadata
-      operationId: getExternalServicesMeta
+      summary: Query service metadata
+      operationId: getServicesMeta
       parameters:
         - in: path
           name: endpoint_code
@@ -427,38 +346,23 @@ paths:
           schema: { type: string }
       responses:
         '200':
-          description: Active service metadata
+          description: Active services
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServicesMetaResponse'
-              examples:
-                ok:
-                  value:
-                    ok: true
-                    services:
-                      - code: STD_CT
-                        name: Chlamydia Trachomatis PCR
-                        sample_type: swab
         '401':
           description: Unauthorized
         '403':
           description: Metadata query disabled
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                disabled:
-                  value: { ok: false, error: metadata_query_disabled }
         '404':
           description: Endpoint not found
 
   /lab/api/v1/{endpoint_code}/meta/profiles:
     get:
       tags: [Metadata]
-      summary: Query profiles metadata
-      operationId: getExternalProfilesMeta
+      summary: Query panel metadata
+      operationId: getProfilesMeta
       parameters:
         - in: path
           name: endpoint_code
@@ -466,33 +370,17 @@ paths:
           schema: { type: string }
       responses:
         '200':
-          description: Active profile metadata
+          description: Active panels
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProfilesMetaResponse'
-              examples:
-                ok:
-                  value:
-                    ok: true
-                    profiles:
-                      - code: STD7-7
-                        name: STD 7 Panel
-                        sample_type: swab
         '401':
           description: Unauthorized
         '403':
           description: Metadata query disabled
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                disabled:
-                  value: { ok: false, error: metadata_query_disabled }
         '404':
           description: Endpoint not found
-
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -505,7 +393,6 @@ components:
     BasicAuth:
       type: http
       scheme: basic
-
   schemas:
     ErrorResponse:
       type: object
@@ -516,27 +403,24 @@ components:
           enum: [false]
         error:
           type: string
-          enum:
-            - endpoint_not_found
-            - endpoint_protocol_not_allowed
-            - unauthorized
-            - request_push_disabled
-            - result_push_disabled
-            - result_query_disabled
-            - report_download_disabled
-            - metadata_query_disabled
-            - accession_required
-            - results_required
-            - lines_required
-            - invalid_line_type
-            - service_not_found
-            - profile_not_found
-            - request_not_found
-            - sample_not_found
-            - report_not_ready
-            - required_dynamic_form_missing
-            - required_dynamic_field_missing
-            - dynamic_form_not_found
+          description: Current implementation error code
+        detail:
+          type: string
+        line_index:
+          type: integer
+        attachment_index:
+          type: integer
+        max_bytes:
+          type: integer
+        allowed_protocols:
+          type: array
+          items: { type: string }
+        service_code:
+          type: string
+        profile_code:
+          type: string
+        specimen_sample_type:
+          type: string
 
     CreateRequestPayload:
       type: object
@@ -544,7 +428,6 @@ components:
       properties:
         external_uid:
           type: string
-          description: Idempotency key unique under one endpoint
         requested_collection_date:
           type: string
           format: date-time
@@ -570,29 +453,135 @@ components:
           items:
             $ref: '#/components/schemas/AttachmentInput'
         dynamic_forms:
-          type: array
-          items:
-            $ref: '#/components/schemas/DynamicFormInput'
+          type: object
+          additionalProperties: true
+          description: Current implementation validates a keyed form payload object.
+
+    PatientInput:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        identifier: { type: string }
+        patient_id_no: { type: string }
+        id_no: { type: string }
+        passport_no: { type: string }
+        passport: { type: string }
+        gender:
+          type: string
+          enum: [male, female, other, unknown]
+        birthdate:
+          type: string
+          format: date
+        phone: { type: string }
+        email:
+          type: string
+          format: email
+        lang: { type: string }
+        street: { type: string }
+        street2: { type: string }
+        city: { type: string }
+        state_id: { type: integer }
+        state_code: { type: string }
+        state: { type: string }
+        zip: { type: string }
+        country_id: { type: integer }
+        country_code: { type: string }
+        country: { type: string }
+        emergency_contact_name: { type: string }
+        emergency_contact_phone: { type: string }
+        emergency_contact_relation: { type: string }
+        allergy_history: { type: string }
+        past_medical_history: { type: string }
+        medication_history: { type: string }
+        pregnancy_status:
+          type: string
+          enum: [not_applicable, pregnant, not_pregnant, unknown]
+        breastfeeding: { type: boolean }
+        insurance_provider: { type: string }
+        insurance_no: { type: string }
+        informed_consent_signed: { type: boolean }
+        informed_consent_date:
+          type: string
+          format: date
+        note: { type: string }
+
+    PhysicianInput:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        code: { type: string }
+        partner_ref: { type: string }
+        license_no: { type: string }
+        title: { type: string }
+        specialty: { type: string }
+        phone: { type: string }
+        email:
+          type: string
+          format: email
+        department_id: { type: integer }
+        department_code: { type: string }
+        institution_id: { type: integer }
+        institution_ref: { type: string }
+        institution_name: { type: string }
+        notify_by_email: { type: boolean }
+        notify_by_sms: { type: boolean }
+        note: { type: string }
+
+    RequestLineInput:
+      type: object
+      required: [line_type, specimen_sample_type]
+      properties:
+        line_type:
+          type: string
+          enum: [service, profile]
+        service_code:
+          type: string
+        profile_code:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+          default: 1
+        specimen_ref:
+          type: string
+          default: SP1
+        specimen_barcode:
+          type: string
+        specimen_sample_type:
+          type: string
+        note:
+          type: string
+
+    AttachmentInput:
+      type: object
+      required: [name, content_base64]
+      properties:
+        name: { type: string }
+        filename: { type: string }
+        content_base64:
+          type: string
+          description: Base64 binary data
+        datas:
+          type: string
+          description: Alias of content_base64
+        mimetype: { type: string }
 
     ResultLineInput:
       type: object
       required: [service_code, result]
       properties:
-        service_code:
-          type: string
-        result:
-          type: string
-        note:
-          type: string
+        service_code: { type: string }
+        result: { type: string }
+        note: { type: string }
 
     ResultPushPayload:
       type: object
       required: [accession, results]
       properties:
-        external_uid:
-          type: string
-        accession:
-          type: string
+        external_uid: { type: string }
+        accession: { type: string }
         results:
           type: array
           minItems: 1
@@ -606,8 +595,7 @@ components:
       type: object
       required: [results]
       properties:
-        external_uid:
-          type: string
+        external_uid: { type: string }
         results:
           type: array
           minItems: 1
@@ -620,237 +608,40 @@ components:
     ResultPushResponse:
       type: object
       properties:
-        ok:
-          type: boolean
+        ok: { type: boolean }
         ack_code:
           type: string
           enum: [AA, AE, AR]
-        job_id:
-          type: integer
-        job_name:
-          type: string
-        state:
-          type: string
-        error:
-          type: string
-
-    PatientInput:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Existing lab.patient id (same company)
-        name:
-          type: string
-        patient_id_no:
-          type: string
-          description: Alias of identifier
-        id_no:
-          type: string
-          description: Alias of identifier
-        identifier:
-          type: string
-          description: Patient ID / national ID
-        passport_no:
-          type: string
-        passport:
-          type: string
-          description: Alias of passport_no
-        gender:
-          type: string
-          enum: [male, female, other, unknown]
-          default: unknown
-        birthdate:
-          type: string
-          format: date
-        phone:
-          type: string
-        email:
-          type: string
-          format: email
-        lang:
-          type: string
-          description: Odoo language code, e.g. en_US / zh_CN / th_TH
-        street:
-          type: string
-        street2:
-          type: string
-        city:
-          type: string
-        state_id:
-          type: integer
-        state_code:
-          type: string
-        state:
-          type: string
-        zip:
-          type: string
-        country_id:
-          type: integer
-        country_code:
-          type: string
-        country:
-          type: string
-        emergency_contact_name:
-          type: string
-        emergency_contact_phone:
-          type: string
-        emergency_contact_relation:
-          type: string
-        allergy_history:
-          type: string
-        past_medical_history:
-          type: string
-        medication_history:
-          type: string
-        pregnancy_status:
-          type: string
-          enum: [not_applicable, pregnant, not_pregnant, unknown]
-        breastfeeding:
-          type: boolean
-        insurance_provider:
-          type: string
-        insurance_no:
-          type: string
-        informed_consent_signed:
-          type: boolean
-        informed_consent_date:
-          type: string
-          format: date
-        note:
-          type: string
-
-    PhysicianInput:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Existing lab.physician id (same company)
-        name:
-          type: string
-        code:
-          type: string
-        partner_ref:
-          type: string
-          description: Alias of code
-        license_no:
-          type: string
-        title:
-          type: string
-        specialty:
-          type: string
-        phone:
-          type: string
-        email:
-          type: string
-          format: email
-        department_id:
-          type: integer
-        department_code:
-          type: string
-        institution_id:
-          type: integer
-        institution_ref:
-          type: string
-          description: Match partner ref/vat
-        institution_name:
-          type: string
-        notify_by_email:
-          type: boolean
-        notify_by_sms:
-          type: boolean
-        note:
-          type: string
-
-    RequestLineInput:
-      type: object
-      required: [line_type]
-      properties:
-        line_type:
-          type: string
-          enum: [service, profile]
-        service_code:
-          type: string
-          description: Required when line_type=service
-        profile_code:
-          type: string
-          description: Required when line_type=profile
-        quantity:
-          type: integer
-          minimum: 1
-          default: 1
-        specimen_ref:
-          type: string
-          default: SP1
-        specimen_barcode:
-          type: string
-        specimen_sample_type:
-          type: string
-          default: swab
-        note:
-          type: string
-
-    AttachmentInput:
-      type: object
-      required: [name, content_base64]
-      properties:
-        name:
-          type: string
-        content_base64:
-          type: string
-          description: Base64-encoded binary content
-        mimetype:
-          type: string
-
-    DynamicFormInput:
-      type: object
-      required: [form_code, answers]
-      properties:
-        form_code:
-          type: string
-        answers:
-          type: object
-          additionalProperties: true
-          description: Key-value map; key must match dynamic form field key.
+        job_id: { type: integer }
+        job_name: { type: string }
+        state: { type: string }
+        error: { type: string }
 
     CreateRequestResponse:
       type: object
-      required: [ok]
       properties:
-        ok:
-          type: boolean
-        deduplicated:
-          type: boolean
-          description: true when external_uid already exists
+        ok: { type: boolean }
+        deduplicated: { type: boolean }
         request:
           $ref: '#/components/schemas/RequestObject'
 
     RequestQueryResponse:
       type: object
-      required: [ok]
       properties:
-        ok:
-          type: boolean
+        ok: { type: boolean }
         request:
           $ref: '#/components/schemas/RequestObject'
 
     RequestObject:
       type: object
       properties:
-        id:
-          type: integer
-        request_no:
-          type: string
-        state:
-          type: string
-        request_type:
-          type: string
-        requester:
-          type: string
-        institution:
-          type: string
-        priority:
-          type: string
+        id: { type: integer }
+        request_no: { type: string }
+        state: { type: string }
+        request_type: { type: string }
+        requester: { type: string }
+        institution: { type: string }
+        priority: { type: string }
         submitted_at:
           type: string
           format: date-time
@@ -879,14 +670,10 @@ components:
     RequestSample:
       type: object
       properties:
-        sample_id:
-          type: integer
-        accession:
-          type: string
-        barcode:
-          type: string
-        state:
-          type: string
+        sample_id: { type: integer }
+        accession: { type: string }
+        barcode: { type: string }
+        state: { type: string }
         report_date:
           type: string
           format: date-time
@@ -895,26 +682,19 @@ components:
     AttachmentSummary:
       type: object
       properties:
-        id:
-          type: integer
-        name:
-          type: string
-        mimetype:
-          type: string
-        size:
-          type: integer
+        id: { type: integer }
+        name: { type: string }
+        mimetype: { type: string }
+        size: { type: integer }
 
     UploadAttachmentResponse:
       type: object
-      required: [ok, request_no, attachments_uploaded]
       properties:
         ok:
           type: boolean
           enum: [true]
-        request_no:
-          type: string
-        attachments_uploaded:
-          type: integer
+        request_no: { type: string }
+        attachments_uploaded: { type: integer }
         attachments:
           type: array
           items:
@@ -922,7 +702,6 @@ components:
 
     SampleResultResponse:
       type: object
-      required: [ok, sample]
       properties:
         ok:
           type: boolean
@@ -930,9 +709,45 @@ components:
         sample:
           $ref: '#/components/schemas/SampleObject'
 
+    SampleObject:
+      type: object
+      properties:
+        id: { type: integer }
+        accession: { type: string }
+        barcode: { type: string }
+        state: { type: string }
+        report_date:
+          type: string
+          format: date-time
+          nullable: true
+        patient:
+          $ref: '#/components/schemas/SamplePatientSummary'
+        request_no: { type: string }
+        ai_interpretation:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultLine'
+
+    ResultLine:
+      type: object
+      properties:
+        service_code: { type: string }
+        service_name: { type: string }
+        result_value: { type: string }
+        binary_interpretation: { type: string }
+        state: { type: string }
+        unit: { type: string }
+        ref_min:
+          type: number
+          nullable: true
+        ref_max:
+          type: number
+          nullable: true
+
     SampleTypesMetaResponse:
       type: object
-      required: [ok, sample_types]
       properties:
         ok:
           type: boolean
@@ -944,7 +759,6 @@ components:
 
     ServicesMetaResponse:
       type: object
-      required: [ok, services]
       properties:
         ok:
           type: boolean
@@ -956,7 +770,6 @@ components:
 
     ProfilesMetaResponse:
       type: object
-      required: [ok, profiles]
       properties:
         ok:
           type: boolean
@@ -966,114 +779,45 @@ components:
           items:
             $ref: '#/components/schemas/ProfileMeta'
 
-    SampleObject:
-      type: object
-      properties:
-        id:
-          type: integer
-        accession:
-          type: string
-        barcode:
-          type: string
-        state:
-          type: string
-        report_date:
-          type: string
-          format: date-time
-          nullable: true
-        patient:
-          $ref: '#/components/schemas/SamplePatientSummary'
-        request_no:
-          type: string
-        ai_interpretation:
-          type: string
-          description: Empty string when AI text is not portal-visible
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultLine'
-
-    ResultLine:
-      type: object
-      properties:
-        service_code:
-          type: string
-        service_name:
-          type: string
-        result_value:
-          type: string
-        binary_interpretation:
-          type: string
-        state:
-          type: string
-        unit:
-          type: string
-        ref_min:
-          type: number
-          nullable: true
-        ref_max:
-          type: number
-          nullable: true
-
     SampleTypeMeta:
       type: object
       properties:
-        code:
-          type: string
-        name:
-          type: string
-        is_default:
-          type: boolean
+        code: { type: string }
+        name: { type: string }
+        is_default: { type: boolean }
 
     ServiceMeta:
       type: object
       properties:
-        code:
-          type: string
-        name:
-          type: string
-        sample_type:
-          type: string
+        code: { type: string }
+        name: { type: string }
+        sample_type: { type: string }
 
     ProfileMeta:
       type: object
       properties:
-        code:
-          type: string
-        name:
-          type: string
-        sample_type:
-          type: string
+        code: { type: string }
+        name: { type: string }
+        sample_type: { type: string }
 
     PatientAddress:
       type: object
       properties:
-        street:
-          type: string
-        street2:
-          type: string
-        city:
-          type: string
-        state_code:
-          type: string
-        state:
-          type: string
-        zip:
-          type: string
-        country_code:
-          type: string
-        country:
-          type: string
+        street: { type: string }
+        street2: { type: string }
+        city: { type: string }
+        state_code: { type: string }
+        state: { type: string }
+        zip: { type: string }
+        country_code: { type: string }
+        country: { type: string }
 
     PatientEmergencyContact:
       type: object
       properties:
-        name:
-          type: string
-        phone:
-          type: string
-        relation:
-          type: string
+        name: { type: string }
+        phone: { type: string }
+        relation: { type: string }
 
     PatientSummary:
       type: object
@@ -1081,26 +825,18 @@ components:
         id:
           type: integer
           nullable: true
-        name:
-          type: string
-        identifier:
-          type: string
-        passport_no:
-          type: string
-        gender:
-          type: string
+        name: { type: string }
+        identifier: { type: string }
+        passport_no: { type: string }
+        gender: { type: string }
         birthdate:
           type: string
           format: date
           nullable: true
-        age_display:
-          type: string
-        phone:
-          type: string
-        email:
-          type: string
-        lang:
-          type: string
+        age_display: { type: string }
+        phone: { type: string }
+        email: { type: string }
+        lang: { type: string }
         address:
           $ref: '#/components/schemas/PatientAddress'
         emergency_contact:
@@ -1112,10 +848,8 @@ components:
         id:
           type: integer
           nullable: true
-        code:
-          type: string
-        name:
-          type: string
+        code: { type: string }
+        name: { type: string }
 
     PhysicianInstitutionSummary:
       type: object
@@ -1123,8 +857,7 @@ components:
         id:
           type: integer
           nullable: true
-        name:
-          type: string
+        name: { type: string }
 
     PhysicianSummary:
       type: object
@@ -1132,28 +865,19 @@ components:
         id:
           type: integer
           nullable: true
-        name:
-          type: string
-        code:
-          type: string
-        license_no:
-          type: string
-        title:
-          type: string
-        specialty:
-          type: string
-        phone:
-          type: string
-        email:
-          type: string
+        name: { type: string }
+        code: { type: string }
+        license_no: { type: string }
+        title: { type: string }
+        specialty: { type: string }
+        phone: { type: string }
+        email: { type: string }
         department:
           $ref: '#/components/schemas/PhysicianDepartmentSummary'
         institution:
           $ref: '#/components/schemas/PhysicianInstitutionSummary'
-        notify_by_email:
-          type: boolean
-        notify_by_sms:
-          type: boolean
+        notify_by_email: { type: boolean }
+        notify_by_sms: { type: boolean }
 
     SamplePatientSummary:
       type: object
@@ -1161,9 +885,6 @@ components:
         id:
           type: integer
           nullable: true
-        name:
-          type: string
-        identifier:
-          type: string
-        passport_no:
-          type: string
+        name: { type: string }
+        identifier: { type: string }
+        passport_no: { type: string }
