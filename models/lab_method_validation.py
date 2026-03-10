@@ -5,7 +5,7 @@ from odoo.exceptions import UserError, ValidationError
 class LabMethodValidation(models.Model):
     _name = "lab.method.validation"
     _description = "Lab Method Validation"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin", "lab.governance.evidence.mixin"]
     _order = "id desc"
 
     name = fields.Char(default="New", readonly=True, copy=False, tracking=True)
@@ -62,6 +62,8 @@ class LabMethodValidation(models.Model):
     rejected_by_id = fields.Many2one("res.users", readonly=True, tracking=True)
     rejected_at = fields.Datetime(readonly=True, tracking=True)
     reject_reason = fields.Text()
+    change_control_ids = fields.Many2many("lab.change.control", string="Linked Change Controls")
+    risk_register_ids = fields.Many2many("lab.risk.register", string="Linked Risks")
 
     is_active_for_release = fields.Boolean(compute="_compute_is_active_for_release", store=True)
 
@@ -141,6 +143,13 @@ class LabMethodValidation(models.Model):
                     "reject_reason": False,
                 }
             )
+            rec._ensure_governance_evidence(
+                evidence_type="validation",
+                title=_("Validation approval evidence for %s") % rec.display_name,
+                reference=rec.name,
+                summary=rec.summary_result or rec.plan_note or rec.display_name,
+                extra_vals={"method_validation_id": rec.id},
+            )
 
     def action_reject(self):
         for rec in self:
@@ -161,6 +170,36 @@ class LabMethodValidation(models.Model):
             if rec.state != "approved":
                 continue
             rec.state = "expired"
+
+    def action_create_change_control(self):
+        for rec in self:
+            if rec.change_control_ids:
+                continue
+            change = self.env["lab.change.control"].create(
+                {
+                    "title": _("Method validation change for %s") % rec.service_id.name,
+                    "change_type": "method",
+                    "reason": rec.plan_note or rec.summary_result or rec.name,
+                    "scope_summary": _("Method version: %s") % rec.method_version,
+                    "impact_assessment": rec.summary_result or rec.plan_note or rec.name,
+                    "implementation_plan": _("Implement validated method version %s for routine release.") % rec.method_version,
+                    "rollback_plan": _("Rollback to previous approved method if validation outcome cannot be sustained."),
+                    "validation_required": True,
+                    "method_validation_ids": [(6, 0, [rec.id])],
+                    "service_ids": [(6, 0, [rec.service_id.id])],
+                    "document_review_required": True,
+                    "training_required": True,
+                }
+            )
+            rec.change_control_ids = [(4, change.id)]
+            rec._ensure_governance_evidence(
+                evidence_type="other",
+                title=_("Change control generated for %s") % rec.display_name,
+                reference=change.name,
+                summary=change.title,
+                extra_vals={"method_validation_id": rec.id, "change_control_id": change.id},
+            )
+        return True
 
     @api.model
     def _cron_notify_validation_review_due(self):

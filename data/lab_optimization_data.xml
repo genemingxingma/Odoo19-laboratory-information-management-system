@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_lab_operation_exception" model="ir.sequence">
+        <field name="name">Lab Operation Exception</field>
+        <field name="code">lab.operation.exception</field>
+        <field name="prefix">EXC%(y)s</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_lab_instrument_run" model="ir.sequence">
+        <field name="name">Lab Instrument Run</field>
+        <field name="code">lab.instrument.run</field>
+        <field name="prefix">RUN%(y)s</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="lab_workflow_route_exception_owner" model="lab.workflow.route">
+        <field name="name">Exception Owner Follow-up</field>
+        <field name="code">exception_owner</field>
+        <field name="target_model">lab.operation.exception</field>
+        <field name="role_group_id" ref="laboratory_management.group_lab_quality_manager"/>
+        <field name="deadline_hours">24</field>
+        <field name="summary_template">Resolve laboratory exception</field>
+    </record>
+
+    <record id="lab_workflow_route_run_review" model="lab.workflow.route">
+        <field name="name">Run Review</field>
+        <field name="code">run_review</field>
+        <field name="target_model">lab.instrument.run</field>
+        <field name="role_group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="deadline_hours">8</field>
+        <field name="summary_template">Review imported run</field>
+    </record>
+
+    <record id="lab_workflow_route_referral_followup" model="lab.workflow.route">
+        <field name="name">Referral Follow-up</field>
+        <field name="code">referral_followup</field>
+        <field name="target_model">lab.referral.order</field>
+        <field name="role_group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="deadline_hours">24</field>
+        <field name="summary_template">Follow up referral order</field>
+    </record>
+
+    <record id="lab_workflow_route_preauth_review" model="lab.workflow.route">
+        <field name="name">Preauthorization Review</field>
+        <field name="code">preauthorization_review</field>
+        <field name="target_model">lab.test.request</field>
+        <field name="role_group_id" ref="laboratory_management.group_lab_manager"/>
+        <field name="deadline_hours">12</field>
+        <field name="summary_template">Review pre-authorization</field>
+    </record>
+
+    <record id="lab_workflow_route_pathology_signoff" model="lab.workflow.route">
+        <field name="name">Pathology Sign-off Review</field>
+        <field name="code">pathology_signoff</field>
+        <field name="target_model">lab.pathology.case</field>
+        <field name="role_group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="deadline_hours">8</field>
+        <field name="summary_template">Review pathology diagnosis</field>
+    </record>
+
+    <record id="lab_workflow_route_pathology_release" model="lab.workflow.route">
+        <field name="name">Pathology Report Release</field>
+        <field name="code">pathology_release</field>
+        <field name="target_model">lab.pathology.case</field>
+        <field name="role_group_id" ref="laboratory_management.group_lab_reviewer"/>
+        <field name="deadline_hours">8</field>
+        <field name="summary_template">Release pathology report</field>
+    </record>
+</odoo>

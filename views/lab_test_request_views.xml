@@ -311,8 +311,8 @@
         <field name="domain">[('state', '=', 'quoted')]</field>
     </record>
 
-    <menuitem id="menu_lab_test_request" name="Test Requests" parent="menu_laboratory_operations" action="action_lab_test_request" sequence="5"/>
-    <menuitem id="menu_lab_test_request_triage" name="Requests to Triage" parent="menu_laboratory_operations" action="action_lab_test_request_to_triage" sequence="6" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
-    <menuitem id="menu_lab_test_request_quote" name="Requests to Quote" parent="menu_laboratory_operations" action="action_lab_test_request_to_quote" sequence="7" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
-    <menuitem id="menu_lab_test_request_quote_revision" name="Quote Revisions" parent="menu_laboratory_operations" action="action_lab_test_request_quote_revision" sequence="8" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_test_request" name="Test Requests" parent="menu_lab_ops_frontdesk" action="action_lab_test_request" sequence="5"/>
+    <menuitem id="menu_lab_test_request_triage" name="Requests to Triage" parent="menu_lab_ops_frontdesk" action="action_lab_test_request_to_triage" sequence="6" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_test_request_quote" name="Requests to Quote" parent="menu_lab_ops_frontdesk" action="action_lab_test_request_to_quote" sequence="7" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_test_request_quote_revision" name="Quote Revisions" parent="menu_lab_ops_frontdesk" action="action_lab_test_request_quote_revision" sequence="8" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
 </odoo>

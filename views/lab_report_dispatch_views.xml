@@ -185,7 +185,7 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_lab_report_dispatch" name="Report Dispatches" parent="menu_laboratory_quality" action="action_lab_report_dispatch" sequence="16" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
-    <menuitem id="menu_lab_report_dispatch_unacked" name="Unacknowledged Dispatches" parent="menu_laboratory_quality" action="action_lab_report_dispatch_unacked" sequence="17" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
-    <menuitem id="menu_lab_report_ack_signature" name="Ack Signatures" parent="menu_laboratory_quality" action="action_lab_report_ack_signature" sequence="18" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_report_dispatch" name="Report Dispatches" parent="menu_lab_quality_publication" action="action_lab_report_dispatch" sequence="16" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_report_dispatch_unacked" name="Unacknowledged Dispatches" parent="menu_lab_quality_publication" action="action_lab_report_dispatch_unacked" sequence="17" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_report_ack_signature" name="Ack Signatures" parent="menu_lab_quality_publication" action="action_lab_report_ack_signature" sequence="18" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
 </odoo>

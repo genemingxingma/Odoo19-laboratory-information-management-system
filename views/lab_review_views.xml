@@ -48,7 +48,7 @@
     <menuitem
         id="menu_lab_review_reason_template"
         name="Review Reason Templates"
-        parent="menu_laboratory_config"
+        parent="menu_lab_config_workflow"
         action="action_lab_review_reason_template"
         sequence="35"
     />

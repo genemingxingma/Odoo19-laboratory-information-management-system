@@ -7,13 +7,14 @@
     <menuitem id="menu_lab_ops_workbench" name="Workbench &amp; Tasks" parent="menu_laboratory_operations" sequence="40"/>
     <menuitem id="menu_lab_ops_connectivity" name="Connectivity &amp; Imports" parent="menu_laboratory_operations" sequence="50"/>
     <menuitem id="menu_lab_ops_custody" name="Chain of Custody" parent="menu_laboratory_operations" sequence="60"/>
+    <menuitem id="menu_lab_ops_specialty" name="Specialty &amp; Referral" parent="menu_laboratory_operations" sequence="70"/>
 
     <!-- Quality -->
     <menuitem id="menu_lab_quality_verification" name="Verification Queues" parent="menu_laboratory_quality" sequence="10"/>
     <menuitem id="menu_lab_quality_validation" name="Validation &amp; Retest" parent="menu_laboratory_quality" sequence="20"/>
     <menuitem id="menu_lab_quality_qc" name="QC &amp; EQA Programs" parent="menu_laboratory_quality" sequence="30"/>
     <menuitem id="menu_lab_quality_compliance" name="Compliance &amp; CAPA" parent="menu_laboratory_quality" sequence="40"/>
-    <menuitem id="menu_lab_quality_perm_audit" name="Permission &amp; Interface Audit" parent="menu_laboratory_quality" sequence="50"/>
+    <menuitem id="menu_lab_quality_perm_audit" name="Governance, Permissions &amp; Interfaces" parent="menu_laboratory_quality" sequence="50"/>
     <menuitem id="menu_lab_quality_publication" name="Release &amp; Traceability" parent="menu_laboratory_quality" sequence="60"/>
     <menuitem id="menu_lab_quality_people" name="Training &amp; Metrics" parent="menu_laboratory_quality" sequence="70"/>
 

@@ -80,10 +80,13 @@ class LabSample(models.Model):
         compute="_compute_iso_release_gate",
         string="ISO15189 Release Ready",
         store=True,
+        compute_sudo=True,
     )
     iso_release_block_reason = fields.Text(
         compute="_compute_iso_release_gate",
         string="ISO15189 Block Reason",
+        store=True,
+        compute_sudo=True,
     )
     review_log_ids = fields.One2many(
         "lab.sample.review.log",
@@ -163,7 +166,14 @@ class LabSample(models.Model):
         "analysis_ids.service_id",
         "analysis_ids.service_id.require_qc",
         "analysis_ids.service_id.require_reagent_lot",
+        "analysis_ids.service_id.require_method_validation",
         "analysis_ids.needs_manual_review",
+        "technical_review_state",
+        "technical_reviewer_id",
+        "medical_review_state",
+        "medical_reviewer_id",
+        "report_template_id",
+        "company_id",
     )
     def _compute_iso_release_gate(self):
         for rec in self:
@@ -245,6 +255,20 @@ class LabSample(models.Model):
                         _("No active analyst authorization for %(user)s on service %(service)s.")
                         % {"user": analysis.analyst_id.name, "service": analysis.service_id.name}
                     )
+            if self.technical_review_state == "approved" and self.technical_reviewer_id:
+                analyst_conflict = analyses.filtered(lambda x: x.analyst_id.id == self.technical_reviewer_id.id)
+                if analyst_conflict:
+                    blockers.append(
+                        _("Technical reviewer %(user)s also performed analysis on one or more released services.")
+                        % {"user": self.technical_reviewer_id.name}
+                    )
+            if self.medical_review_state == "approved" and self.medical_reviewer_id:
+                analyst_conflict = analyses.filtered(lambda x: x.analyst_id.id == self.medical_reviewer_id.id)
+                if analyst_conflict:
+                    blockers.append(
+                        _("Medical reviewer %(user)s also performed analysis on one or more released services.")
+                        % {"user": self.medical_reviewer_id.name}
+                    )
 
         missing_reagent = analyses.filtered(
             lambda x: x.service_id.require_reagent_lot and not x.reagent_lot_id
@@ -324,6 +348,14 @@ class LabSample(models.Model):
                     _("No active approved method validation found for service %(service)s.")
                     % {"service": service.name}
                 )
+            stale_validations = active_validations.filtered(
+                lambda v: v.next_review_date and v.next_review_date < fields.Date.today()
+            )
+            for validation in stale_validations:
+                blockers.append(
+                    _("Method validation %(validation)s for service %(service)s is overdue for review.")
+                    % {"validation": validation.name, "service": validation.service_id.name}
+                )
 
         open_ncr = self.env["lab.nonconformance"].search_count(
             [
@@ -333,6 +365,17 @@ class LabSample(models.Model):
         )
         if open_ncr:
             blockers.append(_("Open nonconformance records exist for this sample."))
+
+        active_changes = self.env["lab.change.control"]._find_active_release_blocking_changes(
+            company=self.company_id,
+            services=analyses.mapped("service_id"),
+            report_template=self.report_template_id,
+        )
+        if active_changes:
+            blockers.append(
+                _("Release is blocked by active change controls: %(changes)s.")
+                % {"changes": ", ".join(active_changes.mapped("name"))}
+            )
         return blockers
 
     def _create_review_log(self, stage, action, note=None):

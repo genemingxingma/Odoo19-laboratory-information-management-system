@@ -536,7 +536,7 @@
         </field>
     </record>
 
-    <menuitem id="menu_lab_custody_receive_session" name="Receive Sessions" parent="menu_laboratory_operations" action="action_lab_custody_receive_session" sequence="26"/>
-    <menuitem id="menu_lab_custody_investigation" name="Custody Investigations" parent="menu_laboratory_quality" action="action_lab_custody_investigation" sequence="21"/>
-    <menuitem id="menu_lab_custody_investigation_action" name="Investigation Actions" parent="menu_laboratory_quality" action="action_lab_custody_investigation_action" sequence="22"/>
+    <menuitem id="menu_lab_custody_receive_session" name="Receive Sessions" parent="menu_lab_ops_custody" action="action_lab_custody_receive_session" sequence="26"/>
+    <menuitem id="menu_lab_custody_investigation" name="Custody Investigations" parent="menu_lab_quality_compliance" action="action_lab_custody_investigation" sequence="21"/>
+    <menuitem id="menu_lab_custody_investigation_action" name="Investigation Actions" parent="menu_lab_quality_compliance" action="action_lab_custody_investigation_action" sequence="22"/>
 </odoo>

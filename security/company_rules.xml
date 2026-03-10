@@ -235,4 +235,64 @@
         <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>
+    <record id="rule_lab_pathology_case_company_scope" model="ir.rule">
+        <field name="name">Lab Pathology Case Company Scope</field>
+        <field name="model_id" ref="model_lab_pathology_case"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_pathology_specimen_company_scope" model="ir.rule">
+        <field name="name">Lab Pathology Specimen Company Scope</field>
+        <field name="model_id" ref="model_lab_pathology_specimen"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_pathology_slide_company_scope" model="ir.rule">
+        <field name="name">Lab Pathology Slide Company Scope</field>
+        <field name="model_id" ref="model_lab_pathology_slide"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_pathology_image_company_scope" model="ir.rule">
+        <field name="name">Lab Pathology Image Company Scope</field>
+        <field name="model_id" ref="model_lab_pathology_image"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_plate_batch_company_scope" model="ir.rule">
+        <field name="name">Lab Plate Batch Company Scope</field>
+        <field name="model_id" ref="model_lab_plate_batch"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_plate_batch_line_company_scope" model="ir.rule">
+        <field name="name">Lab Plate Batch Line Company Scope</field>
+        <field name="model_id" ref="model_lab_plate_batch_line"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_referral_lab_company_scope" model="ir.rule">
+        <field name="name">Lab Referral Lab Company Scope</field>
+        <field name="model_id" ref="model_lab_referral_lab"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_referral_order_company_scope" model="ir.rule">
+        <field name="name">Lab Referral Order Company Scope</field>
+        <field name="model_id" ref="model_lab_referral_order"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_referral_order_line_company_scope" model="ir.rule">
+        <field name="name">Lab Referral Order Line Company Scope</field>
+        <field name="model_id" ref="model_lab_referral_order_line"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_lab_change_control_company_scope" model="ir.rule">
+        <field name="name">Lab Change Control Company Scope</field>
+        <field name="model_id" ref="model_lab_change_control"/>
+        <field name="groups" eval="[(4, ref('laboratory_management.group_lab_user'))]"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
 </odoo>

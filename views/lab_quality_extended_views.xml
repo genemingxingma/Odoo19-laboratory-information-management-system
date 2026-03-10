@@ -310,8 +310,8 @@
         <field name="search_view_id" ref="view_lab_eqa_closure_report_search"/>
     </record>
 
-    <menuitem id="menu_lab_eqa_scheme" name="EQA Schemes" parent="menu_laboratory_quality" action="action_lab_eqa_scheme" sequence="34"/>
-    <menuitem id="menu_lab_eqa_round" name="EQA Rounds" parent="menu_laboratory_quality" action="action_lab_eqa_round" sequence="35"/>
-    <menuitem id="menu_lab_eqa_closure_report" name="EQA Closure Reports" parent="menu_laboratory_quality" action="action_lab_eqa_closure_report" sequence="36"/>
-    <menuitem id="menu_lab_compliance_snapshot" name="Compliance Reports" parent="menu_laboratory_quality" action="action_lab_compliance_snapshot" sequence="37"/>
+    <menuitem id="menu_lab_eqa_scheme" name="EQA Schemes" parent="menu_lab_quality_qc" action="action_lab_eqa_scheme" sequence="34"/>
+    <menuitem id="menu_lab_eqa_round" name="EQA Rounds" parent="menu_lab_quality_qc" action="action_lab_eqa_round" sequence="35"/>
+    <menuitem id="menu_lab_eqa_closure_report" name="EQA Closure Reports" parent="menu_lab_quality_qc" action="action_lab_eqa_closure_report" sequence="36"/>
+    <menuitem id="menu_lab_compliance_snapshot" name="Compliance Reports" parent="menu_lab_quality_compliance" action="action_lab_compliance_snapshot" sequence="37"/>
 </odoo>

@@ -467,15 +467,15 @@
         </field>
     </record>
 
-    <menuitem id="menu_lab_department_workbench" name="Department Workbench" parent="menu_laboratory_operations" action="action_lab_department_workbench_wizard" sequence="2"/>
-    <menuitem id="menu_lab_workbench_rule_runs" name="Workbench Rule Runs" parent="menu_laboratory_operations" action="action_lab_department_workbench_rule_run" sequence="3"/>
+    <menuitem id="menu_lab_department_workbench" name="Department Workbench" parent="menu_lab_ops_workbench" action="action_lab_department_workbench_wizard" sequence="2"/>
+    <menuitem id="menu_lab_workbench_rule_runs" name="Workbench Rule Runs" parent="menu_lab_ops_workbench" action="action_lab_department_workbench_rule_run" sequence="3"/>
 
-    <menuitem id="menu_lab_department_queue_rule" name="Department Queue Rules" parent="menu_laboratory_config" action="action_lab_department_queue_rule" sequence="23"/>
-    <menuitem id="menu_lab_hl7_template" name="HL7 Templates" parent="menu_laboratory_config" action="action_lab_hl7_template" sequence="24"/>
+    <menuitem id="menu_lab_department_queue_rule" name="Department Queue Rules" parent="menu_lab_config_workflow" action="action_lab_department_queue_rule" sequence="23"/>
+    <menuitem id="menu_lab_hl7_template" name="HL7 Templates" parent="menu_lab_config_integration" action="action_lab_hl7_template" sequence="24"/>
 
-    <menuitem id="menu_lab_qc_trend_profile" name="QC Trend Profiles" parent="menu_laboratory_quality" action="action_lab_qc_trend_profile" sequence="37"/>
-    <menuitem id="menu_lab_qc_trend_snapshot" name="QC Trend Snapshots" parent="menu_laboratory_quality" action="action_lab_qc_trend_snapshot" sequence="38"/>
-    <menuitem id="menu_lab_compliance_audit_report" name="Compliance Audit Reports" parent="menu_laboratory_quality" action="action_lab_compliance_audit_report" sequence="39"/>
+    <menuitem id="menu_lab_qc_trend_profile" name="QC Trend Profiles" parent="menu_lab_quality_qc" action="action_lab_qc_trend_profile" sequence="37"/>
+    <menuitem id="menu_lab_qc_trend_snapshot" name="QC Trend Snapshots" parent="menu_lab_quality_qc" action="action_lab_qc_trend_snapshot" sequence="38"/>
+    <menuitem id="menu_lab_compliance_audit_report" name="Compliance Audit Reports" parent="menu_lab_quality_compliance" action="action_lab_compliance_audit_report" sequence="39"/>
 
-    <menuitem id="menu_lab_interface_analytics_report" name="Interface Analytics" parent="menu_laboratory_quality" action="action_lab_interface_analytics_report" sequence="40"/>
+    <menuitem id="menu_lab_interface_analytics_report" name="Interface Analytics" parent="menu_lab_quality_perm_audit" action="action_lab_interface_analytics_report" sequence="40"/>
 </odoo>

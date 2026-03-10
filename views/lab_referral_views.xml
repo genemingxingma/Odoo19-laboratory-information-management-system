@@ -203,6 +203,6 @@
         </field>
     </record>
 
-    <menuitem id="menu_lab_referral_order" name="Referral Orders" parent="menu_laboratory_operations" action="action_lab_referral_order" sequence="55"/>
-    <menuitem id="menu_lab_referral_lab" name="Referral Labs" parent="menu_lab_config_operations" action="action_lab_referral_lab" sequence="25"/>
+    <menuitem id="menu_lab_referral_order" name="Referral Orders" parent="menu_lab_ops_specialty" action="action_lab_referral_order" sequence="55"/>
+    <menuitem id="menu_lab_referral_lab" name="Referral Labs" parent="menu_lab_config_org" action="action_lab_referral_lab" sequence="25"/>
 </odoo>

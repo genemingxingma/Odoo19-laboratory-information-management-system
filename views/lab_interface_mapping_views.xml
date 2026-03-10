@@ -63,7 +63,7 @@
     <menuitem
         id="menu_lab_interface_mapping_profile"
         name="Mapping Profiles"
-        parent="menu_laboratory_config"
+        parent="menu_lab_config_integration"
         action="action_lab_interface_mapping_profile"
         sequence="31"
     />

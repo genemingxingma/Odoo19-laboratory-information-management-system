@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_qc_material_batch_wizard_form" model="ir.ui.view">
+        <field name="name">lab.qc.material.batch.wizard.form</field>
+        <field name="model">lab.qc.material.batch.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Batch Create QC Materials">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="create_mode"/>
+                            <field name="service_ids" widget="many2many_tags" invisible="create_mode not in ('service', 'both')"/>
+                            <field name="panel_ids" widget="many2many_tags" invisible="create_mode not in ('panel', 'both')"/>
+                            <field name="service_count" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="name_template"/>
+                            <field name="code_prefix"/>
+                            <field name="lot_number"/>
+                            <field name="target_value"/>
+                            <field name="std_dev"/>
+                            <field name="skip_existing"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="rule_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_batch_create" type="object" class="btn-primary" string="Create"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_qc_material_batch_wizard" model="ir.actions.act_window">
+        <field name="name">Batch Create QC Materials</field>
+        <field name="res_model">lab.qc.material.batch.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_lab_qc_material_batch_wizard"
+        name="Batch Create QC Materials"
+        parent="menu_laboratory_quality"
+        action="action_lab_qc_material_batch_wizard"
+        sequence="21"
+    />
+</odoo>

@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_workflow_route_list" model="ir.ui.view">
+        <field name="name">lab.workflow.route.list</field>
+        <field name="model">lab.workflow.route</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="target_model"/>
+                <field name="role_group_id"/>
+                <field name="default_user_id"/>
+                <field name="deadline_hours"/>
+                <field name="sop_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_workflow_route_form" model="ir.ui.view">
+        <field name="name">lab.workflow.route.form</field>
+        <field name="model">lab.workflow.route</field>
+        <field name="arch" type="xml">
+            <form string="Workflow Route">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="target_model"/>
+                        </group>
+                        <group>
+                            <field name="role_group_id"/>
+                            <field name="default_user_id"/>
+                            <field name="deadline_hours"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="sop_id"/>
+                        <field name="summary_template"/>
+                        <field name="note_template"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_workflow_route" model="ir.actions.act_window">
+        <field name="name">Workflow Routes</field>
+        <field name="res_model">lab.workflow.route</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_operation_exception_list" model="ir.ui.view">
+        <field name="name">lab.operation.exception.list</field>
+        <field name="model">lab.operation.exception</field>
+        <field name="arch" type="xml">
+            <list default_order="create_date desc">
+                <field name="name"/>
+                <field name="category"/>
+                <field name="severity"/>
+                <field name="summary"/>
+                <field name="assigned_user_id"/>
+                <field name="state"/>
+                <field name="sample_id"/>
+                <field name="request_id"/>
+                <field name="referral_order_id"/>
+                <field name="pathology_case_id"/>
+                <field name="due_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_operation_exception_form" model="ir.ui.view">
+        <field name="name">lab.operation.exception.form</field>
+        <field name="model">lab.operation.exception</field>
+        <field name="arch" type="xml">
+            <form string="Laboratory Exception">
+                <header>
+                    <button name="action_start" type="object" string="Start" invisible="state != 'open'"/>
+                    <button name="action_create_capa" type="object" string="Create CAPA" invisible="capa_id"/>
+                    <button name="action_view_source" type="object" string="Open Source" invisible="not source_model or not source_res_id"/>
+                    <button name="action_resolve" type="object" string="Resolve" class="btn-primary" invisible="state in ('resolved','cancelled')"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('resolved','cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="open,in_progress,resolved,cancelled"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="category"/>
+                            <field name="severity"/>
+                            <field name="assigned_user_id"/>
+                        </group>
+                        <group>
+                            <field name="due_date"/>
+                            <field name="sample_id"/>
+                            <field name="request_id"/>
+                            <field name="capa_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="summary"/>
+                        <field name="details"/>
+                    </group>
+                    <group>
+                        <field name="referral_order_id"/>
+                        <field name="pathology_case_id"/>
+                        <field name="source_model" readonly="1"/>
+                        <field name="source_display_name" readonly="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_operation_exception_search" model="ir.ui.view">
+        <field name="name">lab.operation.exception.search</field>
+        <field name="model">lab.operation.exception</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="severity"/>
+                <field name="state"/>
+                <field name="assigned_user_id"/>
+                <filter name="f_open" string="Open" domain="[('state','in',('open','in_progress'))]"/>
+                <filter name="f_critical" string="Critical" domain="[('severity','=','critical')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_operation_exception" model="ir.actions.act_window">
+        <field name="name">Exception Hub</field>
+        <field name="res_model">lab.operation.exception</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_operation_exception_search"/>
+    </record>
+
+    <record id="view_lab_instrument_run_list" model="ir.ui.view">
+        <field name="name">lab.instrument.run.list</field>
+        <field name="model">lab.instrument.run</field>
+        <field name="arch" type="xml">
+            <list default_order="id desc">
+                <field name="name"/>
+                <field name="department"/>
+                <field name="service_id"/>
+                <field name="instrument_id"/>
+                <field name="state"/>
+                <field name="line_count"/>
+                <field name="imported_line_count"/>
+                <field name="reviewed_by_id"/>
+                <field name="run_started_at"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_instrument_run_form" model="ir.ui.view">
+        <field name="name">lab.instrument.run.form</field>
+        <field name="model">lab.instrument.run</field>
+        <field name="arch" type="xml">
+            <form string="Instrument Run">
+                <header>
+                    <button name="action_sync_sample_sheet" type="object" string="Sync Sample Sheet" invisible="state in ('running','imported','reviewed','closed','cancelled')"/>
+                    <button name="action_lock_sample_sheet" type="object" string="Lock Sample Sheet" invisible="sample_sheet_locked"/>
+                    <button name="action_start_run" type="object" string="Start" invisible="state not in ('planned','loaded')"/>
+                    <button name="action_mark_imported" type="object" string="Mark Imported" invisible="state != 'running'"/>
+                    <button name="action_mark_reviewed" type="object" string="Mark Reviewed" invisible="state != 'imported'"/>
+                    <button name="action_close" type="object" string="Close" class="btn-primary" invisible="state != 'reviewed'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('closed','cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="planned,loaded,running,imported,reviewed,closed,cancelled"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="department"/>
+                            <field name="service_id"/>
+                            <field name="instrument_id"/>
+                        </group>
+                        <group>
+                            <field name="worksheet_id"/>
+                            <field name="sample_sheet_locked"/>
+                            <field name="line_count" readonly="1"/>
+                            <field name="imported_line_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="plate_batch_ids">
+                            <list>
+                                <field name="name"/>
+                                <field name="service_id"/>
+                                <field name="state"/>
+                                <field name="worksheet_id"/>
+                            </list>
+                        </field>
+                        <field name="qc_summary"/>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="Sample Sheet">
+                            <field name="line_ids">
+                                <list editable="bottom" default_order="sequence asc">
+                                    <field name="sequence"/>
+                                    <field name="well_code"/>
+                                    <field name="sample_id"/>
+                                    <field name="analysis_id"/>
+                                    <field name="service_id"/>
+                                    <field name="raw_result"/>
+                                    <field name="imported_value"/>
+                                    <field name="result_state"/>
+                                    <button name="action_apply_to_analysis" type="object" string="Apply"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_instrument_run" model="ir.actions.act_window">
+        <field name="name">Instrument Runs</field>
+        <field name="res_model">lab.instrument.run</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_pathology_synoptic_template_list" model="ir.ui.view">
+        <field name="name">lab.pathology.synoptic.template.list</field>
+        <field name="model">lab.pathology.synoptic.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="pathology_type"/>
+                <field name="service_ids" widget="many2many_tags"/>
+                <field name="profile_ids" widget="many2many_tags"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_pathology_synoptic_template_form" model="ir.ui.view">
+        <field name="name">lab.pathology.synoptic.template.form</field>
+        <field name="model">lab.pathology.synoptic.template</field>
+        <field name="arch" type="xml">
+            <form string="Pathology Synoptic Template">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="pathology_type"/>
+                        </group>
+                        <group>
+                            <field name="service_ids" widget="many2many_tags"/>
+                            <field name="profile_ids" widget="many2many_tags"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="sequence"/>
+                            <field name="label"/>
+                            <field name="field_key"/>
+                            <field name="required"/>
+                            <field name="example_value"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_pathology_synoptic_template" model="ir.actions.act_window">
+        <field name="name">Pathology Synoptic Templates</field>
+        <field name="res_model">lab.pathology.synoptic.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_partner_catalog_rule_list" model="ir.ui.view">
+        <field name="name">lab.partner.catalog.rule.list</field>
+        <field name="model">lab.partner.catalog.rule</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="request_type"/>
+                <field name="preauthorization_required"/>
+                <field name="credit_limit"/>
+                <field name="default_report_template_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_partner_catalog_rule_form" model="ir.ui.view">
+        <field name="name">lab.partner.catalog.rule.form</field>
+        <field name="model">lab.partner.catalog.rule</field>
+        <field name="arch" type="xml">
+            <form string="Institution Catalog Rule">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="request_type"/>
+                        </group>
+                        <group>
+                            <field name="preauthorization_required"/>
+                            <field name="require_contract_reference"/>
+                            <field name="default_report_template_id"/>
+                            <field name="credit_limit"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="exclude_selected"/>
+                        <field name="refund_policy"/>
+                        <field name="recollect_policy"/>
+                    </group>
+                    <group>
+                        <field name="allowed_service_ids" widget="many2many_tags"/>
+                        <field name="allowed_profile_ids" widget="many2many_tags"/>
+                    </group>
+                    <field name="note"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_partner_catalog_rule" model="ir.actions.act_window">
+        <field name="name">Institution Catalog Rules</field>
+        <field name="res_model">lab.partner.catalog.rule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_lab_request_partner_price_list" model="ir.ui.view">
+        <field name="name">lab.request.partner.price.list</field>
+        <field name="model">lab.request.partner.price</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="partner_id"/>
+                <field name="service_id"/>
+                <field name="profile_id"/>
+                <field name="price"/>
+                <field name="contract_reference"/>
+                <field name="active_from"/>
+                <field name="active_to"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_request_partner_price_form" model="ir.ui.view">
+        <field name="name">lab.request.partner.price.form</field>
+        <field name="model">lab.request.partner.price</field>
+        <field name="arch" type="xml">
+            <form string="Partner Specific Lab Price">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="partner_id"/>
+                            <field name="service_id"/>
+                            <field name="profile_id"/>
+                        </group>
+                        <group>
+                            <field name="price"/>
+                            <field name="contract_reference"/>
+                            <field name="active_from"/>
+                            <field name="active_to"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lab_request_partner_price" model="ir.actions.act_window">
+        <field name="name">Contract Prices</field>
+        <field name="res_model">lab.request.partner.price</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_partner_form_inherit_lab_optimization" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.lab.optimization</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/notebook" position="inside">
+                <page string="Laboratory" invisible="not is_company">
+                    <group>
+                        <group>
+                            <field name="lab_default_report_template_id"/>
+                            <field name="lab_credit_control_enabled"/>
+                            <field name="lab_credit_limit" invisible="not lab_credit_control_enabled"/>
+                            <field name="lab_open_invoice_amount" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="lab_catalog_rule_ids">
+                        <list editable="bottom">
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="request_type"/>
+                            <field name="preauthorization_required"/>
+                            <field name="credit_limit"/>
+                            <field name="default_report_template_id"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_template_form_inherit_lab_optimization" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.lab.optimization</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="laboratory_management.view_product_template_form_inherit_lab_ecommerce"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lab_turnaround_note']" position="after">
+                <group string="Laboratory Package Governance" invisible="not is_lab_test_product">
+                    <field name="lab_package_code"/>
+                    <field name="lab_package_version"/>
+                    <field name="lab_package_active_from"/>
+                    <field name="lab_package_active_to"/>
+                    <field name="lab_contract_only"/>
+                    <field name="lab_refund_policy"/>
+                    <field name="lab_recollect_policy"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_plate_batch_form_inherit_run" model="ir.ui.view">
+        <field name="name">lab.plate.batch.form.inherit.run</field>
+        <field name="model">lab.plate.batch</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_plate_batch_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_create_worksheet']" position="after">
+                <button name="action_create_instrument_run" type="object" string="Create/Update Run" invisible="state in ('done','cancelled')"/>
+            </xpath>
+            <xpath expr="//field[@name='worksheet_id']" position="after">
+                <field name="run_id" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_pathology_case_form_inherit_synoptic" model="ir.ui.view">
+        <field name="name">lab.pathology.case.form.inherit.synoptic</field>
+        <field name="model">lab.pathology.case</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_pathology_case_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_apply_synoptic_template" type="object" string="Reload Synoptic" invisible="not synoptic_template_id"/>
+            </xpath>
+            <xpath expr="//field[@name='recommendation']" position="after">
+                <field name="synoptic_template_id"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Synoptic">
+                    <field name="synoptic_item_ids">
+                        <list editable="bottom">
+                            <field name="sequence"/>
+                            <field name="label"/>
+                            <field name="field_key"/>
+                            <field name="required"/>
+                            <field name="value_text"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_referral_lab_form_inherit_lifecycle" model="ir.ui.view">
+        <field name="name">lab.referral.lab.form.inherit.lifecycle</field>
+        <field name="model">lab.referral.lab</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_referral_lab_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='note']" position="before">
+                <group string="Lifecycle">
+                    <field name="qualification_state"/>
+                    <field name="last_review_date"/>
+                    <field name="next_review_date"/>
+                    <field name="kpi_tat_avg_hours" readonly="1"/>
+                    <field name="open_referral_count" readonly="1"/>
+                    <field name="reviewed_referral_count" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_referral_order_form_inherit_lifecycle" model="ir.ui.view">
+        <field name="name">lab.referral.order.form.inherit.lifecycle</field>
+        <field name="model">lab.referral.order</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_referral_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='note']" position="before">
+                <group string="Lifecycle Control">
+                    <field name="expected_due_at" readonly="1"/>
+                    <field name="tat_breach" readonly="1"/>
+                    <field name="conformity_checked"/>
+                    <field name="conformity_note"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_test_request_form_inherit_authorization" model="ir.ui.view">
+        <field name="name">lab.test.request.form.inherit.authorization</field>
+        <field name="model">lab.test.request</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_test_request_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_request_preauthorization" type="object" string="Request Preauth" invisible="not preauthorization_required or preauthorization_state == 'approved'"/>
+                <button name="action_approve_preauthorization" type="object" string="Approve Preauth" invisible="preauthorization_state != 'pending'"/>
+                <button name="action_reject_preauthorization" type="object" string="Reject Preauth" invisible="preauthorization_state != 'pending'"/>
+            </xpath>
+            <xpath expr="//field[@name='preferred_template_id']" position="after">
+                <field name="institution_catalog_rule_id" readonly="1"/>
+                <field name="preauthorization_required" readonly="1"/>
+                <field name="preauthorization_state" readonly="0"/>
+                <field name="credit_hold" readonly="1"/>
+                <field name="catalog_scope_summary" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='clinical_note']" position="after">
+                <field name="preauthorization_note" invisible="not preauthorization_required"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_control_center_wizard_form_inherit_optimization" model="ir.ui.view">
+        <field name="name">lab.control.center.wizard.form.inherit.optimization</field>
+        <field name="model">lab.control.center.wizard</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_control_center_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[button[@name='action_open_new_request']]" position="inside">
+                <button name="action_open_runs" type="object" string="Instrument Runs"/>
+                <button name="action_open_exceptions" type="object" string="Exception Hub"/>
+                <button name="action_open_referrals" type="object" string="Referral Lifecycle"/>
+                <button name="action_open_preauthorizations" type="object" string="Preauthorizations"/>
+            </xpath>
+            <xpath expr="//group[field[@name='change_open_count'] and field[@name='waste_overdue_count']]" position="after">
+                <group string="Risk &amp; Throughput">
+                    <field name="exception_open_count" readonly="1"/>
+                    <field name="run_open_count" readonly="1"/>
+                    <field name="referral_followup_count" readonly="1"/>
+                    <field name="preauthorization_pending_count" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_lab_ops_runs" name="Runs &amp; Sample Sheet" parent="menu_lab_ops_accession" action="action_lab_instrument_run" sequence="35"/>
+    <menuitem id="menu_lab_quality_exception_hub" name="Exception Hub" parent="menu_lab_quality_compliance" action="action_lab_operation_exception" sequence="14"/>
+    <menuitem id="menu_lab_config_pathology_synoptic" name="Pathology Synoptic Templates" parent="menu_lab_config_templates" action="action_lab_pathology_synoptic_template" sequence="35"/>
+    <menuitem id="menu_lab_config_workflow_routes" name="Workflow Routes" parent="menu_lab_config_workflow" action="action_lab_workflow_route" sequence="18"/>
+    <menuitem id="menu_lab_config_catalog_rules" name="Institution Catalog Rules" parent="menu_lab_config_commerce" action="action_lab_partner_catalog_rule" sequence="12"/>
+    <menuitem id="menu_lab_config_contract_prices" name="Contract Prices" parent="menu_lab_config_commerce" action="action_lab_request_partner_price" sequence="14"/>
+</odoo>

@@ -65,5 +65,5 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_lab_worksheet" name="Worksheets" parent="menu_laboratory_operations" action="action_lab_worksheet" sequence="20"/>
+    <menuitem id="menu_lab_worksheet" name="Worksheets" parent="menu_lab_ops_accession" action="action_lab_worksheet" sequence="20"/>
 </odoo>

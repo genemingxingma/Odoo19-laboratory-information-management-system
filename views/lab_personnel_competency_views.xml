@@ -106,7 +106,7 @@
     <menuitem
         id="menu_lab_service_authorization"
         name="Personnel Authorizations"
-        parent="menu_laboratory_config"
+        parent="menu_lab_config_org"
         action="action_lab_service_authorization"
         sequence="48"
         groups="laboratory_management.group_lab_reviewer"

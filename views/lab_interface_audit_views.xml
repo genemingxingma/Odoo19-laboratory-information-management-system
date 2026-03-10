@@ -57,7 +57,7 @@
     <menuitem
         id="menu_lab_interface_audit_log"
         name="Interface Audit Logs"
-        parent="menu_laboratory_operations"
+        parent="menu_lab_ops_connectivity"
         action="action_lab_interface_audit_log"
         sequence="13"
     />

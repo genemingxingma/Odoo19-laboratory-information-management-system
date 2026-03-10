@@ -77,7 +77,7 @@
     <menuitem
         id="menu_lab_sample_ai_interpretation"
         name="AI Interpretations"
-        parent="menu_laboratory_quality"
+        parent="menu_lab_quality_validation"
         action="action_lab_sample_ai_interpretation"
         sequence="50"
         groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"
@@ -86,7 +86,7 @@
     <menuitem
         id="menu_lab_ai_settings"
         name="AI Settings"
-        parent="menu_laboratory_config"
+        parent="menu_lab_config_templates"
         action="action_lab_ai_settings"
         sequence="15"
         groups="base.group_system"

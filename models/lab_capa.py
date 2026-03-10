@@ -5,7 +5,7 @@ from odoo.exceptions import UserError
 class LabNonconformance(models.Model):
     _name = "lab.nonconformance"
     _description = "Laboratory Nonconformance / CAPA"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin", "lab.governance.evidence.mixin"]
     _order = "id desc"
 
     name = fields.Char(default="New", readonly=True, copy=False, tracking=True)
@@ -56,6 +56,10 @@ class LabNonconformance(models.Model):
     close_note = fields.Text()
     closed_by_id = fields.Many2one("res.users", readonly=True)
     closed_date = fields.Datetime(readonly=True)
+    change_control_id = fields.Many2one("lab.change.control", string="Linked Change Control")
+    risk_register_id = fields.Many2one("lab.risk.register", string="Linked Risk Register")
+    method_validation_id = fields.Many2one("lab.method.validation", string="Linked Method Validation")
+    training_id = fields.Many2one("lab.quality.training", string="Linked Training")
 
     _name_uniq = models.Constraint("unique(name)", "Nonconformance number must be unique.")
 
@@ -98,3 +102,31 @@ class LabNonconformance(models.Model):
 
     def action_reset_draft(self):
         self.write({"state": "draft"})
+
+    def action_create_linked_risk(self):
+        for rec in self:
+            if rec.risk_register_id:
+                continue
+            risk = self.env["lab.risk.register"].create(
+                {
+                    "title": _("Risk from %s") % rec.title,
+                    "summary": rec.description or rec.title,
+                    "potential_impact": rec.description or rec.title,
+                    "current_controls": rec.immediate_action or False,
+                    "mitigation_plan": rec.corrective_action or rec.preventive_action or False,
+                    "risk_owner_id": rec.owner_id.id or self.env.user.id,
+                    "quality_owner_id": rec.owner_id.id or False,
+                    "nonconformance_id": rec.id,
+                    "sample_id": rec.sample_id.id or False,
+                    "service_ids": [(6, 0, [rec.service_id.id])] if rec.service_id else False,
+                }
+            )
+            rec.risk_register_id = risk.id
+            rec._ensure_governance_evidence(
+                evidence_type="other",
+                title=_("Linked risk generated for %s") % rec.title,
+                reference=risk.name,
+                summary=risk.title,
+                extra_vals={"nonconformance_id": rec.id, "risk_register_id": risk.id},
+            )
+        return True

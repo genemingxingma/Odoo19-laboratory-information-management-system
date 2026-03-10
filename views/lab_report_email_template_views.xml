@@ -68,7 +68,7 @@
     <menuitem
         id="menu_lab_report_email_template"
         name="Report Email Templates"
-        parent="menu_laboratory_config"
+        parent="menu_lab_config_templates"
         action="action_lab_report_email_template"
         sequence="31"
         groups="laboratory_management.group_lab_manager"

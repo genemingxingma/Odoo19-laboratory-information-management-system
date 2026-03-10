@@ -417,12 +417,12 @@
         </field>
     </record>
 
-    <menuitem id="menu_lab_task_board" name="Task Board" parent="menu_laboratory_operations" action="action_lab_task_board_wizard" sequence="6"/>
-    <menuitem id="menu_lab_workstation_task" name="Workstation Tasks" parent="menu_laboratory_operations" action="action_lab_workstation_task" sequence="7"/>
-    <menuitem id="menu_lab_interface_replay_batch" name="Interface Replay" parent="menu_laboratory_operations" action="action_lab_interface_replay_batch" sequence="8"/>
+    <menuitem id="menu_lab_task_board" name="Task Board" parent="menu_lab_ops_workbench" action="action_lab_task_board_wizard" sequence="6"/>
+    <menuitem id="menu_lab_workstation_task" name="Workstation Tasks" parent="menu_lab_ops_workbench" action="action_lab_workstation_task" sequence="7"/>
+    <menuitem id="menu_lab_interface_replay_batch" name="Interface Replay" parent="menu_lab_ops_connectivity" action="action_lab_interface_replay_batch" sequence="8"/>
 
-    <menuitem id="menu_lab_sop_branch_run" name="SOP Branch Runs" parent="menu_laboratory_quality" action="action_lab_sop_branch_run" sequence="42"/>
+    <menuitem id="menu_lab_sop_branch_run" name="SOP Branch Runs" parent="menu_lab_quality_validation" action="action_lab_sop_branch_run" sequence="42"/>
 
-    <menuitem id="menu_lab_task_sla_policy" name="Task SLA Policies" parent="menu_laboratory_config" action="action_lab_task_sla_policy" sequence="26"/>
-    <menuitem id="menu_lab_sop_branch_rule" name="SOP Branch Rules" parent="menu_laboratory_config" action="action_lab_sop_branch_rule" sequence="27"/>
+    <menuitem id="menu_lab_task_sla_policy" name="Task SLA Policies" parent="menu_lab_config_workflow" action="action_lab_task_sla_policy" sequence="26"/>
+    <menuitem id="menu_lab_sop_branch_rule" name="SOP Branch Rules" parent="menu_lab_config_workflow" action="action_lab_sop_branch_rule" sequence="27"/>
 </odoo>

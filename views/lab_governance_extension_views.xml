@@ -281,10 +281,10 @@
         </field>
     </record>
 
-    <menuitem id="menu_lab_governance_workbench" name="Governance Workbench" parent="menu_laboratory_quality" action="action_lab_governance_workbench_wizard" sequence="43"/>
-    <menuitem id="menu_lab_interface_reconciliation_report" name="Interface Reconciliation" parent="menu_laboratory_quality" action="action_lab_interface_reconciliation_report" sequence="44"/>
-    <menuitem id="menu_lab_permission_audit_snapshot" name="Permission Audits" parent="menu_laboratory_quality" action="action_lab_permission_audit_snapshot" sequence="45"/>
+    <menuitem id="menu_lab_governance_workbench" name="Governance Workbench" parent="menu_lab_quality_perm_audit" action="action_lab_governance_workbench_wizard" sequence="43"/>
+    <menuitem id="menu_lab_interface_reconciliation_report" name="Interface Reconciliation" parent="menu_lab_quality_perm_audit" action="action_lab_interface_reconciliation_report" sequence="44"/>
+    <menuitem id="menu_lab_permission_audit_snapshot" name="Permission Audits" parent="menu_lab_quality_perm_audit" action="action_lab_permission_audit_snapshot" sequence="45"/>
 
-    <menuitem id="menu_lab_department_exception_template" name="Exception Templates" parent="menu_laboratory_config" action="action_lab_department_exception_template" sequence="28"/>
-    <menuitem id="menu_lab_permission_audit_wizard" name="Run Permission Audit" parent="menu_laboratory_config" action="action_lab_permission_audit_wizard" sequence="29"/>
+    <menuitem id="menu_lab_department_exception_template" name="Exception Templates" parent="menu_lab_config_exception" action="action_lab_department_exception_template" sequence="28"/>
+    <menuitem id="menu_lab_permission_audit_wizard" name="Run Permission Audit" parent="menu_lab_quality_perm_audit" action="action_lab_permission_audit_wizard" sequence="29"/>
 </odoo>

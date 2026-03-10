@@ -100,5 +100,5 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_lab_report_template" name="Report Templates" parent="menu_laboratory_config" action="action_lab_report_template" sequence="30"/>
+    <menuitem id="menu_lab_report_template" name="Report Templates" parent="menu_lab_config_templates" action="action_lab_report_template" sequence="30"/>
 </odoo>

@@ -162,6 +162,6 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_lab_department_sop_version" name="SOP Versions" parent="menu_laboratory_config" action="action_lab_department_sop_version" sequence="32"/>
-    <menuitem id="menu_lab_retest_analytics_report" name="Retest Analytics" parent="menu_laboratory_quality" action="action_lab_retest_analytics_report" sequence="48"/>
+    <menuitem id="menu_lab_department_sop_version" name="SOP Versions" parent="menu_lab_config_workflow" action="action_lab_department_sop_version" sequence="32"/>
+    <menuitem id="menu_lab_retest_analytics_report" name="Retest Analytics" parent="menu_lab_quality_validation" action="action_lab_retest_analytics_report" sequence="48"/>
 </odoo>

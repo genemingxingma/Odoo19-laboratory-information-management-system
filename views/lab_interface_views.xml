@@ -202,6 +202,6 @@
         <field name="code">model.action_process_pending()</field>
     </record>
 
-    <menuitem id="menu_lab_interface_endpoint" name="Interface Endpoints" parent="menu_laboratory_config" action="action_lab_interface_endpoint" sequence="30"/>
-    <menuitem id="menu_lab_interface_job" name="Interface Jobs" parent="menu_laboratory_operations" action="action_lab_interface_job" sequence="12"/>
+    <menuitem id="menu_lab_interface_endpoint" name="Interface Endpoints" parent="menu_lab_config_integration" action="action_lab_interface_endpoint" sequence="30"/>
+    <menuitem id="menu_lab_interface_job" name="Interface Jobs" parent="menu_lab_ops_connectivity" action="action_lab_interface_job" sequence="12"/>
 </odoo>

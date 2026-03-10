@@ -187,7 +187,7 @@
         <field name="search_view_id" ref="view_lab_reagent_usage_search"/>
     </record>
 
-    <menuitem id="menu_lab_assay_kit" name="Assay Kits" parent="menu_laboratory_config" action="action_lab_assay_kit" sequence="39"/>
-    <menuitem id="menu_lab_reagent_lot" name="Reagent Lots" parent="menu_laboratory_config" action="action_lab_reagent_lot" sequence="40"/>
-    <menuitem id="menu_lab_reagent_usage" name="Reagent Usage" parent="menu_laboratory_config" action="action_lab_reagent_usage" sequence="41"/>
+    <menuitem id="menu_lab_assay_kit" name="Assay Kits" parent="menu_lab_config_inventory" action="action_lab_assay_kit" sequence="39"/>
+    <menuitem id="menu_lab_reagent_lot" name="Reagent Lots" parent="menu_lab_config_inventory" action="action_lab_reagent_lot" sequence="40"/>
+    <menuitem id="menu_lab_reagent_usage" name="Reagent Usage" parent="menu_lab_config_inventory" action="action_lab_reagent_usage" sequence="41"/>
 </odoo>

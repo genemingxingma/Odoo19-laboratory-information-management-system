@@ -309,9 +309,9 @@
         </field>
     </record>
 
-    <menuitem id="menu_lab_storage_queue" name="Storage Queue" parent="menu_laboratory_operations" action="action_lab_sample_storage_queue" sequence="20"/>
-    <menuitem id="menu_lab_storage_overdue" name="Storage Overdue" parent="menu_laboratory_quality" action="action_lab_sample_storage_overdue" sequence="16"/>
-    <menuitem id="menu_lab_storage_event" name="Storage Events" parent="menu_laboratory_quality" action="action_lab_storage_event" sequence="17"/>
-    <menuitem id="menu_lab_disposal_record" name="Disposal Records" parent="menu_laboratory_quality" action="action_lab_disposal_record" sequence="18"/>
-    <menuitem id="menu_lab_storage_location" name="Storage Locations" parent="menu_laboratory_config" action="action_lab_storage_location" sequence="40"/>
+    <menuitem id="menu_lab_storage_queue" name="Storage Queue" parent="menu_lab_ops_accession" action="action_lab_sample_storage_queue" sequence="20"/>
+    <menuitem id="menu_lab_storage_overdue" name="Storage Overdue" parent="menu_lab_quality_publication" action="action_lab_sample_storage_overdue" sequence="16"/>
+    <menuitem id="menu_lab_storage_event" name="Storage Events" parent="menu_lab_quality_publication" action="action_lab_storage_event" sequence="17"/>
+    <menuitem id="menu_lab_disposal_record" name="Disposal Records" parent="menu_lab_quality_publication" action="action_lab_disposal_record" sequence="18"/>
+    <menuitem id="menu_lab_storage_location" name="Storage Locations" parent="menu_lab_config_inventory" action="action_lab_storage_location" sequence="40"/>
 </odoo>

@@ -372,7 +372,7 @@ class LabQualityAuditFinding(models.Model):
 class LabQualityTraining(models.Model):
     _name = "lab.quality.training"
     _description = "Quality Training Session"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin", "lab.governance.evidence.mixin"]
     _order = "training_date desc, id desc"
 
     name = fields.Char(default="New", readonly=True, copy=False)
@@ -432,6 +432,7 @@ class LabQualityTraining(models.Model):
     pass_count = fields.Integer(compute="_compute_attendee")
     schedule_reminder_sent = fields.Boolean(default=False, copy=False, readonly=True)
     schedule_conflict = fields.Boolean(compute="_compute_schedule_conflict")
+    change_control_ids = fields.Many2many("lab.change.control", string="Linked Change Controls")
 
     @api.depends("attendee_ids.passed")
     def _compute_attendee(self):
@@ -518,6 +519,37 @@ class LabQualityTraining(models.Model):
 
     def action_schedule(self):
         self.write({"state": "scheduled"})
+
+    def action_create_change_control(self):
+        for rec in self:
+            if rec.change_control_ids:
+                continue
+            services = rec.authorization_service_ids
+            change = self.env["lab.change.control"].create(
+                {
+                    "title": _("Training implementation for %s") % rec.topic,
+                    "change_type": "authorization",
+                    "reason": rec.note or rec.topic,
+                    "scope_summary": rec.topic,
+                    "impact_assessment": _("Training-driven authorization update for %s attendee(s).") % rec.attendee_count,
+                    "implementation_plan": _("Complete training attendance and authorization issuance."),
+                    "rollback_plan": _("Suspend authorization if trainee competency is not sustained."),
+                    "training_required": True,
+                    "training_ack_complete": rec.state == "done",
+                    "training_session_ids": [(6, 0, [rec.id])],
+                    "service_ids": [(6, 0, services.ids)],
+                    "validation_required": False,
+                    "document_review_required": False,
+                }
+            )
+            rec.change_control_ids = [(4, change.id)]
+            rec._ensure_governance_evidence(
+                evidence_type="training",
+                title=_("Change control generated from training %s") % rec.display_name,
+                reference=change.name,
+                summary=change.title,
+                extra_vals={"training_id": rec.id, "change_control_id": change.id},
+            )
         return True
 
     def action_done(self):

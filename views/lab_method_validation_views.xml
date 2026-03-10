@@ -32,6 +32,11 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,pending_approval,approved,rejected,expired"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_governance_evidence" icon="fa-link">
+                            <field name="evidence_count" widget="statinfo" string="Evidence Links"/>
+                        </button>
+                    </div>
                     <group>
                         <group>
                             <field name="name" readonly="1"/>
@@ -84,6 +89,13 @@
                             <group>
                                 <field name="reject_reason" placeholder="Reason is required when rejecting validation"/>
                             </group>
+                            <group>
+                                <field name="change_control_ids" widget="many2many_tags" readonly="1"/>
+                                <field name="risk_register_ids" widget="many2many_tags" readonly="1"/>
+                            </group>
+                            <group>
+                                <button name="action_create_change_control" type="object" string="Create Change Control" class="btn-secondary" invisible="change_control_ids"/>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
@@ -114,5 +126,5 @@
         <field name="search_view_id" ref="view_lab_method_validation_search"/>
     </record>
 
-    <menuitem id="menu_lab_method_validation" name="Method Validation" parent="menu_laboratory_quality" action="action_lab_method_validation" sequence="16"/>
+    <menuitem id="menu_lab_method_validation" name="Method Validation" parent="menu_lab_quality_validation" action="action_lab_method_validation" sequence="16"/>
 </odoo>

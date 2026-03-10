@@ -211,6 +211,6 @@
         </field>
     </record>
 
-    <menuitem id="menu_lab_custody_escalation_log" name="Custody Escalations" parent="menu_laboratory_quality" action="action_lab_custody_escalation_log" sequence="23"/>
-    <menuitem id="menu_lab_custody_sla_policy" name="Custody SLA Policies" parent="menu_laboratory_config" action="action_lab_custody_sla_policy" sequence="42"/>
+    <menuitem id="menu_lab_custody_escalation_log" name="Custody Escalations" parent="menu_lab_quality_compliance" action="action_lab_custody_escalation_log" sequence="23"/>
+    <menuitem id="menu_lab_custody_sla_policy" name="Custody SLA Policies" parent="menu_lab_config_exception" action="action_lab_custody_sla_policy" sequence="42"/>
 </odoo>

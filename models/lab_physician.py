@@ -33,6 +33,12 @@ class ResPartnerLabPhysician(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
+    lab_default_report_template_id = fields.Many2one(
+        "lab.report.template",
+        string="Default Lab Report Template",
+        domain="[('company_id', '=', company_id), ('active', '=', True)]",
+        help="When this partner is used as institution/client in a portal test request, the request uses this template by default.",
+    )
 
     @api.onchange("is_lab_physician")
     def _onchange_is_lab_physician(self):

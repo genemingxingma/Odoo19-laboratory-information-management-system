@@ -250,6 +250,14 @@ class LabTestRequest(models.Model):
         for vals in vals_list:
             if vals.get("name", "New") == "New":
                 vals["name"] = seq_model.next_by_code("lab.test.request") or "New"
+            if not vals.get("preferred_template_id"):
+                client_partner = self.env["res.partner"].browse(vals.get("client_partner_id")).commercial_partner_id
+                if client_partner and client_partner.lab_default_report_template_id:
+                    vals["preferred_template_id"] = client_partner.lab_default_report_template_id.id
+                else:
+                    default_template = self.env.ref("laboratory_management.report_template_classic", raise_if_not_found=False)
+                    if default_template:
+                        vals["preferred_template_id"] = default_template.id
         records = super().create(vals_list)
         for rec in records:
             rec._log_timeline("draft", _("Request created"))
@@ -350,6 +358,19 @@ class LabTestRequest(models.Model):
                 rec.patient_birthdate = rec.patient_id.birthdate
                 rec.patient_gender = rec.patient_id.gender
                 rec.patient_phone = rec.patient_id.phone
+
+    @api.onchange("client_partner_id")
+    def _onchange_client_partner_id_default_template(self):
+        for rec in self:
+            if rec.preferred_template_id:
+                continue
+            partner = rec.client_partner_id.commercial_partner_id if rec.client_partner_id else self.env["res.partner"]
+            if partner and partner.lab_default_report_template_id:
+                rec.preferred_template_id = partner.lab_default_report_template_id
+            else:
+                default_template = self.env.ref("laboratory_management.report_template_classic", raise_if_not_found=False)
+                if default_template:
+                    rec.preferred_template_id = default_template
 
     def action_submit(self):
         self._ensure_lines()

@@ -98,6 +98,34 @@ class LabMasterDataMixin(models.AbstractModel):
         return self._default_from_master("lab.request.type", "individual")
 
     @api.model
+    def _default_risk_type_id(self):
+        return (
+            self.env["lab.risk.type"].sudo().search([("active", "=", True), ("is_default", "=", True)], limit=1).id
+            or self.env["lab.risk.type"].sudo().search([("active", "=", True)], order="sequence asc, id asc", limit=1).id
+        )
+
+    @api.model
+    def _default_waste_type_id(self):
+        return (
+            self.env["lab.waste.type"].sudo().search([("active", "=", True), ("is_default", "=", True)], limit=1).id
+            or self.env["lab.waste.type"].sudo().search([("active", "=", True)], order="sequence asc, id asc", limit=1).id
+        )
+
+    @api.model
+    def _default_waste_treatment_method_id(self):
+        return (
+            self.env["lab.waste.treatment.method"].sudo().search([("active", "=", True), ("is_default", "=", True)], limit=1).id
+            or self.env["lab.waste.treatment.method"].sudo().search([("active", "=", True)], order="sequence asc, id asc", limit=1).id
+        )
+
+    @api.model
+    def _default_calibration_type_id(self):
+        return (
+            self.env["lab.calibration.type"].sudo().search([("active", "=", True), ("is_default", "=", True)], limit=1).id
+            or self.env["lab.calibration.type"].sudo().search([("active", "=", True)], order="sequence asc, id asc", limit=1).id
+        )
+
+    @api.model
     def seed_i18n_master_data(self):
         """Seed core master-data names using English source strings only."""
         translations = {
@@ -125,6 +153,41 @@ class LabMasterDataMixin(models.AbstractModel):
             "lab.request.type": {
                 "individual": "Individual",
                 "institution": "Institution",
+            },
+            "lab.risk.type": {
+                "pre_analytical": "Pre-analytical",
+                "analytical": "Analytical",
+                "post_analytical": "Post-analytical",
+                "quality": "Quality / Compliance",
+                "biosafety": "Biosafety",
+                "waste": "Medical Waste",
+                "information": "Information / Interface",
+                "vendor": "Vendor / Referral",
+                "personnel": "Personnel / Competency",
+                "other": "Other",
+            },
+            "lab.waste.type": {
+                "infectious": "Infectious Waste",
+                "sharps": "Sharps",
+                "pathology": "Pathology Waste",
+                "chemical": "Chemical Waste",
+                "pharmaceutical": "Pharmaceutical Waste",
+                "general": "General Laboratory Waste",
+                "other": "Other",
+            },
+            "lab.waste.treatment.method": {
+                "autoclave": "Autoclave",
+                "incineration": "Incineration",
+                "chemical": "Chemical Neutralization",
+                "vendor_disposal": "Licensed Vendor Disposal",
+                "other": "Other",
+            },
+            "lab.calibration.type": {
+                "routine": "Routine",
+                "post_maintenance": "Post Maintenance",
+                "post_repair": "Post Repair",
+                "verification": "Verification",
+                "other": "Other",
             },
         }
         for model_name, codes in translations.items():
@@ -333,3 +396,67 @@ class LabRequestType(models.Model):
             else:
                 # Empty list means all are allowed.
                 rec.allowed_profile_count = profile_model.search_count(profile_domain)
+
+
+class LabRiskType(models.Model):
+    _name = "lab.risk.type"
+    _description = "Laboratory Risk Type"
+    _order = "sequence, id"
+
+    name = fields.Char(required=True, translate=True)
+    code = fields.Char(required=True)
+    sequence = fields.Integer(default=10)
+    is_default = fields.Boolean(default=False)
+    active = fields.Boolean(default=True)
+
+    _sql_constraints = [
+        ("lab_risk_type_code_uniq", "unique(code)", "Risk type code must be unique."),
+    ]
+
+
+class LabWasteType(models.Model):
+    _name = "lab.waste.type"
+    _description = "Laboratory Waste Type"
+    _order = "sequence, id"
+
+    name = fields.Char(required=True, translate=True)
+    code = fields.Char(required=True)
+    sequence = fields.Integer(default=10)
+    is_default = fields.Boolean(default=False)
+    active = fields.Boolean(default=True)
+
+    _sql_constraints = [
+        ("lab_waste_type_code_uniq", "unique(code)", "Waste type code must be unique."),
+    ]
+
+
+class LabWasteTreatmentMethod(models.Model):
+    _name = "lab.waste.treatment.method"
+    _description = "Laboratory Waste Treatment Method"
+    _order = "sequence, id"
+
+    name = fields.Char(required=True, translate=True)
+    code = fields.Char(required=True)
+    sequence = fields.Integer(default=10)
+    is_default = fields.Boolean(default=False)
+    active = fields.Boolean(default=True)
+
+    _sql_constraints = [
+        ("lab_waste_treatment_method_code_uniq", "unique(code)", "Waste treatment method code must be unique."),
+    ]
+
+
+class LabCalibrationType(models.Model):
+    _name = "lab.calibration.type"
+    _description = "Laboratory Calibration Type"
+    _order = "sequence, id"
+
+    name = fields.Char(required=True, translate=True)
+    code = fields.Char(required=True)
+    sequence = fields.Integer(default=10)
+    is_default = fields.Boolean(default=False)
+    active = fields.Boolean(default=True)
+
+    _sql_constraints = [
+        ("lab_calibration_type_code_uniq", "unique(code)", "Calibration type code must be unique."),
+    ]

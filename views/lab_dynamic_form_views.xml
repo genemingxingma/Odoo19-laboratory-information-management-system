@@ -125,7 +125,7 @@
               sequence="30"/>
     <menuitem id="menu_lab_request_dynamic_form_response"
               name="Form Responses"
-              parent="menu_laboratory_operations"
+              parent="menu_lab_ops_frontdesk"
               action="action_lab_request_dynamic_form_response"
               sequence="9"/>
 </odoo>

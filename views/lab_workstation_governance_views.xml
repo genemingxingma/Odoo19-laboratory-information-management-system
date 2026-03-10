@@ -219,7 +219,7 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem id="menu_lab_workstation_my_workbench" name="My Workbench" parent="menu_laboratory_operations" action="action_lab_workstation_my_workbench_wizard" sequence="5"/>
-    <menuitem id="menu_lab_workstation_role_profile" name="Role Profiles" parent="menu_laboratory_config" action="action_lab_workstation_role_profile" sequence="28"/>
-    <menuitem id="menu_lab_workstation_assignment_rule" name="Assignment Rules" parent="menu_laboratory_config" action="action_lab_workstation_assignment_rule" sequence="29"/>
+    <menuitem id="menu_lab_workstation_my_workbench" name="My Workbench" parent="menu_lab_ops_workbench" action="action_lab_workstation_my_workbench_wizard" sequence="5"/>
+    <menuitem id="menu_lab_workstation_role_profile" name="Role Profiles" parent="menu_lab_config_org" action="action_lab_workstation_role_profile" sequence="28"/>
+    <menuitem id="menu_lab_workstation_assignment_rule" name="Assignment Rules" parent="menu_lab_config_org" action="action_lab_workstation_assignment_rule" sequence="29"/>
 </odoo>

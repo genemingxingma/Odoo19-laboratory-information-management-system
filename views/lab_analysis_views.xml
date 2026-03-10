@@ -147,7 +147,7 @@
         <field name="domain">[('needs_manual_review','=',True),('review_assigned_user_id','=',uid),('state','in',('assigned','done'))]</field>
     </record>
 
-    <menuitem id="menu_lab_analysis_queue" name="Analysis Queue" parent="menu_laboratory_operations" action="action_lab_analysis_queue" sequence="15"/>
-    <menuitem id="menu_lab_manual_review_queue" name="Manual Review Queue" parent="menu_laboratory_quality" action="action_lab_manual_review_queue" sequence="12"/>
-    <menuitem id="menu_lab_my_manual_review_queue" name="My Manual Reviews" parent="menu_laboratory_quality" action="action_lab_my_manual_review_queue" sequence="13"/>
+    <menuitem id="menu_lab_analysis_queue" name="Analysis Queue" parent="menu_lab_ops_accession" action="action_lab_analysis_queue" sequence="15"/>
+    <menuitem id="menu_lab_manual_review_queue" name="Manual Review Queue" parent="menu_lab_quality_verification" action="action_lab_manual_review_queue" sequence="12"/>
+    <menuitem id="menu_lab_my_manual_review_queue" name="My Manual Reviews" parent="menu_lab_quality_verification" action="action_lab_my_manual_review_queue" sequence="13"/>
 </odoo>

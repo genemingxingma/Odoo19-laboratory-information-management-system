@@ -17,6 +17,7 @@ from . import lab_qc
 from . import lab_reagent
 from . import lab_instrument
 from . import lab_import_job
+from . import lab_governance_evidence
 from . import lab_capa
 from . import lab_sample
 from . import lab_plate
@@ -46,10 +47,15 @@ from . import lab_worksheet
 
 from . import lab_quality_program
 from . import lab_quality_extended
+from . import lab_referral
 from . import lab_method_validation
+from . import lab_change_control
+from . import lab_risk_management
 from . import lab_personnel_competency
 from . import lab_personnel_matrix
 from . import lab_training_authorization_template
 from . import lab_master_data_overrides
 from . import lab_company_scope
 from . import lab_control_center
+from . import lab_optimization_suite
+from . import lab_instrument_calibration

@@ -224,8 +224,8 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_lab_qc_material" name="QC Materials" parent="menu_laboratory_quality" action="action_lab_qc_material" sequence="20"/>
-    <menuitem id="menu_lab_qc_run" name="QC Runs" parent="menu_laboratory_quality" action="action_lab_qc_run" sequence="30"/>
-    <menuitem id="menu_lab_qc_rule_library" name="QC Rule Library" parent="menu_laboratory_quality" action="action_lab_qc_rule_library" sequence="31"/>
-    <menuitem id="menu_lab_qc_daily_snapshot" name="QC Daily Snapshots" parent="menu_laboratory_quality" action="action_lab_qc_daily_snapshot" sequence="32"/>
+    <menuitem id="menu_lab_qc_material" name="QC Materials" parent="menu_lab_quality_qc" action="action_lab_qc_material" sequence="20"/>
+    <menuitem id="menu_lab_qc_run" name="QC Runs" parent="menu_lab_quality_qc" action="action_lab_qc_run" sequence="30"/>
+    <menuitem id="menu_lab_qc_rule_library" name="QC Rule Library" parent="menu_lab_quality_qc" action="action_lab_qc_rule_library" sequence="31"/>
+    <menuitem id="menu_lab_qc_daily_snapshot" name="QC Daily Snapshots" parent="menu_lab_quality_qc" action="action_lab_qc_daily_snapshot" sequence="32"/>
 </odoo>

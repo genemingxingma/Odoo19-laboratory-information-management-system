@@ -33,6 +33,11 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,open,investigation,capa,closed,cancel"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_governance_evidence" icon="fa-link">
+                            <field name="evidence_count" widget="statinfo" string="Evidence Links"/>
+                        </button>
+                    </div>
                     <group>
                         <group>
                             <field name="name" readonly="1"/>
@@ -49,6 +54,10 @@
                             <field name="analysis_id"/>
                             <field name="qc_run_id"/>
                             <field name="service_id" readonly="1"/>
+                            <field name="change_control_id"/>
+                            <field name="risk_register_id"/>
+                            <field name="method_validation_id"/>
+                            <field name="training_id"/>
                             <field name="closed_by_id" readonly="1"/>
                             <field name="closed_date" readonly="1"/>
                         </group>
@@ -71,6 +80,11 @@
                                 <field name="corrective_action"/>
                                 <field name="preventive_action"/>
                                 <field name="close_note"/>
+                            </group>
+                        </page>
+                        <page string="Linkages">
+                            <group>
+                                <button name="action_create_linked_risk" type="object" string="Create Linked Risk" class="btn-secondary" invisible="risk_register_id"/>
                             </group>
                         </page>
                     </notebook>
@@ -106,5 +120,5 @@
         <field name="search_view_id" ref="view_lab_nonconformance_search"/>
     </record>
 
-    <menuitem id="menu_lab_nonconformance" name="Nonconformance / CAPA" parent="menu_laboratory_quality" action="action_lab_nonconformance" sequence="15"/>
+    <menuitem id="menu_lab_nonconformance" name="Nonconformance / CAPA" parent="menu_lab_quality_compliance" action="action_lab_nonconformance" sequence="15"/>
 </odoo>

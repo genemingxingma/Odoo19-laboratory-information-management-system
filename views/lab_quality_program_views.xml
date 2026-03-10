@@ -333,6 +333,11 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,scheduled,done,cancel"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_governance_evidence" icon="fa-link">
+                            <field name="evidence_count" widget="statinfo" string="Evidence Links"/>
+                        </button>
+                    </div>
                     <group>
                         <group>
                             <field name="name" readonly="1"/>
@@ -363,6 +368,9 @@
                     <group>
                         <field name="note"/>
                     </group>
+                    <group>
+                        <field name="change_control_ids" widget="many2many_tags" readonly="1"/>
+                    </group>
                     <notebook>
                         <page string="Attendees">
                             <field name="attendee_ids">
@@ -389,6 +397,9 @@
                             </field>
                         </page>
                     </notebook>
+                    <group>
+                        <button name="action_create_change_control" type="object" string="Create Change Control" class="btn-secondary" invisible="change_control_ids"/>
+                    </group>
                 </sheet>
                 <chatter/>
             </form>
@@ -468,8 +479,8 @@
         <field name="code">model.action_capture_kpi()</field>
     </record>
 
-    <menuitem id="menu_lab_quality_program" name="Quality Programs" parent="menu_laboratory_quality" action="action_lab_quality_program" sequence="30"/>
-    <menuitem id="menu_lab_quality_audit" name="Internal Audits" parent="menu_laboratory_quality" action="action_lab_quality_audit" sequence="31"/>
-    <menuitem id="menu_lab_quality_training" name="Training Sessions" parent="menu_laboratory_quality" action="action_lab_quality_training" sequence="32"/>
-    <menuitem id="menu_lab_quality_kpi" name="KPI Snapshots" parent="menu_laboratory_quality" action="action_lab_quality_kpi_snapshot" sequence="33"/>
+    <menuitem id="menu_lab_quality_program" name="Quality Programs" parent="menu_lab_quality_qc" action="action_lab_quality_program" sequence="30"/>
+    <menuitem id="menu_lab_quality_audit" name="Internal Audits" parent="menu_lab_quality_compliance" action="action_lab_quality_audit" sequence="31"/>
+    <menuitem id="menu_lab_quality_training" name="Training Sessions" parent="menu_lab_quality_people" action="action_lab_quality_training" sequence="32"/>
+    <menuitem id="menu_lab_quality_kpi" name="KPI Snapshots" parent="menu_lab_quality_people" action="action_lab_quality_kpi_snapshot" sequence="33"/>
 </odoo>

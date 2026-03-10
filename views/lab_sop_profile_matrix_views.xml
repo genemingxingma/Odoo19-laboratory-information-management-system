@@ -297,8 +297,8 @@
         </field>
     </record>
 
-    <menuitem id="menu_lab_sop_workflow_profile" name="Workflow Profiles" parent="menu_laboratory_config" action="action_lab_sop_workflow_profile" sequence="30"/>
-    <menuitem id="menu_lab_sop_decision_threshold_profile" name="Decision Thresholds" parent="menu_laboratory_config" action="action_lab_sop_decision_threshold_profile" sequence="31"/>
-    <menuitem id="menu_lab_sop_exception_decision" name="Exception Decisions" parent="menu_laboratory_config" action="action_lab_sop_exception_decision" sequence="32"/>
-    <menuitem id="menu_lab_sop_exception_decision_run" name="Decision Runs" parent="menu_laboratory_quality" action="action_lab_sop_exception_decision_run" sequence="47"/>
+    <menuitem id="menu_lab_sop_workflow_profile" name="Workflow Profiles" parent="menu_lab_config_workflow" action="action_lab_sop_workflow_profile" sequence="30"/>
+    <menuitem id="menu_lab_sop_decision_threshold_profile" name="Decision Thresholds" parent="menu_lab_config_workflow" action="action_lab_sop_decision_threshold_profile" sequence="31"/>
+    <menuitem id="menu_lab_sop_exception_decision" name="Exception Decisions" parent="menu_lab_config_workflow" action="action_lab_sop_exception_decision" sequence="32"/>
+    <menuitem id="menu_lab_sop_exception_decision_run" name="Decision Runs" parent="menu_lab_quality_validation" action="action_lab_sop_exception_decision_run" sequence="47"/>
 </odoo>

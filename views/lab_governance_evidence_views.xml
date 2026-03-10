@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_governance_evidence_list" model="ir.ui.view">
+        <field name="name">lab.governance.evidence.list</field>
+        <field name="model">lab.governance.evidence</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="title"/>
+                <field name="evidence_type"/>
+                <field name="evidence_date"/>
+                <field name="reference"/>
+                <field name="source_model"/>
+                <field name="source_display_name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_governance_evidence_form" model="ir.ui.view">
+        <field name="name">lab.governance.evidence.form</field>
+        <field name="model">lab.governance.evidence</field>
+        <field name="arch" type="xml">
+            <form string="Governance Evidence">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_attachments" icon="fa-paperclip">
+                            <field name="attachment_count" widget="statinfo" string="Attachments"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="title"/>
+                            <field name="evidence_type"/>
+                            <field name="evidence_date"/>
+                            <field name="reference"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="source_model" readonly="1"/>
+                            <field name="source_res_id" readonly="1"/>
+                            <field name="source_display_name" readonly="1"/>
+                            <field name="approval_record_ref"/>
+                            <field name="controlled_document_ref"/>
+                            <field name="signature_record_ref"/>
+                            <field name="change_control_id"/>
+                            <field name="risk_register_id"/>
+                            <field name="nonconformance_id"/>
+                            <field name="method_validation_id"/>
+                            <field name="training_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="summary"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_governance_evidence_search" model="ir.ui.view">
+        <field name="name">lab.governance.evidence.search</field>
+        <field name="model">lab.governance.evidence</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="title"/>
+                <field name="evidence_type"/>
+                <field name="reference"/>
+                <field name="source_model"/>
+                <filter name="g_type" string="Evidence Type" context="{'group_by':'evidence_type'}"/>
+                <filter name="g_source" string="Source Model" context="{'group_by':'source_model'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_governance_evidence" model="ir.actions.act_window">
+        <field name="name">Governance Evidence</field>
+        <field name="res_model">lab.governance.evidence</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_governance_evidence_search"/>
+    </record>
+
+    <menuitem id="menu_lab_governance_evidence" name="Governance Evidence" parent="menu_lab_quality_compliance" action="action_lab_governance_evidence" sequence="17" groups="laboratory_management.group_lab_reviewer"/>
+</odoo>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_plate_batch_list" model="ir.ui.view">
+        <field name="name">lab.plate.batch.list</field>
+        <field name="model">lab.plate.batch</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="department"/>
+                <field name="service_id"/>
+                <field name="plate_format"/>
+                <field name="total_wells"/>
+                <field name="assigned_wells"/>
+                <field name="remaining_wells"/>
+                <field name="worksheet_id"/>
+                <field name="state"/>
+                <field name="company_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_plate_batch_form" model="ir.ui.view">
+        <field name="name">lab.plate.batch.form</field>
+        <field name="model">lab.plate.batch</field>
+        <field name="arch" type="xml">
+            <form string="Plate Batch">
+                <header>
+                    <button name="action_auto_assign_pending" type="object" string="Auto Assign Pending" class="btn-primary" invisible="state in ('done','cancelled')"/>
+                    <button name="action_apply_scan_payload" type="object" string="Apply Scanned Barcodes" invisible="state in ('done','cancelled')"/>
+                    <button name="action_create_worksheet" type="object" string="Create/Update Worksheet" invisible="state in ('done','cancelled')"/>
+                    <button name="action_export_instrument_csv" type="object" string="Export Instrument CSV"/>
+                    <button name="action_start" type="object" string="Start" invisible="state in ('in_progress','done','cancelled')"/>
+                    <button name="action_done" type="object" string="Done" class="btn-primary" invisible="state in ('done','cancelled')"/>
+                    <button name="action_reset_wells" type="object" string="Reset Wells" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('done','cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,loaded,in_progress,done,cancelled"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="department"/>
+                            <field name="service_id"/>
+                            <field name="plate_format"/>
+                        </group>
+                        <group>
+                            <field name="total_wells" readonly="1"/>
+                            <field name="assigned_wells" readonly="1"/>
+                            <field name="remaining_wells" readonly="1"/>
+                            <field name="worksheet_id" readonly="1"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="scan_payload" placeholder="Paste barcode/accession codes, one per line"/>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="Plate Grid">
+                            <field name="plate_grid_html" readonly="1" widget="html"/>
+                        </page>
+                        <page string="Well Lines">
+                            <field name="line_ids" context="{'default_batch_id': id}">
+                                <list editable="bottom" default_order="sequence asc">
+                                    <field name="sequence"/>
+                                    <field name="well_code" readonly="1"/>
+                                    <field name="analysis_id" domain="[('state','in',('pending','assigned')),('plate_batch_id','=',False),('department','=',parent.department),('company_id','=',parent.company_id), '|', ('service_id','=',False), ('service_id','=',parent.service_id)]"/>
+                                    <field name="sample_accession" readonly="1"/>
+                                    <field name="accession_barcode" readonly="1"/>
+                                    <field name="service_id" readonly="1"/>
+                                    <field name="analysis_state" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_plate_batch_line_list" model="ir.ui.view">
+        <field name="name">lab.plate.batch.line.list</field>
+        <field name="model">lab.plate.batch.line</field>
+        <field name="arch" type="xml">
+            <list default_order="batch_id,sequence asc">
+                <field name="batch_id"/>
+                <field name="well_code"/>
+                <field name="analysis_id"/>
+                <field name="sample_accession"/>
+                <field name="accession_barcode"/>
+                <field name="service_id"/>
+                <field name="analysis_state"/>
+                <field name="company_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_plate_batch_search" model="ir.ui.view">
+        <field name="name">lab.plate.batch.search</field>
+        <field name="model">lab.plate.batch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="department"/>
+                <field name="service_id"/>
+                <field name="state"/>
+                <filter name="f_open" string="Open" domain="[('state','in',('draft','loaded','in_progress'))]"/>
+                <filter name="f_done" string="Done" domain="[('state','=','done')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lab_analysis_list_inherit_plate" model="ir.ui.view">
+        <field name="name">lab.sample.analysis.list.inherit.plate</field>
+        <field name="model">lab.sample.analysis</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_analysis_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='worksheet_id']" position="after">
+                <field name="plate_batch_id"/>
+                <field name="plate_well_position"/>
+                <field name="plate_well_order"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_lab_analysis_form_inherit_plate" model="ir.ui.view">
+        <field name="name">lab.sample.analysis.form.inherit.plate</field>
+        <field name="model">lab.sample.analysis</field>
+        <field name="inherit_id" ref="laboratory_management.view_lab_analysis_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='worksheet_id']" position="after">
+                <field name="plate_batch_id" readonly="1"/>
+                <field name="plate_well_position" readonly="1"/>
+                <field name="plate_well_order" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_lab_plate_batch" model="ir.actions.act_window">
+        <field name="name">Plate Batches</field>
+        <field name="res_model">lab.plate.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_plate_batch_search"/>
+    </record>
+
+    <record id="action_lab_plate_batch_line" model="ir.actions.act_window">
+        <field name="name">Plate Well Lines</field>
+        <field name="res_model">lab.plate.batch.line</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_lab_plate_batch" name="Plate Batches" parent="menu_lab_ops_accession" action="action_lab_plate_batch" sequence="18"/>
+    <menuitem id="menu_lab_plate_batch_line" name="Plate Well Lines" parent="menu_lab_quality_publication" action="action_lab_plate_batch_line" sequence="18"/>
+</odoo>

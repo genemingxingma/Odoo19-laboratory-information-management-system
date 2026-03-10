@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lab_risk_register_list" model="ir.ui.view">
+        <field name="name">lab.risk.register.list</field>
+        <field name="model">lab.risk.register</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="risk_level in ('high', 'critical')" decoration-warning="risk_level == 'medium'" decoration-success="state in ('closed', 'accepted')">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="risk_type_id"/>
+                <field name="risk_level"/>
+                <field name="priority_score"/>
+                <field name="risk_owner_id"/>
+                <field name="target_date"/>
+                <field name="state"/>
+                <field name="is_overdue" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_risk_register_form" model="ir.ui.view">
+        <field name="name">lab.risk.register.form</field>
+        <field name="model">lab.risk.register</field>
+        <field name="arch" type="xml">
+            <form string="Risk Register">
+                <header>
+                    <button name="action_start_assessment" type="object" string="Start Assessment" class="btn-primary" invisible="state not in ('identified','cancel')"/>
+                    <button name="action_start_mitigation" type="object" string="Start Mitigation" class="btn-primary" invisible="state not in ('assessment','identified')"/>
+                    <button name="action_start_monitoring" type="object" string="Start Monitoring" class="btn-primary" invisible="state not in ('assessment','mitigation')"/>
+                    <button name="action_accept" type="object" string="Accept Residual Risk" invisible="state not in ('monitoring','mitigation')"/>
+                    <button name="action_close" type="object" string="Close" class="btn-primary" invisible="state not in ('monitoring','accepted')"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('closed','cancel')"/>
+                    <button name="action_reset_identified" type="object" string="Reset" invisible="state not in ('closed','accepted','cancel')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="identified,assessment,mitigation,monitoring,closed,accepted,cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_governance_evidence" icon="fa-link">
+                            <field name="evidence_count" widget="statinfo" string="Evidence Links"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="title"/>
+                            <field name="risk_type_id"/>
+                            <field name="risk_level" readonly="1"/>
+                            <field name="priority_score" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="risk_owner_id"/>
+                            <field name="quality_owner_id"/>
+                            <field name="identified_date"/>
+                            <field name="target_date"/>
+                            <field name="review_date"/>
+                            <field name="is_overdue" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Assessment Matrix">
+                        <group>
+                            <field name="severity"/>
+                            <field name="likelihood"/>
+                            <field name="detectability"/>
+                        </group>
+                        <group>
+                            <field name="digital_record_only"/>
+                            <field name="escalation_required"/>
+                            <field name="closed_at" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Risk Detail">
+                            <group>
+                                <field name="summary"/>
+                                <field name="source"/>
+                                <field name="potential_impact"/>
+                                <field name="current_controls"/>
+                                <field name="mitigation_plan"/>
+                                <field name="residual_risk_note"/>
+                            </group>
+                        </page>
+                        <page string="Linked Objects">
+                            <group>
+                                <group>
+                                    <field name="change_control_id"/>
+                                    <field name="nonconformance_id"/>
+                                    <field name="method_validation_id"/>
+                                    <field name="training_id"/>
+                                    <field name="sample_id"/>
+                                </group>
+                                <group>
+                                    <field name="service_ids" widget="many2many_tags"/>
+                                    <field name="profile_ids" widget="many2many_tags"/>
+                                    <field name="instrument_ids" widget="many2many_tags"/>
+                                </group>
+                            </group>
+                            <group>
+                                <button name="action_create_linked_nonconformance" type="object" string="Create Linked CAPA" class="btn-secondary" invisible="nonconformance_id"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_risk_register_search" model="ir.ui.view">
+        <field name="name">lab.risk.register.search</field>
+        <field name="model">lab.risk.register</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="title"/>
+                <field name="risk_owner_id"/>
+                <field name="risk_type_id"/>
+                <filter name="f_open" string="Open" domain="[('state','not in',('closed','accepted','cancel'))]"/>
+                <filter name="f_high" string="High/Critical" domain="[('risk_level','in',('high','critical'))]"/>
+                <filter name="f_overdue" string="Overdue" domain="[('is_overdue','=',True)]"/>
+                <separator string="Group By"/>
+                <filter name="group_risk_type" string="Risk Type" context="{'group_by':'risk_type_id'}"/>
+                <filter name="group_owner" string="Owner" context="{'group_by':'risk_owner_id'}"/>
+                <filter name="group_state" string="State" context="{'group_by':'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_risk_register" model="ir.actions.act_window">
+        <field name="name">Risk Register</field>
+        <field name="res_model">lab.risk.register</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_risk_register_search"/>
+        <field name="context">{'search_default_f_open': 1}</field>
+    </record>
+
+    <record id="view_lab_medical_waste_batch_list" model="ir.ui.view">
+        <field name="name">lab.medical.waste.batch.list</field>
+        <field name="model">lab.medical.waste.batch</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="is_overdue" decoration-warning="state in ('stored','ready')" decoration-success="state == 'disposed'">
+                <field name="name"/>
+                <field name="waste_type_id"/>
+                <field name="department_id"/>
+                <field name="generated_date"/>
+                <field name="collection_due_date"/>
+                <field name="responsible_user_id"/>
+                <field name="quantity"/>
+                <field name="quantity_uom"/>
+                <field name="state"/>
+                <field name="is_overdue" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_medical_waste_batch_form" model="ir.ui.view">
+        <field name="name">lab.medical.waste.batch.form</field>
+        <field name="model">lab.medical.waste.batch</field>
+        <field name="arch" type="xml">
+            <form string="Medical Waste Batch">
+                <header>
+                    <button name="action_mark_segregated" type="object" string="Mark Segregated" class="btn-primary" invisible="state not in ('draft','cancel')"/>
+                    <button name="action_mark_stored" type="object" string="Mark Stored" class="btn-primary" invisible="state != 'segregated'"/>
+                    <button name="action_mark_ready" type="object" string="Ready for Pickup" class="btn-primary" invisible="state not in ('stored','segregated')"/>
+                    <button name="action_mark_disposed" type="object" string="Mark Disposed" class="btn-primary" invisible="state not in ('ready','stored')"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ('disposed','cancel')"/>
+                    <button name="action_reset_draft" type="object" string="Reset" invisible="state not in ('disposed','cancel')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,segregated,stored,ready,disposed,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="waste_type_id"/>
+                            <field name="department_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="risk_register_id"/>
+                        </group>
+                        <group>
+                            <field name="responsible_user_id"/>
+                            <field name="vendor_partner_id"/>
+                            <field name="generated_date"/>
+                            <field name="collection_due_date"/>
+                            <field name="disposed_date" readonly="1"/>
+                            <field name="is_overdue" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Containment &amp; Disposal">
+                        <group>
+                            <field name="quantity"/>
+                            <field name="quantity_uom"/>
+                            <field name="container_count"/>
+                            <field name="storage_location"/>
+                        </group>
+                        <group>
+                            <field name="treatment_method_id"/>
+                            <field name="manifest_reference"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <group>
+                                <field name="segregation_note"/>
+                                <field name="note"/>
+                                <field name="disposal_note"/>
+                            </group>
+                        </page>
+                        <page string="Linked Records">
+                            <group>
+                                <field name="disposal_record_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_lab_medical_waste_batch_search" model="ir.ui.view">
+        <field name="name">lab.medical.waste.batch.search</field>
+        <field name="model">lab.medical.waste.batch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="waste_type_id"/>
+                <field name="department_id"/>
+                <field name="responsible_user_id"/>
+                <filter name="f_open" string="Open" domain="[('state','not in',('disposed','cancel'))]"/>
+                <filter name="f_ready" string="Ready" domain="[('state','=','ready')]"/>
+                <filter name="f_overdue" string="Overdue" domain="[('is_overdue','=',True)]"/>
+                <separator string="Group By"/>
+                <filter name="group_category" string="Category" context="{'group_by':'waste_type_id'}"/>
+                <filter name="group_department" string="Department" context="{'group_by':'department_id'}"/>
+                <filter name="group_state" string="State" context="{'group_by':'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lab_medical_waste_batch" model="ir.actions.act_window">
+        <field name="name">Medical Waste</field>
+        <field name="res_model">lab.medical.waste.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lab_medical_waste_batch_search"/>
+        <field name="context">{'search_default_f_open': 1}</field>
+    </record>
+
+    <menuitem id="menu_lab_risk_register" name="Risk Register" parent="menu_lab_quality_compliance" action="action_lab_risk_register" sequence="11" groups="laboratory_management.group_lab_reviewer"/>
+    <menuitem id="menu_lab_medical_waste_batch" name="Medical Waste" parent="menu_lab_quality_compliance" action="action_lab_medical_waste_batch" sequence="16" groups="laboratory_management.group_lab_reviewer"/>
+</odoo>

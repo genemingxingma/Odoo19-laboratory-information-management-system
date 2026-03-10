@@ -194,7 +194,7 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_lab_department_sop" name="Department SOP" parent="menu_laboratory_config" action="action_lab_department_sop" sequence="20"/>
-    <menuitem id="menu_lab_retest_policy" name="Retest Policies" parent="menu_laboratory_config" action="action_lab_retest_policy" sequence="21"/>
-    <menuitem id="menu_lab_permission_matrix" name="Permission Matrix" parent="menu_laboratory_config" action="action_lab_permission_matrix" sequence="22"/>
+    <menuitem id="menu_lab_department_sop" name="Department SOP" parent="menu_lab_config_workflow" action="action_lab_department_sop" sequence="20"/>
+    <menuitem id="menu_lab_retest_policy" name="Retest Policies" parent="menu_lab_config_workflow" action="action_lab_retest_policy" sequence="21"/>
+    <menuitem id="menu_lab_permission_matrix" name="Permission Matrix" parent="menu_lab_config_org" action="action_lab_permission_matrix" sequence="22"/>
 </odoo>

@@ -41,7 +41,7 @@
     <menuitem
         id="menu_lab_manual_review_digest_config"
         name="Digest Notification Config"
-        parent="menu_laboratory_config"
+        parent="menu_lab_config_templates"
         action="action_lab_manual_review_digest_config"
         sequence="45"
     />

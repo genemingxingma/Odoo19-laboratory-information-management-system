@@ -102,6 +102,62 @@
         </field>
     </record>
 
+    <record id="view_lab_risk_type_list" model="ir.ui.view">
+        <field name="name">lab.risk.type.list</field>
+        <field name="model">lab.risk.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_default"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_waste_type_list" model="ir.ui.view">
+        <field name="name">lab.waste.type.list</field>
+        <field name="model">lab.waste.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_default"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_waste_treatment_method_list" model="ir.ui.view">
+        <field name="name">lab.waste.treatment.method.list</field>
+        <field name="model">lab.waste.treatment.method</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_default"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_lab_calibration_type_list" model="ir.ui.view">
+        <field name="name">lab.calibration.type.list</field>
+        <field name="model">lab.calibration.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_default"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
     <record id="action_lab_department_type" model="ir.actions.act_window">
         <field name="name">Departments</field>
         <field name="res_model">lab.department.type</field>
@@ -134,10 +190,38 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_lab_master_data_root" name="Master Data" parent="menu_laboratory_config" sequence="5"/>
+    <record id="action_lab_risk_type" model="ir.actions.act_window">
+        <field name="name">Risk Types</field>
+        <field name="res_model">lab.risk.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_waste_type" model="ir.actions.act_window">
+        <field name="name">Waste Types</field>
+        <field name="res_model">lab.waste.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_waste_treatment_method" model="ir.actions.act_window">
+        <field name="name">Waste Treatment Methods</field>
+        <field name="res_model">lab.waste.treatment.method</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_lab_calibration_type" model="ir.actions.act_window">
+        <field name="name">Calibration Types</field>
+        <field name="res_model">lab.calibration.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_lab_master_data_root" name="Master Data" parent="menu_lab_config_org" sequence="5"/>
     <menuitem id="menu_lab_department_type" name="Departments" parent="menu_lab_master_data_root" action="action_lab_department_type" sequence="10"/>
     <menuitem id="menu_lab_sample_type" name="Sample Types" parent="menu_lab_master_data_root" action="action_lab_sample_type" sequence="20"/>
     <menuitem id="menu_lab_priority_type" name="Priorities" parent="menu_lab_master_data_root" action="action_lab_priority_type" sequence="30"/>
     <menuitem id="menu_lab_request_type" name="Request Types" parent="menu_lab_master_data_root" action="action_lab_request_type" sequence="40"/>
     <menuitem id="menu_lab_result_unit" name="Result Units" parent="menu_lab_master_data_root" action="action_lab_result_unit" sequence="50"/>
+    <menuitem id="menu_lab_risk_type" name="Risk Types" parent="menu_lab_master_data_root" action="action_lab_risk_type" sequence="60"/>
+    <menuitem id="menu_lab_waste_type" name="Waste Types" parent="menu_lab_master_data_root" action="action_lab_waste_type" sequence="70"/>
+    <menuitem id="menu_lab_waste_treatment_method" name="Waste Treatment Methods" parent="menu_lab_master_data_root" action="action_lab_waste_treatment_method" sequence="80"/>
+    <menuitem id="menu_lab_calibration_type" name="Calibration Types" parent="menu_lab_master_data_root" action="action_lab_calibration_type" sequence="90"/>
 </odoo>

@@ -243,8 +243,8 @@
         </field>
     </record>
 
-    <menuitem id="menu_lab_sop_execution_dashboard" name="SOP Dashboard" parent="menu_laboratory_operations" action="action_lab_sop_execution_dashboard_wizard" sequence="4"/>
-    <menuitem id="menu_lab_sop_execution" name="SOP Executions" parent="menu_laboratory_operations" action="action_lab_sop_execution" sequence="5"/>
-    <menuitem id="menu_lab_sop_execution_event" name="SOP Events" parent="menu_laboratory_quality" action="action_lab_sop_execution_event" sequence="41"/>
-    <menuitem id="menu_lab_sop_retest_strategy" name="Retest Strategies" parent="menu_laboratory_config" action="action_lab_sop_retest_strategy" sequence="25"/>
+    <menuitem id="menu_lab_sop_execution_dashboard" name="SOP Dashboard" parent="menu_lab_ops_workbench" action="action_lab_sop_execution_dashboard_wizard" sequence="4"/>
+    <menuitem id="menu_lab_sop_execution" name="SOP Executions" parent="menu_lab_ops_workbench" action="action_lab_sop_execution" sequence="5"/>
+    <menuitem id="menu_lab_sop_execution_event" name="SOP Events" parent="menu_lab_quality_compliance" action="action_lab_sop_execution_event" sequence="41"/>
+    <menuitem id="menu_lab_sop_retest_strategy" name="Retest Strategies" parent="menu_lab_config_workflow" action="action_lab_sop_retest_strategy" sequence="25"/>
 </odoo>

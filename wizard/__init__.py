@@ -10,3 +10,4 @@ from . import lab_custody_investigation_bulk_update_wizard
 from . import lab_workbench_wizard
 from . import lab_kpi_dashboard_wizard
 from . import lab_test_request_attachment_wizard
+from . import lab_qc_material_batch_wizard

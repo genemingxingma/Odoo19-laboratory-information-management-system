@@ -325,7 +325,7 @@
         <field name="view_mode">kanban,list,form</field>
     </record>
 
-    <menuitem id="menu_laboratory_pathology" name="Pathology" parent="menu_laboratory_operations" sequence="35"/>
+    <menuitem id="menu_laboratory_pathology" name="Pathology" parent="menu_lab_ops_specialty" sequence="35"/>
     <menuitem id="menu_lab_pathology_case" name="Pathology Cases" parent="menu_laboratory_pathology" action="action_lab_pathology_case" sequence="10"/>
     <menuitem id="menu_lab_pathology_specimen" name="Pathology Specimens" parent="menu_laboratory_pathology" action="action_lab_pathology_specimen" sequence="20"/>
     <menuitem id="menu_lab_pathology_slide" name="Pathology Slides" parent="menu_laboratory_pathology" action="action_lab_pathology_slide" sequence="30"/>

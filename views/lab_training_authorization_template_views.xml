@@ -80,5 +80,5 @@
         </field>
     </record>
 
-    <menuitem id="menu_lab_training_authorization_template" name="Training Auth Templates" parent="menu_lab_config_operations" action="action_lab_training_authorization_template" sequence="19" groups="laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_training_authorization_template" name="Training Auth Templates" parent="menu_lab_config_org" action="action_lab_training_authorization_template" sequence="19" groups="laboratory_management.group_lab_manager"/>
 </odoo>

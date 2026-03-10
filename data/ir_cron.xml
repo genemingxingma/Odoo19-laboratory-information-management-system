@@ -20,6 +20,16 @@
         <field name="active" eval="True"/>
     </record>
 
+    <record id="ir_cron_lab_instrument_calibration_due_notify" model="ir.cron">
+        <field name="name">Lab: Notify Instrument Calibration Due</field>
+        <field name="model_id" ref="model_lab_instrument"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_notify_calibration_due()</field>
+        <field name="interval_number">12</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+
     <record id="ir_cron_lab_manual_review_overdue_notify" model="ir.cron">
         <field name="name">Lab: Notify Overdue Manual Reviews</field>
         <field name="model_id" ref="model_lab_sample_analysis"/>

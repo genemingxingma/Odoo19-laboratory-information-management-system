@@ -388,8 +388,8 @@
         </field>
     </record>
 
-    <menuitem id="menu_lab_custody_batch" name="Custody Batches" parent="menu_laboratory_operations" action="action_lab_sample_custody_batch" sequence="25"/>
-    <menuitem id="menu_lab_custody_batch_line" name="Custody Batch Lines" parent="menu_laboratory_quality" action="action_lab_sample_custody_batch_line" sequence="19"/>
-    <menuitem id="menu_lab_custody_batch_signoff" name="Custody Sign-offs" parent="menu_laboratory_quality" action="action_lab_sample_custody_batch_signoff" sequence="20"/>
-    <menuitem id="menu_lab_custody_exception_template" name="Custody Exception Templates" parent="menu_laboratory_config" action="action_lab_custody_exception_template" sequence="41"/>
+    <menuitem id="menu_lab_custody_batch" name="Custody Batches" parent="menu_lab_ops_custody" action="action_lab_sample_custody_batch" sequence="25"/>
+    <menuitem id="menu_lab_custody_batch_line" name="Custody Batch Lines" parent="menu_lab_quality_publication" action="action_lab_sample_custody_batch_line" sequence="19"/>
+    <menuitem id="menu_lab_custody_batch_signoff" name="Custody Sign-offs" parent="menu_lab_quality_publication" action="action_lab_sample_custody_batch_signoff" sequence="20"/>
+    <menuitem id="menu_lab_custody_exception_template" name="Custody Exception Templates" parent="menu_lab_config_exception" action="action_lab_custody_exception_template" sequence="41"/>
 </odoo>

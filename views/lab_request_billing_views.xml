@@ -486,9 +486,9 @@
         <field name="domain">[('state','in',('issued','partially_paid')),('due_date','&lt;',context_today())]</field>
     </record>
 
-    <menuitem id="menu_lab_request_invoice" name="Request Invoices" parent="menu_laboratory_operations" action="action_lab_request_invoice" sequence="12"/>
-    <menuitem id="menu_lab_request_invoice_overdue" name="Overdue Invoices" parent="menu_laboratory_operations" action="action_lab_request_invoice_overdue" sequence="13" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
-    <menuitem id="menu_lab_request_payment" name="Request Payments" parent="menu_laboratory_operations" action="action_lab_request_payment" sequence="14" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
-    <menuitem id="menu_lab_request_refund" name="Request Refunds" parent="menu_laboratory_operations" action="action_lab_request_refund" sequence="15" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
-    <menuitem id="menu_lab_billing_reconciliation" name="Billing Reconciliation" parent="menu_laboratory_operations" action="action_lab_billing_reconciliation" sequence="16" groups="laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_request_invoice" name="Request Invoices" parent="menu_lab_ops_billing" action="action_lab_request_invoice" sequence="12"/>
+    <menuitem id="menu_lab_request_invoice_overdue" name="Overdue Invoices" parent="menu_lab_ops_billing" action="action_lab_request_invoice_overdue" sequence="13" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_request_payment" name="Request Payments" parent="menu_lab_ops_billing" action="action_lab_request_payment" sequence="14" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_request_refund" name="Request Refunds" parent="menu_lab_ops_billing" action="action_lab_request_refund" sequence="15" groups="laboratory_management.group_lab_reception,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_billing_reconciliation" name="Billing Reconciliation" parent="menu_lab_ops_billing" action="action_lab_billing_reconciliation" sequence="16" groups="laboratory_management.group_lab_manager"/>
 </odoo>

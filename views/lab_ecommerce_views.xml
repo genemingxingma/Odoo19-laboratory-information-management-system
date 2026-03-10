@@ -99,5 +99,5 @@
         <field name="domain">[('is_lab_test_product', '=', True)]</field>
     </record>
 
-    <menuitem id="menu_lab_ecommerce_products" name="Lab Ecommerce Products" parent="menu_laboratory_config" action="action_lab_ecommerce_products" sequence="25" groups="laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_ecommerce_products" name="Lab Ecommerce Products" parent="menu_lab_config_commerce" action="action_lab_ecommerce_products" sequence="25" groups="laboratory_management.group_lab_manager"/>
 </odoo>

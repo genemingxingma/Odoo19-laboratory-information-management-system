@@ -134,4 +134,147 @@
         <field name="code">ng_ml</field>
         <field name="sequence">70</field>
     </record>
+
+    <record id="lab_risk_type_quality" model="lab.risk.type">
+        <field name="name">Quality / Compliance</field>
+        <field name="code">quality</field>
+        <field name="sequence">10</field>
+        <field name="is_default">1</field>
+    </record>
+    <record id="lab_risk_type_pre_analytical" model="lab.risk.type">
+        <field name="name">Pre-analytical</field>
+        <field name="code">pre_analytical</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="lab_risk_type_analytical" model="lab.risk.type">
+        <field name="name">Analytical</field>
+        <field name="code">analytical</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="lab_risk_type_post_analytical" model="lab.risk.type">
+        <field name="name">Post-analytical</field>
+        <field name="code">post_analytical</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="lab_risk_type_biosafety" model="lab.risk.type">
+        <field name="name">Biosafety</field>
+        <field name="code">biosafety</field>
+        <field name="sequence">50</field>
+    </record>
+    <record id="lab_risk_type_waste" model="lab.risk.type">
+        <field name="name">Medical Waste</field>
+        <field name="code">waste</field>
+        <field name="sequence">60</field>
+    </record>
+    <record id="lab_risk_type_information" model="lab.risk.type">
+        <field name="name">Information / Interface</field>
+        <field name="code">information</field>
+        <field name="sequence">70</field>
+    </record>
+    <record id="lab_risk_type_vendor" model="lab.risk.type">
+        <field name="name">Vendor / Referral</field>
+        <field name="code">vendor</field>
+        <field name="sequence">80</field>
+    </record>
+    <record id="lab_risk_type_personnel" model="lab.risk.type">
+        <field name="name">Personnel / Competency</field>
+        <field name="code">personnel</field>
+        <field name="sequence">90</field>
+    </record>
+    <record id="lab_risk_type_other" model="lab.risk.type">
+        <field name="name">Other</field>
+        <field name="code">other</field>
+        <field name="sequence">99</field>
+    </record>
+
+    <record id="lab_waste_type_infectious" model="lab.waste.type">
+        <field name="name">Infectious Waste</field>
+        <field name="code">infectious</field>
+        <field name="sequence">10</field>
+        <field name="is_default">1</field>
+    </record>
+    <record id="lab_waste_type_sharps" model="lab.waste.type">
+        <field name="name">Sharps</field>
+        <field name="code">sharps</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="lab_waste_type_pathology" model="lab.waste.type">
+        <field name="name">Pathology Waste</field>
+        <field name="code">pathology</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="lab_waste_type_chemical" model="lab.waste.type">
+        <field name="name">Chemical Waste</field>
+        <field name="code">chemical</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="lab_waste_type_pharmaceutical" model="lab.waste.type">
+        <field name="name">Pharmaceutical Waste</field>
+        <field name="code">pharmaceutical</field>
+        <field name="sequence">50</field>
+    </record>
+    <record id="lab_waste_type_general" model="lab.waste.type">
+        <field name="name">General Laboratory Waste</field>
+        <field name="code">general</field>
+        <field name="sequence">60</field>
+    </record>
+    <record id="lab_waste_type_other" model="lab.waste.type">
+        <field name="name">Other</field>
+        <field name="code">other</field>
+        <field name="sequence">99</field>
+    </record>
+
+    <record id="lab_waste_treatment_vendor" model="lab.waste.treatment.method">
+        <field name="name">Licensed Vendor Disposal</field>
+        <field name="code">vendor_disposal</field>
+        <field name="sequence">10</field>
+        <field name="is_default">1</field>
+    </record>
+    <record id="lab_waste_treatment_autoclave" model="lab.waste.treatment.method">
+        <field name="name">Autoclave</field>
+        <field name="code">autoclave</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="lab_waste_treatment_incineration" model="lab.waste.treatment.method">
+        <field name="name">Incineration</field>
+        <field name="code">incineration</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="lab_waste_treatment_chemical" model="lab.waste.treatment.method">
+        <field name="name">Chemical Neutralization</field>
+        <field name="code">chemical</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="lab_waste_treatment_other" model="lab.waste.treatment.method">
+        <field name="name">Other</field>
+        <field name="code">other</field>
+        <field name="sequence">99</field>
+    </record>
+
+    <record id="lab_calibration_type_routine" model="lab.calibration.type">
+        <field name="name">Routine</field>
+        <field name="code">routine</field>
+        <field name="sequence">10</field>
+        <field name="is_default">1</field>
+    </record>
+    <record id="lab_calibration_type_post_maintenance" model="lab.calibration.type">
+        <field name="name">Post Maintenance</field>
+        <field name="code">post_maintenance</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="lab_calibration_type_post_repair" model="lab.calibration.type">
+        <field name="name">Post Repair</field>
+        <field name="code">post_repair</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="lab_calibration_type_verification" model="lab.calibration.type">
+        <field name="name">Verification</field>
+        <field name="code">verification</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="lab_calibration_type_other" model="lab.calibration.type">
+        <field name="name">Other</field>
+        <field name="code">other</field>
+        <field name="sequence">99</field>
+    </record>
 </odoo>

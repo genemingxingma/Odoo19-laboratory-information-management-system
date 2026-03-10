@@ -149,5 +149,5 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem id="menu_lab_permission_audit_repair" name="Permission Repairs" parent="menu_laboratory_quality" action="action_lab_permission_audit_repair" sequence="46"/>
+    <menuitem id="menu_lab_permission_audit_repair" name="Permission Repairs" parent="menu_lab_quality_perm_audit" action="action_lab_permission_audit_repair" sequence="46"/>
 </odoo>

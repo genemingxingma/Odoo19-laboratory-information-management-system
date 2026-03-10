@@ -274,11 +274,8 @@
         <field name="group_ids" eval="[(6, 0, [ref('laboratory_management.group_lab_reviewer'), ref('laboratory_management.group_lab_manager')])]"/>
     </record>
 
-    <menuitem id="menu_lab_sample" name="Samples / Accessions" parent="menu_laboratory_operations" action="action_lab_sample" sequence="10"/>
-    <menuitem id="menu_lab_sample_to_verify" name="Results to Verify" parent="menu_laboratory_quality" action="action_lab_sample_to_verify" sequence="10"/>
-    <menuitem id="menu_lab_sample_ai_pending_review" name="AI Pending Review" parent="menu_laboratory_quality" action="action_lab_sample_ai_pending_review" sequence="15" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
+    <menuitem id="menu_lab_sample" name="Samples / Accessions" parent="menu_lab_ops_accession" action="action_lab_sample" sequence="10"/>
+    <menuitem id="menu_lab_sample_to_verify" name="Results to Verify" parent="menu_lab_quality_verification" action="action_lab_sample_to_verify" sequence="10"/>
+    <menuitem id="menu_lab_sample_ai_pending_review" name="AI Pending Review" parent="menu_lab_quality_validation" action="action_lab_sample_ai_pending_review" sequence="15" groups="laboratory_management.group_lab_reviewer,laboratory_management.group_lab_manager"/>
 
-    <record id="menu_laboratory_root" model="ir.ui.menu">
-        <field name="action" ref="action_lab_sample"/>
-    </record>
 </odoo>

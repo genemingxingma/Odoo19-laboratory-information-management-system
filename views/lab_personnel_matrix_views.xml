@@ -127,6 +127,6 @@
         <field name="search_view_id" ref="view_lab_personnel_matrix_run_line_search"/>
     </record>
 
-    <menuitem id="menu_lab_personnel_matrix_run" name="Personnel Matrix" parent="menu_lab_quality_governance" action="action_lab_personnel_matrix_run" sequence="48" groups="laboratory_management.group_lab_reviewer"/>
-    <menuitem id="menu_lab_personnel_matrix_run_line" name="Personnel Matrix Lines" parent="menu_lab_quality_governance" action="action_lab_personnel_matrix_run_line" sequence="49" groups="laboratory_management.group_lab_reviewer"/>
+    <menuitem id="menu_lab_personnel_matrix_run" name="Personnel Matrix" parent="menu_lab_quality_people" action="action_lab_personnel_matrix_run" sequence="48" groups="laboratory_management.group_lab_reviewer"/>
+    <menuitem id="menu_lab_personnel_matrix_run_line" name="Personnel Matrix Lines" parent="menu_lab_quality_people" action="action_lab_personnel_matrix_run_line" sequence="49" groups="laboratory_management.group_lab_reviewer"/>
 </odoo>
